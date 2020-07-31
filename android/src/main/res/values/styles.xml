@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="PangleFlutterAdDialog" parent="@style/Theme.AppCompat.Dialog">
+        <item name="android:windowIsFloating">false</item>
+        <!--        <item name="android:windowFullscreen">true</item>-->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="PangleFlutterAnimNoAnim" parent="@android:style/Animation">
+        <item name="android:windowEnterAnimation">@anim/pangle_flutter_push_anim_in</item>
+        <item name="android:windowExitAnimation">@anim/pangle_flutter_push_anim_out</item>
+    </style>
+
+</resources>

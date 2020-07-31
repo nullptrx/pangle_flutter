@@ -1,0 +1,47 @@
+PODS:
+  - AFNetworking (4.0.1):
+    - AFNetworking/NSURLSession (= 4.0.1)
+    - AFNetworking/Reachability (= 4.0.1)
+    - AFNetworking/Security (= 4.0.1)
+    - AFNetworking/Serialization (= 4.0.1)
+    - AFNetworking/UIKit (= 4.0.1)
+  - AFNetworking/NSURLSession (4.0.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (4.0.1)
+  - AFNetworking/Security (4.0.1)
+  - AFNetworking/Serialization (4.0.1)
+  - AFNetworking/UIKit (4.0.1):
+    - AFNetworking/NSURLSession
+  - Bytedance-UnionAD (3.1.0.5)
+  - Flutter (1.0.0)
+  - pangle_flutter (0.0.1):
+    - AFNetworking (~> 4.0)
+    - Bytedance-UnionAD (~> 3.1.0.5)
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - pangle_flutter (from `.symlinks/plugins/pangle_flutter/ios`)
+
+SPEC REPOS:
+  trunk:
+    - AFNetworking
+    - Bytedance-UnionAD
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  pangle_flutter:
+    :path: ".symlinks/plugins/pangle_flutter/ios"
+
+SPEC CHECKSUMS:
+  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  Bytedance-UnionAD: 4768919f6de97eb29687b8e50cee65eef5e9f3a9
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  pangle_flutter: e59c09cd64f6bf0126d5daa63980003d3ee97340
+
+PODFILE CHECKSUM: 2609452b760cd11039b14039a86564367a3d8ab9
+
+COCOAPODS: 1.9.3

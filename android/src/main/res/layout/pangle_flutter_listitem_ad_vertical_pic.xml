@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="240dp">
+
+        <ImageView
+            android:id="@+id/iv_listitem_image"
+            android:layout_width="135dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/iv_listitem_dislike"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="right|top"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:clickable="true"
+            android:src="@drawable/pangle_flutter_dislike" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_listitem_ad_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="center"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:textSize="14dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+
+        <ImageView
+            android:id="@+id/iv_listitem_icon"
+            android:layout_width="30dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp" />
+
+        <LinearLayout
+            android:id="@+id/tv_source_desc_layout"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginLeft="5dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_listitem_ad_desc"
+                android:layout_width="80dp"
+                android:layout_height="20dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/tv_listitem_ad_source"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textSize="8dp" />
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_listitem_creative"
+            android:layout_width="135dp"
+            android:layout_height="40dp"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textSize="9dp"
+            tools:text="点击下载" />
+    </LinearLayout>
+    <!--==== 测试下载状态控制功能 begin ========-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/btn_listitem_stop"
+            android:layout_width="135dp"
+            android:layout_height="40dp"
+            android:textSize="9dp"
+            android:visibility="gone"
+            tools:text="暂停" />
+
+        <Button
+            android:id="@+id/btn_listitem_remove"
+            android:layout_width="135dp"
+            android:layout_height="40dp"
+            android:textSize="9dp"
+            android:visibility="gone"
+            tools:text="删除" />
+    </LinearLayout>
+    <!--==== 测试下载状态控制功能 end ========-->
+
+</LinearLayout>
+
+
