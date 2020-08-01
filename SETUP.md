@@ -6,10 +6,10 @@
 
 #### 1. 导入AAR包
 
-##### 方法一
+##### ~~方法一~~(已移除该方式导入的支持)
 
-1. 将压缩包中的`open_ad_sdk.aar`拷贝至module `app`中`libs`文件夹中（没有就创建一个）。
-2. 在module `app`的`build.gradle`中对应位置加人如下配置
+1. ~~将压缩包中的`open_ad_sdk.aar`拷贝至module `app`中`libs`文件夹中（没有就创建一个）。~~
+2. ~~在module `app`的`build.gradle`中对应位置加人如下配置~~
 
 ```groovy
 android {
@@ -28,7 +28,7 @@ dependencies {
 }
 ```
 
-##### 方法二
+##### 方法二 （推荐）
 
 1. 创建一个新module，`File->New->New Module...->Import .JAR/AAR Package`，选择`open_ad_sdk.aar`完成导入。
 2. 在module `app`的`build.gradle`中对应位置加人如下配置
