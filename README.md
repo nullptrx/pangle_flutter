@@ -19,7 +19,7 @@ pangle_flutter是一款集成了穿山甲`Android`和`iOS`SDK的Flutter插件。
 ### 1. 添加yaml依赖
 ```yaml
 dependencies:
-	# 添加依赖
+  # 添加依赖
   pangle_flutter: ^0.0.1
 ```
 ### 2. Android和iOS额外配置
