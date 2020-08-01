@@ -19,7 +19,8 @@ class FeedView extends StatefulWidget {
   State<StatefulWidget> createState() => _FeedViewState();
 }
 
-class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin {
+class _FeedViewState extends State<FeedView>
+    with AutomaticKeepAliveClientMixin {
   FeedViewController _controller;
   bool offstage = true;
   double adWidth = kPangleSize;
@@ -96,7 +97,8 @@ class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin 
         this.adHeight = height;
       });
     };
-    final controller = FeedViewController._(id, onRemove: removed, onUpdate: updated);
+    final controller =
+        FeedViewController._(id, onRemove: removed, onUpdate: updated);
     _controller = controller;
   }
 

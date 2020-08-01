@@ -41,7 +41,8 @@ class _MyAppState extends State<MyApp> {
             RaisedButton(
               onPressed: () {
                 pangle.loadSplashAd(
-                    iOS: IOSSplashConfig(slotId: kSplashId), android: AndroidSplashConfig(slotId: kSplashId));
+                    iOS: IOSSplashConfig(slotId: kSplashId),
+                    android: AndroidSplashConfig(slotId: kSplashId));
               },
               child: Text('Splash Ad'),
             ),
@@ -69,10 +70,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   void loadBannerAd() {
-    Navigator.push(context, CupertinoPageRoute(builder: (context) => BannerPage()));
+    Navigator.push(
+        context, CupertinoPageRoute(builder: (context) => BannerPage()));
   }
 
   void loadFeedAd() {
-    Navigator.push(context, CupertinoPageRoute(builder: (context) => FeedPage()));
+    Navigator.push(
+        context, CupertinoPageRoute(builder: (context) => FeedPage()));
   }
 }

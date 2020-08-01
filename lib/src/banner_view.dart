@@ -30,7 +30,8 @@ class BannerView extends StatefulWidget {
   State<StatefulWidget> createState() => _BannerViewState();
 }
 
-class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMixin {
+class _BannerViewState extends State<BannerView>
+    with AutomaticKeepAliveClientMixin {
   BannerViewController _controller;
   bool offstage = true;
   double adWidth = kPangleSize;
@@ -48,7 +49,8 @@ class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMi
       if (defaultTargetPlatform == TargetPlatform.android) {
         platformView = AndroidView(
           viewType: kBannerViewType,
-          onPlatformViewCreated: (index) => _onPlatformViewCreated(context, index),
+          onPlatformViewCreated: (index) =>
+              _onPlatformViewCreated(context, index),
           creationParams: _createParams(),
           creationParamsCodec: const StandardMessageCodec(),
           // BannerView content is not affected by the Android view's layout direction,
@@ -59,7 +61,8 @@ class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMi
       } else if (defaultTargetPlatform == TargetPlatform.iOS) {
         platformView = UiKitView(
           viewType: kBannerViewType,
-          onPlatformViewCreated: (index) => _onPlatformViewCreated(context, index),
+          onPlatformViewCreated: (index) =>
+              _onPlatformViewCreated(context, index),
           creationParams: _createParams(),
           creationParamsCodec: const StandardMessageCodec(),
           // BannerView content is not affected by the Android view's layout direction,
@@ -165,7 +168,8 @@ enum BannerMethod {
 
 class BannerViewController {
   MethodChannel _methodChannel;
-  final _streamController = StreamController<BannerMethod>.broadcast(sync: false);
+  final _streamController =
+      StreamController<BannerMethod>.broadcast(sync: false);
 
   Stream<BannerMethod> get methodHandler {
     return _streamController.stream;

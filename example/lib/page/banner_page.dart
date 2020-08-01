@@ -27,7 +27,8 @@ class _BannerPageState extends State<BannerPage> {
           ),
           BannerView(
             iOS: IOSBannerAdConfig(slotId: kBannerId),
-            android: AndroidBannerAdConfig(slotId: kBannerId, imgSize: PangleImgSize.banner600_150),
+            android: AndroidBannerAdConfig(
+                slotId: kBannerId, imgSize: PangleImgSize.banner600_150),
           ),
           Expanded(
             child: Container(
