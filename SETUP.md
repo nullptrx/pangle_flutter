@@ -13,8 +13,8 @@
 
 ```groovy
 android {
-  	// 1. 添加aar目录
-		repositories {
+// 1. 添加aar目录
+repositories {
         flatDir {
             dirs('libs')
         }
@@ -35,7 +35,7 @@ dependencies {
 
 ```groovy
 dependencies {
-  	// 导入open_ad_sdk
+    // 导入open_ad_sdk
     implementation(name: 'open_ad_sdk', ext: 'aar')
 }
 ```
@@ -74,13 +74,13 @@ dependencies {
 
 ```xml
 <dict>
-  <key>NSAppTransportSecurity</key>
-  <dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-  <key>io.flutter.embedded_views_preview</key>
-	<true/>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+    <key>io.flutter.embedded_views_preview</key>
+    <true/>
 </dict>
 ```
 
