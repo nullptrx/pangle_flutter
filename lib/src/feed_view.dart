@@ -8,17 +8,12 @@ import 'size.dart';
 
 final kFeedViewType = 'nullptrx.github.io/pangle_feedview';
 
-typedef void FeedViewCreatedCallback(FeedViewController controller);
-
 class FeedView extends StatefulWidget {
-  final String tag;
-  final FeedViewCreatedCallback onCreated;
+  final String id;
 
-  const FeedView({
-    Key key,
-    this.onCreated,
-    this.tag,
-  }) : super(key: key);
+  final VoidCallback onRemove;
+
+  FeedView({Key key, this.id, this.onRemove}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _FeedViewState();
@@ -81,40 +76,27 @@ class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin 
   }
 
   void _onPlatformViewCreated(BuildContext context, int id) {
-    final controller = FeedViewController._(
-      id,
-      onRemoved: () {
-        setState(() {
-          this.offstage = true;
-          this.adWidth = kPangleSize;
-          this.adHeight = kPangleSize;
-        });
-      },
-    );
-    _controller = controller;
-    _loadAd(context, controller);
-    if (widget.onCreated != null) {
-      widget.onCreated(controller);
-    }
-  }
-
-  Future<Null> _loadAd(BuildContext context, FeedViewController controller) async {
-    if (controller == null) {
-      return;
-    }
-    final data = await controller.loadAd(tag: widget.tag);
-    if (data['success'] ?? false) {
-      double width = data['width'];
-      double height = data['height'];
-
-      if (mounted) {
-        setState(() {
-          this.offstage = false;
-          this.adWidth = width;
-          this.adHeight = height;
-        });
+    final removed = () {
+//      setState(() {
+//        this.offstage = true;
+//        this.adWidth = kPangleSize;
+//        this.adHeight = kPangleSize;
+//      });
+      if (widget.onRemove != null) {
+        widget.onRemove();
       }
-    }
+    };
+    final updated = (args) {
+      double width = args['width'];
+      double height = args['height'];
+      setState(() {
+        this.offstage = false;
+        this.adWidth = width;
+        this.adHeight = height;
+      });
+    };
+    final controller = FeedViewController._(id, onRemove: removed, onUpdate: updated);
+    _controller = controller;
   }
 
   @override
@@ -127,25 +109,28 @@ class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin 
 
   @override
   void dispose() {
+    _controller = null;
     super.dispose();
   }
 
   Map<String, dynamic> _createParams() {
-    return {};
+    return {
+      'feedId': widget.id,
+    };
   }
 }
 
-enum FeedMethod {
-  remove,
-}
+typedef SizeCallback = void Function(Map<dynamic, dynamic> params);
 
 class FeedViewController {
   MethodChannel _methodChannel;
-  final VoidCallback onRemoved;
+  final VoidCallback onRemove;
+  final SizeCallback onUpdate;
 
   FeedViewController._(
     int id, {
-    this.onRemoved,
+    this.onRemove,
+    this.onUpdate,
   }) {
     _methodChannel = new MethodChannel('${kFeedViewType}_$id');
     _methodChannel.setMethodCallHandler(_handleMethod);
@@ -154,19 +139,19 @@ class FeedViewController {
   Future<dynamic> _handleMethod(MethodCall call) {
     switch (call.method) {
       case 'remove':
-        if (onRemoved != null) {
-          onRemoved();
+        if (onRemove != null) {
+          onRemove();
+        }
+        break;
+      case 'update':
+        final params = call.arguments as Map<dynamic, dynamic>;
+        if (onUpdate != null) {
+          onUpdate(params);
         }
         break;
       default:
         break;
     }
-  }
-
-  Future<Map<String, dynamic>> loadAd({String tag}) async {
-    return await _methodChannel.invokeMapMethod<String, dynamic>("load", {
-      'tag': tag,
-    });
   }
 
   Future<Null> _update(Map<String, dynamic> params) async {

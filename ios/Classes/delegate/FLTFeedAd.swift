@@ -22,20 +22,29 @@ public class FLTFeedAd: NSObject, BUNativeAdsManagerDelegate {
 
     public func nativeAdsManagerSuccess(toLoad adsManager: BUNativeAdsManager, nativeAds nativeAdDataArray: [BUNativeAd]?) {
         if nativeAdDataArray != nil {
-            PangleAdManager.shared.setFeedAd(tag, feedAds: nativeAdDataArray!)
+            let keys = PangleAdManager.shared.setFeedAd(nativeAdDataArray!)
+            invoke(code: 0, count: keys.count, data: keys)
+        } else {
+            invoke(code: -1)
         }
-        invoke(code: 0, message: nil, count: nativeAdDataArray?.count ?? 0)
     }
 
-    func invoke(code: Int = 0, message: String? = nil, count: Int = 0) {
+    func invoke(code: Int = 0, message: String? = nil, count: Int = 0, data: [String]? = nil) {
         guard result != nil else {
             return
         }
 
-        let params = NSMutableDictionary()
+        var params: [String: Any] = [:]
         params["code"] = code
-        params["message"] = message
+        if message != nil {
+            params["message"] = message
+        }
         params["count"] = count
+        if data != nil {
+            params["data"] = data
+        } else {
+            params["data"] = []
+        }
         result!(params)
         PangleAdManager.shared.loadFeedAdComplete()
     }

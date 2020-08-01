@@ -4,17 +4,9 @@ import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTFeedAd
 import io.flutter.plugin.common.MethodChannel
 import io.github.nullptrx.pangleflutter.util.PangleAdManager
-import java.lang.ref.WeakReference
 import kotlin.collections.set
 
-class FLTFeedAd(result: MethodChannel.Result, val tag: String) : TTAdNative.FeedAdListener {
-
-
-  val result: WeakReference<MethodChannel.Result>
-
-  init {
-    this.result = WeakReference(result)
-  }
+class FLTFeedAd(var result: MethodChannel.Result?, val tag: String) : TTAdNative.FeedAdListener {
 
   override fun onError(code: Int, message: String) {
     invoke(code, message)
@@ -25,20 +17,26 @@ class FLTFeedAd(result: MethodChannel.Result, val tag: String) : TTAdNative.Feed
       invoke(-1)
       return
     }
-    PangleAdManager.shared.setFeedAd(tag, ads)
-    invoke(0, count = ads.size)
+    val data = PangleAdManager.shared.setFeedAd(ads)
+    invoke(0, count = ads.size, data = data)
   }
 
-  private fun invoke(code: Int = 0, message: String = "", count: Int = 0) {
-    val method = result.get()
-    method?.apply {
+  private fun invoke(code: Int = 0, message: String? = null, count: Int = 0, data: List<String>? = null) {
+    result?.apply {
       val params = mutableMapOf<String, Any>()
       params["code"] = code
-      params["message"] = message
+      message?.also {
+        params["message"] = it
+      }
       params["count"] = count
+      data?.also {
+        params["data"] = it
+      }
       success(params)
     }
-    result.clear()
+    result = null
+
+
   }
 
 }

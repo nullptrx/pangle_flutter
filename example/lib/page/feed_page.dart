@@ -11,8 +11,10 @@ class FeedPage extends StatefulWidget {
 
 class Item {
   bool isAd;
+  String id;
+  String feedId;
 
-  Item({this.isAd = false});
+  Item({this.isAd = false, this.feedId, this.id});
 }
 
 class _FeedPageState extends State<FeedPage> {
@@ -25,7 +27,7 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   _loadFeedAd() async {
-    int count = await pangle.loadFeedAd(
+    PangleFeedAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedAdConfig(slotId: kFeedId, count: 2),
       android: AndroidFeedAdConfig(slotId: kFeedId, count: 2),
     );
@@ -34,13 +36,13 @@ class _FeedPageState extends State<FeedPage> {
 
     var item;
     for (var i = 0; i < totalCount; i++) {
-      item = Item();
+      item = Item(id: i.toString());
       data.add(item);
     }
 
-    for (var i = 0; i < count; i++) {
+    for (var i = 0; i < feedAd.count; i++) {
       int index = Random().nextInt(totalCount);
-      final item = Item(isAd: true);
+      final item = Item(isAd: true, feedId: feedAd.data[i]);
       data.insert(index, item);
     }
     setState(() {
@@ -60,14 +62,29 @@ class _FeedPageState extends State<FeedPage> {
         itemBuilder: (context, index) {
           var item = items[index];
           if (item.isAd) {
-            return FeedView();
+            return FeedView(
+              id: item.feedId,
+              onRemove: () {
+                setState(() {
+                  this.items.removeAt(index);
+                });
+              },
+            );
           }
 
-          return Container(
-            height: 50,
-            alignment: Alignment.center,
-            padding: EdgeInsets.all(8),
-            child: Text('item $index'),
+          return GestureDetector(
+            onTap: () {
+              setState(() {
+                this.items.removeAt(index);
+              });
+            },
+            behavior: HitTestBehavior.opaque,
+            child: Container(
+              height: 50,
+              alignment: Alignment.center,
+              padding: EdgeInsets.all(8),
+              child: Text('item ${item.id}'),
+            ),
           );
         },
         separatorBuilder: (BuildContext context, int index) {

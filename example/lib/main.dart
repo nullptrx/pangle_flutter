@@ -2,15 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
-import 'package:pangle_flutter_example/common/constant.dart';
 
+import 'common/constant.dart';
 import 'page/banner_page.dart';
 import 'page/feed_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await pangle.init(iOS: IOSConfig(appId: kAppId), android: AndroidConfig(appId: kAppId));
-  await pangle.loadSplashAd(iOS: IOSSplashConfig(slotId: kSplashId), android: AndroidSplashConfig(slotId: kSplashId));
+  await pangle.init(
+    iOS: IOSConfig(appId: kAppId),
+    android: AndroidConfig(appId: kAppId),
+  );
+  await pangle.loadSplashAd(
+    iOS: IOSSplashConfig(slotId: kSplashId),
+    android: AndroidSplashConfig(slotId: kSplashId),
+  );
   runApp(MaterialApp(home: MyApp()));
 }
 

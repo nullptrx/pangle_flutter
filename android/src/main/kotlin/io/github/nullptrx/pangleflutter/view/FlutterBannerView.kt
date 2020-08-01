@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.res.Resources
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import com.bytedance.sdk.openadsdk.TTAdDislike
 import com.bytedance.sdk.openadsdk.TTAdNative
@@ -24,16 +26,17 @@ import java.lang.ref.WeakReference
 /**
  * 暂时没有用到的
  */
-class FlutterBannerView(val context: Context, messenger: BinaryMessenger, val id: Int, params: Map<String, Any>) : PlatformView, MethodChannel.MethodCallHandler {
+class FlutterBannerView(val context: Context, messenger: BinaryMessenger, val id: Int, params: Map<String, Any?>) : PlatformView, MethodChannel.MethodCallHandler {
 
   private val methodChannel: MethodChannel
   private val container: FrameLayout
 
   init {
-    container = FrameLayout(context)
-
     methodChannel = MethodChannel(messenger, "nullptrx.github.io/pangle_bannerview_$id")
     methodChannel.setMethodCallHandler(this)
+    
+    container = FrameLayout(context)
+    container.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
   }
 

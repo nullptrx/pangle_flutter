@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -25,10 +26,8 @@ import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
-import io.github.nullptrx.pangleflutter.PangleFlutterPlugin
 import io.github.nullptrx.pangleflutter.R
 import io.github.nullptrx.pangleflutter.util.*
-import java.lang.ref.WeakReference
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
@@ -38,29 +37,37 @@ class FlutterFeedView(
     val context: Context,
     messenger: BinaryMessenger,
     val id: Int,
-    params: Map<String, Any>
-) : PlatformView, MethodChannel.MethodCallHandler {
+    params: Map<String, Any?>
+) : PlatformView, MethodChannel.MethodCallHandler, DislikeInteractionCallback {
 
   companion object {
     private val ttAppDownloadListenerMap = WeakHashMap<AdViewHolder, TTAppDownloadListener>()
+    private val ttFeedAdMap = mutableMapOf<Int, TTFeedAd>()
   }
 
   var activity: Activity? = null
 
   private val methodChannel: MethodChannel
-  private var methodResult: MethodChannel.Result? = null
   private val container: FrameLayout
-  private var ttFeedAd: TTFeedAd? = null
+  private var feedId: String? = null
 
 
   init {
 
+    methodChannel = MethodChannel(messenger, "nullptrx.github.io/pangle_feedview_$id")
+    methodChannel.setMethodCallHandler(this)
+
     activity = scanForActivity(context)
 
     container = FrameLayout(context)
+    container.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
-    methodChannel = MethodChannel(messenger, "nullptrx.github.io/pangle_feedview_$id")
-    methodChannel.setMethodCallHandler(this)
+    val feedId = params["feedId"] as? String
+    feedId?.also {
+      val ttFeedAd: TTFeedAd? = PangleAdManager.shared.getFeedAd(it)
+      loadAd(ttFeedAd)
+    }
+
 
   }
 
@@ -74,27 +81,13 @@ class FlutterFeedView(
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-    methodResult = result
     when (call.method) {
-      "load", "reload" -> {
-        val tag = call.argument<String>("tag") ?: PangleFlutterPlugin.kDefaultFeedTag
-        loadFeedAd(tag)
-
-      }
       "update" -> {
         invalidateView()
         result.success(null)
       }
       else -> result.notImplemented()
     }
-  }
-
-  private fun loadFeedAd(tag: String) {
-
-    val ttFeedAd = PangleAdManager.shared.getFeedAd(tag)
-    this.ttFeedAd = ttFeedAd
-    loadAd(ttFeedAd)
-
   }
 
   private fun scanForActivity(cont: Context?): Activity? {
@@ -109,8 +102,9 @@ class FlutterFeedView(
   }
 
   private fun invalidateView() {
-    val ad = this.ttFeedAd
-    ad?.also {
+    this.feedId ?: return
+    val ttFeedAd: TTFeedAd? = PangleAdManager.shared.getFeedAd(this.feedId!!)
+    ttFeedAd?.also {
       val feedHeight: Float = when (it.imageMode) {
         TTAdConstant.IMAGE_MODE_SMALL_IMG -> 170.dp
         TTAdConstant.IMAGE_MODE_LARGE_IMG -> 310.dp
@@ -133,6 +127,14 @@ class FlutterFeedView(
 
   }
 
+  private fun removeView() {
+    this.feedId?.also {
+      PangleAdManager.shared.removeFeedAd(it)
+    }
+    methodChannel.invokeMethod(Method.remove.name, null)
+    container.removeAllViews()
+  }
+
   private fun loadImage(url: String): Drawable? {
     try {
       val imgUrl = URL(url)
@@ -148,13 +150,12 @@ class FlutterFeedView(
 
   internal enum class Method {
     remove,
-    reload;
+    update;
   }
 
 
   fun loadAd(ad: TTFeedAd?) {
     if (ad == null) {
-      invoke()
       return
     }
     container.removeAllViews()
@@ -177,7 +178,6 @@ class FlutterFeedView(
     }.toFloat()
 
     if (view == null) {
-      invoke()
       return
     }
 
@@ -195,25 +195,11 @@ class FlutterFeedView(
     }
   }
 
-  private fun invoke(message: String? = null) {
-    methodResult?.apply {
-      val params = mutableMapOf<String, Any?>()
-      params["success"] = false
-      params["message"] = message
-      success(params)
-    }
-    methodResult = null
-  }
-
   private fun invoke(width: Float, height: Float) {
-    methodResult?.apply {
-      val params = mutableMapOf<String, Any>()
-      params["success"] = true
-      params["width"] = width
-      params["height"] = height
-      success(params)
-    }
-    methodResult = null
+    val params = mutableMapOf<String, Any>()
+    params["width"] = width
+    params["height"] = height
+    methodChannel.invokeMethod(Method.update.name, params)
   }
 
   private fun bindSmallAdView(parent: ViewGroup, @NonNull ad: TTFeedAd): View {
@@ -428,32 +414,20 @@ class FlutterFeedView(
   private fun bindDislikeCustom(convertView: ViewGroup, dislike: View, ad: TTFeedAd) {
     dislike.setOnClickListener {
       ad.getDislikeDialog(activity)?.apply {
-        setDislikeInteractionCallback(DislikeInteraction(id, methodChannel, convertView))
+        setDislikeInteractionCallback(this@FlutterFeedView)
         showDislikeDialog()
       }
     }
 
   }
 
-  internal inner class DislikeInteraction(val id: Int, methodChannel: MethodChannel, viewGroup: ViewGroup) : DislikeInteractionCallback {
-
-    val methodChannel by lazy {
-      WeakReference(methodChannel)
-    }
-
-    val viewGroup by lazy { WeakReference(viewGroup) }
-
-    override fun onSelected(position: Int, value: String) {
+  override fun onSelected(position: Int, value: String) {
 //      val id = id
-      methodChannel.get()?.invokeMethod(Method.remove.name, null)
-      viewGroup.get()?.removeAllViews()
-      methodChannel.clear()
-      viewGroup.clear()
-    }
-
-    override fun onCancel() {}
-    override fun onRefuse() {}
+    removeView()
   }
+
+  override fun onCancel() {}
+  override fun onRefuse() {}
 
   private fun bindDownloadListener(adCreativeButton: Button, adViewHolder: AdViewHolder, ad: TTFeedAd) {
     val downloadListener: TTAppDownloadListener = object : TTAppDownloadListener {

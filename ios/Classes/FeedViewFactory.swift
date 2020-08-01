@@ -12,19 +12,18 @@ public class FeedViewFactory: NSObject, FlutterPlatformViewFactory {
         let instance = BannerViewFactory(messenger: messenger)
         return instance
     }
-    
+
     private var messenger: FlutterBinaryMessenger
-    
+
     init(messenger: FlutterBinaryMessenger) {
         self.messenger = messenger
     }
-    
+
     public func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol {
         return FlutterStandardMessageCodec.sharedInstance()
     }
-    
+
     public func create(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?) -> FlutterPlatformView {
-        return FLTFeedView(frame, id: viewId, params: (args as? Dictionary) ?? Dictionary(), messenger: messenger)
+        return FLTFeedView(frame, id: viewId, params: (args as? [String: Any]) ?? [:], messenger: messenger)
     }
 }
-

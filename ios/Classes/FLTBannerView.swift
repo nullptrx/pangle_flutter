@@ -14,7 +14,7 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
     private var contentView: UIView?
     private var methodResult: FlutterResult?
 
-    init(_ frame: CGRect, id: Int64, params: [String: Any?], messenger: FlutterBinaryMessenger) {
+    init(_ frame: CGRect, id: Int64, params: [String: Any], messenger: FlutterBinaryMessenger) {
         self.container = UIView(frame: frame)
         let channelName = String(format: "nullptrx.github.io/pangle_bannerview_%lld", id)
         self.methodChannel = FlutterMethodChannel(name: channelName, binaryMessenger: messenger)
@@ -27,7 +27,6 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-        self.methodResult = result
         let args: [String: Any?] = call.arguments as? [String: Any?] ?? Dictionary()
         switch call.method {
         case "load", "reload":
@@ -35,7 +34,7 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
                 result(FlutterError(code: "-1", message: "No vc", details: nil))
                 return
             }
-
+            self.methodResult = result
             let slotId = args["slotId"] as! String
             let imgSizeIndex = args["imgSize"] as! Int
             let imgSize = BUSize(by: BUProposalSize(rawValue: imgSizeIndex)!)!

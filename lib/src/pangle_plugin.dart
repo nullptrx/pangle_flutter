@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:pangle_flutter/src/model.dart';
 
 import 'config_android.dart';
 import 'config_ios.dart';
@@ -70,20 +71,20 @@ class PanglePlugin {
   /// [iOS] config for iOS
   /// [android] config for Android
   /// return loaded ad count.
-  Future<int> loadFeedAd({
+  Future<PangleFeedAd> loadFeedAd({
     IOSFeedAdConfig iOS,
     AndroidFeedAdConfig android,
   }) async {
-    Map<String, dynamic> ret;
+    Map<dynamic, dynamic> ret;
     if (Platform.isIOS && iOS != null) {
       ret = await _methodChannel.invokeMapMethod('loadFeedAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
       ret = await _methodChannel.invokeMapMethod('loadFeedAd', android.toJSON());
     }
-    if (ret != null && ret['code'] == 0) {
-      return ret['count'];
+    if (ret == null) {
+      return PangleFeedAd.empty();
     }
-    return 0;
+    return PangleFeedAd.fromJsonMap(ret);
   }
 
   /// Request permissions

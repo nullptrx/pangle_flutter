@@ -11,7 +11,7 @@ import Flutter
 public class PangleAdManager: NSObject {
     public static let shared = PangleAdManager()
     
-    private let feedAdCollection = NSCache<NSString, NSMutableArray>()
+    private var feedAdCollection: [String: BUNativeAd] = [:]
     // Splash Ad
     private var splashAdDelegate: BUSplashAdDelegate?
     // Rewarded Video Ad
@@ -21,20 +21,22 @@ public class PangleAdManager: NSObject {
     private var feedAdDelegate: BUNativeAdsManagerDelegate?
     private var feedAdManager: BUNativeAdsManager?
     
-    public func setFeedAd(_ tag: String, feedAds: [BUNativeAd]) {
-        let originAds: NSMutableArray = (self.feedAdCollection.object(forKey: tag as NSString) ?? NSMutableArray())
-        originAds.addObjects(from: feedAds)
-        self.feedAdCollection.setObject(originAds, forKey: tag as NSString)
+    public func setFeedAd(_ nativeAds: [BUNativeAd]) -> [String] {
+        var feedAds: [String: BUNativeAd] = [:]
+        for nativeAd in nativeAds {
+            feedAds[String(nativeAd.hash)] = nativeAd
+        }
+        self.feedAdCollection.merge(feedAds, uniquingKeysWith: { _, last in last })
+        let array: [String] = Array(feedAds.keys)
+        return array
     }
     
-    public func getFeedAd(_ tag: String) -> BUNativeAd? {
-        let originAds: NSMutableArray = self.feedAdCollection.object(forKey: tag as NSString) ?? NSMutableArray()
-        if originAds.count > 0 {
-            let nad = originAds.object(at: 0) as! BUNativeAd
-            originAds.remove(nad)
-            return nad
-        }
-        return nil
+    public func getFeedAd(_ key: String) -> BUNativeAd? {
+        return self.feedAdCollection[key]
+    }
+    
+    public func removeFeedAd(_ key: String) {
+        self.feedAdCollection.removeValue(forKey: key)
     }
     
     public func initialize(_ appId: String, logLevel: Int?, coppa: UInt?, isPaidApp: Bool?) {

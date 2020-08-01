@@ -7,96 +7,69 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="deac6a36-7290-4f77-b7b9-0413686d8cd1" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle___open_ad_sdk__aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_activity_activity_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_annotation_annotation_1_1_0_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_appcompat_appcompat_1_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_appcompat_appcompat_resources_1_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_common_2_1_0_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_arch_core_core_runtime_2_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_collection_collection_1_1_0_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_core_core_1_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_cursoradapter_cursoradapter_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_customview_customview_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_drawerlayout_drawerlayout_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_exifinterface_exifinterface_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_fragment_fragment_1_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_interpolator_interpolator_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_common_2_1_0_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_2_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_core_2_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_runtime_2_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_viewmodel_2_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_loader_loader_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_savedstate_savedstate_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_1_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_animated_1_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_versionedparcelable_versionedparcelable_1_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__androidx_viewpager_viewpager_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_github_nullptrX_maven_open_ad_sdk_3_2_0_2_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_squareup_okhttp3_okhttp_3_10_0_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_squareup_okio_okio_1_14_0_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__com_squareup_picasso_picasso_2_71828_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/libs/open_ad_sdk.aar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/android/src/main/res/raw/pangle_flutter_keep.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle___open_ad_sdk__aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_activity_activity_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_annotation_annotation_1_1_0_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_appcompat_appcompat_1_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_appcompat_appcompat_resources_1_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_arch_core_core_common_2_1_0_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_arch_core_core_runtime_2_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_collection_collection_1_1_0_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_core_core_1_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_cursoradapter_cursoradapter_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_customview_customview_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_drawerlayout_drawerlayout_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_exifinterface_exifinterface_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_fragment_fragment_1_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_interpolator_interpolator_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_common_2_1_0_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_2_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_livedata_core_2_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_runtime_2_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_lifecycle_lifecycle_viewmodel_2_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_loader_loader_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_savedstate_savedstate_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_1_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_vectordrawable_vectordrawable_animated_1_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_versionedparcelable_versionedparcelable_1_1_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__androidx_viewpager_viewpager_1_0_0_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__com_github_nullptrX_maven_open_ad_sdk_3_2_0_2_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__com_squareup_okhttp3_okhttp_3_10_0_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__com_squareup_okio_okio_1_14_0_jar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__com_squareup_picasso_picasso_2_71828_aar.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/libs/open_ad_sdk.aar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/src/main/res/raw/pangle_flutter_keep.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_1_3_72_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_common_1_3_72_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_jdk7_1_3_72_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_1_3_72_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_common_1_3_72_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/libraries/Gradle__org_jetbrains_kotlin_kotlin_stdlib_jdk7_1_3_72_jar.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/lib/src/model.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/src/model.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/android/.idea/.name" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/android/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/android/.idea/caches/build_file_checksums.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/android/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/io/github/nullptrx/pangleflutter/delegate/FLTFeedAd.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/io/github/nullptrx/pangleflutter/delegate/FLTFeedAd.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/io/github/nullptrx/pangleflutter/util/PangleAdManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/io/github/nullptrx/pangleflutter/util/PangleAdManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/BannerViewFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/BannerViewFactory.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/FeedViewFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/FeedViewFactory.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/FlutterBannerView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/FlutterBannerView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/FlutterFeedView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/FlutterFeedView.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/gradle.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/android/open_ad_sdk/open_ad_sdk.aar" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/open_ad_sdk/open_ad_sdk.aar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/android/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/android/settings.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/.idea/.name" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/.idea/.name" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/.idea/jarRepositories.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/.idea/jarRepositories.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/.idea/caches/build_file_checksums.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/src/main/kotlin/io/github/nullptrx/pangleflutter/delegate/FLTFeedAd.kt" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/src/main/kotlin/io/github/nullptrx/pangleflutter/delegate/FLTFeedAd.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/BannerViewFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/BannerViewFactory.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/FeedViewFactory.kt" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/FeedViewFactory.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/FlutterBannerView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/FlutterBannerView.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/FlutterFeedView.kt" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/android/src/main/kotlin/io/github/nullptrx/pangleflutter/view/FlutterFeedView.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/android/app/src/main/AndroidManifest.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/android/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/android/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/android/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/android/open_ad_sdk/open_ad_sdk.aar" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/android/open_ad_sdk/open_ad_sdk.aar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/android/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/android/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/ios/Runner/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/lib/page/feed_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/example/lib/page/feed_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/ios/Classes/BannerViewFactory.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/ios/Classes/BannerViewFactory.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/ios/Classes/FLTBannerView.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/ios/Classes/FLTBannerView.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/ios/Classes/FLTFeedView.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/ios/Classes/FLTFeedView.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/ios/Classes/FeedViewFactory.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/ios/Classes/FeedViewFactory.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/ios/Classes/PangleAdManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/ios/Classes/PangleAdManager.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/ios/Classes/SwiftPangleFlutterPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/ios/Classes/SwiftPangleFlutterPlugin.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/ios/Classes/delegate/FLTFeedAd.swift" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/ios/Classes/delegate/FLTFeedAd.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/lib/pangle_flutter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/lib/pangle_flutter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/lib/src/feed_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/lib/src/feed_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/lib/src/pangle_plugin.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/lib/src/pangle_plugin.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/pangle_flutter.iml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/pangle_flutter/pangle_flutter.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/banner_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/banner_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner/Info.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/lib/page/feed_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/page/feed_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/BannerViewFactory.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/BannerViewFactory.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/FLTBannerView.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/FLTBannerView.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/FLTFeedView.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/FLTFeedView.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/FeedViewFactory.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/FeedViewFactory.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/PangleAdManager.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/PangleAdManager.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/SwiftPangleFlutterPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/SwiftPangleFlutterPlugin.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Classes/delegate/FLTFeedAd.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/delegate/FLTFeedAd.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pangle_flutter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/pangle_flutter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/config_android.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/config_android.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/feed_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/feed_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/pangle_plugin.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/pangle_plugin.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pangle_flutter.iml" beforeDir="false" afterPath="$PROJECT_DIR$/pangle_flutter.iml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -167,22 +140,26 @@
       <screen x="0" y="23" width="1920" height="1134" />
     </state>
     <state x="542" y="239" key="#com.intellij.ide.util.MemberChooser/0.23.1920.1134@0.23.1920.1134" timestamp="1596112300459" />
-    <state width="1467" height="197" key="GridCell.Tab.0.bottom" timestamp="1596247681681">
+    <state width="1467" height="257" key="GridCell.Tab.0.bottom" timestamp="1596281615461">
       <screen x="0" y="23" width="1920" height="1134" />
     </state>
-    <state width="1467" height="197" key="GridCell.Tab.0.bottom/0.23.1920.1134@0.23.1920.1134" timestamp="1596247681681" />
-    <state width="1467" height="197" key="GridCell.Tab.0.center" timestamp="1596247681681">
+    <state width="1467" height="257" key="GridCell.Tab.0.bottom/0.23.1920.1134@0.23.1920.1134" timestamp="1596281615461" />
+    <state width="1467" height="257" key="GridCell.Tab.0.center" timestamp="1596281615460">
       <screen x="0" y="23" width="1920" height="1134" />
     </state>
-    <state width="1467" height="197" key="GridCell.Tab.0.center/0.23.1920.1134@0.23.1920.1134" timestamp="1596247681681" />
-    <state width="1467" height="197" key="GridCell.Tab.0.left" timestamp="1596247681680">
+    <state width="1467" height="257" key="GridCell.Tab.0.center/0.23.1920.1134@0.23.1920.1134" timestamp="1596281615460" />
+    <state width="1467" height="257" key="GridCell.Tab.0.left" timestamp="1596281615460">
       <screen x="0" y="23" width="1920" height="1134" />
     </state>
-    <state width="1467" height="197" key="GridCell.Tab.0.left/0.23.1920.1134@0.23.1920.1134" timestamp="1596247681680" />
-    <state width="1467" height="197" key="GridCell.Tab.0.right" timestamp="1596247681681">
+    <state width="1467" height="257" key="GridCell.Tab.0.left/0.23.1920.1134@0.23.1920.1134" timestamp="1596281615460" />
+    <state width="1467" height="257" key="GridCell.Tab.0.right" timestamp="1596281615461">
       <screen x="0" y="23" width="1920" height="1134" />
     </state>
-    <state width="1467" height="197" key="GridCell.Tab.0.right/0.23.1920.1134@0.23.1920.1134" timestamp="1596247681681" />
+    <state width="1467" height="257" key="GridCell.Tab.0.right/0.23.1920.1134@0.23.1920.1134" timestamp="1596281615461" />
+    <state x="785" y="233" width="872" height="599" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1596249756926">
+      <screen x="0" y="23" width="1920" height="1134" />
+    </state>
+    <state x="785" y="233" width="872" height="599" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.23.1920.1134@0.23.1920.1134" timestamp="1596249756926" />
     <state x="805" y="272" width="710" height="488" key="find.popup" timestamp="1596041646616">
       <screen x="0" y="23" width="1920" height="1134" />
     </state>
@@ -196,7 +173,30 @@
           <line>104</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$USER_HOME$/Library/development/flutter/packages/flutter/lib/src/widgets/platform_view.dart</url>
+          <line>442</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$USER_HOME$/Library/development/flutter/packages/flutter/lib/src/widgets/platform_view.dart</url>
+          <line>497</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$USER_HOME$/Library/development/flutter/packages/flutter/lib/src/widgets/platform_view.dart</url>
+          <line>469</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/src/pangle_plugin.dart</url>
+          <line>83</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint enabled="true" suspend="THREAD" type="java-exception" />
+      </default-breakpoints>
     </breakpoint-manager>
   </component>
 </project>

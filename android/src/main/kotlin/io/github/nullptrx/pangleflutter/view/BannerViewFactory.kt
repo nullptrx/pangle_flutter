@@ -8,7 +8,7 @@ import io.flutter.plugin.platform.PlatformViewFactory
 
 class BannerViewFactory(val messenger: BinaryMessenger) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
   override fun create(context: Context, id: Int, args: Any?): PlatformView? {
-    val params: Map<String, Any> = args as? Map<String, Any> ?: mutableMapOf()
+    val params: Map<String, Any?> = args as? Map<String, Any?> ?: mutableMapOf()
     return FlutterBannerView(context, messenger, id, params)
   }
 

@@ -12,8 +12,8 @@ class FeedViewFactory(val messenger: BinaryMessenger) : PlatformViewFactory(Stan
 
   private var activity: WeakReference<Activity>? = null
 
-  override fun create(context: Context?, id: Int, args: Any?): PlatformView? {
-    val params = args as? Map<String, Any>
+  override fun create(context: Context, id: Int, args: Any?): PlatformView? {
+    val params = args as? Map<String, Any?>
     val act = activity?.get()
     if (act == null) {
       return null

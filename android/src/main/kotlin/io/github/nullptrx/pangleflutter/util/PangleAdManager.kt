@@ -17,30 +17,30 @@ class PangleAdManager {
 
   }
 
-  private val feedAdCollection = Collections.synchronizedMap<String, LinkedList<TTFeedAd>>(mutableMapOf<String, LinkedList<TTFeedAd>>())
+  private val feedAdCollection = Collections.synchronizedMap<String, TTFeedAd>(mutableMapOf<String, TTFeedAd>())
 
   private var ttAdManager: TTAdManager? = null
   private var ttAdNative: TTAdNative? = null
     get() = field
 
 
-  fun setFeedAd(tag: String, ttFeedAds: List<TTFeedAd>) {
-    val originAds = feedAdCollection[tag] ?: LinkedList()
-    originAds.apply {
-      addAll(ttFeedAds)
+  fun setFeedAd(ttFeedAds: List<TTFeedAd>): List<String> {
+    val data = mutableListOf<String>()
+    ttFeedAds.forEach {
+      val key = it.hashCode().toString()
+      feedAdCollection[key] = it
+      data.add(key)
     }
-    feedAdCollection[tag] = originAds
+    return data
   }
 
   fun getFeedAd(tag: String): TTFeedAd? {
-    val feedAds = feedAdCollection[tag]
-    feedAds?.apply {
-      if (size > 0) {
-        val feedAd = removeFirst()
-        return feedAd
-      }
-    }
-    return null
+    val feedAd = feedAdCollection[tag]
+    return feedAd
+  }
+
+  fun removeFeedAd(key: String) {
+    feedAdCollection.remove(key)
   }
 
   fun initialize(activity: Activity?, appId: String, debug: Boolean?, useTextureView: Boolean?, titleBarTheme: Int?, allowShowNotify: Boolean?, allowShowPageWhenScreenLock: Boolean?, directDownloadNetworkType: Int?, supportMultiProcess: Boolean?, paid: Boolean?) {

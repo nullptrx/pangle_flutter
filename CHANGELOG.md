@@ -1,3 +1,3 @@
 ## 0.0.1
 
-* TODO: Describe initial release.
+* 初步实现开屏、激励视频、Banner、信息流广告

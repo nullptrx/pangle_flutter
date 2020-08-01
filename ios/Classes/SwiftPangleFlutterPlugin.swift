@@ -25,8 +25,6 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         self.methodChannel = methodChannel
     }
     
-    //    https://ad.oceanengine.com/union/media/union/download/detail?id=16&docId=5de8d57325b16b00113af09e&osType=ios
-    
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let instance = PangleAdManager.shared
         let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
@@ -75,3 +73,4 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         }
     }
 }
+
