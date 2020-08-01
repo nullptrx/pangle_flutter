@@ -2,8 +2,8 @@
 <project version="4">
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_CUSTOM_FILTER" value="pangle" />
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="error" />
-    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="debug" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="deac6a36-7290-4f77-b7b9-0413686d8cd1" name="Default Changelist" comment="">
@@ -167,22 +167,22 @@
       <screen x="0" y="23" width="1920" height="1134" />
     </state>
     <state x="542" y="239" key="#com.intellij.ide.util.MemberChooser/0.23.1920.1134@0.23.1920.1134" timestamp="1596112300459" />
-    <state width="1467" height="257" key="GridCell.Tab.0.bottom" timestamp="1596247551624">
+    <state width="1467" height="197" key="GridCell.Tab.0.bottom" timestamp="1596247681681">
       <screen x="0" y="23" width="1920" height="1134" />
     </state>
-    <state width="1467" height="257" key="GridCell.Tab.0.bottom/0.23.1920.1134@0.23.1920.1134" timestamp="1596247551624" />
-    <state width="1467" height="257" key="GridCell.Tab.0.center" timestamp="1596247551623">
+    <state width="1467" height="197" key="GridCell.Tab.0.bottom/0.23.1920.1134@0.23.1920.1134" timestamp="1596247681681" />
+    <state width="1467" height="197" key="GridCell.Tab.0.center" timestamp="1596247681681">
       <screen x="0" y="23" width="1920" height="1134" />
     </state>
-    <state width="1467" height="257" key="GridCell.Tab.0.center/0.23.1920.1134@0.23.1920.1134" timestamp="1596247551623" />
-    <state width="1467" height="257" key="GridCell.Tab.0.left" timestamp="1596247551623">
+    <state width="1467" height="197" key="GridCell.Tab.0.center/0.23.1920.1134@0.23.1920.1134" timestamp="1596247681681" />
+    <state width="1467" height="197" key="GridCell.Tab.0.left" timestamp="1596247681680">
       <screen x="0" y="23" width="1920" height="1134" />
     </state>
-    <state width="1467" height="257" key="GridCell.Tab.0.left/0.23.1920.1134@0.23.1920.1134" timestamp="1596247551623" />
-    <state width="1467" height="257" key="GridCell.Tab.0.right" timestamp="1596247551623">
+    <state width="1467" height="197" key="GridCell.Tab.0.left/0.23.1920.1134@0.23.1920.1134" timestamp="1596247681680" />
+    <state width="1467" height="197" key="GridCell.Tab.0.right" timestamp="1596247681681">
       <screen x="0" y="23" width="1920" height="1134" />
     </state>
-    <state width="1467" height="257" key="GridCell.Tab.0.right/0.23.1920.1134@0.23.1920.1134" timestamp="1596247551623" />
+    <state width="1467" height="197" key="GridCell.Tab.0.right/0.23.1920.1134@0.23.1920.1134" timestamp="1596247681681" />
     <state x="805" y="272" width="710" height="488" key="find.popup" timestamp="1596041646616">
       <screen x="0" y="23" width="1920" height="1134" />
     </state>
