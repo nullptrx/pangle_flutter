@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.nullptrX:maven:open_ad_sdk-3.2.0.2@aar" type="AndroidModuleLibraryType">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6ce287dc6a6a649ed2d199fa294bb438/jetified-maven-open_ad_sdk-3.2.0.2/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6ce287dc6a6a649ed2d199fa294bb438/jetified-maven-open_ad_sdk-3.2.0.2/jars/libs/adhost.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6ce287dc6a6a649ed2d199fa294bb438/jetified-maven-open_ad_sdk-3.2.0.2/jars/libs/classes-2.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6ce287dc6a6a649ed2d199fa294bb438/jetified-maven-open_ad_sdk-3.2.0.2/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/6ce287dc6a6a649ed2d199fa294bb438/jetified-maven-open_ad_sdk-3.2.0.2/jars/libs/ttmd5-0.0.2-alpha.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

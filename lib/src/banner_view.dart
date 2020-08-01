@@ -30,11 +30,14 @@ class BannerView extends StatefulWidget {
   State<StatefulWidget> createState() => _BannerViewState();
 }
 
-class _BannerViewState extends State<BannerView> {
+class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMixin {
   BannerViewController _controller;
   bool offstage = true;
   double adWidth = kPangleSize;
   double adHeight = kPangleSize;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

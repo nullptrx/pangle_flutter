@@ -24,16 +24,14 @@ class FeedView extends StatefulWidget {
   State<StatefulWidget> createState() => _FeedViewState();
 }
 
-class _FeedViewState extends State<FeedView> {
+class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin {
   FeedViewController _controller;
   bool offstage = true;
   double adWidth = kPangleSize;
   double adHeight = kPangleSize;
 
   @override
-  void initState() {
-    super.initState();
-  }
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

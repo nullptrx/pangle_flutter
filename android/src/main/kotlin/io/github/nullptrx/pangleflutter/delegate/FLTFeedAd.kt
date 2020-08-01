@@ -2,14 +2,13 @@ package io.github.nullptrx.pangleflutter.delegate
 
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTFeedAd
-import io.github.nullptrx.pangleflutter.util.PangleAdManager
 import io.flutter.plugin.common.MethodChannel
+import io.github.nullptrx.pangleflutter.util.PangleAdManager
 import java.lang.ref.WeakReference
 import kotlin.collections.set
 
 class FLTFeedAd(result: MethodChannel.Result, val tag: String) : TTAdNative.FeedAdListener {
 
-  
 
   val result: WeakReference<MethodChannel.Result>
 
@@ -32,11 +31,13 @@ class FLTFeedAd(result: MethodChannel.Result, val tag: String) : TTAdNative.Feed
 
   private fun invoke(code: Int = 0, message: String = "", count: Int = 0) {
     val method = result.get()
-    val params = mutableMapOf<String, Any>()
-    params["code"] = code
-    params["message"] = message
-    params["count"] = count
-    method?.success(params)
+    method?.apply {
+      val params = mutableMapOf<String, Any>()
+      params["code"] = code
+      params["message"] = message
+      params["count"] = count
+      success(params)
+    }
     result.clear()
   }
 

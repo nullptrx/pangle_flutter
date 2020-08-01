@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/pangle_flutter_*,@anim/pangle_flutter_*,@layout/pangle_flutter_*,@anim/tt_*,@color/tt_*,@color/appdownloader_*,@dimen/tt_*,@drawable/appdownloader_*,@drawable/tt_*,@id/app_*,@id/appdownloader_*,@id/cancel_tv,@id/confirm_tv,@id/install_*,@id/kllk_install_tv,@id/local_install_hijack_layout,@id/tag_ignore,@id/tag_view_name,@id/tt_*,@integer/tt_*,@layout/tt_*,@layout/ttdownloader_*,@string/appdownloader_*,@string/tt_*,@style/EditTextStyle,@style/*TTDownload*,@style/appdownloader_*,@style/tt_*,@style/ttdownloader_*" />

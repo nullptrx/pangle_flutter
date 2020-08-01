@@ -42,11 +42,18 @@ android {
             consumerProguardFiles "proguard-rules.pro"
         }
     }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation project(':open_ad_sdk')
+    compileOnly(name: 'open_ad_sdk', ext: 'aar')
+
 }

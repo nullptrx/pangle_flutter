@@ -8,9 +8,7 @@
          FlutterApplication and put your custom class here. -->
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:icon="@mipmap/ic_launcher"
-        android:label="pangle_flutter_example"
-        tools:replace="android:label">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name="io.github.nullptrx.pangleflutterexample.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
