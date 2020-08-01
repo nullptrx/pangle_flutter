@@ -1,6 +1,6 @@
 # 穿山甲 Flutter SDK
 
-[![pub package](https://img.shields.io/pub/v/pangle_flutter.svg)](https://pub.dartlang.org/packages/pangle_flutter)
+[![pub package](https://img.shields.io/pub/v/pangle_flutter.svg)](https://pub.dartlang.org/packages/pangle_flutter) [![Licence](https://img.shields.io/github/license/nullptrX/pangle_flutter)](https://github.com/nullptrX/pangle_flutter/blob/master/LICENSE)
 
 ## 简介
 
@@ -20,7 +20,7 @@ pangle_flutter是一款集成了穿山甲`Android`和`iOS`SDK的Flutter插件。
 ```yaml
 dependencies:
   # 添加依赖
-  pangle_flutter: ^0.0.1
+  pangle_flutter: latest
 ```
 ### 2. Android和iOS额外配置
 
