@@ -30,6 +30,7 @@ class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin 
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Widget body;
     try {
       Widget platformView;
@@ -67,7 +68,7 @@ class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin 
           ),
         );
       }
-    } on PlatformException catch (e) {}
+    } on PlatformException {}
 
     if (body == null) {
       body = Container();
@@ -102,9 +103,7 @@ class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin 
   @override
   void didUpdateWidget(FeedView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget != this) {
-      _controller?._update(_createParams());
-    }
+    _controller?._update(_createParams());
   }
 
   @override
@@ -152,6 +151,7 @@ class FeedViewController {
       default:
         break;
     }
+    return null;
   }
 
   Future<Null> _update(Map<String, dynamic> params) async {

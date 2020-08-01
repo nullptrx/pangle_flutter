@@ -41,6 +41,7 @@ class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMi
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     Widget body;
     try {
       Widget platformView;
@@ -78,7 +79,7 @@ class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMi
           ),
         );
       }
-    } on PlatformException catch (e) {}
+    } on PlatformException {}
     if (body == null) {
       body = Container();
     }
@@ -89,9 +90,7 @@ class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMi
   @override
   void didUpdateWidget(BannerView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget != this) {
-      _controller?._update(_createParams());
-    }
+    _controller?._update(_createParams());
   }
 
   void _onPlatformViewCreated(BuildContext context, int id) {
@@ -166,8 +165,6 @@ enum BannerMethod {
 
 class BannerViewController {
   MethodChannel _methodChannel;
-  _BannerViewState _state;
-  BuildContext _context;
   final _streamController = StreamController<BannerMethod>.broadcast(sync: false);
 
   Stream<BannerMethod> get methodHandler {
@@ -175,14 +172,10 @@ class BannerViewController {
   }
 
   void destroy() {
-    _context = null;
-    _state = null;
     _streamController.close();
   }
 
   BannerViewController._(int id, BuildContext context, _BannerViewState state) {
-    _context = context;
-    _state = state;
     _methodChannel = new MethodChannel('${kBannerViewType}_$id');
     _methodChannel.setMethodCallHandler((call) {
       switch (call.method) {
@@ -193,6 +186,7 @@ class BannerViewController {
           _streamController.add(BannerMethod.remove);
           break;
       }
+      return null;
     });
   }
 

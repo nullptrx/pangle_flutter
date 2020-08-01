@@ -1,8 +1,7 @@
 name: pangle_flutter
-description: Flutter plugin for Pangle Ad SDK.
-version: 0.0.1
-author:
-homepage:
+description: A Flutter plugin that supports Pangle SDK on Android and iOS. Such as Splash Ad, Rewarded Video Ad, etc.
+version: 0.0.2
+homepage: https://github.com/nullptrX/pangle_flutter
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
