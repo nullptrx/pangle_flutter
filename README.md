@@ -317,7 +317,7 @@ AndroidFeedAdConfig({
 
 
 
-## 测试说明
+## 使用说明
 
 1. 开屏广告放在runApp之前（个人感觉理论上也应该这儿），之前使用`activity.addContentView()`方式实现存在两种非正常情况
 
@@ -331,6 +331,8 @@ AndroidFeedAdConfig({
    从而解决了移除item（`setState((){});`）时，出现广告对象消失的问题。
 
 3. iOS信息流广告的点击事件需要传入`rootViewController`，使用的是`(UIApplication.shared.delegate?.window??.rootViewController)!`，暂未发现问题。
+
+4. 屏幕旋转更新FeedView宽高暂未完成
 
 
 
