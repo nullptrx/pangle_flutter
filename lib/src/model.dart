@@ -14,5 +14,5 @@ class PangleFeedAd {
       : code = map["code"],
         message = map["message"],
         count = map["count"],
-        data = List<String>.from(map["data"]);
+        data = map["data"] == null ? [] : List<String>.from(map["data"]);
 }
