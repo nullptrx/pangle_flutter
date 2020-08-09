@@ -9,3 +9,8 @@
 ## 0.0.3
 
 * 格式化项目
+
+## 0.0.4
+
+* Android布局使用ConstraintLayout减少布局嵌套
+* 优化FeedView，BannerView加载逻辑

@@ -11,8 +11,6 @@ import Flutter
 public class FLTFeedView: NSObject, FlutterPlatformView {
     private let methodChannel: FlutterMethodChannel
     private let container: UIView
-    private var adCell: BUDFeedAdBaseTableViewCell?
-    private var feedId: String?
 
     init(_ frame: CGRect, id: Int64, params: [String: Any], messenger: FlutterBinaryMessenger) {
         self.container = UIView(frame: frame)
@@ -25,7 +23,6 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
         self.methodChannel.setMethodCallHandler(self.handle(_:result:))
 
         let feedId = params["feedId"] as? String
-        self.feedId = feedId
         if feedId != nil {
             let nad = PangleAdManager.shared.getFeedAd(feedId!)
             self.loadAd(nad)
@@ -39,31 +36,37 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
         case "update":
-            guard let cell: BUDFeedAdBaseTableViewCell = self.adCell else {
-                result(nil)
-                return
+//            guard let cell: BUDFeedAdBaseTableViewCell = self.adCell else {
+//                result(nil)
+//                return
+//            }
+//
+//            let width = UIScreen.main.bounds.width
+//            //        let width = self.container.bounds.width
+//            //        let width: CGFloat = 340
+//            var height: CGFloat = 0.0
+//            let nad = cell.nativeAd
+//            if cell is BUDFeedAdLeftTableViewCell {
+//                height = BUDFeedAdLeftTableViewCell.cellHeight(withModel: nad, width: width)
+//            } else if cell is BUDFeedAdLargeTableViewCell {
+//                height = BUDFeedAdLargeTableViewCell.cellHeight(withModel: nad, width: width)
+//            } else if cell is BUDFeedAdGroupTableViewCell {
+//                height = BUDFeedAdGroupTableViewCell.cellHeight(withModel: nad, width: width)
+//            } else if cell is BUDFeedVideoAdTableViewCell {
+//                height = BUDFeedVideoAdTableViewCell.cellHeight(withModel: nad, width: width)
+//            }
+//            let frame = CGRect(x: 0, y: 0, width: width, height: height)
+//            cell.contentView.frame = frame
+//            cell.frame = frame
+//            cell.refreshUI(withModel: cell.nativeAd)
+//            self.container.frame = frame
+//            self.container.updateConstraints()
+            let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
+            let feedId = args["feedId"] as? String
+            if feedId != nil {
+                let nad = PangleAdManager.shared.getFeedAd(feedId!)
+                self.loadAd(nad)
             }
-
-            let width = UIScreen.main.bounds.width
-            //        let width = self.container.bounds.width
-            //        let width: CGFloat = 340
-            var height: CGFloat = 0.0
-            let nad = cell.nativeAd
-            if cell is BUDFeedAdLeftTableViewCell {
-                height = BUDFeedAdLeftTableViewCell.cellHeight(withModel: nad, width: width)
-            } else if cell is BUDFeedAdLargeTableViewCell {
-                height = BUDFeedAdLargeTableViewCell.cellHeight(withModel: nad, width: width)
-            } else if cell is BUDFeedAdGroupTableViewCell {
-                height = BUDFeedAdGroupTableViewCell.cellHeight(withModel: nad, width: width)
-            } else if cell is BUDFeedVideoAdTableViewCell {
-                height = BUDFeedVideoAdTableViewCell.cellHeight(withModel: nad, width: width)
-            }
-            let frame = CGRect(x: 0, y: 0, width: width, height: height)
-            cell.contentView.frame = frame
-            cell.frame = frame
-            cell.refreshUI(withModel: cell.nativeAd)
-            self.container.frame = frame
-            self.container.updateConstraints()
             result(nil)
         default:
             result(FlutterMethodNotImplemented)
@@ -74,16 +77,15 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
         guard let nativeAd: BUNativeAd = ad else {
             return
         }
-        
-        // TODO 使用AppUtil.getCurrentVC()，界面刷新时获取时，得到的VC会是UIViewController, 不是FlutterViewController
+
+        // TODO: 使用AppUtil.getCurrentVC()，界面刷新时获取时，得到的VC会是UIViewController, 不是FlutterViewController
 //        guard let vc = AppUtil.getCurrentVC() else {
 //            return
 //        }
-        
+
         // 1. 判断nativeAd.rootViewController是否nil, nil赋值vc, 非nil不赋值
         // 2. 使用(UIApplication.shared.delegate?.window??.rootViewController)!获取rootVC，目前没发现问题。但据说可能跳转后无法回到当前页面，有待考证
-        
-        
+
         let viewController: UIViewController = (UIApplication.shared.delegate?.window??.rootViewController)!
         nativeAd.rootViewController = viewController
 
@@ -141,7 +143,7 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
             }
         }
 
-        self.adCell = cell
+        self.removeAllView()
         let frame = CGRect(x: 0, y: 0, width: width, height: height)
         cell.contentView.frame = frame
         cell.frame = frame
@@ -184,17 +186,15 @@ extension FLTFeedView: BUNativeAdDelegate {
 
     public func nativeAd(_ nativeAd: BUNativeAd?, dislikeWithReason filterWords: [BUDislikeWords]?) {
         self.methodChannel.invokeMethod("remove", arguments: nil)
-
-        if self.feedId != nil {
-            PangleAdManager.shared.removeFeedAd(self.feedId!)
+        if nativeAd != nil {
+            PangleAdManager.shared.removeFeedAd(String(nativeAd!.hash))
         }
-//        self.removeView()
+        self.removeAllView()
     }
 
     public func nativeAdDidCloseOtherController(_ nativeAd: BUNativeAd, interactionType: BUInteractionType) {}
 
-    public func removeView() {
-        self.adCell?.removeFromSuperview()
-        self.adCell = nil
+    public func removeAllView() {
+        self.container.subviews.forEach { $0.removeFromSuperview() }
     }
 }

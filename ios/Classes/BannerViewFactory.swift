@@ -20,6 +20,6 @@ public class BannerViewFactory: NSObject, FlutterPlatformViewFactory {
     }
 
     public func create(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?) -> FlutterPlatformView {
-        return FLTBannerView(frame, id: viewId, params: (args as? [String: Any]) ?? [:], messenger: self.messenger)
+        return FLTBannerView(frame, id: viewId, params: (args as? [String: Any?]) ?? [:], messenger: self.messenger)
     }
 }
