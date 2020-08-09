@@ -3,11 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="140dp"
+    android:layout_height="wrap_content"
     android:background="@color/tt_white"
     android:clipToPadding="false"
     android:paddingHorizontal="16dp"
     android:paddingTop="16dp">
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@id/pangle_flutter_item_group"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        app:constraint_referenced_ids="pangle_flutter_item_dislike"
+        app:layout_constraintEnd_toEndOf="@id/pangle_flutter_item_divider"
+        app:layout_constraintStart_toStartOf="@id/pangle_flutter_item_divider"
+        app:layout_constraintTop_toBottomOf="@id/pangle_flutter_item_divider" />
 
     <ImageView
         android:id="@id/pangle_flutter_item_icon"
@@ -106,8 +115,8 @@
         android:paddingHorizontal="8dp"
         android:src="@drawable/pangle_flutter_dislike"
         app:layout_constrainedHeight="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="@id/pangle_flutter_item_image"
-        app:layout_constraintTop_toBottomOf="@id/pangle_flutter_item_divider"
+        app:layout_constraintBottom_toBottomOf="@id/pangle_flutter_item_group"
+        app:layout_constraintEnd_toEndOf="@id/pangle_flutter_item_group"
+        app:layout_constraintTop_toTopOf="@id/pangle_flutter_item_group"
         app:layout_constraintVertical_bias="0.5" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -12,28 +12,14 @@ class _BannerPageState extends State<BannerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Banner Ad'),
+        title: Text('Banner AD'),
       ),
       body: Column(
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.all(8.0),
-            height: 100,
-            alignment: Alignment.center,
-            child: Text(
-              'Content',
-              style: TextStyle(fontSize: 30),
-            ),
-          ),
           BannerView(
             iOS: IOSBannerAdConfig(slotId: kBannerId),
             android: AndroidBannerAdConfig(
                 slotId: kBannerId, imgSize: PangleImgSize.banner600_150),
-          ),
-          Expanded(
-            child: Container(
-              color: Color(0xFF777777),
-            ),
           ),
         ],
       ),

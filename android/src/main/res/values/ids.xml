@@ -24,5 +24,7 @@
 
     <item name="pangle_flutter_item_group" type="id" />
 
+    <item name="pangle_flutter_item_group2" type="id" />
+
 
 </resources>

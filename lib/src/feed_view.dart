@@ -8,6 +8,7 @@ import 'size.dart';
 
 final kFeedViewType = 'nullptrx.github.io/pangle_feedview';
 
+/// display feed AD
 class FeedView extends StatefulWidget {
   final String id;
 
@@ -19,7 +20,8 @@ class FeedView extends StatefulWidget {
   State<StatefulWidget> createState() => _FeedViewState();
 }
 
-class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+class _FeedViewState extends State<FeedView>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   FeedViewController _controller;
   bool offstage = true;
   double adWidth = kPangleSize;
@@ -67,7 +69,7 @@ class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin,
           // FeedView content is not affected by the Android view's layout direction,
           // we explicitly set it here so that the widget doesn't require an ambient
           // directionality.
-          layoutDirection: TextDirection.rtl,
+          layoutDirection: TextDirection.ltr,
         );
       } else if (defaultTargetPlatform == TargetPlatform.iOS) {
         platformView = UiKitView(
@@ -78,7 +80,7 @@ class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin,
           // FeedView content is not affected by the Android view's layout direction,
           // we explicitly set it here so that the widget doesn't require an ambient
           // directionality.
-          layoutDirection: TextDirection.rtl,
+          layoutDirection: TextDirection.ltr,
         );
       }
       if (platformView != null) {
@@ -120,7 +122,8 @@ class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin,
         this.adHeight = height;
       });
     };
-    final controller = FeedViewController._(id, onRemove: removed, onUpdate: updated);
+    final controller =
+        FeedViewController._(id, onRemove: removed, onUpdate: updated);
     _controller = controller;
   }
 
@@ -130,8 +133,6 @@ class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin,
     };
   }
 }
-
-typedef SizeCallback = void Function(Map<dynamic, dynamic> params);
 
 class FeedViewController {
   MethodChannel _methodChannel;

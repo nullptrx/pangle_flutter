@@ -54,7 +54,7 @@ class _FeedPageState extends State<FeedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Feed Ad'),
+        title: Text('Feed AD'),
       ),
       body: Container(
           child: ListView.separated(

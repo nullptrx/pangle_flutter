@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pangle Ad SDK Examples'),
+        title: const Text('Pangle Flutter Examples'),
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
                   android: AndroidSplashConfig(slotId: kSplashId),
                 );
               },
-              child: Text('Splash Ad'),
+              child: Text('Splash AD'),
             ),
             RaisedButton(
               onPressed: () {
@@ -60,15 +60,15 @@ class _MyAppState extends State<MyApp> {
                   android: AndroidRewardedVideoConfig(slotId: kRewardedVideoId),
                 );
               },
-              child: Text('Reward Video Ad'),
+              child: Text('Reward Video AD'),
             ),
             RaisedButton(
               onPressed: loadBannerAd,
-              child: Text('Banner Ad'),
+              child: Text('Banner AD'),
             ),
             RaisedButton(
               onPressed: loadFeedAd,
-              child: Text('Feed Ad'),
+              child: Text('Feed AD'),
             ),
           ],
         ),
@@ -77,10 +77,12 @@ class _MyAppState extends State<MyApp> {
   }
 
   void loadBannerAd() {
-    Navigator.push(context, CupertinoPageRoute(builder: (context) => BannerPage()));
+    Navigator.push(
+        context, CupertinoPageRoute(builder: (context) => BannerPage()));
   }
 
   void loadFeedAd() {
-    Navigator.push(context, CupertinoPageRoute(builder: (context) => FeedPage()));
+    Navigator.push(
+        context, CupertinoPageRoute(builder: (context) => FeedPage()));
   }
 }

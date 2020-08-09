@@ -13,6 +13,7 @@ final kBannerViewType = 'nullptrx.github.io/pangle_bannerview';
 
 typedef void BannerViewCreatedCallback(BannerViewController controller);
 
+/// display banner AD
 class BannerView extends StatefulWidget {
   final IOSBannerAdConfig iOS;
   final AndroidBannerAdConfig android;
@@ -31,7 +32,7 @@ class BannerView extends StatefulWidget {
 }
 
 class _BannerViewState extends State<BannerView>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   BannerViewController _controller;
   bool offstage = true;
   double adWidth = kPangleSize;
@@ -39,6 +40,24 @@ class _BannerViewState extends State<BannerView>
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _controller = null;
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    _controller?._update(_createParams());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +75,7 @@ class _BannerViewState extends State<BannerView>
           // BannerView content is not affected by the Android view's layout direction,
           // we explicitly set it here so that the widget doesn't require an ambient
           // directionality.
-          layoutDirection: TextDirection.rtl,
+          layoutDirection: TextDirection.ltr,
         );
       } else if (defaultTargetPlatform == TargetPlatform.iOS) {
         platformView = UiKitView(
@@ -68,7 +87,7 @@ class _BannerViewState extends State<BannerView>
           // BannerView content is not affected by the Android view's layout direction,
           // we explicitly set it here so that the widget doesn't require an ambient
           // directionality.
-          layoutDirection: TextDirection.rtl,
+          layoutDirection: TextDirection.ltr,
         );
       }
       if (platformView != null) {
@@ -97,44 +116,33 @@ class _BannerViewState extends State<BannerView>
   }
 
   void _onPlatformViewCreated(BuildContext context, int id) {
-    var controller = BannerViewController._(id, context, this);
+    final removed = () {
+      setState(() {
+        this.offstage = true;
+        this.adWidth = kPangleSize;
+        this.adHeight = kPangleSize;
+      });
+//      if (widget.onRemove != null) {
+//        widget.onRemove();
+//      }
+    };
+    final updated = (args) {
+      double width = args['width'];
+      double height = args['height'];
+      setState(() {
+        this.offstage = false;
+        this.adWidth = width;
+        this.adHeight = height;
+      });
+    };
+
+    var controller =
+        BannerViewController._(id, onRemove: removed, onUpdate: updated);
     _controller = controller;
-    _controller.methodHandler.listen((event) {
-      if (event == BannerMethod.remove) {
-        setState(() {
-          this.offstage = true;
-          this.adWidth = kPangleSize;
-          this.adHeight = kPangleSize;
-        });
-      }
-    });
-    _loadAd(controller);
     if (widget.onBannerViewCreated == null) {
       return;
     }
     widget.onBannerViewCreated(controller);
-  }
-
-  void _loadAd(BannerViewController controller) async {
-    if (controller == null) {
-      return;
-    }
-    final data = await controller?.loadAd(
-      iOS: widget.iOS,
-      android: widget.android,
-    );
-    if (data['success'] ?? false) {
-      double width = data['width'];
-      double height = data['height'];
-
-      if (mounted) {
-        setState(() {
-          this.offstage = false;
-          this.adWidth = width;
-          this.adHeight = height;
-        });
-      }
-    }
   }
 
   void updateWidget(BuildContext context, bool success) {
@@ -143,12 +151,6 @@ class _BannerViewState extends State<BannerView>
         offstage = !success;
       });
     }
-  }
-
-  @override
-  void dispose() {
-    _controller.destroy();
-    super.dispose();
   }
 
   Map<String, dynamic> _createParams() {
@@ -168,46 +170,35 @@ enum BannerMethod {
 
 class BannerViewController {
   MethodChannel _methodChannel;
-  final _streamController =
-      StreamController<BannerMethod>.broadcast(sync: false);
+  final VoidCallback onRemove;
+  final SizeCallback onUpdate;
 
-  Stream<BannerMethod> get methodHandler {
-    return _streamController.stream;
-  }
-
-  void destroy() {
-    _streamController.close();
-  }
-
-  BannerViewController._(int id, BuildContext context, _BannerViewState state) {
+  BannerViewController._(
+    int id, {
+    this.onRemove,
+    this.onUpdate,
+  }) {
     _methodChannel = new MethodChannel('${kBannerViewType}_$id');
-    _methodChannel.setMethodCallHandler((call) {
-      switch (call.method) {
-        case 'reload':
-          _streamController.add(BannerMethod.reload);
-          break;
-        case 'remove':
-          _streamController.add(BannerMethod.remove);
-          break;
-      }
-      return null;
-    });
+    _methodChannel.setMethodCallHandler(_handleMethod);
   }
 
-  /// Request banner ad data.
-  ///
-  /// [iOS] config for iOS
-  /// [android] config for Android
-  Future<Map<String, dynamic>> loadAd({
-    IOSBannerAdConfig iOS,
-    AndroidBannerAdConfig android,
-  }) async {
-    if (Platform.isIOS && iOS != null) {
-      return await _methodChannel.invokeMapMethod('load', iOS.toJSON());
-    } else if (Platform.isAndroid && android != null) {
-      return await _methodChannel.invokeMapMethod('load', android.toJSON());
+  Future<dynamic> _handleMethod(MethodCall call) {
+    switch (call.method) {
+      case 'remove':
+        if (onRemove != null) {
+          onRemove();
+        }
+        break;
+      case 'update':
+        final params = call.arguments as Map<dynamic, dynamic>;
+        if (onUpdate != null) {
+          onUpdate(params);
+        }
+        break;
+      default:
+        break;
     }
-    return {};
+    return null;
   }
 
   Future<Null> _update(Map<String, dynamic> params) async {

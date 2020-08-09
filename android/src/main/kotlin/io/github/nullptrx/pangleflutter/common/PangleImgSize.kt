@@ -1,6 +1,7 @@
 package io.github.nullptrx.pangleflutter.common
 
 import android.content.res.Resources
+import io.github.nullptrx.pangleflutter.util.ScreenUtil
 
 enum class PangleImgSize(val width: Int = 0, val height: Int = 0) {
   banner640_90(640, 90),

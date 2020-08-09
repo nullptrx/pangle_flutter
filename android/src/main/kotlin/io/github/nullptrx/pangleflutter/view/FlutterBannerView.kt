@@ -20,7 +20,6 @@ import io.github.nullptrx.pangleflutter.common.TTSizeF
 import io.github.nullptrx.pangleflutter.util.PangleAdManager
 import io.github.nullptrx.pangleflutter.util.PangleAdSlotManager
 import io.github.nullptrx.pangleflutter.util.px
-import java.lang.ref.WeakReference
 
 
 /**
@@ -34,10 +33,17 @@ class FlutterBannerView(val context: Context, messenger: BinaryMessenger, val id
   init {
     methodChannel = MethodChannel(messenger, "nullptrx.github.io/pangle_bannerview_$id")
     methodChannel.setMethodCallHandler(this)
-    
+
     container = FrameLayout(context)
     container.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
+
+    val slotId = params["slotId"] as String
+    val imgSizeIndex = params["imgSize"] as Int
+    val isSupportDeepLink = params["isSupportDeepLink"] as? Boolean ?: true
+    val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
+    val adSlot = PangleAdSlotManager.getBannerAdSlot(slotId, imgSizeIndex, isSupportDeepLink)
+    PangleAdManager.shared.loadBannerAd(adSlot, FLTBannerAd(imgSize))
   }
 
   override fun getView(): View {
@@ -52,19 +58,12 @@ class FlutterBannerView(val context: Context, messenger: BinaryMessenger, val id
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
 
     when (call.method) {
-      "load", "reload" -> {
-        val slotId = call.argument<String>("slotId")!!
-        val imgSizeIndex = call.argument<Int>("imgSize") ?: PangleImgSize.banner600_286.ordinal
-        val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
-        val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
-        val adSlot = PangleAdSlotManager.getBannerAdSlot(slotId, imgSizeIndex, isSupportDeepLink)
-        PangleAdManager.shared.loadBannerAd(adSlot, FLTBannerAd(imgSize, result))
-      }
       "update" -> {
-        val imgSizeIndex = call.argument<Int>("imgSize") ?: PangleImgSize.banner600_286.ordinal
+        val imgSizeIndex = call.argument<Int>("imgSize") as Int
         val imgSize = PangleImgSize.values()[imgSizeIndex]
 
-        invalidateView(imgSize.width, imgSize.height)
+        val size = invalidateView(imgSize.width, imgSize.height)
+        invoke(size.width.px, size.height.px)
         result.success(null)
       }
       else -> result.notImplemented()
@@ -80,19 +79,29 @@ class FlutterBannerView(val context: Context, messenger: BinaryMessenger, val id
 
   internal enum class Method {
     remove,
-    reload;
+    reload,
+    update,
   }
 
-  internal inner class FLTBannerAd(val imgSize: TTSize, result: MethodChannel.Result?) : TTAdNative.BannerAdListener {
+//  private fun invoke(message: String? = null) {
+//    val params = mutableMapOf<String, Any?>()
+//    params["success"] = false
+//    params["message"] = message
+//    methodChannel.invokeMethod(Method.update.name, params)
+//  }
 
-    val result: WeakReference<MethodChannel.Result?>
+  private fun invoke(width: Float, height: Float) {
+    val params = mutableMapOf<String, Any>()
+    params["width"] = width
+    params["height"] = height
+    methodChannel.invokeMethod(Method.update.name, params)
+  }
 
-    init {
-      this.result = WeakReference(result)
-    }
+
+  internal inner class FLTBannerAd(val imgSize: TTSize) : TTAdNative.BannerAdListener {
 
     override fun onError(code: Int, message: String?) {
-      invoke(message)
+//      invoke(message)
     }
 
     override fun onBannerAdLoad(ad: TTBannerAd) {
@@ -100,7 +109,7 @@ class FlutterBannerView(val context: Context, messenger: BinaryMessenger, val id
 //      view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
       container.removeAllViews()
       val size = invalidateView(imgSize.width, imgSize.height)
-      val params = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+      val params = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
       container.addView(view, params)
       //设置轮播的时间间隔  间隔在30s到120秒之间的值，不设置默认不轮播
 //      ad.setSlideIntervalTime(30_000)
@@ -137,27 +146,6 @@ class FlutterBannerView(val context: Context, messenger: BinaryMessenger, val id
 
     }
 
-    private fun invoke(message: String? = null) {
-      result.get()?.apply {
-        val params = mutableMapOf<String, Any?>()
-        params["success"] = false
-        params["message"] = message
-        success(params)
-      }
-      result.clear()
-    }
-
-    private fun invoke(width: Float, height: Float) {
-      val method = result.get()
-      method?.apply {
-        val params = mutableMapOf<String, Any>()
-        params["success"] = true
-        params["width"] = width
-        params["height"] = height
-        success(params)
-      }
-      result.clear()
-    }
 
   }
 }
