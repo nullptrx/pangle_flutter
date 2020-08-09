@@ -14,3 +14,7 @@
 
 * Android布局使用ConstraintLayout减少布局嵌套
 * 优化FeedView，BannerView加载逻辑
+
+## 0.0.5
+
+* 增加FeedView，BannerView点击移除时的默认实现
