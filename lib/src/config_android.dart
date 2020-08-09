@@ -44,6 +44,7 @@ class AndroidConfig {
     this.titleBarTheme = AndroidTitleBarTheme.light,
   });
 
+  /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'appId': appId,
@@ -78,6 +79,7 @@ class AndroidSplashConfig {
     this.isExpress,
   });
 
+  /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
@@ -115,6 +117,7 @@ class AndroidRewardedVideoConfig {
     this.extra,
   });
 
+  /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
@@ -142,6 +145,7 @@ class AndroidBannerAdConfig {
     this.isSupportDeepLink,
   });
 
+  /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
@@ -174,6 +178,7 @@ class AndroidFeedAdConfig {
     this.isSupportDeepLink,
   });
 
+  /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,

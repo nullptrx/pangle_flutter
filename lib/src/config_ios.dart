@@ -21,6 +21,7 @@ class IOSConfig {
     this.isPaidApp,
   });
 
+  /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'appId': appId,
@@ -47,6 +48,7 @@ class IOSSplashConfig {
     this.hideSkipButton,
   });
 
+  /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
@@ -83,6 +85,7 @@ class IOSRewardedVideoConfig {
     this.extra,
   });
 
+  /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
@@ -110,6 +113,7 @@ class IOSBannerAdConfig {
     this.count,
   });
 
+  /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
@@ -141,6 +145,7 @@ class IOSFeedAdConfig {
     this.isSupportDeepLink,
   });
 
+  /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,

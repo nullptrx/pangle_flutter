@@ -1,9 +1,11 @@
+/// log level, only ios works.
 enum PangleLogLevel {
   none,
   error,
   debug,
 }
 
+/// pick image size for ad
 enum PangleImgSize {
   banner640_90,
   banner640_100,
@@ -22,12 +24,14 @@ enum PangleImgSize {
   drawFullScreen,
 }
 
+/// title bar theme for land page, only android works.
 enum AndroidTitleBarTheme {
   light,
   dark,
   no_title_bar,
 }
 
+/// available network type for downloading type ad.
 class AndroidDirectDownloadNetworkType {
   static const int kMobile = 1;
   static const int k2G = 2;

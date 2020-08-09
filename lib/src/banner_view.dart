@@ -17,12 +17,14 @@ typedef void BannerViewCreatedCallback(BannerViewController controller);
 class BannerView extends StatefulWidget {
   final IOSBannerAdConfig iOS;
   final AndroidBannerAdConfig android;
+  final VoidCallback onRemove;
 
   const BannerView({
     Key key,
     this.iOS,
     this.android,
     this.onBannerViewCreated,
+    this.onRemove,
   }) : super(key: key);
 
   final BannerViewCreatedCallback onBannerViewCreated;
@@ -117,14 +119,15 @@ class _BannerViewState extends State<BannerView>
 
   void _onPlatformViewCreated(BuildContext context, int id) {
     final removed = () {
-      setState(() {
-        this.offstage = true;
-        this.adWidth = kPangleSize;
-        this.adHeight = kPangleSize;
-      });
-//      if (widget.onRemove != null) {
-//        widget.onRemove();
-//      }
+      if (widget.onRemove != null) {
+        widget.onRemove();
+      } else {
+        setState(() {
+          this.offstage = true;
+          this.adWidth = kPangleSize;
+          this.adHeight = kPangleSize;
+        });
+      }
     };
     final updated = (args) {
       double width = args['width'];

@@ -14,6 +14,9 @@ class FeedView extends StatefulWidget {
 
   final VoidCallback onRemove;
 
+  /// constructor a feed view
+  /// [id] feedId
+  /// [onRemove] when click dislike button
   FeedView({Key key, this.id, this.onRemove}) : super(key: key);
 
   @override
@@ -104,13 +107,14 @@ class _FeedViewState extends State<FeedView>
 
   void _onPlatformViewCreated(BuildContext context, int id) {
     final removed = () {
-//      setState(() {
-//        this.offstage = true;
-//        this.adWidth = kPangleSize;
-//        this.adHeight = kPangleSize;
-//      });
       if (widget.onRemove != null) {
         widget.onRemove();
+      } else {
+        setState(() {
+          this.offstage = true;
+          this.adWidth = kPangleSize;
+          this.adHeight = kPangleSize;
+        });
       }
     };
     final updated = (args) {

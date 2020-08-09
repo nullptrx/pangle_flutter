@@ -1,3 +1,5 @@
+library pangle_flutter;
+
 export 'src/banner_view.dart';
 export 'src/config_android.dart';
 export 'src/config_ios.dart';
