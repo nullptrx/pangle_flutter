@@ -108,7 +108,7 @@ class FlutterFeedView(
       val feedHeight: Float = when (it.imageMode) {
         TTAdConstant.IMAGE_MODE_SMALL_IMG -> 140.dp
         TTAdConstant.IMAGE_MODE_LARGE_IMG -> 310.dp
-        TTAdConstant.IMAGE_MODE_GROUP_IMG -> 210.dp
+        TTAdConstant.IMAGE_MODE_GROUP_IMG -> 180.dp
         TTAdConstant.IMAGE_MODE_VIDEO -> 310.dp
         TTAdConstant.IMAGE_MODE_VERTICAL_IMG -> 10.dp
         else -> 0
@@ -171,7 +171,7 @@ class FlutterFeedView(
     val feedHeight: Float = when (ad.imageMode) {
       TTAdConstant.IMAGE_MODE_SMALL_IMG -> 140.dp
       TTAdConstant.IMAGE_MODE_LARGE_IMG -> 310.dp
-      TTAdConstant.IMAGE_MODE_GROUP_IMG -> 210.dp
+      TTAdConstant.IMAGE_MODE_GROUP_IMG -> 180.dp
       TTAdConstant.IMAGE_MODE_VIDEO -> 310.dp
       TTAdConstant.IMAGE_MODE_VERTICAL_IMG -> 10.dp
       else -> 0
@@ -205,15 +205,15 @@ class FlutterFeedView(
   private fun bindSmallAdView(parent: ViewGroup, @NonNull ad: TTFeedAd): View {
     val holder = SmallAdViewHolder()
     val view = LayoutInflater.from(context).inflate(R.layout.pangle_flutter_item_small_pic, parent, false)
-    holder.title = view[R.id.tv_listitem_ad_title]
-    holder.description = view[R.id.tv_listitem_ad_desc]
-    holder.source = view[R.id.tv_listitem_ad_source]
-    holder.smallImage = view[R.id.iv_listitem_image]
-    holder.icon = view[R.id.iv_listitem_icon]
-    holder.dislike = view[R.id.iv_listitem_dislike]
-    holder.creativeButton = view[R.id.btn_listitem_creative]
-    holder.stopButton = view[R.id.btn_listitem_stop]
-    holder.removeButton = view[R.id.btn_listitem_remove]
+    holder.title = view[R.id.pangle_flutter_item_title]
+    holder.description = view[R.id.pangle_flutter_item_desc]
+    holder.source = view[R.id.pangle_flutter_item_source]
+    holder.smallImage = view[R.id.pangle_flutter_item_image]
+    holder.icon = view[R.id.pangle_flutter_item_icon]
+    holder.dislike = view[R.id.pangle_flutter_item_dislike]
+    holder.creativeButton = view[R.id.pangle_flutter_item_creative]
+    holder.stopButton = view[R.id.pangle_flutter_item_stop]
+    holder.removeButton = view[R.id.pangle_flutter_item_remove]
 
     bindData(container, holder, ad)
     if (ad.imageList != null && !ad.imageList.isEmpty()) {
@@ -235,16 +235,18 @@ class FlutterFeedView(
   private fun bindVerticalAdView(parent: ViewGroup, @NonNull ad: TTFeedAd): View {
 
     val holder = VerticalAdViewHolder()
-    val view = LayoutInflater.from(context).inflate(R.layout.pangle_flutter_listitem_ad_vertical_pic, parent, false)
-    holder.title = view[R.id.tv_listitem_ad_title]
-    holder.description = view[R.id.tv_listitem_ad_desc]
-    holder.source = view[R.id.tv_listitem_ad_source]
-    holder.verticalImage = view[R.id.iv_listitem_image]
-    holder.icon = view[R.id.iv_listitem_icon]
-    holder.dislike = view[R.id.iv_listitem_dislike]
-    holder.creativeButton = view[R.id.btn_listitem_creative]
-    holder.stopButton = view[R.id.btn_listitem_stop]
-    holder.removeButton = view[R.id.btn_listitem_remove]
+    // 未找到模板素材，暂时使用 small pic 布局
+    val view = LayoutInflater.from(context).inflate(R.layout.pangle_flutter_item_small_pic, parent, false)
+//    val view = LayoutInflater.from(context).inflate(R.layout.pangle_flutter_listitem_ad_vertical_pic, parent, false)
+    holder.title = view[R.id.pangle_flutter_item_title]
+    holder.description = view[R.id.pangle_flutter_item_desc]
+    holder.source = view[R.id.pangle_flutter_item_source]
+    holder.verticalImage = view[R.id.pangle_flutter_item_image]
+    holder.icon = view[R.id.pangle_flutter_item_icon]
+    holder.dislike = view[R.id.pangle_flutter_item_dislike]
+    holder.creativeButton = view[R.id.pangle_flutter_item_creative]
+    holder.stopButton = view[R.id.pangle_flutter_item_stop]
+    holder.removeButton = view[R.id.pangle_flutter_item_remove]
 
     bindData(container, holder, ad)
     if (ad.imageList != null && !ad.imageList.isEmpty()) {
@@ -259,16 +261,16 @@ class FlutterFeedView(
   private fun bindLargeAdView(parent: ViewGroup, @NonNull ad: TTFeedAd): View {
 
     val holder = LargeAdViewHolder()
-    val view = LayoutInflater.from(context).inflate(R.layout.pangle_flutter_listitem_ad_large_pic, parent, false)
-    holder.title = view[R.id.tv_listitem_ad_title]
-    holder.description = view[R.id.tv_listitem_ad_desc]
-    holder.source = view[R.id.tv_listitem_ad_source]
-    holder.largeImage = view[R.id.iv_listitem_image]
-    holder.icon = view[R.id.iv_listitem_icon]
-    holder.dislike = view[R.id.iv_listitem_dislike]
-    holder.creativeButton = view[R.id.btn_listitem_creative]
-    holder.stopButton = view[R.id.btn_listitem_stop]
-    holder.removeButton = view[R.id.btn_listitem_remove]
+    val view = LayoutInflater.from(context).inflate(R.layout.pangle_flutter_item_large_pic, parent, false)
+    holder.title = view[R.id.pangle_flutter_item_title]
+    holder.description = view[R.id.pangle_flutter_item_desc]
+    holder.source = view[R.id.pangle_flutter_item_source]
+    holder.largeImage = view[R.id.pangle_flutter_item_image]
+    holder.icon = view[R.id.pangle_flutter_item_icon]
+    holder.dislike = view[R.id.pangle_flutter_item_dislike]
+    holder.creativeButton = view[R.id.pangle_flutter_item_creative]
+    holder.stopButton = view[R.id.pangle_flutter_item_stop]
+    holder.removeButton = view[R.id.pangle_flutter_item_remove]
 
     bindData(container, holder, ad)
     if (ad.imageList != null && !ad.imageList.isEmpty()) {
@@ -284,18 +286,18 @@ class FlutterFeedView(
   private fun bindGroupAdView(parent: ViewGroup, @NonNull ad: TTFeedAd): View {
 
     val holder = GroupAdViewHolder()
-    val view = LayoutInflater.from(context).inflate(R.layout.pangle_flutter_listitem_ad_group_pic, parent, false)
-    holder.title = view[R.id.tv_listitem_ad_title]
-    holder.description = view[R.id.tv_listitem_ad_desc]
-    holder.source = view[R.id.tv_listitem_ad_source]
-    holder.groupImage1 = view[R.id.iv_listitem_image1]
-    holder.groupImage2 = view[R.id.iv_listitem_image2]
-    holder.groupImage3 = view[R.id.iv_listitem_image3]
-    holder.icon = view[R.id.iv_listitem_icon]
-    holder.dislike = view[R.id.iv_listitem_dislike]
-    holder.creativeButton = view[R.id.btn_listitem_creative]
-    holder.stopButton = view[R.id.btn_listitem_stop]
-    holder.removeButton = view[R.id.btn_listitem_remove]
+    val view = LayoutInflater.from(context).inflate(R.layout.pangle_flutter_item_group_pic, parent, false)
+    holder.title = view[R.id.pangle_flutter_item_title]
+    holder.description = view[R.id.pangle_flutter_item_desc]
+    holder.source = view[R.id.pangle_flutter_item_source]
+    holder.groupImage1 = view[R.id.pangle_flutter_item_image1]
+    holder.groupImage2 = view[R.id.pangle_flutter_item_image2]
+    holder.groupImage3 = view[R.id.pangle_flutter_item_image3]
+    holder.icon = view[R.id.pangle_flutter_item_icon]
+    holder.dislike = view[R.id.pangle_flutter_item_dislike]
+    holder.creativeButton = view[R.id.pangle_flutter_item_creative]
+    holder.stopButton = view[R.id.pangle_flutter_item_stop]
+    holder.removeButton = view[R.id.pangle_flutter_item_remove]
 
     bindData(container, holder, ad)
     if (ad.imageList != null && ad.imageList.size >= 3) {
@@ -321,16 +323,16 @@ class FlutterFeedView(
    */
   private fun bindVideoView(parent: ViewGroup, ad: TTFeedAd): View {
     val holder = VideoAdViewHolder()
-    val view = LayoutInflater.from(context).inflate(R.layout.pangle_flutter_listitem_ad_large_video, parent, false)
-    holder.title = view[R.id.tv_listitem_ad_title]
-    holder.description = view[R.id.tv_listitem_ad_desc]
-    holder.source = view[R.id.tv_listitem_ad_source]
-    holder.videoView = view[R.id.iv_listitem_video]
-    holder.icon = view[R.id.iv_listitem_icon]
-    holder.dislike = view[R.id.iv_listitem_dislike]
-    holder.creativeButton = view[R.id.btn_listitem_creative]
-    holder.stopButton = view[R.id.btn_listitem_stop]
-    holder.removeButton = view[R.id.btn_listitem_remove]
+    val view = LayoutInflater.from(context).inflate(R.layout.pangle_flutter_item_large_video, parent, false)
+    holder.title = view[R.id.pangle_flutter_item_title]
+    holder.description = view[R.id.pangle_flutter_item_desc]
+    holder.source = view[R.id.pangle_flutter_item_source]
+    holder.videoView = view[R.id.pangle_flutter_item_video]
+    holder.icon = view[R.id.pangle_flutter_item_icon]
+    holder.dislike = view[R.id.pangle_flutter_item_dislike]
+    holder.creativeButton = view[R.id.pangle_flutter_item_creative]
+    holder.stopButton = view[R.id.pangle_flutter_item_stop]
+    holder.removeButton = view[R.id.pangle_flutter_item_remove]
 
     bindData(parent, holder, ad)
     val video = ad.adView

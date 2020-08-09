@@ -4,5 +4,5 @@
     <corners android:radius="2dp" />
     <stroke
         android:width="0.7dp"
-        android:color="#3399cc" />
+        android:color="@color/pangle_flutter_custom" />
 </shape>

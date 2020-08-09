@@ -19,8 +19,7 @@ class FeedView extends StatefulWidget {
   State<StatefulWidget> createState() => _FeedViewState();
 }
 
-class _FeedViewState extends State<FeedView>
-    with AutomaticKeepAliveClientMixin {
+class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   FeedViewController _controller;
   bool offstage = true;
   double adWidth = kPangleSize;
@@ -28,6 +27,30 @@ class _FeedViewState extends State<FeedView>
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _controller = null;
+    super.dispose();
+  }
+
+  @override
+  void didChangeMetrics() {
+    _controller?._update(_createParams());
+  }
+
+  @override
+  void didUpdateWidget(FeedView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _controller?._update(_createParams());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,21 +120,8 @@ class _FeedViewState extends State<FeedView>
         this.adHeight = height;
       });
     };
-    final controller =
-        FeedViewController._(id, onRemove: removed, onUpdate: updated);
+    final controller = FeedViewController._(id, onRemove: removed, onUpdate: updated);
     _controller = controller;
-  }
-
-  @override
-  void didUpdateWidget(FeedView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _controller?._update(_createParams());
-  }
-
-  @override
-  void dispose() {
-    _controller = null;
-    super.dispose();
   }
 
   Map<String, dynamic> _createParams() {
