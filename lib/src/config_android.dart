@@ -138,7 +138,7 @@ class AndroidBannerAdConfig {
   /// [isSupportDeepLink] optional. Whether to support deeplink.
   AndroidBannerAdConfig({
     @required this.slotId,
-    this.imgSize = PangleImgSize.banner600_286,
+    this.imgSize = PangleImgSize.banner600_150,
     this.isSupportDeepLink,
   });
 

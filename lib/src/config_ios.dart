@@ -106,7 +106,7 @@ class IOSBannerAdConfig {
   /// [imgSize] required. Image size.
   IOSBannerAdConfig({
     @required this.slotId,
-    this.imgSize = PangleImgSize.banner600_286,
+    this.imgSize = PangleImgSize.banner600_150,
     this.count,
   });
 

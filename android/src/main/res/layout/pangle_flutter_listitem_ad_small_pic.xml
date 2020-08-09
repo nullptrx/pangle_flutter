@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+
     android:orientation="vertical">
 
     <LinearLayout
@@ -30,6 +31,7 @@
                 android:singleLine="false"
                 android:textColor="@android:color/black"
                 android:textSize="16dp"
+                android:visibility="gone"
                 tools:text="80后的回忆！经典三国完美复刻，安卓用户的福利" />
 
             <LinearLayout
@@ -46,11 +48,10 @@
                     android:layout_width="30dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginRight="10dp"
-                    android:visibility="gone" />
+                    android:layout_marginRight="10dp" />
 
                 <TextView
-                    android:id="@+id/tv_listitem_ad_source"
+                    android:id="@+id/tv_listitem_ad_desc"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"

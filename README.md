@@ -334,6 +334,27 @@ AndroidFeedAdConfig({
 
 4. 屏幕旋转更新FeedView宽高暂未完成
 
+5. 如果Android应用没有授予`READ_PHONE_STATE`权限，有可能出现这样的错误
+
+```
+U SHALL NOT PASS!
+E  java.lang.SecurityException: getDeviceId: The user 10285 does not meet the requirements to access device identifiers.
+E      at android.os.Parcel.createException(Parcel.java:2071)
+E      at android.os.Parcel.readException(Parcel.java:2039)
+E      at android.os.Parcel.readException(Parcel.java:1987)
+E      at com.android.internal.telephony.ITelephony$Stub$Proxy.getDeviceId(ITelephony.java:10590)
+E      at android.telephony.TelephonyManager.getDeviceId(TelephonyManager.java:1619)
+E      at com.bytedance.embedapplog.bm.a(SourceFile:12)
+E      at com.bytedance.embedapplog.an.a(SourceFile:38)
+E      at com.bytedance.embedapplog.aa.e(SourceFile:183)
+E      at com.bytedance.embedapplog.k.handleMessage(SourceFile:128)
+E      at android.os.Handler.dispatchMessage(Handler.java:103)
+E      at android.os.Looper.loop(Looper.java:214)
+E      at android.os.HandlerThread.run(HandlerThread.java:67)
+```
+
+
+
 
 
 ## 贡献

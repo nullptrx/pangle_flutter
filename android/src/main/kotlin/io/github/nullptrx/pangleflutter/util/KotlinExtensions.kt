@@ -37,7 +37,7 @@ val Number.px
   get() = this.toFloat() / Resources.getSystem().displayMetrics.density
 
 
-operator fun <T : View> View.get(id: Int): T {
+operator fun <T : View> View.get(id: Int): T? {
   return findViewById(id)
 }
 
