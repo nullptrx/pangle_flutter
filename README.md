@@ -319,22 +319,14 @@ AndroidFeedAdConfig({
 
 ## 使用说明
 
-1. 开屏广告放在runApp之前（个人感觉理论上也应该这儿），之前使用`activity.addContentView()`方式实现存在两种非正常情况
-
-   - 内容页先出现的问题
-   - 内容页没有渲染，开屏广告结束后，界面黑屏（FlutterView未成功渲染）
-
-   后使用DialogFragment的方式实现后，暂未出现以上问题。
-
+1. 开屏广告放在runApp之前调用体验最佳
 2. 信息流广告之前在PlatformView创建成功后再load的方式，改为创建时load。然后使用获取的FeedAd对象的hashCode作为key全局缓存，通过Flutter中FeedView传入的id，寻找对应广告对象。
 
    从而解决了移除item（`setState((){});`）时，出现广告对象消失的问题。
 
 3. iOS信息流广告的点击事件需要传入`rootViewController`，使用的是`(UIApplication.shared.delegate?.window??.rootViewController)!`，暂未发现问题。
 
-4. 屏幕旋转更新FeedView宽高暂未完成
-
-5. 如果Android应用没有授予`READ_PHONE_STATE`权限，有可能出现这样的错误
+4. 如果Android应用没有授予`READ_PHONE_STATE`权限，有可能出现这样的错误
 
 ```
 U SHALL NOT PASS!
@@ -352,9 +344,6 @@ E      at android.os.Handler.dispatchMessage(Handler.java:103)
 E      at android.os.Looper.loop(Looper.java:214)
 E      at android.os.HandlerThread.run(HandlerThread.java:67)
 ```
-
-
-
 
 
 ## 贡献
