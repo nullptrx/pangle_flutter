@@ -105,7 +105,7 @@ class IOSBannerAdConfig {
 
   /// The feed ad config for iOS
   ///
-  /// [slotId] required. The unique identifier of a feed ad.
+  /// [slotId] required. The unique identifier of a banner ad.
   /// [imgSize] required. Image size.
   IOSBannerAdConfig({
     @required this.slotId,
@@ -153,6 +153,28 @@ class IOSFeedAdConfig {
       'count': count,
       'imgSize': imgSize.index,
       'isSupportDeepLink': isSupportDeepLink,
+    };
+  }
+}
+
+class IOSInterstitialAdConfig {
+  final String slotId;
+  final PangleImgSize imgSize;
+
+  /// The interstitial ad config for iOS
+  ///
+  /// [slotId] required. The unique identifier of a interstitial ad.
+  /// [imgSize] required. Image size.
+  IOSInterstitialAdConfig({
+    @required this.slotId,
+    this.imgSize = PangleImgSize.interstitial600_400,
+  });
+
+  /// Convert config to json
+  Map<String, dynamic> toJSON() {
+    return {
+      'slotId': slotId,
+      'imgSize': imgSize.index,
     };
   }
 }

@@ -33,7 +33,8 @@ public class FLTRewardedVideoAd: NSObject, BURewardedVideoAdDelegate {
     }
     
     public func rewardedVideoAd(_ rewardedVideoAd: BURewardedVideoAd, didFailWithError error: Error?) {
-        invoke(code: -1, message: error?.localizedDescription)
+        let err = error as NSError?
+        invoke(code: err?.code ?? -1, message: error?.localizedDescription)
     }
     
     public func rewardedVideoAdDidClick(_ rewardedVideoAd: BURewardedVideoAd) {}

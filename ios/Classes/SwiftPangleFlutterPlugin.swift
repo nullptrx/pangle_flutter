@@ -41,7 +41,8 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
             let slotId: String = args["slotId"] as! String
             let tolerateTimeout: Double? = args["tolerateTimeout"] as? Double
             let hideSkipButton: Bool? = args["hideSkipButton"] as? Bool
-            instance.loadSplashAd(slotId, result: result, tolerateTimeout: tolerateTimeout, hideSkipButton: hideSkipButton)
+            instance.loadSplashAd(slotId, tolerateTimeout: tolerateTimeout, hideSkipButton: hideSkipButton)
+            result(nil)
         case "loadRewardVideoAd":
             let slotId: String = args["slotId"] as! String
             let userId: String = args["userId"] as? String ?? ""

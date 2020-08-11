@@ -11,9 +11,9 @@ import Foundation
 public class FLTSplashAd: NSObject, BUSplashAdDelegate {
     private var isClicked = false
     private var result: FlutterResult?
-    init(_ result: @escaping FlutterResult) {
-        self.result = result
-    }
+//    init(_ result: @escaping FlutterResult) {
+//        self.result = result
+//    }
     
     public func splashAdDidClick(_ splashAd: BUSplashAdView) {
         isClicked = true
@@ -33,7 +33,8 @@ public class FLTSplashAd: NSObject, BUSplashAdDelegate {
     
     public func splashAd(_ splashAd: BUSplashAdView, didFailWithError error: Error?) {
         splashAd.removeFromSuperview()
-        invoke(code: -1, message: error?.localizedDescription)
+        let err = error as NSError?
+        invoke(code: err?.code ?? -1, message: error?.localizedDescription)
     }
     
     public func splashAdDidClickSkip(_ splashAd: BUSplashAdView) {}

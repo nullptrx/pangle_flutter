@@ -11,14 +11,23 @@ final pangle = PanglePlugin._();
 
 /// Pangle Ad Plugin
 class PanglePlugin {
-  static const MethodChannel _methodChannel =
-      const MethodChannel('nullptrx.github.io/pangle');
+  static const MethodChannel _methodChannel = const MethodChannel('nullptrx.github.io/pangle');
 
   PanglePlugin._() {
     _methodChannel.setMethodCallHandler((call) => _handleMethod(call));
   }
 
   _handleMethod(MethodCall call) {}
+
+  /// Request permissions
+  /// 穿山甲SDK不强制获取权限，即使没有获取可选权限SDK也能正常运行；获取权限将帮助穿山甲优化投放广告精准度和用户的交互体验，提高eCPM。
+  ///
+  /// No effect on `iOS`, who does not allow this type of functionality.
+  Future<Null> requestPermissionIfNecessary() async {
+    if (Platform.isAndroid) {
+      await _methodChannel.invokeMethod('requestPermissionIfNecessary');
+    }
+  }
 
   /// Register the App key that’s already been applied before requesting an ad from TikTok Audience Network.
   ///
@@ -60,11 +69,9 @@ class PanglePlugin {
     AndroidRewardedVideoConfig android,
   }) async {
     if (Platform.isIOS && iOS != null) {
-      return await _methodChannel.invokeMapMethod(
-          'loadRewardVideoAd', iOS.toJSON());
+      return await _methodChannel.invokeMapMethod('loadRewardVideoAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      return await _methodChannel.invokeMapMethod(
-          'loadRewardVideoAd', android.toJSON());
+      return await _methodChannel.invokeMapMethod('loadRewardVideoAd', android.toJSON());
     }
     return {};
   }
@@ -82,8 +89,7 @@ class PanglePlugin {
     if (Platform.isIOS && iOS != null) {
       ret = await _methodChannel.invokeMapMethod('loadFeedAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      ret =
-          await _methodChannel.invokeMapMethod('loadFeedAd', android.toJSON());
+      ret = await _methodChannel.invokeMapMethod('loadFeedAd', android.toJSON());
     }
     if (ret == null) {
       return PangleFeedAd.empty();
@@ -91,13 +97,21 @@ class PanglePlugin {
     return PangleFeedAd.fromJsonMap(ret);
   }
 
-  /// Request permissions
-  /// 穿山甲SDK不强制获取权限，即使没有获取可选权限SDK也能正常运行；获取权限将帮助穿山甲优化投放广告精准度和用户的交互体验，提高eCPM。
+  /// Request interstitial ad data.
   ///
-  /// No effect on `iOS`, who does not allow this type of functionality.
-  Future<Null> requestPermissionIfNecessary() async {
-    if (Platform.isAndroid) {
-      await _methodChannel.invokeMethod('requestPermissionIfNecessary');
+  /// [iOS] config for iOS
+  /// [android] config for Android
+  /// return loaded ad count.
+  Future<Map<String, dynamic>> loadInterstitialAd({
+    IOSInterstitialAdConfig iOS,
+    AndroidInterstitialAdConfig android,
+  }) async {
+    throw UnimplementedError();
+    if (Platform.isIOS && iOS != null) {
+      return await _methodChannel.invokeMapMethod('loadInterstitialAd', iOS.toJSON());
+    } else if (Platform.isAndroid && android != null) {
+      return await _methodChannel.invokeMapMethod('loadInterstitialAd', android.toJSON());
     }
+    return {};
   }
 }

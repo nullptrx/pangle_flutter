@@ -36,31 +36,6 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch call.method {
         case "update":
-//            guard let cell: BUDFeedAdBaseTableViewCell = self.adCell else {
-//                result(nil)
-//                return
-//            }
-//
-//            let width = UIScreen.main.bounds.width
-//            //        let width = self.container.bounds.width
-//            //        let width: CGFloat = 340
-//            var height: CGFloat = 0.0
-//            let nad = cell.nativeAd
-//            if cell is BUDFeedAdLeftTableViewCell {
-//                height = BUDFeedAdLeftTableViewCell.cellHeight(withModel: nad, width: width)
-//            } else if cell is BUDFeedAdLargeTableViewCell {
-//                height = BUDFeedAdLargeTableViewCell.cellHeight(withModel: nad, width: width)
-//            } else if cell is BUDFeedAdGroupTableViewCell {
-//                height = BUDFeedAdGroupTableViewCell.cellHeight(withModel: nad, width: width)
-//            } else if cell is BUDFeedVideoAdTableViewCell {
-//                height = BUDFeedVideoAdTableViewCell.cellHeight(withModel: nad, width: width)
-//            }
-//            let frame = CGRect(x: 0, y: 0, width: width, height: height)
-//            cell.contentView.frame = frame
-//            cell.frame = frame
-//            cell.refreshUI(withModel: cell.nativeAd)
-//            self.container.frame = frame
-//            self.container.updateConstraints()
             let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
             let feedId = args["feedId"] as? String
             if feedId != nil {

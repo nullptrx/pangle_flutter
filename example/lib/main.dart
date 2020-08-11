@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -15,7 +17,7 @@ void main() async {
   );
   await pangle.loadSplashAd(
     iOS: IOSSplashConfig(slotId: kSplashId),
-    android: AndroidSplashConfig(slotId: kSplashId),
+    android: AndroidSplashConfig(slotId: kSplashId, isExpress: true),
   );
   runApp(MaterialApp(home: MyApp()));
 }
@@ -45,30 +47,24 @@ class _MyAppState extends State<MyApp> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             RaisedButton(
-              onPressed: () {
-                pangle.loadSplashAd(
-                  iOS: IOSSplashConfig(slotId: kSplashId),
-                  android: AndroidSplashConfig(slotId: kSplashId),
-                );
-              },
+              onPressed: _loadSplashAd,
               child: Text('Splash AD'),
             ),
             RaisedButton(
-              onPressed: () {
-                pangle.loadRewardVideoAd(
-                  iOS: IOSRewardedVideoConfig(slotId: kRewardedVideoId),
-                  android: AndroidRewardedVideoConfig(slotId: kRewardedVideoId),
-                );
-              },
+              onPressed: _loadRewardVideoAd,
               child: Text('Reward Video AD'),
             ),
             RaisedButton(
-              onPressed: loadBannerAd,
+              onPressed: _loadBannerAd,
               child: Text('Banner AD'),
             ),
             RaisedButton(
-              onPressed: loadFeedAd,
+              onPressed: _loadFeedAd,
               child: Text('Feed AD'),
+            ),
+            RaisedButton(
+              onPressed: _loadInterstitialAd,
+              child: Text('Interstitial AD'),
             ),
           ],
         ),
@@ -76,13 +72,33 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  void loadBannerAd() {
-    Navigator.push(
-        context, CupertinoPageRoute(builder: (context) => BannerPage()));
+  _loadSplashAd() {
+    pangle.loadSplashAd(
+      iOS: IOSSplashConfig(slotId: kSplashId),
+      android: AndroidSplashConfig(slotId: kSplashId),
+    );
   }
 
-  void loadFeedAd() {
-    Navigator.push(
-        context, CupertinoPageRoute(builder: (context) => FeedPage()));
+  _loadRewardVideoAd() {
+    pangle.loadRewardVideoAd(
+      iOS: IOSRewardedVideoConfig(slotId: kRewardedVideoId),
+      android: AndroidRewardedVideoConfig(slotId: kRewardedVideoId),
+    );
+  }
+
+  void _loadBannerAd() {
+    Navigator.push(context, CupertinoPageRoute(builder: (context) => BannerPage()));
+  }
+
+  void _loadFeedAd() {
+    Navigator.push(context, CupertinoPageRoute(builder: (context) => FeedPage()));
+  }
+
+  void _loadInterstitialAd() async {
+    final result = await pangle.loadInterstitialAd(
+      iOS: IOSInterstitialAdConfig(slotId: kInterstitialId),
+      android: AndroidInterstitialAdConfig(slotId: kInterstitialId),
+    );
+    print(jsonEncode(result));
   }
 }

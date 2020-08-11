@@ -55,10 +55,10 @@ public class PangleAdManager: NSObject {
         }
     }
     
-    public func loadSplashAd(_ slotId: String, result: @escaping FlutterResult, tolerateTimeout: Double?, hideSkipButton: Bool?) {
+    public func loadSplashAd(_ slotId: String, tolerateTimeout: Double?, hideSkipButton: Bool?) {
         let frame = UIScreen.main.bounds
         let splashView = BUSplashAdView(slotID: slotId, frame: frame)
-        self.splashAdDelegate = FLTSplashAd(result)
+        self.splashAdDelegate = FLTSplashAd()
         splashView.delegate = self.splashAdDelegate
         if tolerateTimeout != nil {
             splashView.tolerateTimeout = tolerateTimeout!

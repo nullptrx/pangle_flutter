@@ -136,7 +136,7 @@ class AndroidBannerAdConfig {
 
   /// The feed ad config for Android
   ///
-  /// [slotId] required. The unique identifier of a feed ad.
+  /// [slotId] required. The unique identifier of a banner ad.
   /// [imgSize] required. Image size.
   /// [isSupportDeepLink] optional. Whether to support deeplink.
   AndroidBannerAdConfig({
@@ -163,7 +163,7 @@ class AndroidFeedAdConfig {
   final int count;
   final bool isSupportDeepLink;
 
-  /// The feed ad config for iOS
+  /// The feed ad config for Android
   ///
   /// [slotId] required. The unique identifier of a feed ad.
   /// [imgSize] required. Image size.
@@ -186,6 +186,28 @@ class AndroidFeedAdConfig {
       'count': count,
       'imgSize': imgSize.index,
       'isSupportDeepLink': isSupportDeepLink,
+    };
+  }
+}
+
+class AndroidInterstitialAdConfig {
+  final String slotId;
+  final PangleImgSize imgSize;
+
+  /// The interstitial ad config for Android
+  ///
+  /// [slotId] required. The unique identifier of a interstitial ad.
+  /// [imgSize] required. Image size.
+  AndroidInterstitialAdConfig({
+    @required this.slotId,
+    this.imgSize = PangleImgSize.interstitial600_400,
+  });
+
+  /// Convert config to json
+  Map<String, dynamic> toJSON() {
+    return {
+      'slotId': slotId,
+      'imgSize': imgSize.index,
     };
   }
 }

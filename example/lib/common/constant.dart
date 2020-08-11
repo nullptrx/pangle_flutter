@@ -4,3 +4,5 @@ const kRewardedVideoId = "920801724";
 const kBannerId = "920801711";
 const kFeedId = "920801899";
 const kNativeBannerId = "920801177";
+const kInterstitialId = "945388068";
+const kExpressInterstitialId = "920801184";
