@@ -345,6 +345,36 @@ E      at android.os.Looper.loop(Looper.java:214)
 E      at android.os.HandlerThread.run(HandlerThread.java:67)
 ```
 
+5. 插屏广告不显示问题
+
+```java
+// open_ad_sdk:
+// com.bytedance.sdk.openadsdk.utils.a:28处有生命周期的监控, 
+// FlutterActivity跳转界面时一定情况下不会回调onStart(),onStop()
+// 如使用ttAdManager.requestPermissionIfNecessary(context)时，就不会调用。
+// 上述情况，导致onActivityStarted少走了一次，因此下面的show方法走不通。
+public void onActivityStarted(Activity var1) {
+  if (this.a.incrementAndGet() > 0) {
+    this.b.set(false);
+  }
+
+  this.b();
+}
+...
+
+public void onActivityStopped(Activity var1) {
+  if (this.a.decrementAndGet() == 0) {
+    this.b.set(true);
+  }
+
+}
+
+// com.bytedance.sdk.openadsdk.core.c.b:306处有生命周期的判断，无法执行show()
+if (!this.k.isShowing() && !com.bytedance.sdk.openadsdk.core.i.c().a()) {
+  this.k.show();
+}
+
+```
 
 ## 贡献
 
