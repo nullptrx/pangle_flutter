@@ -111,8 +111,8 @@ class PangleAdManager {
 
   }
 
-  fun loadFeedAd(adSlot: AdSlot, result: MethodChannel.Result, tag: String) {
-    ttAdNative?.loadFeedAd(adSlot, FLTFeedAd(result, tag))
+  fun loadFeedAd(adSlot: AdSlot, result: MethodChannel.Result) {
+    ttAdNative?.loadFeedAd(adSlot, FLTFeedAd(result))
   }
 
 

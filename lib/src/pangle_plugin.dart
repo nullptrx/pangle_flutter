@@ -11,7 +11,8 @@ final pangle = PanglePlugin._();
 
 /// Pangle Ad Plugin
 class PanglePlugin {
-  static const MethodChannel _methodChannel = const MethodChannel('nullptrx.github.io/pangle');
+  static const MethodChannel _methodChannel =
+      const MethodChannel('nullptrx.github.io/pangle');
 
   PanglePlugin._() {
     _methodChannel.setMethodCallHandler((call) => _handleMethod(call));
@@ -69,9 +70,11 @@ class PanglePlugin {
     AndroidRewardedVideoConfig android,
   }) async {
     if (Platform.isIOS && iOS != null) {
-      return await _methodChannel.invokeMapMethod('loadRewardVideoAd', iOS.toJSON());
+      return await _methodChannel.invokeMapMethod(
+          'loadRewardVideoAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      return await _methodChannel.invokeMapMethod('loadRewardVideoAd', android.toJSON());
+      return await _methodChannel.invokeMapMethod(
+          'loadRewardVideoAd', android.toJSON());
     }
     return {};
   }
@@ -89,7 +92,8 @@ class PanglePlugin {
     if (Platform.isIOS && iOS != null) {
       ret = await _methodChannel.invokeMapMethod('loadFeedAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      ret = await _methodChannel.invokeMapMethod('loadFeedAd', android.toJSON());
+      ret =
+          await _methodChannel.invokeMapMethod('loadFeedAd', android.toJSON());
     }
     if (ret == null) {
       return PangleFeedAd.empty();
@@ -108,9 +112,11 @@ class PanglePlugin {
   }) async {
     throw UnimplementedError();
     if (Platform.isIOS && iOS != null) {
-      return await _methodChannel.invokeMapMethod('loadInterstitialAd', iOS.toJSON());
+      return await _methodChannel.invokeMapMethod(
+          'loadInterstitialAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      return await _methodChannel.invokeMapMethod('loadInterstitialAd', android.toJSON());
+      return await _methodChannel.invokeMapMethod(
+          'loadInterstitialAd', android.toJSON());
     }
     return {};
   }

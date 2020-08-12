@@ -9,14 +9,9 @@ import io.github.nullptrx.pangleflutter.dialog.NativeSplashDialog
 import io.github.nullptrx.pangleflutter.dialog.SupportSplashDialog
 import java.lang.ref.WeakReference
 
-internal class FLTSplashAd(val hideSkipButton: Boolean?, activity: Activity?) : TTAdNative.SplashAdListener {
-  private val target: WeakReference<Activity?>
+internal class FLTSplashAd(val hideSkipButton: Boolean?,var activity: Activity?) : TTAdNative.SplashAdListener {
   private var supportDialog: SupportSplashDialog? = null
   private var nativeDialog: NativeSplashDialog? = null
-
-  init {
-    this.target = WeakReference(activity)
-  }
 
 
   override fun onError(code: Int, message: String) {
@@ -58,7 +53,6 @@ internal class FLTSplashAd(val hideSkipButton: Boolean?, activity: Activity?) : 
       }
 
     })
-    val activity = target.get()
     activity?.also {
       if (it is FragmentActivity) {
         val tag = SupportSplashDialog::class.java.name

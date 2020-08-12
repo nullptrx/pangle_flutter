@@ -79,19 +79,22 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  _loadRewardVideoAd() {
-    pangle.loadRewardVideoAd(
+  _loadRewardVideoAd() async {
+    final result = await pangle.loadRewardVideoAd(
       iOS: IOSRewardedVideoConfig(slotId: kRewardedVideoId),
       android: AndroidRewardedVideoConfig(slotId: kRewardedVideoId),
     );
+    print(jsonEncode(result));
   }
 
   void _loadBannerAd() {
-    Navigator.push(context, CupertinoPageRoute(builder: (context) => BannerPage()));
+    Navigator.push(
+        context, CupertinoPageRoute(builder: (context) => BannerPage()));
   }
 
   void _loadFeedAd() {
-    Navigator.push(context, CupertinoPageRoute(builder: (context) => FeedPage()));
+    Navigator.push(
+        context, CupertinoPageRoute(builder: (context) => FeedPage()));
   }
 
   void _loadInterstitialAd() async {

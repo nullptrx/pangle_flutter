@@ -21,9 +21,6 @@ import io.github.nullptrx.pangleflutter.view.FeedViewFactory
 public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
   companion object {
     val kDefaultFeedAdCount = 3
-    val kDefaultRewardAmount = 1
-    val kDefaultFeedTag = "FeedAd"
-    val kDefaultSplashTimeout = 3f
 
     @JvmStatic
     fun registerWith(registrar: Registrar) {
@@ -130,12 +127,11 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
 
       "loadFeedAd" -> {
         val slotId = call.argument<String>("slotId")!!
-        val tag = call.argument<String>("tag") ?: kDefaultFeedTag
         val count = call.argument<Int>("count") ?: kDefaultFeedAdCount
         val imgSizeIndex = call.argument<Int>("imgSize")!!
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
         val adSlot = PangleAdSlotManager.getFeedAdSlot(slotId, count, imgSizeIndex, isSupportDeepLink)
-        pangle.loadFeedAd(adSlot, result, tag)
+        pangle.loadFeedAd(adSlot, result)
       }
       "requestPermissionIfNecessary" -> {
         context?.also {

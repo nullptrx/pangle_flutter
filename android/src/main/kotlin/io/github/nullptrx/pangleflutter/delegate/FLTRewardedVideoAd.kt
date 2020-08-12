@@ -4,25 +4,18 @@ import android.app.Activity
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTRewardVideoAd
 import io.flutter.plugin.common.MethodChannel
-import java.lang.ref.WeakReference
 
-internal class FLTRewardedVideoAd(result: MethodChannel.Result, target: Activity) : TTAdNative.RewardVideoAdListener {
-  val result: WeakReference<MethodChannel.Result>
-  val target: WeakReference<Activity>
-
-  init {
-    this.result = WeakReference(result)
-    this.target = WeakReference(target)
-  }
+internal class FLTRewardedVideoAd(var result: MethodChannel.Result?, var target: Activity?) : TTAdNative.RewardVideoAdListener {
 
   var ttVideoAd: TTRewardVideoAd? = null
 
   override fun onRewardVideoAdLoad(ad: TTRewardVideoAd?) {
-    val activity = target.get()
-    activity ?: return
-    ttVideoAd = ad
-    ttVideoAd?.setRewardAdInteractionListener(RewardAdInteractionImpl())
-    ttVideoAd?.showRewardVideoAd(activity)
+
+    target?.also {
+      ttVideoAd = ad
+      ttVideoAd?.setRewardAdInteractionListener(RewardAdInteractionImpl())
+      ttVideoAd?.showRewardVideoAd(it)
+    }
   }
 
   override fun onRewardVideoCached() {
@@ -34,13 +27,14 @@ internal class FLTRewardedVideoAd(result: MethodChannel.Result, target: Activity
   }
 
   private fun invoke(code: Int = 0, message: String?) {
-    val ret = result.get()
-    ret ?: return
-    val args = mutableMapOf<String, Any?>()
-    args["code"] = code
-    args["message"] = message
-    ret.success(args)
-    result.clear()
+    result?.apply {
+      val args = mutableMapOf<String, Any?>()
+      args["code"] = code
+      args["message"] = message
+      success(args)
+    }
+    result = null
+    target = null
   }
 
 

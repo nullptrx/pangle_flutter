@@ -6,7 +6,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.github.nullptrx.pangleflutter.util.PangleAdManager
 import kotlin.collections.set
 
-class FLTFeedAd(var result: MethodChannel.Result?, val tag: String) : TTAdNative.FeedAdListener {
+class FLTFeedAd(var result: MethodChannel.Result?) : TTAdNative.FeedAdListener {
 
   override fun onError(code: Int, message: String) {
     invoke(code, message)

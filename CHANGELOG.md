@@ -18,3 +18,11 @@
 ## 0.0.5
 
 * 增加FeedView，BannerView点击移除时的默认实现
+
+## 0.0.6
+
+* 移除弱引用实现，防止FlutterResult回调失败
+
+
+
+
