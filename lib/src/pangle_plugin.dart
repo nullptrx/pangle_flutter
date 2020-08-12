@@ -22,8 +22,17 @@ class PanglePlugin {
 
   /// Request permissions
   /// 穿山甲SDK不强制获取权限，即使没有获取可选权限SDK也能正常运行；获取权限将帮助穿山甲优化投放广告精准度和用户的交互体验，提高eCPM。
+  /// 常见问题：
+  /// * 使用该方法请求权限时 FlutterActivity不会回调onStart,onStop方法，会导致插屏广告(Interstitial Ad)不能正常显示。
+  ///   详见 Android SDK [com.bytedance.sdk.openadsdk.utils.a:28],[com.bytedance.sdk.openadsdk.core.c.b:306].
+  /// 建议自行实现权限请求, 如使用[permission_handler](https://pub.flutter-io.cn/packages?q=permission_handler)
+  ///
+  /// ```
+  /// [Permission.location, Permission.phone, Permission.storage].request();
+  /// ```
   ///
   /// No effect on `iOS`, who does not allow this type of functionality.
+  @deprecated
   Future<Null> requestPermissionIfNecessary() async {
     if (Platform.isAndroid) {
       await _methodChannel.invokeMethod('requestPermissionIfNecessary');
@@ -110,7 +119,6 @@ class PanglePlugin {
     IOSInterstitialAdConfig iOS,
     AndroidInterstitialAdConfig android,
   }) async {
-    throw UnimplementedError();
     if (Platform.isIOS && iOS != null) {
       return await _methodChannel.invokeMapMethod(
           'loadInterstitialAd', iOS.toJSON());

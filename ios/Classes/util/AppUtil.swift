@@ -8,6 +8,14 @@
 import Foundation
 
 class AppUtil {
+    static func getVC() -> UIViewController {
+        let viewController = UIApplication.shared.windows.filter { (w) -> Bool in
+            w.isHidden == false
+        }.first?.rootViewController
+//        let viewController: UIViewController = (UIApplication.shared.delegate?.window??.rootViewController)!
+        return viewController!
+    }
+
     static func getCurrentVC() -> UIViewController? {
         let rootViewController = UIApplication.shared.keyWindow?.rootViewController
         let currentVC = self.getCurrentVC(from: rootViewController)

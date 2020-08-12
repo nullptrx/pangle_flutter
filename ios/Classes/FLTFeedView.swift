@@ -61,7 +61,7 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
         // 1. 判断nativeAd.rootViewController是否nil, nil赋值vc, 非nil不赋值
         // 2. 使用(UIApplication.shared.delegate?.window??.rootViewController)!获取rootVC，目前没发现问题。但据说可能跳转后无法回到当前页面，有待考证
 
-        let viewController: UIViewController = (UIApplication.shared.delegate?.window??.rootViewController)!
+        let viewController = AppUtil.getVC()
         nativeAd.rootViewController = viewController
 
         nativeAd.delegate = self

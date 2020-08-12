@@ -69,9 +69,14 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
             let isSupportDeepLink: Bool = args["isSupportDeepLink"] as? Bool ?? true
             
             instance.loadFeedAd(slotId, result: result, tag: tag, count: count, imgSize: imgSize, isSupportDeepLink: isSupportDeepLink)
+            
+        case "loadInterstitialAd":
+            let slotId: String = args["slotId"] as! String
+            let imgSize: Int = args["imgSize"] as! Int
+            
+            instance.loadInterstitialAd(slotId, result: result, imgSize: imgSize)
         default:
             result(FlutterMethodNotImplemented)
         }
     }
 }
-

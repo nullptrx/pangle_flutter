@@ -26,7 +26,7 @@ internal class FLTRewardedVideoAd(var result: MethodChannel.Result?, var target:
 
   }
 
-  private fun invoke(code: Int = 0, message: String?) {
+  private fun invoke(code: Int = 0, message: String? = null) {
     result?.apply {
       val args = mutableMapOf<String, Any?>()
       args["code"] = code
@@ -55,7 +55,7 @@ internal class FLTRewardedVideoAd(var result: MethodChannel.Result?, var target:
     }
 
     override fun onAdClose() {
-      invoke(0, null)
+      invoke()
     }
 
     override fun onVideoError() {

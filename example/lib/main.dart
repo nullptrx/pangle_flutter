@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'common/constant.dart';
 import 'page/banner_page.dart';
@@ -15,10 +16,10 @@ void main() async {
     iOS: IOSConfig(appId: kAppId),
     android: AndroidConfig(appId: kAppId),
   );
-  await pangle.loadSplashAd(
-    iOS: IOSSplashConfig(slotId: kSplashId),
-    android: AndroidSplashConfig(slotId: kSplashId, isExpress: true),
-  );
+//  await pangle.loadSplashAd(
+//    iOS: IOSSplashConfig(slotId: kSplashId),
+//    android: AndroidSplashConfig(slotId: kSplashId, isExpress: true),
+//  );
   runApp(MaterialApp(home: MyApp()));
 }
 
@@ -31,7 +32,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    pangle.requestPermissionIfNecessary();
   }
 
   @override
@@ -46,6 +46,10 @@ class _MyAppState extends State<MyApp> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            RaisedButton(
+              onPressed: _requestPermissions,
+              child: Text('Request Permissions'),
+            ),
             RaisedButton(
               onPressed: _loadSplashAd,
               child: Text('Splash AD'),
@@ -70,6 +74,12 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
     );
+  }
+
+  void _requestPermissions() async {
+//    pangle.requestPermissionIfNecessary();
+
+    await [Permission.location, Permission.phone, Permission.storage].request();
   }
 
   _loadSplashAd() {

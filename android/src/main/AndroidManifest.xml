@@ -40,5 +40,10 @@
             android:authorities="${applicationId}.TTMultiProvider"
             android:exported="false" />
 
+        <activity
+            android:name="com.bytedance.sdk.openadsdk.activity.base.TTDelegateActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            tools:replace="android:theme" />
     </application>
 </manifest>

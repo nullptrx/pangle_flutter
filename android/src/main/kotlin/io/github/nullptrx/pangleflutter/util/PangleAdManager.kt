@@ -1,8 +1,10 @@
 package io.github.nullptrx.pangleflutter.util
 
 import android.app.Activity
+import android.app.Application
 import android.content.Context
 import android.content.pm.PackageInfo
+import android.os.Bundle
 import com.bytedance.sdk.openadsdk.*
 import io.flutter.plugin.common.MethodChannel
 import io.github.nullptrx.pangleflutter.delegate.FLTFeedAd
@@ -94,6 +96,10 @@ class PangleAdManager {
 
   }
 
+  fun requestPermissionIfNecessary(context: Context) {
+    ttAdManager?.requestPermissionIfNecessary(context)
+  }
+
   fun loadSplashAd(adSlot: AdSlot, listener: TTAdNative.SplashAdListener, timeout: Float? = null) {
     if (timeout == null) {
       ttAdNative?.loadSplashAd(adSlot, listener)
@@ -120,8 +126,9 @@ class PangleAdManager {
     ttAdNative?.loadBannerAd(adSlot, listener)
   }
 
-  fun requestPermissionIfNecessary(context: Context) {
-    ttAdManager?.requestPermissionIfNecessary(context)
+  fun loadInteractionAd(adSlot: AdSlot, listener: TTAdNative.NativeExpressAdListener) {
+    ttAdNative?.loadInteractionExpressAd(adSlot, listener)
   }
+
 
 }

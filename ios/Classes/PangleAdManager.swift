@@ -20,6 +20,9 @@ public class PangleAdManager: NSObject {
     // Feed Ad
     private var feedAdDelegate: BUNativeAdsManagerDelegate?
     private var feedAdManager: BUNativeAdsManager?
+    // Interstitial Ad
+    private var interstitialAd: BUNativeExpressInterstitialAd?
+    private var interstitialAdDelegate: BUNativeExpresInterstitialAdDelegate?
     
     public func setFeedAd(_ nativeAds: [BUNativeAd]) -> [String] {
         var feedAds: [String: BUNativeAd] = [:]
@@ -68,11 +71,15 @@ public class PangleAdManager: NSObject {
             splashView.hideSkipButton = hideSkipButton!
         }
         
-        splashView.loadAdData()
+        let vc = AppUtil.getVC()
         
-        let keyWindow = UIApplication.shared.windows.first
-        keyWindow?.rootViewController?.view.addSubview(splashView)
-        splashView.rootViewController = keyWindow?.rootViewController
+        vc.view.addSubview(splashView)
+        splashView.rootViewController = vc
+//        let keyWindow = UIApplication.shared.windows.first
+//        keyWindow?.rootViewController?.view.addSubview(splashView)
+//        splashView.rootViewController = keyWindow?.rootViewController
+        
+        splashView.loadAdData()
     }
     
     public func loadSplashAdComplete() {
@@ -114,5 +121,22 @@ public class PangleAdManager: NSObject {
     public func loadFeedAdComplete() {
         self.feedAdManager = nil
         self.feedAdDelegate = nil
+    }
+    
+    public func loadInterstitialAd(_ slotId: String, result: @escaping FlutterResult, imgSize: Int) {
+        let size = BUSize(by: BUProposalSize(rawValue: imgSize)!)!
+        
+        let width = Double(UIScreen.main.bounds.width) * 0.9
+        let height = width / Double(size.width) * Double(size.height)
+        
+        self.interstitialAd = BUNativeExpressInterstitialAd(slotID: slotId, adSize: CGSize(width: width, height: height))
+        self.interstitialAdDelegate = FLTInterstitialAd(result)
+        self.interstitialAd?.delegate = self.interstitialAdDelegate
+        self.interstitialAd?.loadData()
+    }
+    
+    public func loadInterstitialAdComplete() {
+        self.interstitialAdDelegate = nil
+        self.interstitialAd = nil
     }
 }

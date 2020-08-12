@@ -11,6 +11,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import io.flutter.plugin.platform.PlatformViewFactory
 import io.github.nullptrx.pangleflutter.common.PangleTitleBarTheme
+import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialAd
 import io.github.nullptrx.pangleflutter.delegate.FLTSplashAd
 import io.github.nullptrx.pangleflutter.util.PangleAdManager
 import io.github.nullptrx.pangleflutter.util.PangleAdSlotManager
@@ -34,10 +35,6 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
   private var context: Context? = null
   private var bannerViewFactory: PlatformViewFactory? = null
   private var feedViewFactory: FeedViewFactory? = null
-
-  init {
-
-  }
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activity = binding.activity
@@ -105,6 +102,11 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         result.success(null)
       }
 
+      "requestPermissionIfNecessary" -> {
+        context?.also {
+          pangle.requestPermissionIfNecessary(it)
+        }
+      }
       "loadSplashAd" -> {
         val slotId = call.argument<String>("slotId")!!
         val tolerateTimeout = call.argument<Float>("tolerateTimeout")
@@ -133,10 +135,13 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val adSlot = PangleAdSlotManager.getFeedAdSlot(slotId, count, imgSizeIndex, isSupportDeepLink)
         pangle.loadFeedAd(adSlot, result)
       }
-      "requestPermissionIfNecessary" -> {
-        context?.also {
-          pangle.requestPermissionIfNecessary(it)
-        }
+
+      "loadInterstitialAd" -> {
+        val slotId = call.argument<String>("slotId")!!
+        val imgSizeIndex = call.argument<Int>("imgSize")!!
+        val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+        val adSlot = PangleAdSlotManager.getInterstitialAdSlot(slotId, imgSizeIndex, isSupportDeepLink)
+        pangle.loadInteractionAd(adSlot, FLTInterstitialAd(result, activity))
       }
       else -> result.notImplemented()
     }

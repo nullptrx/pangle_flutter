@@ -81,4 +81,19 @@ object PangleAdSlotManager {
         .build()
     return adSlot
   }
+
+  fun getInterstitialAdSlot(slotId: String, imgSizeIndex: Int, isSupportDeepLink: Boolean): AdSlot {
+    val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
+
+    val width = imgSize.width * 0.9
+    val height = imgSize.height * 0.9
+    val adSlot = AdSlot.Builder()
+        .setCodeId(slotId)
+        .setExpressViewAcceptedSize(width.px, height.px)
+        .setSupportDeepLink(isSupportDeepLink)
+        //请求原生广告时候，请务必调用该方法，设置参数为TYPE_BANNER或TYPE_INTERACTION_AD
+        .setAdCount(1)
+        .build()
+    return adSlot
+  }
 }

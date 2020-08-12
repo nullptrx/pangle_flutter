@@ -15,13 +15,11 @@ public class FLTRewardedVideoAd: NSObject, BURewardedVideoAdDelegate {
     }
     
     public func rewardedVideoAdDidLoad(_ rewardedVideoAd: BURewardedVideoAd) {
-        print("rewardedVideoAdDidLoad")
     }
     
     public func rewardedVideoAdVideoDidLoad(_ rewardedVideoAd: BURewardedVideoAd) {
-        print("rewardedVideoAdVideoDidLoad")
-        let keyWindow = UIApplication.shared.windows.first
-        rewardedVideoAd.show(fromRootViewController: keyWindow!.rootViewController!)
+        let vc = AppUtil.getVC()
+        rewardedVideoAd.show(fromRootViewController: vc)
     }
     
     public func rewardedVideoAdServerRewardDidFail(_ rewardedVideoAd: BURewardedVideoAd) {
