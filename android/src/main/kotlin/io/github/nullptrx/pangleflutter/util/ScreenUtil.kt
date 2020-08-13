@@ -18,7 +18,7 @@ object ScreenUtil {
     val dm = Resources.getSystem().displayMetrics
     return TTSize(dm.widthPixels, dm.heightPixels)
   }
-
+  
   fun getScreenWidthDp(): Float {
     val displayMetrics = Resources.getSystem().displayMetrics
     val density = displayMetrics.density

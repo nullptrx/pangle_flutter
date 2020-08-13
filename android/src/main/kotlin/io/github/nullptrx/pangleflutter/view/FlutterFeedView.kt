@@ -27,10 +27,7 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 import io.github.nullptrx.pangleflutter.R
-import io.github.nullptrx.pangleflutter.util.PangleAdManager
-import io.github.nullptrx.pangleflutter.util.ScreenUtil
-import io.github.nullptrx.pangleflutter.util.get
-import io.github.nullptrx.pangleflutter.util.px
+import io.github.nullptrx.pangleflutter.util.*
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
@@ -160,28 +157,42 @@ class FlutterFeedView(
     val screenSize = ScreenUtil.getScreenSize()
     val sw = screenSize.width.toFloat()
     val sh = screenSize.height.toFloat()
-    val feedHeight: Float
-    if (sw > sh) {
-      val feedHeightPercent: Float = when (ad.imageMode) {
-        TTAdConstant.IMAGE_MODE_SMALL_IMG -> 0.175f // 140.dp
-        TTAdConstant.IMAGE_MODE_LARGE_IMG -> 0.68f // 310.dp
-        TTAdConstant.IMAGE_MODE_GROUP_IMG -> 0.3483f // 180.dp
-        TTAdConstant.IMAGE_MODE_VIDEO -> 0.68f // 310.dp
-        TTAdConstant.IMAGE_MODE_VERTICAL_IMG -> 0.001f // 1
-        else -> 0.001f // 1
-      }
-      feedHeight = sw * feedHeightPercent
-    } else {
-      val feedHeightPercent: Float = when (ad.imageMode) {
-        TTAdConstant.IMAGE_MODE_SMALL_IMG -> 0.3565f // 140.dp
-        TTAdConstant.IMAGE_MODE_LARGE_IMG -> 0.7898f // 310.dp
-        TTAdConstant.IMAGE_MODE_GROUP_IMG -> 0.4583f // 180.dp
-        TTAdConstant.IMAGE_MODE_VIDEO -> 0.7898f // 310.dp
-        TTAdConstant.IMAGE_MODE_VERTICAL_IMG -> 0.001f // 1
-        else -> 0.001f // 1
-      }
-      feedHeight = sw * feedHeightPercent
-    }
+//    val feedHeight: Float
+//    if (sw > sh) {
+//      val feedHeightPercent: Float = when (ad.imageMode) {
+//        TTAdConstant.IMAGE_MODE_SMALL_IMG -> 0.175f // 140.dp
+//        TTAdConstant.IMAGE_MODE_LARGE_IMG -> 0.68f // 310.dp
+//        TTAdConstant.IMAGE_MODE_GROUP_IMG -> 0.3483f // 180.dp
+//        TTAdConstant.IMAGE_MODE_VIDEO -> 0.68f // 310.dp
+//        TTAdConstant.IMAGE_MODE_VERTICAL_IMG -> 0.001f // 1
+//        else -> 0.001f // 1
+//      }
+//      feedHeight = sw * feedHeightPercent
+//    } else {
+//      val feedHeightPercent: Float = when (ad.imageMode) {
+//        TTAdConstant.IMAGE_MODE_SMALL_IMG -> 0.3565f // 140.dp
+//        TTAdConstant.IMAGE_MODE_LARGE_IMG -> 0.7898f // 310.dp
+//        TTAdConstant.IMAGE_MODE_GROUP_IMG -> 0.4583f // 180.dp
+//        TTAdConstant.IMAGE_MODE_VIDEO -> 0.7898f // 310.dp
+//        TTAdConstant.IMAGE_MODE_VERTICAL_IMG -> 0.001f // 1
+//        else -> 0.001f // 1
+//      }
+//      feedHeight = sw * feedHeightPercent
+//    }
+
+    val screenWidthDp = ScreenUtil.getScreenWidthDp()
+    val feedHeight: Float = when (ad.imageMode) {
+      // 16 + 150 * 9 /16 + 30 + 0.5
+      TTAdConstant.IMAGE_MODE_SMALL_IMG -> 130.875.dp
+      // 16 + 6 + 28 + 4 + 40 + 30 + （sw - 2 * 16）* 9 / 16
+      TTAdConstant.IMAGE_MODE_LARGE_IMG -> (124 + (screenWidthDp - 32) * 9.0 / 16).dp
+      // 16 + 28 + 6 + 40 + 30 + (sw - 2 * 16 - 2 * 5) / 1.52 / 3
+      TTAdConstant.IMAGE_MODE_GROUP_IMG -> (120 + (screenWidthDp - 42) / 4.56).dp // 180.dp
+      TTAdConstant.IMAGE_MODE_VIDEO -> (124 + (screenWidthDp - 32) * 9.0 / 16).dp // 310.dp
+      // unimplemented
+      TTAdConstant.IMAGE_MODE_VERTICAL_IMG -> 1.dp // 1
+      else -> 1.dp // 1
+    }.toFloat()
 
     container.apply {
       val params = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)

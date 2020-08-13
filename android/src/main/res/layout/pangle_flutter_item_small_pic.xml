@@ -81,7 +81,7 @@
     <View
         android:id="@id/pangle_flutter_item_divider"
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:layout_marginTop="8dp"
         android:background="@color/pangle_flutter_divider"
         app:layout_constraintEnd_toEndOf="parent"
