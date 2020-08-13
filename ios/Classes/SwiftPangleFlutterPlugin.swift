@@ -73,8 +73,12 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         case "loadInterstitialAd":
             let slotId: String = args["slotId"] as! String
             let imgSize: Int = args["imgSize"] as! Int
-            
-            instance.loadInterstitialAd(slotId, result: result, imgSize: imgSize)
+            let isExpress: Bool = args["isExpress"] as? Bool ?? false
+            if isExpress {
+                instance.loadInterstitialExpressAd(slotId, result: result, imgSize: imgSize)
+            } else {
+                instance.loadInterstitialAd(slotId, result: result, imgSize: imgSize)
+            }
         default:
             result(FlutterMethodNotImplemented)
         }

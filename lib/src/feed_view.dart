@@ -8,10 +8,12 @@ import 'size.dart';
 
 final kFeedViewType = 'nullptrx.github.io/pangle_feedview';
 
-/// display feed AD
+/// Display feed AD
+/// PlatformView does not support Android API level 19 or below.
 class FeedView extends StatefulWidget {
   final String id;
 
+  /// default implementation, if null.
   final VoidCallback onRemove;
 
   /// constructor a feed view
@@ -27,6 +29,7 @@ class _FeedViewState extends State<FeedView>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   FeedViewController _controller;
   bool offstage = true;
+  bool removed = false;
   double adWidth = kPangleSize;
   double adHeight = kPangleSize;
 
@@ -55,6 +58,14 @@ class _FeedViewState extends State<FeedView>
   void didUpdateWidget(FeedView oldWidget) {
     super.didUpdateWidget(oldWidget);
     _controller?._update(_createParams());
+  }
+
+  void remove() {
+    _controller?.remove();
+    _controller = null;
+    setState(() {
+      this.removed = true;
+    });
   }
 
   @override
@@ -87,20 +98,24 @@ class _FeedViewState extends State<FeedView>
         );
       }
       if (platformView != null) {
-        body = Offstage(
-          offstage: offstage,
-          child: Container(
-            color: Colors.white,
-            width: adWidth,
-            height: adHeight,
-            child: platformView,
-          ),
-        );
+        if (removed) {
+          body = SizedBox.shrink();
+        } else {
+          body = Offstage(
+            offstage: offstage,
+            child: Container(
+              color: Colors.white,
+              width: adWidth,
+              height: adHeight,
+              child: platformView,
+            ),
+          );
+        }
       }
     } on PlatformException {}
 
     if (body == null) {
-      body = Container();
+      body = SizedBox.shrink();
     }
     return body;
   }
@@ -110,11 +125,7 @@ class _FeedViewState extends State<FeedView>
       if (widget.onRemove != null) {
         widget.onRemove();
       } else {
-        setState(() {
-          this.offstage = true;
-          this.adWidth = kPangleSize;
-          this.adHeight = kPangleSize;
-        });
+        remove();
       }
     };
     final updated = (args) {
@@ -150,6 +161,10 @@ class FeedViewController {
   }) {
     _methodChannel = new MethodChannel('${kFeedViewType}_$id');
     _methodChannel.setMethodCallHandler(_handleMethod);
+  }
+
+  void remove() {
+    _methodChannel = null;
   }
 
   Future<dynamic> _handleMethod(MethodCall call) {

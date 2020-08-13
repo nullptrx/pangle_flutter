@@ -1,62 +1,25 @@
 package io.github.nullptrx.pangleflutter.delegate
 
 import android.app.Activity
-import android.view.View
 import com.bytedance.sdk.openadsdk.TTAdDislike
 import com.bytedance.sdk.openadsdk.TTAdNative
-import com.bytedance.sdk.openadsdk.TTNativeExpressAd
+import com.bytedance.sdk.openadsdk.TTInteractionAd
 import io.flutter.plugin.common.MethodChannel
 
-class FLTInterstitialAd(var result: MethodChannel.Result?, var target: Activity?) : TTAdNative.NativeExpressAdListener, TTAdDislike.DislikeInteractionCallback, TTNativeExpressAd.AdInteractionListener {
+class FLTInterstitialAd(var result: MethodChannel.Result?, var target: Activity?) : TTAdNative.InteractionAdListener, TTInteractionAd.AdInteractionListener, TTAdDislike.DislikeInteractionCallback {
 
-  private var ttNativeAd: TTNativeExpressAd? = null
-
-
-  override fun onNativeExpressAdLoad(ttNativeExpressAds: MutableList<TTNativeExpressAd>?) {
+  override fun onInteractionAdLoad(ttInteractionAd: TTInteractionAd) {
     target?.also {
-      if (ttNativeExpressAds?.size ?: 0 > 0) {
-        val ttNativeAd = ttNativeExpressAds!![0]
-        ttNativeAd.setDislikeCallback(it, this)
-        ttNativeAd.setExpressInteractionListener(this)
-        ttNativeAd.render()
-        this.ttNativeAd = ttNativeAd
-      }
-    }
-  }
 
-  override fun onError(code: Int, message: String?) {
-    invoke(code, message)
-  }
-
-  override fun onSelected(index: Int, selection: String) {
-  }
-
-  override fun onCancel() {
-  }
-
-  override fun onRefuse() {
-  }
-
-  override fun onAdDismiss() {
-    ttNativeAd?.destroy()
-    ttNativeAd = null
-  }
-
-  override fun onAdClicked(view: View, type: Int) {
-  }
-
-  override fun onAdShow(view: View?, type: Int) {
-  }
-
-  override fun onRenderSuccess(view: View, width: Float, height: Float) {
-    target?.also {
-      ttNativeAd?.showInteractionExpressAd(it)
+      ttInteractionAd.setAdInteractionListener(this)
+      ttInteractionAd.setShowDislikeIcon(this)
+      ttInteractionAd.showInteractionAd(it)
     }
     invoke()
   }
 
-  override fun onRenderFail(view: View?, msg: String?, code: Int) {
-    invoke(code, msg)
+  override fun onError(code: Int, message: String?) {
+    invoke(code, message)
   }
 
 
@@ -69,6 +32,24 @@ class FLTInterstitialAd(var result: MethodChannel.Result?, var target: Activity?
     }
     result = null
     target = null
+  }
+
+  override fun onAdDismiss() {
+  }
+
+  override fun onAdClicked() {
+  }
+
+  override fun onAdShow() {
+  }
+
+  override fun onSelected(position: Int, value: String) {
+  }
+
+  override fun onCancel() {
+  }
+
+  override fun onRefuse() {
   }
 
 }

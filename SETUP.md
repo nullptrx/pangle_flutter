@@ -2,7 +2,11 @@
 
 首先，当然是去官网下载SDK了。(做了几张GIF图，效果不太好，还是文字说明吧～)
 
+
+
 ### Android
+
+
 
 #### 1. 导入AAR包
 
@@ -40,6 +44,8 @@ dependencies {
 }
 ```
 
+
+
 #### 2. 处理AndroidManifest错误
 
 官方AAR中application节点加了label属性，所以需要覆盖它
@@ -59,13 +65,39 @@ dependencies {
      >
 ```
 
-#### 3. 至此，Android模块一般可以正常使用了。（权限、混淆等配置均已在模块中，无需额外配置）
+
+
+#### 3. 因部分广告请求是http请求，在安卓API 24以上需要手动添加http支持，才能正常请求广告
+
+```xml
+ <application
+        android:name="io.flutter.app.FlutterApplication"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Pangle Flutter"
+        # 添加下面这句
+        android:networkSecurityConfig="@xml/pangle_network_config"
+        # 或者直接允许所有http请求
+        android:usesCleartextTraffic=“true”
+        # 以上二选一      
+        tools:replace="android:label">
+
+```
+
+
+
+#### 4. 至此，Android模块一般可以正常使用了。（权限、混淆等配置均已在模块中，无需额外配置）
+
+
 
 ### iOS
+
+
 
 #### 1. 导入Framework包（无需操作）
 
 默认使用pod导入，在4.x版本以内会使用最新版本
+
+
 
 #### 2. 工程plist文件设置
 
@@ -83,6 +115,8 @@ dependencies {
     <true/>
 </dict>
 ```
+
+
 
 #### 3.剩余配置参考官方文档
 

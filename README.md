@@ -131,6 +131,27 @@ FeedView(
 )
 ```
 
+### 6. 插屏广告
+
+```dart
+ final result = await pangle.loadInterstitialAd(
+   iOS: IOSInterstitialAdConfig(
+     slotId: kInterstitialId,
+     isExpress: true,
+
+     /// 该宽高为你申请的广告位宽高，请根据实际情况赋值
+     imgSize: PangleImgSize.interstitial600_400,
+   ),
+   android: AndroidInterstitialAdConfig(
+     slotId: kInterstitialId,
+     isExpress: true,
+   ),
+ );
+print(jsonEncode(result));
+```
+
+
+
 
 
 ## 参数说明
@@ -198,11 +219,13 @@ IOSSplashConfig({
 /// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
 /// [hideSkipButton] optional. Whether hide skip button, default NO. If you hide the skip button, you need to customize the countdown.
 /// [isExpress] optional. experimental. 个性化模板广告
+/// [isSupportDeepLink] optional. Whether to support deeplink. default true.
 AndroidSplashConfig({
   @required this.slotId,
   this.tolerateTimeout,
   this.hideSkipButton,
   this.isExpress,
+  this.isSupportDeepLink,
 });
 ```
 
@@ -243,12 +266,16 @@ IOSRewardedVideoConfig({
 /// [rewardName] optional. reward name.
 /// [rewardAmount] optional. number of rewards.
 /// [extra] optional. serialized string.
+/// [isVertical] optional. Whether video is vertical orientation. Vertical, if true. Otherwise, horizontal.
+/// [isSupportDeepLink] optional. Whether to support deeplink. default true.
 AndroidRewardedVideoConfig({
   @required this.slotId,
   this.userId,
   this.rewardName,
   this.rewardAmount,
   this.extra,
+  this.isVertical,
+  this.isSupportDeepLink,
 });
 ```
 
@@ -261,10 +288,12 @@ AndroidRewardedVideoConfig({
 ///
 /// [slotId] required. The unique identifier of a feed ad.
 /// [imgSize] required. Image size.
+/// [isExpress] optional. 个性化模板广告.
 IOSBannerAdConfig({
   @required this.slotId,
-  this.imgSize = PangleImgSize.feed690_388,
+  this.imgSize = PangleImgSize.banner600_150,
   this.count,
+  this.isExpress,
 });
 
 /// The feed ad config for Android
@@ -272,10 +301,12 @@ IOSBannerAdConfig({
 /// [slotId] required. The unique identifier of a feed ad.
 /// [imgSize] required. Image size.
 /// [isSupportDeepLink] optional. Whether to support deeplink.
+/// [isExpress] optional. 个性化模板广告.
 AndroidBannerAdConfig({
   @required this.slotId,
-  this.imgSize = PangleImgSize.feed690_388,
+  this.imgSize = PangleImgSize.banner600_150,
   this.isSupportDeepLink,
+  this.isExpress,
 });
 ```
 
@@ -313,6 +344,35 @@ AndroidFeedAdConfig({
   this.count,
   this.isSupportDeepLink,
 });
+```
+
+### 插屏广告
+
+```dart
+/// The interstitial ad config for iOS
+///
+/// [slotId] required. The unique identifier of a interstitial ad.
+/// [imgSize] required. Image size.
+/// [isExpress] optional. 个性化模板广告.
+IOSInterstitialAdConfig({
+  @required this.slotId,
+  this.imgSize = PangleImgSize.interstitial600_400,
+  this.isExpress,
+})
+
+
+/// The interstitial ad config for Android
+///
+/// [slotId] required. The unique identifier of a interstitial ad.
+/// [imgSize] required. Image size.
+/// [isExpress] optional. experimental. 个性化模板广告
+/// [isSupportDeepLink] optional. Whether to support deeplink. default true.
+AndroidInterstitialAdConfig({
+  @required this.slotId,
+  this.imgSize = PangleImgSize.interstitial600_400,
+  this.isSupportDeepLink,
+  this.isExpress,
+})
 ```
 
 
@@ -375,6 +435,12 @@ if (!this.k.isShowing() && !com.bytedance.sdk.openadsdk.core.i.c().a()) {
 }
 
 ```
+
+6. `BannerView`、`FeedView`通过PlatformView实现。在安卓上，PlatformView最低支持API 20。
+
+
+
+
 
 ## 贡献
 

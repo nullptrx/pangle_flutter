@@ -9,9 +9,9 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import io.flutter.plugin.platform.PlatformViewFactory
 import io.github.nullptrx.pangleflutter.common.PangleTitleBarTheme
 import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialAd
+import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialExpressAd
 import io.github.nullptrx.pangleflutter.delegate.FLTSplashAd
 import io.github.nullptrx.pangleflutter.util.PangleAdManager
 import io.github.nullptrx.pangleflutter.util.PangleAdSlotManager
@@ -33,26 +33,30 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
   private var methodChannel: MethodChannel? = null
   private var activity: Activity? = null
   private var context: Context? = null
-  private var bannerViewFactory: PlatformViewFactory? = null
+  private var bannerViewFactory: BannerViewFactory? = null
   private var feedViewFactory: FeedViewFactory? = null
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activity = binding.activity
     feedViewFactory?.attachActivity(binding.activity)
+    bannerViewFactory?.attachActivity(binding.activity)
   }
 
   override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
     activity = binding.activity
     feedViewFactory?.attachActivity(binding.activity)
+    bannerViewFactory?.attachActivity(binding.activity)
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
     feedViewFactory?.detachActivity()
+    bannerViewFactory?.detachActivity()
     activity = null
   }
 
   override fun onDetachedFromActivity() {
     feedViewFactory?.detachActivity()
+    bannerViewFactory?.detachActivity()
     activity = null
   }
 
@@ -109,10 +113,11 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
       }
       "loadSplashAd" -> {
         val slotId = call.argument<String>("slotId")!!
+        val isExpress = call.argument<Boolean>("isExpress") ?: false
         val tolerateTimeout = call.argument<Float>("tolerateTimeout")
         val hideSkipButton = call.argument<Boolean>("hideSkipButton")
-        val isExpress = call.argument<Boolean>("isExpress")
-        val adSlot = PangleAdSlotManager.getSplashAdSlot(slotId, isExpress, activity)
+        val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+        val adSlot = PangleAdSlotManager.getSplashAdSlot(slotId, isExpress, activity, isSupportDeepLink)
         pangle.loadSplashAd(adSlot, FLTSplashAd(hideSkipButton, activity), tolerateTimeout)
         result.success(null)
       }
@@ -122,8 +127,9 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val rewardName = call.argument<String>("rewardName")
         val rewardAmount = call.argument<Int>("rewardAmount")
         val extra = call.argument<String>("extra")
-
-        val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(slotId, userId, rewardName, rewardAmount, extra)
+        val isVertical = call.argument<Boolean>("isVertical") ?: true
+        val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+        val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(slotId, userId, rewardName, rewardAmount, isVertical, isSupportDeepLink, extra)
         pangle.loadRewardVideoAd(adSlot, result, activity)
       }
 
@@ -138,10 +144,15 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
 
       "loadInterstitialAd" -> {
         val slotId = call.argument<String>("slotId")!!
+        val isExpress = call.argument<Boolean>("isExpress") ?: false
         val imgSizeIndex = call.argument<Int>("imgSize")!!
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
-        val adSlot = PangleAdSlotManager.getInterstitialAdSlot(slotId, imgSizeIndex, isSupportDeepLink)
-        pangle.loadInteractionAd(adSlot, FLTInterstitialAd(result, activity))
+        val adSlot = PangleAdSlotManager.getInterstitialAdSlot(slotId, isExpress, imgSizeIndex, isSupportDeepLink)
+        if (isExpress) {
+          pangle.loadInteractionExpressAd(adSlot, FLTInterstitialExpressAd(result, activity))
+        } else {
+          pangle.loadInteractionAd(adSlot, FLTInterstitialAd(result, activity))
+        }
       }
       else -> result.notImplemented()
     }

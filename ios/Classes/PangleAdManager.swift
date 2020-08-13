@@ -21,8 +21,11 @@ public class PangleAdManager: NSObject {
     private var feedAdDelegate: BUNativeAdsManagerDelegate?
     private var feedAdManager: BUNativeAdsManager?
     // Interstitial Ad
-    private var interstitialAd: BUNativeExpressInterstitialAd?
-    private var interstitialAdDelegate: BUNativeExpresInterstitialAdDelegate?
+    private var interstitialAd: BUInterstitialAd?
+    private var interstitialAdDelegate: BUInterstitialAdDelegate?
+    // Interstitial Express Ad
+    private var interstitialExpressAd: BUNativeExpressInterstitialAd?
+    private var interstitialExpressAdDelegate: BUNativeExpresInterstitialAdDelegate?
     
     public func setFeedAd(_ nativeAds: [BUNativeAd]) -> [String] {
         var feedAds: [String: BUNativeAd] = [:]
@@ -78,7 +81,6 @@ public class PangleAdManager: NSObject {
 //        let keyWindow = UIApplication.shared.windows.first
 //        keyWindow?.rootViewController?.view.addSubview(splashView)
 //        splashView.rootViewController = keyWindow?.rootViewController
-        
         splashView.loadAdData()
     }
     
@@ -126,10 +128,9 @@ public class PangleAdManager: NSObject {
     public func loadInterstitialAd(_ slotId: String, result: @escaping FlutterResult, imgSize: Int) {
         let size = BUSize(by: BUProposalSize(rawValue: imgSize)!)!
         
-        let width = Double(UIScreen.main.bounds.width) * 0.9
-        let height = width / Double(size.width) * Double(size.height)
-        
-        self.interstitialAd = BUNativeExpressInterstitialAd(slotID: slotId, adSize: CGSize(width: width, height: height))
+//        let width = Double(UIScreen.main.bounds.width) * 0.9
+//        let height = width / Double(size.width) * Double(size.height)
+        self.interstitialAd = BUInterstitialAd(slotID: slotId, size: size)
         self.interstitialAdDelegate = FLTInterstitialAd(result)
         self.interstitialAd?.delegate = self.interstitialAdDelegate
         self.interstitialAd?.loadData()
@@ -138,5 +139,22 @@ public class PangleAdManager: NSObject {
     public func loadInterstitialAdComplete() {
         self.interstitialAdDelegate = nil
         self.interstitialAd = nil
+    }
+    
+    public func loadInterstitialExpressAd(_ slotId: String, result: @escaping FlutterResult, imgSize: Int) {
+        let size = BUSize(by: BUProposalSize(rawValue: imgSize)!)!
+        
+        let width = Double(UIScreen.main.bounds.width) * 0.9
+        let height = width / Double(size.width) * Double(size.height)
+        
+        self.interstitialExpressAd = BUNativeExpressInterstitialAd(slotID: slotId, adSize: CGSize(width: width, height: height))
+        self.interstitialExpressAdDelegate = FLTInterstitialExpressAd(result)
+        self.interstitialExpressAd?.delegate = self.interstitialExpressAdDelegate
+        self.interstitialExpressAd?.loadData()
+    }
+    
+    public func loadInterstitialExpressAdComplete() {
+        self.interstitialExpressAdDelegate = nil
+        self.interstitialExpressAd = nil
     }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import 'constant.dart';
+import 'extension.dart';
 
 class IOSConfig {
   final String appId;
@@ -19,7 +20,7 @@ class IOSConfig {
     this.logLevel,
     this.coppa,
     this.isPaidApp,
-  });
+  }) : assert(appId.isNotBlank);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -46,7 +47,7 @@ class IOSSplashConfig {
     @required this.slotId,
     this.tolerateTimeout,
     this.hideSkipButton,
-  });
+  }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -83,7 +84,7 @@ class IOSRewardedVideoConfig {
     this.rewardName,
     this.rewardAmount,
     this.extra,
-  });
+  }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -101,23 +102,25 @@ class IOSBannerAdConfig {
   final String slotId;
   final PangleImgSize imgSize;
 
-  final int count;
+  final bool isExpress;
 
   /// The feed ad config for iOS
   ///
   /// [slotId] required. The unique identifier of a banner ad.
   /// [imgSize] required. Image size.
+  /// [isExpress] optional. 个性化模板广告.
   IOSBannerAdConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.banner600_150,
-    this.count,
-  });
+    this.isExpress,
+  }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
       'imgSize': imgSize.index,
+      'isExpress': isExpress,
     };
   }
 }
@@ -126,7 +129,6 @@ class IOSFeedAdConfig {
   final String slotId;
   final PangleImgSize imgSize;
 
-  final String tag;
   final int count;
   final bool isSupportDeepLink;
 
@@ -134,22 +136,19 @@ class IOSFeedAdConfig {
   ///
   /// [slotId] required. The unique identifier of a feed ad.
   /// [imgSize] required. Image size.
-  /// [tag] optional. experimental. Mark it.
   /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
   /// [isSupportDeepLink] optional. Whether to support deeplink.
   IOSFeedAdConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.feed690_388,
-    this.tag,
     this.count,
     this.isSupportDeepLink,
-  });
+  }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
-      'tag': tag,
       'count': count,
       'imgSize': imgSize.index,
       'isSupportDeepLink': isSupportDeepLink,
@@ -160,21 +159,25 @@ class IOSFeedAdConfig {
 class IOSInterstitialAdConfig {
   final String slotId;
   final PangleImgSize imgSize;
+  final bool isExpress;
 
   /// The interstitial ad config for iOS
   ///
   /// [slotId] required. The unique identifier of a interstitial ad.
   /// [imgSize] required. Image size.
+  /// [isExpress] optional. 个性化模板广告.
   IOSInterstitialAdConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.interstitial600_400,
-  });
+    this.isExpress,
+  }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
       'imgSize': imgSize.index,
+      'isExpress': isExpress,
     };
   }
 }

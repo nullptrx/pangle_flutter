@@ -17,9 +17,16 @@ class _BannerPageState extends State<BannerPage> {
       body: Column(
         children: <Widget>[
           BannerView(
-            iOS: IOSBannerAdConfig(slotId: kBannerId),
+            iOS: IOSBannerAdConfig(
+              slotId: kBannerExpressId,
+              imgSize: PangleImgSize.banner600_300,
+              isExpress: true,
+            ),
             android: AndroidBannerAdConfig(
-                slotId: kBannerId, imgSize: PangleImgSize.banner600_150),
+              slotId: kBannerExpressId,
+              imgSize: PangleImgSize.banner600_300,
+              isExpress: true,
+            ),
           ),
         ],
       ),

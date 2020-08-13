@@ -143,7 +143,8 @@ extension FLTFeedView: BUVideoAdViewDelegate {
 
     public func videoAdViewFinishViewDidClick(_ videoAdView: BUVideoAdView) {}
 
-    public func videoAdView(_ videoAdView: BUVideoAdView, didLoadFailWithError error: Error?) {}
+    public func videoAdView(_ videoAdView: BUVideoAdView, didLoadFailWithError error: Error?) {
+    }
 
     public func videoAdView(_ videoAdView: BUVideoAdView, stateDidChanged playerState: BUPlayerPlayState) {}
 
@@ -157,7 +158,11 @@ extension FLTFeedView: BUNativeAdDelegate {
 
     public func nativeAdDidClick(_ nativeAd: BUNativeAd, with view: UIView?) {}
 
-    public func nativeAd(_ nativeAd: BUNativeAd, didFailWithError error: Error?) {}
+    public func nativeAd(_ nativeAd: BUNativeAd, didFailWithError error: Error?) {
+        self.methodChannel.invokeMethod("remove", arguments: nil)
+        PangleAdManager.shared.removeFeedAd(String(nativeAd.hash))
+        self.removeAllView()
+    }
 
     public func nativeAd(_ nativeAd: BUNativeAd?, dislikeWithReason filterWords: [BUDislikeWords]?) {
         self.methodChannel.invokeMethod("remove", arguments: nil)

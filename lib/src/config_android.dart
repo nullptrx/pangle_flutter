@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import 'constant.dart';
+import 'extension.dart';
 
 class AndroidConfig {
   final String appId;
@@ -42,7 +43,7 @@ class AndroidConfig {
     this.isPaidApp,
     this.useTextureView,
     this.titleBarTheme = AndroidTitleBarTheme.light,
-  });
+  }) : assert(appId.isNotBlank);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -65,19 +66,22 @@ class AndroidSplashConfig {
   final double tolerateTimeout;
   final bool hideSkipButton;
   final bool isExpress;
+  final bool isSupportDeepLink;
 
   /// The splash ad config for Android
   ///
   /// [slotId] The unique identifier of splash ad.
   /// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
   /// [hideSkipButton] optional. Whether hide skip button, default NO. If you hide the skip button, you need to customize the countdown.
-  /// [isExpress] optional. experimental. 个性化模板广告
+  /// [isExpress] optional. experimental. 个性化模板广告，暂不支持自定义宽高
+  /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
   AndroidSplashConfig({
     @required this.slotId,
     this.tolerateTimeout,
     this.hideSkipButton,
     this.isExpress,
-  });
+    this.isSupportDeepLink,
+  }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -86,6 +90,7 @@ class AndroidSplashConfig {
       'tolerateTimeout': tolerateTimeout,
       'hideSkipButton': hideSkipButton,
       'isExpress': isExpress,
+      'isSupportDeepLink': isSupportDeepLink,
     };
   }
 }
@@ -96,6 +101,8 @@ class AndroidRewardedVideoConfig {
   final String rewardName;
   final int rewardAmount;
   final String extra;
+  final bool isVertical;
+  final bool isSupportDeepLink;
 
   /// The rewarded video ad config for Android
   ///
@@ -109,13 +116,17 @@ class AndroidRewardedVideoConfig {
   /// [rewardName] optional. reward name.
   /// [rewardAmount] optional. number of rewards.
   /// [extra] optional. serialized string.
+  /// [isVertical] optional. Whether video is vertical orientation. Vertical, if true. Otherwise, horizontal.
+  /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
   AndroidRewardedVideoConfig({
     @required this.slotId,
     this.userId,
     this.rewardName,
     this.rewardAmount,
     this.extra,
-  });
+    this.isVertical = true,
+    this.isSupportDeepLink,
+  }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -125,6 +136,8 @@ class AndroidRewardedVideoConfig {
       'rewardName': rewardName,
       'rewardAmount': rewardAmount,
       'extra': extra,
+      'isVertical': isVertical,
+      'isSupportDeepLink': isSupportDeepLink,
     };
   }
 }
@@ -133,17 +146,20 @@ class AndroidBannerAdConfig {
   final String slotId;
   final PangleImgSize imgSize;
   final bool isSupportDeepLink;
+  final bool isExpress;
 
   /// The feed ad config for Android
   ///
   /// [slotId] required. The unique identifier of a banner ad.
   /// [imgSize] required. Image size.
-  /// [isSupportDeepLink] optional. Whether to support deeplink.
+  /// [isExpress] optional. experimental. 个性化模板广告
+  /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
   AndroidBannerAdConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.banner600_150,
     this.isSupportDeepLink,
-  });
+    this.isExpress,
+  }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -151,6 +167,7 @@ class AndroidBannerAdConfig {
       'slotId': slotId,
       'imgSize': imgSize.index,
       'isSupportDeepLink': isSupportDeepLink,
+      'isExpress': isExpress,
     };
   }
 }
@@ -158,8 +175,6 @@ class AndroidBannerAdConfig {
 class AndroidFeedAdConfig {
   final String slotId;
   final PangleImgSize imgSize;
-
-  final String tag;
   final int count;
   final bool isSupportDeepLink;
 
@@ -167,22 +182,19 @@ class AndroidFeedAdConfig {
   ///
   /// [slotId] required. The unique identifier of a feed ad.
   /// [imgSize] required. Image size.
-  /// [tag] optional. experimental. Mark it.
   /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
   /// [isSupportDeepLink] optional. Whether to support deeplink.
   AndroidFeedAdConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.feed690_388,
-    this.tag,
     this.count,
     this.isSupportDeepLink,
-  });
+  }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
-      'tag': tag,
       'count': count,
       'imgSize': imgSize.index,
       'isSupportDeepLink': isSupportDeepLink,
@@ -193,21 +205,29 @@ class AndroidFeedAdConfig {
 class AndroidInterstitialAdConfig {
   final String slotId;
   final PangleImgSize imgSize;
+  final bool isSupportDeepLink;
+  final bool isExpress;
 
   /// The interstitial ad config for Android
   ///
   /// [slotId] required. The unique identifier of a interstitial ad.
   /// [imgSize] required. Image size.
+  /// [isExpress] optional. experimental. 个性化模板广告
+  /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
   AndroidInterstitialAdConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.interstitial600_400,
-  });
+    this.isSupportDeepLink,
+    this.isExpress,
+  }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
       'imgSize': imgSize.index,
+      'isSupportDeepLink': isSupportDeepLink,
+      'isExpress': isExpress,
     };
   }
 }

@@ -1,10 +1,8 @@
 package io.github.nullptrx.pangleflutter.util
 
 import android.app.Activity
-import android.app.Application
 import android.content.Context
 import android.content.pm.PackageInfo
-import android.os.Bundle
 import com.bytedance.sdk.openadsdk.*
 import io.flutter.plugin.common.MethodChannel
 import io.github.nullptrx.pangleflutter.delegate.FLTFeedAd
@@ -16,16 +14,21 @@ class PangleAdManager {
 
   companion object {
     val shared = PangleAdManager()
-
   }
 
+
   private val feedAdCollection = Collections.synchronizedMap<String, TTFeedAd>(mutableMapOf<String, TTFeedAd>())
+  private val bannerAdCollection = Collections.synchronizedMap<String, TTBannerAd>(mutableMapOf<String, TTBannerAd>())
+  private val expressAdCollection = Collections.synchronizedMap<String, TTNativeExpressAd>(mutableMapOf<String, TTNativeExpressAd>())
 
   private var ttAdManager: TTAdManager? = null
   private var ttAdNative: TTAdNative? = null
     get() = field
 
 
+  /**
+   * Feed
+   */
   fun setFeedAd(ttFeedAds: List<TTFeedAd>): List<String> {
     val data = mutableListOf<String>()
     ttFeedAds.forEach {
@@ -37,13 +40,55 @@ class PangleAdManager {
   }
 
   fun getFeedAd(tag: String): TTFeedAd? {
-    val feedAd = feedAdCollection[tag]
-    return feedAd
+    return feedAdCollection[tag]
   }
 
   fun removeFeedAd(key: String) {
     feedAdCollection.remove(key)
   }
+
+  /**
+   * Banner
+   */
+  fun setBannerAd(ttBannerAds: List<TTBannerAd>): List<String> {
+    val data = mutableListOf<String>()
+    ttBannerAds.forEach {
+      val key = it.hashCode().toString()
+      bannerAdCollection[key] = it
+      data.add(key)
+    }
+    return data
+  }
+
+  fun getBannerAd(tag: String): TTBannerAd? {
+    return bannerAdCollection[tag]
+  }
+
+  fun removeBannerAd(key: String) {
+    bannerAdCollection.remove(key)
+  }
+
+  /**
+   * Express
+   */
+  fun setExpressAd(ttBannerAds: List<TTNativeExpressAd>): List<String> {
+    val data = mutableListOf<String>()
+    ttBannerAds.forEach {
+      val key = it.hashCode().toString()
+      expressAdCollection[key] = it
+      data.add(key)
+    }
+    return data
+  }
+
+  fun getExpressAd(tag: String): TTNativeExpressAd? {
+    return expressAdCollection[tag]
+  }
+
+  fun removeExpressAd(key: String) {
+    expressAdCollection.remove(key)
+  }
+
 
   fun initialize(activity: Activity?, appId: String, debug: Boolean?, useTextureView: Boolean?, titleBarTheme: Int?, allowShowNotify: Boolean?, allowShowPageWhenScreenLock: Boolean?, directDownloadNetworkType: Int?, supportMultiProcess: Boolean?, paid: Boolean?) {
     activity ?: return
@@ -126,7 +171,15 @@ class PangleAdManager {
     ttAdNative?.loadBannerAd(adSlot, listener)
   }
 
-  fun loadInteractionAd(adSlot: AdSlot, listener: TTAdNative.NativeExpressAdListener) {
+  fun loadBannerExpressAd(adSlot: AdSlot, listener: TTAdNative.NativeExpressAdListener) {
+    ttAdNative?.loadBannerExpressAd(adSlot, listener)
+  }
+
+  fun loadInteractionAd(adSlot: AdSlot, listener: TTAdNative.InteractionAdListener) {
+    ttAdNative?.loadInteractionAd(adSlot, listener)
+  }
+
+  fun loadInteractionExpressAd(adSlot: AdSlot, listener: TTAdNative.NativeExpressAdListener) {
     ttAdNative?.loadInteractionExpressAd(adSlot, listener)
   }
 

@@ -204,6 +204,7 @@ class FlutterFeedView(
       }
       invoke(sw.px, feedHeight.px)
     }
+    view.invalidate()
   }
 
   private fun invoke(width: Float, height: Float) {

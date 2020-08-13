@@ -13,18 +13,17 @@ final kBannerViewType = 'nullptrx.github.io/pangle_bannerview';
 
 typedef void BannerViewCreatedCallback(BannerViewController controller);
 
-/// display banner AD
+/// Display banner AD
+/// PlatformView does not support Android API level 19 or below.
 class BannerView extends StatefulWidget {
   final IOSBannerAdConfig iOS;
   final AndroidBannerAdConfig android;
-  final VoidCallback onRemove;
 
   const BannerView({
     Key key,
     this.iOS,
     this.android,
     this.onBannerViewCreated,
-    this.onRemove,
   }) : super(key: key);
 
   final BannerViewCreatedCallback onBannerViewCreated;
@@ -37,6 +36,7 @@ class _BannerViewState extends State<BannerView>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   BannerViewController _controller;
   bool offstage = true;
+  bool removed = false;
   double adWidth = kPangleSize;
   double adHeight = kPangleSize;
 
@@ -52,13 +52,21 @@ class _BannerViewState extends State<BannerView>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _controller = null;
+    remove();
     super.dispose();
   }
 
   @override
   void didChangeMetrics() {
     _controller?._update(_createParams());
+  }
+
+  void remove() {
+    setState(() {
+      this.removed = true;
+    });
+    _controller?.remove();
+    _controller = null;
   }
 
   @override
@@ -93,19 +101,23 @@ class _BannerViewState extends State<BannerView>
         );
       }
       if (platformView != null) {
-        body = Offstage(
-          offstage: offstage,
-          child: Container(
-            color: Colors.white,
-            width: adWidth,
-            height: adHeight,
-            child: platformView,
-          ),
-        );
+        if (removed) {
+          body = SizedBox.shrink();
+        } else {
+          body = Offstage(
+            offstage: offstage,
+            child: Container(
+              color: Colors.white,
+              width: adWidth,
+              height: adHeight,
+              child: platformView,
+            ),
+          );
+        }
       }
     } on PlatformException {}
     if (body == null) {
-      body = Container();
+      body = SizedBox.shrink();
     }
 
     return body;
@@ -119,15 +131,7 @@ class _BannerViewState extends State<BannerView>
 
   void _onPlatformViewCreated(BuildContext context, int id) {
     final removed = () {
-      if (widget.onRemove != null) {
-        widget.onRemove();
-      } else {
-        setState(() {
-          this.offstage = true;
-          this.adWidth = kPangleSize;
-          this.adHeight = kPangleSize;
-        });
-      }
+      remove();
     };
     final updated = (args) {
       double width = args['width'];
@@ -183,6 +187,10 @@ class BannerViewController {
   }) {
     _methodChannel = new MethodChannel('${kBannerViewType}_$id');
     _methodChannel.setMethodCallHandler(_handleMethod);
+  }
+
+  void remove() {
+    this._methodChannel = null;
   }
 
   Future<dynamic> _handleMethod(MethodCall call) {

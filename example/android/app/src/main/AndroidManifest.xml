@@ -10,6 +10,7 @@
         android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/ic_launcher"
         android:label="Pangle Flutter"
+        android:networkSecurityConfig="@xml/pangle_network_config"
         tools:replace="android:label">
         <activity
             android:name="io.github.nullptrx.pangleflutterexample.MainActivity"

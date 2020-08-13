@@ -2,49 +2,38 @@
 //  FLTInterstitialAd.swift
 //  pangle_flutter
 //
-//  Created by Jerry on 2020/8/12.
+//  Created by Jerry on 2020/8/13.
 //
 
 import BUAdSDK
 import Flutter
 
-class FLTInterstitialAd: NSObject, BUNativeExpresInterstitialAdDelegate {
+class FLTInterstitialAd: NSObject, BUInterstitialAdDelegate {
     private var result: FlutterResult?
     init(_ result: @escaping FlutterResult) {
         self.result = result
     }
     
-    func nativeExpresInterstitialAdDidLoad(_ interstitialAd: BUNativeExpressInterstitialAd) {
-    }
-    
-    func nativeExpresInterstitialAdRenderFail(_ interstitialAd: BUNativeExpressInterstitialAd, error: Error?) {
-        let err = error as NSError?
-        invoke(code: err?.code ?? -1, message: error?.localizedDescription)
-    }
-    
-    func nativeExpresInterstitialAd(_ interstitialAd: BUNativeExpressInterstitialAd, didFailWithError error: Error?) {
-        let err = error as NSError?
-        invoke(code: err?.code ?? -1, message: error?.localizedDescription)
-    }
-    
-    func nativeExpresInterstitialAdDidClick(_ interstitialAd: BUNativeExpressInterstitialAd) {
-        invoke()
-    }
-    
-    func nativeExpresInterstitialAdDidClose(_ interstitialAd: BUNativeExpressInterstitialAd) {
-        invoke()
-    }
-    
-    func nativeExpresInterstitialAdWillClose(_ interstitialAd: BUNativeExpressInterstitialAd) {}
-    
-    func nativeExpresInterstitialAdWillVisible(_ interstitialAd: BUNativeExpressInterstitialAd) {}
-    
-    func nativeExpresInterstitialAdRenderSuccess(_ interstitialAd: BUNativeExpressInterstitialAd) {
+    func interstitialAdDidLoad(_ interstitialAd: BUInterstitialAd) {
         let vc = AppUtil.getVC()
         interstitialAd.show(fromRootViewController: vc)
+        invoke()
     }
     
-    func nativeExpresInterstitialAdDidCloseOtherController(_ interstitialAd: BUNativeExpressInterstitialAd, interactionType: BUInteractionType) {}
+    func interstitialAd(_ interstitialAd: BUInterstitialAd, didFailWithError error: Error?) {
+        let err = error as NSError?
+        invoke(code: err?.code ?? -1, message: error?.localizedDescription)
+    }
+    
+    func interstitialAdDidClick(_ interstitialAd: BUInterstitialAd) {}
+    
+    func interstitialAdDidClose(_ interstitialAd: BUInterstitialAd) {}
+    
+    func interstitialAdWillClose(_ interstitialAd: BUInterstitialAd) {}
+    
+    func interstitialAdWillVisible(_ interstitialAd: BUInterstitialAd) {}
+    
+    func interstitialAdDidCloseOtherController(_ interstitialAd: BUInterstitialAd, interactionType: BUInteractionType) {}
     
     func invoke(code: Int = 0, message: String? = nil) {
         guard result != nil else {

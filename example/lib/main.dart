@@ -13,13 +13,13 @@ import 'page/feed_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await pangle.init(
-    iOS: IOSConfig(appId: kAppId),
-    android: AndroidConfig(appId: kAppId),
+    iOS: IOSConfig(appId: kAppId, logLevel: PangleLogLevel.debug),
+    android: AndroidConfig(appId: kAppId, debug: true),
   );
-//  await pangle.loadSplashAd(
-//    iOS: IOSSplashConfig(slotId: kSplashId),
-//    android: AndroidSplashConfig(slotId: kSplashId, isExpress: true),
-//  );
+  await pangle.loadSplashAd(
+    iOS: IOSSplashConfig(slotId: kSplashId),
+    android: AndroidSplashConfig(slotId: kSplashId, isExpress: true),
+  );
   runApp(MaterialApp(home: MyApp()));
 }
 
@@ -109,8 +109,17 @@ class _MyAppState extends State<MyApp> {
 
   void _loadInterstitialAd() async {
     final result = await pangle.loadInterstitialAd(
-      iOS: IOSInterstitialAdConfig(slotId: kInterstitialId),
-      android: AndroidInterstitialAdConfig(slotId: kInterstitialId),
+      iOS: IOSInterstitialAdConfig(
+        slotId: kInterstitialId,
+        isExpress: true,
+
+        /// 该宽高为你申请的广告位宽高，请根据实际情况赋值
+        imgSize: PangleImgSize.interstitial600_400,
+      ),
+      android: AndroidInterstitialAdConfig(
+        slotId: kInterstitialId,
+        isExpress: true,
+      ),
     );
     print(jsonEncode(result));
   }
