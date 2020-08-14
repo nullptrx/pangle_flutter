@@ -73,7 +73,7 @@ class AndroidSplashConfig {
   /// [slotId] The unique identifier of splash ad.
   /// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
   /// [hideSkipButton] optional. Whether hide skip button, default NO. If you hide the skip button, you need to customize the countdown.
-  /// [isExpress] optional. experimental. 个性化模板广告，暂不支持自定义宽高
+  /// [isExpress] optional. 个性化模板广告，暂不支持，保留字段 TODO 加载ExpressAd
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
   AndroidSplashConfig({
     @required this.slotId,
@@ -152,7 +152,7 @@ class AndroidBannerAdConfig {
   ///
   /// [slotId] required. The unique identifier of a banner ad.
   /// [imgSize] required. Image size.
-  /// [isExpress] optional. experimental. 个性化模板广告
+  /// [isExpress] optional. 个性化模板广告
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
   AndroidBannerAdConfig({
     @required this.slotId,
@@ -177,6 +177,7 @@ class AndroidFeedAdConfig {
   final PangleImgSize imgSize;
   final int count;
   final bool isSupportDeepLink;
+  final bool isExpress;
 
   /// The feed ad config for Android
   ///
@@ -184,11 +185,13 @@ class AndroidFeedAdConfig {
   /// [imgSize] required. Image size.
   /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
   /// [isSupportDeepLink] optional. Whether to support deeplink.
+  /// [isExpress] optional. 个性化模板广告
   AndroidFeedAdConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.feed690_388,
     this.count,
     this.isSupportDeepLink,
+    this.isExpress,
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
@@ -198,6 +201,7 @@ class AndroidFeedAdConfig {
       'count': count,
       'imgSize': imgSize.index,
       'isSupportDeepLink': isSupportDeepLink,
+      'isExpress': isExpress,
     };
   }
 }
@@ -212,7 +216,7 @@ class AndroidInterstitialAdConfig {
   ///
   /// [slotId] required. The unique identifier of a interstitial ad.
   /// [imgSize] required. Image size.
-  /// [isExpress] optional. experimental. 个性化模板广告
+  /// [isExpress] optional. 个性化模板广告
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
   AndroidInterstitialAdConfig({
     @required this.slotId,

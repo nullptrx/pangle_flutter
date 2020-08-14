@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -16,17 +17,15 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
-import com.bytedance.sdk.openadsdk.TTAdConstant
+import com.bytedance.sdk.openadsdk.*
 import com.bytedance.sdk.openadsdk.TTAdDislike.DislikeInteractionCallback
-import com.bytedance.sdk.openadsdk.TTAppDownloadListener
-import com.bytedance.sdk.openadsdk.TTFeedAd
-import com.bytedance.sdk.openadsdk.TTNativeAd
 import com.squareup.picasso.Picasso
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 import io.github.nullptrx.pangleflutter.R
+import io.github.nullptrx.pangleflutter.common.TTSizeF
 import io.github.nullptrx.pangleflutter.util.*
 import java.net.HttpURLConnection
 import java.net.URL
@@ -38,7 +37,7 @@ class FlutterFeedView(
     messenger: BinaryMessenger,
     val id: Int,
     params: Map<String, Any?>
-) : PlatformView, MethodChannel.MethodCallHandler, DislikeInteractionCallback {
+) : PlatformView, MethodChannel.MethodCallHandler {
 
   companion object {
     private val ttAppDownloadListenerMap = WeakHashMap<AdViewHolder, TTAppDownloadListener>()
@@ -50,6 +49,7 @@ class FlutterFeedView(
   private val methodChannel: MethodChannel
   private val container: FrameLayout
   private var feedId: String? = null
+  private var isExpress: Boolean = false
 
 
   init {
@@ -63,11 +63,10 @@ class FlutterFeedView(
     container.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
     val feedId = params["feedId"] as? String
+    val isExpress = params["isExpress"] as? Boolean ?: false
     this.feedId = feedId
-    feedId?.also {
-      val ttFeedAd: TTFeedAd? = PangleAdManager.shared.getFeedAd(it)
-      loadAd(ttFeedAd)
-    }
+    this.isExpress = isExpress
+    invalidateView()
 
 
   }
@@ -77,8 +76,7 @@ class FlutterFeedView(
   }
 
   override fun dispose() {
-    methodChannel.setMethodCallHandler(null)
-    container.removeAllViews()
+    removeView()
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -103,16 +101,27 @@ class FlutterFeedView(
   }
 
   private fun invalidateView() {
-    this.feedId ?: return
-    val ttFeedAd: TTFeedAd? = PangleAdManager.shared.getFeedAd(this.feedId!!)
-    loadAd(ttFeedAd)
+    this.feedId?.also {
+      if (this.isExpress) {
+        val ttFeedAd: TTFeedAd? = PangleAdManager.shared.getFeedAd(it)
+        loadAd(ttFeedAd)
+      } else {
+        val ttExpressAd: TTNativeExpressAd? = PangleAdManager.shared.getExpressAd(it)
+        loadExpressAd(ttExpressAd)
+      }
+    }
   }
 
   private fun removeView() {
     this.feedId?.also {
-      PangleAdManager.shared.removeFeedAd(it)
+      if (this.isExpress) {
+        PangleAdManager.shared.removeExpressAd(it)
+      } else {
+        PangleAdManager.shared.removeFeedAd(it)
+      }
     }
     methodChannel.invokeMethod(Method.remove.name, null)
+    methodChannel.setMethodCallHandler(null)
     container.removeAllViews()
   }
 
@@ -134,11 +143,15 @@ class FlutterFeedView(
     update;
   }
 
+  private fun invoke(width: Float, height: Float) {
+    val params = mutableMapOf<String, Any>()
+    params["width"] = width
+    params["height"] = height
+    methodChannel.invokeMethod(Method.update.name, params)
+  }
 
   fun loadAd(ad: TTFeedAd?) {
-    if (ad == null) {
-      return
-    }
+    ad ?: return
     container.removeAllViews()
 //    val adView = ad.adView
     val view = when (ad.imageMode) {
@@ -207,12 +220,65 @@ class FlutterFeedView(
     view.invalidate()
   }
 
-  private fun invoke(width: Float, height: Float) {
-    val params = mutableMapOf<String, Any>()
-    params["width"] = width
-    params["height"] = height
-    methodChannel.invokeMethod(Method.update.name, params)
+  private fun invalidateView(width: Float, height: Float): TTSizeF {
+    val screenWidth = Resources.getSystem().displayMetrics.widthPixels.toFloat()
+    val bannerHeight = screenWidth * height / width
+    container.layoutParams = FrameLayout.LayoutParams(screenWidth.toInt(), bannerHeight.toInt())
+    return TTSizeF(screenWidth, bannerHeight)
   }
+
+  fun loadExpressAd(ad: TTNativeExpressAd?) {
+    ad ?: return
+    val expressAdView = ad.expressAdView
+    container.removeAllViews()
+    val params = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+    container.addView(expressAdView, params)
+    val screenWidth = ScreenUtil.getScreenSize().width.toFloat()
+    val imageMode = ad.imageMode
+    val feedHeight = when (ad.imageMode) {
+      TTAdConstant.IMAGE_MODE_VIDEO_VERTICAL -> (screenWidth / 0.56)
+      TTAdConstant.IMAGE_MODE_VIDEO -> (screenWidth / 1.78)
+      TTAdConstant.IMAGE_MODE_LARGE_IMG -> (screenWidth / 1.78)
+      TTAdConstant.IMAGE_MODE_VERTICAL_IMG -> (screenWidth / 1.78)
+      TTAdConstant.IMAGE_MODE_SMALL_IMG -> (screenWidth / 1.52)
+      TTAdConstant.IMAGE_MODE_GROUP_IMG -> (screenWidth / 1.52)
+      TTAdConstant.IMAGE_MODE_UNKNOWN -> (screenWidth / 1.52)
+      else -> 0.0
+    }.toFloat()
+    val size = invalidateView(screenWidth, feedHeight)
+    invoke(size.width.px, size.height.px)
+    ad.setExpressInteractionListener(object : TTNativeExpressAd.ExpressAdInteractionListener {
+      override fun onAdClicked(view: View, type: Int) {
+      }
+
+      override fun onAdShow(view: View?, type: Int) {
+      }
+
+      override fun onRenderSuccess(view: View, width: Float, height: Float) {
+        val renderSize = invalidateView(width, height)
+        invoke(renderSize.width.px, renderSize.height.px)
+        view.invalidate()
+      }
+
+      override fun onRenderFail(view: View?, msg: String?, code: Int) {
+        removeView()
+      }
+    })
+
+    ad.setDislikeCallback(activity, object : DislikeInteractionCallback {
+      override fun onSelected(index: Int, selection: String) {
+        removeView()
+      }
+
+      override fun onCancel() {
+      }
+
+      override fun onRefuse() {
+      }
+    })
+
+  }
+
 
   private fun bindSmallAdView(parent: ViewGroup, @NonNull ad: TTFeedAd): View {
     val holder = SmallAdViewHolder()
@@ -435,20 +501,19 @@ class FlutterFeedView(
   private fun bindDislikeCustom(convertView: ViewGroup, dislike: View, ad: TTFeedAd) {
     dislike.setOnClickListener {
       ad.getDislikeDialog(activity)?.apply {
-        setDislikeInteractionCallback(this@FlutterFeedView)
+        setDislikeInteractionCallback(object : DislikeInteractionCallback {
+          override fun onSelected(position: Int, value: String) {
+            removeView()
+          }
+
+          override fun onCancel() {}
+          override fun onRefuse() {}
+        })
         showDislikeDialog()
       }
     }
 
   }
-
-  override fun onSelected(position: Int, value: String) {
-//      val id = id
-    removeView()
-  }
-
-  override fun onCancel() {}
-  override fun onRefuse() {}
 
   private fun bindDownloadListener(adCreativeButton: Button, adViewHolder: AdViewHolder, ad: TTFeedAd) {
     val downloadListener: TTAppDownloadListener = object : TTAppDownloadListener {

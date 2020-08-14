@@ -12,17 +12,23 @@ final kFeedViewType = 'nullptrx.github.io/pangle_feedview';
 /// PlatformView does not support Android API level 19 or below.
 class FeedView extends StatefulWidget {
   final String id;
+  final bool isExpress;
 
   /// default implementation, if null.
   final VoidCallback onRemove;
 
   /// constructor a feed view
   /// [id] feedId
+  /// [isExpress] optional. 个性化模板广告
   /// [onRemove] when click dislike button
-  FeedView({Key key, this.id, this.onRemove}) : super(key: key);
+  FeedView({Key key, this.id, this.isExpress, this.onRemove}) : super(key: _FeedViewKey(id));
 
   @override
   State<StatefulWidget> createState() => _FeedViewState();
+}
+
+class _FeedViewKey extends GlobalObjectKey {
+  const _FeedViewKey(Object value) : super(value);
 }
 
 class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
@@ -32,35 +38,37 @@ class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin,
   double adWidth = kPangleSize;
   double adHeight = kPangleSize;
 
+  Size _lastSize;
+
   @override
   bool get wantKeepAlive => true;
 
   @override
   void initState() {
     super.initState();
+    var size = WidgetsBinding.instance.window.physicalSize;
+    _lastSize = size;
     WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    remove();
+    clear();
     super.dispose();
   }
 
   @override
   void didChangeMetrics() {
-    _controller?._update(_createParams());
+    var size = WidgetsBinding.instance.window.physicalSize;
+    if (_lastSize?.width != size.width || _lastSize?.height != size.height) {
+      _controller?._update(_createParams());
+    }
   }
 
-  @override
-  void didUpdateWidget(FeedView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _controller?._update(_createParams());
-  }
-
-  void remove() {
-    _controller?.remove();
+  void clear() {
+    // 从缓存里清空该键对应的广告数据
+    _controller?.clear();
     _controller = null;
   }
 
@@ -124,7 +132,7 @@ class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin,
         setState(() {
           this.removed = true;
         });
-        remove();
+        clear();
       }
     };
     final updated = (args) {
@@ -143,6 +151,7 @@ class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin,
   Map<String, dynamic> _createParams() {
     return {
       'feedId': widget.id,
+      'isExpress': widget.isExpress,
     };
   }
 }
@@ -159,10 +168,6 @@ class FeedViewController {
   }) {
     _methodChannel = new MethodChannel('${kFeedViewType}_$id');
     _methodChannel.setMethodCallHandler(_handleMethod);
-  }
-
-  void remove() {
-    _methodChannel = null;
   }
 
   Future<dynamic> _handleMethod(MethodCall call) {
@@ -186,5 +191,9 @@ class FeedViewController {
 
   Future<Null> _update(Map<String, dynamic> params) async {
     await _methodChannel?.invokeMethod("update", params);
+  }
+
+  void clear() {
+    _methodChannel = null;
   }
 }

@@ -76,20 +76,26 @@ object PangleAdSlotManager {
     return adSlot
   }
 
-  fun getFeedAdSlot(slotId: String, count: Int, imgSizeIndex: Int, isSupportDeepLink: Boolean): AdSlot {
+  fun getFeedAdSlot(slotId: String, isExpress: Boolean, count: Int, imgSizeIndex: Int, isSupportDeepLink: Boolean): AdSlot {
     val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
-    val adSlot = AdSlot.Builder()
-        .setCodeId(slotId)
-        .setImageAcceptedSize(imgSize.width, imgSize.height)
-        .setSupportDeepLink(isSupportDeepLink)
-        .setIsAutoPlay(false)
-        //请求原生广告时候，请务必调用该方法，设置参数为TYPE_BANNER或TYPE_INTERACTION_AD
-        .setAdCount(count)
+    val adSlot = AdSlot.Builder().apply {
+      setCodeId(slotId)
+      setSupportDeepLink(isSupportDeepLink)
+      setIsAutoPlay(false)
+      // 请求原生广告时候，请务必调用该方法，设置参数为TYPE_BANNER或TYPE_INTERACTION_AD
+      // setNativeAdType()
+      setAdCount(count)
+      if (isExpress) {
+        setExpressViewAcceptedSize(imgSize.width.px, imgSize.height.px)
+      } else {
+        setImageAcceptedSize(imgSize.width, imgSize.height)
+      }
+    }
         .build()
     return adSlot
   }
 
-  fun getInterstitialAdSlot(slotId: String, isExpress: Boolean, imgSizeIndex: Int, isSupportDeepLink: Boolean): AdSlot {
+  fun getInterstitialAdSlot(slotId: String, isExpress: Boolean, imgSizeIndex: Int, isSupportDeepLink: Boolean, isNativeAd: Boolean): AdSlot {
     val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
 
     val width = imgSize.width * 0.9
@@ -104,6 +110,10 @@ object PangleAdSlotManager {
       setSupportDeepLink(isSupportDeepLink)
       //请求原生广告时候，请务必调用该方法，设置参数为TYPE_BANNER或TYPE_INTERACTION_AD
       setAdCount(1)
+      // TODO support native ad type
+      if (isNativeAd) {
+        setNativeAdType(AdSlot.TYPE_INTERACTION_AD)
+      }
     }
         .build()
     return adSlot

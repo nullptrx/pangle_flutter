@@ -138,8 +138,14 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val count = call.argument<Int>("count") ?: kDefaultFeedAdCount
         val imgSizeIndex = call.argument<Int>("imgSize")!!
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
-        val adSlot = PangleAdSlotManager.getFeedAdSlot(slotId, count, imgSizeIndex, isSupportDeepLink)
-        pangle.loadFeedAd(adSlot, result)
+        val isExpress = call.argument<Boolean>("isExpress") ?: false
+        val adSlot = PangleAdSlotManager.getFeedAdSlot(slotId, isExpress, count, imgSizeIndex, isSupportDeepLink)
+        if (isExpress) {
+          pangle.loadFeedExpressAd(adSlot, result)
+        } else {
+          pangle.loadFeedAd(adSlot, result)
+        }
+
       }
 
       "loadInterstitialAd" -> {
@@ -147,7 +153,8 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val isExpress = call.argument<Boolean>("isExpress") ?: false
         val imgSizeIndex = call.argument<Int>("imgSize")!!
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
-        val adSlot = PangleAdSlotManager.getInterstitialAdSlot(slotId, isExpress, imgSizeIndex, isSupportDeepLink)
+        val isNativeAd = call.argument<Boolean>("isNativeAd") ?: false
+        val adSlot = PangleAdSlotManager.getInterstitialAdSlot(slotId, isExpress, imgSizeIndex, isSupportDeepLink, isNativeAd)
         if (isExpress) {
           pangle.loadInteractionExpressAd(adSlot, FLTInterstitialExpressAd(result, activity))
         } else {

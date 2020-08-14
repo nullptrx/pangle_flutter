@@ -29,7 +29,11 @@ class _FeedPageState extends State<FeedPage> {
   _loadFeedAd() async {
     PangleFeedAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedAdConfig(slotId: kFeedId, count: 3),
-      android: AndroidFeedAdConfig(slotId: kFeedId, count: 3),
+      android: AndroidFeedAdConfig(
+        slotId: kEFeedExpressId,
+        count: 3,
+        isExpress: true,
+      ),
     );
     final data = <Item>[];
     int totalCount = 20;

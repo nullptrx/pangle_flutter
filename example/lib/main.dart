@@ -18,7 +18,7 @@ void main() async {
   );
   await pangle.loadSplashAd(
     iOS: IOSSplashConfig(slotId: kSplashId),
-    android: AndroidSplashConfig(slotId: kSplashId, isExpress: true),
+    android: AndroidSplashConfig(slotId: kSplashId),
   );
   runApp(MaterialApp(home: MyApp()));
 }
@@ -98,26 +98,24 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _loadBannerAd() {
-    Navigator.push(
-        context, CupertinoPageRoute(builder: (context) => BannerPage()));
+    Navigator.push(context, CupertinoPageRoute(builder: (context) => BannerPage()));
   }
 
   void _loadFeedAd() {
-    Navigator.push(
-        context, CupertinoPageRoute(builder: (context) => FeedPage()));
+    Navigator.push(context, CupertinoPageRoute(builder: (context) => FeedPage()));
   }
 
   void _loadInterstitialAd() async {
     final result = await pangle.loadInterstitialAd(
       iOS: IOSInterstitialAdConfig(
-        slotId: kInterstitialId,
+        slotId: kInterstitialExpressId,
         isExpress: true,
 
         /// 该宽高为你申请的广告位宽高，请根据实际情况赋值
         imgSize: PangleImgSize.interstitial600_400,
       ),
       android: AndroidInterstitialAdConfig(
-        slotId: kInterstitialId,
+        slotId: kInterstitialExpressId,
         isExpress: true,
       ),
     );

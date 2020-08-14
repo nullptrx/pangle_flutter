@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo
 import com.bytedance.sdk.openadsdk.*
 import io.flutter.plugin.common.MethodChannel
 import io.github.nullptrx.pangleflutter.delegate.FLTFeedAd
+import io.github.nullptrx.pangleflutter.delegate.FLTFeedExpressAd
 import io.github.nullptrx.pangleflutter.delegate.FLTRewardedVideoAd
 import java.util.*
 
@@ -39,8 +40,8 @@ class PangleAdManager {
     return data
   }
 
-  fun getFeedAd(tag: String): TTFeedAd? {
-    return feedAdCollection[tag]
+  fun getFeedAd(key: String): TTFeedAd? {
+    return feedAdCollection[key]
   }
 
   fun removeFeedAd(key: String) {
@@ -60,8 +61,8 @@ class PangleAdManager {
     return data
   }
 
-  fun getBannerAd(tag: String): TTBannerAd? {
-    return bannerAdCollection[tag]
+  fun getBannerAd(key: String): TTBannerAd? {
+    return bannerAdCollection[key]
   }
 
   fun removeBannerAd(key: String) {
@@ -74,6 +75,8 @@ class PangleAdManager {
   fun setExpressAd(ttBannerAds: List<TTNativeExpressAd>): List<String> {
     val data = mutableListOf<String>()
     ttBannerAds.forEach {
+      // 预先渲染
+      it.render()
       val key = it.hashCode().toString()
       expressAdCollection[key] = it
       data.add(key)
@@ -81,12 +84,13 @@ class PangleAdManager {
     return data
   }
 
-  fun getExpressAd(tag: String): TTNativeExpressAd? {
-    return expressAdCollection[tag]
+  fun getExpressAd(key: String): TTNativeExpressAd? {
+    return expressAdCollection[key]
   }
 
   fun removeExpressAd(key: String) {
-    expressAdCollection.remove(key)
+    val it = expressAdCollection.remove(key)
+    it?.destroy()
   }
 
 
@@ -166,6 +170,9 @@ class PangleAdManager {
     ttAdNative?.loadFeedAd(adSlot, FLTFeedAd(result))
   }
 
+  fun loadFeedExpressAd(adSlot: AdSlot, result: MethodChannel.Result) {
+    ttAdNative?.loadNativeExpressAd(adSlot, FLTFeedExpressAd(result))
+  }
 
   fun loadBannerAd(adSlot: AdSlot, listener: TTAdNative.BannerAdListener) {
     ttAdNative?.loadBannerAd(adSlot, listener)

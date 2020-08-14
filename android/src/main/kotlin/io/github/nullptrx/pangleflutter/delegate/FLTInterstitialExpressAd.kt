@@ -29,6 +29,7 @@ class FLTInterstitialExpressAd(var result: MethodChannel.Result?, var target: Ac
   }
 
   override fun onSelected(index: Int, selection: String) {
+    
   }
 
   override fun onCancel() {

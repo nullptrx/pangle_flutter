@@ -114,7 +114,6 @@ object ScreenUtil {
           ret = true
         }
       } catch (e: Exception) {
-        e.printStackTrace()
       }
     }
     return ret

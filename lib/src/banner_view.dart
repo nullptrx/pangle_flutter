@@ -19,7 +19,7 @@ class BannerView extends StatefulWidget {
   final IOSBannerAdConfig iOS;
   final AndroidBannerAdConfig android;
 
-  const BannerView({
+  BannerView({
     Key key,
     this.iOS,
     this.android,
@@ -32,12 +32,18 @@ class BannerView extends StatefulWidget {
   State<StatefulWidget> createState() => _BannerViewState();
 }
 
+class BannerViewKey extends GlobalObjectKey {
+  const BannerViewKey(Object value) : super(value);
+}
+
 class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   BannerViewController _controller;
   bool offstage = true;
   bool removed = false;
   double adWidth = kPangleSize;
   double adHeight = kPangleSize;
+
+  Size _lastSize;
 
   @override
   bool get wantKeepAlive => true;
@@ -51,17 +57,23 @@ class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMi
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    remove();
+    clear();
     super.dispose();
   }
 
   @override
   void didChangeMetrics() {
-    _controller?._update(_createParams());
+    var size = WidgetsBinding.instance.window.physicalSize;
+    if (_lastSize == null) {
+      _lastSize = size;
+      _controller?._update(_createParams());
+    } else if (_lastSize.width != size.width || _lastSize.height != size.height) {
+      _controller?._update(_createParams());
+    }
   }
 
-  void remove() {
-    _controller?.remove();
+  void clear() {
+    _controller?.clear();
     _controller = null;
   }
 
@@ -117,18 +129,12 @@ class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMi
     return body;
   }
 
-  @override
-  void didUpdateWidget(BannerView oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _controller?._update(_createParams());
-  }
-
   void _onPlatformViewCreated(BuildContext context, int id) {
     final removed = () {
       setState(() {
         this.removed = true;
       });
-      remove();
+      clear();
     };
     final updated = (args) {
       double width = args['width'];
@@ -185,7 +191,7 @@ class BannerViewController {
     _methodChannel.setMethodCallHandler(_handleMethod);
   }
 
-  void remove() {
+  void clear() {
     this._methodChannel = null;
   }
 

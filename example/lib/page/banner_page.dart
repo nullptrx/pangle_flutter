@@ -28,6 +28,30 @@ class _BannerPageState extends State<BannerPage> {
               isExpress: true,
             ),
           ),
+          BannerView(
+            iOS: IOSBannerAdConfig(
+              slotId: kBannerExpressId,
+              imgSize: PangleImgSize.banner600_300,
+              isExpress: true,
+            ),
+            android: AndroidBannerAdConfig(
+              slotId: kBannerExpressId,
+              imgSize: PangleImgSize.banner600_150,
+              isExpress: true,
+            ),
+          ),
+          BannerView(
+            iOS: IOSBannerAdConfig(
+              slotId: kBannerExpressId,
+              imgSize: PangleImgSize.banner600_300,
+              isExpress: true,
+            ),
+            android: AndroidBannerAdConfig(
+              slotId: kBannerExpressId,
+              imgSize: PangleImgSize.banner600_260,
+              isExpress: true,
+            ),
+          ),
         ],
       ),
     );

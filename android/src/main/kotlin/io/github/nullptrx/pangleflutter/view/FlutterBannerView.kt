@@ -179,9 +179,14 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
 
       // 设置轮播的时间间隔  间隔在30s到120秒之间的值，不设置默认不轮播
 //      ad.setSlideIntervalTime(30_000)
-      ad.render()
+      container.removeAllViews()
+      val params = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+      val expressAdView = ad.expressAdView
+      container.addView(expressAdView, params)
       val size = invalidateView(imgSize.width, imgSize.height)
       invoke(size.width.px, size.height.px)
+      ad.render()
+
     }
 
     override fun onAdDismiss() {
@@ -195,9 +200,6 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
     }
 
     override fun onRenderSuccess(view: View, width: Float, height: Float) {
-      container.removeAllViews()
-      val params = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-      container.addView(view, params)
       view.invalidate()
     }
 
