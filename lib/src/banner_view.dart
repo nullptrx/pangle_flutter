@@ -18,15 +18,16 @@ typedef void BannerViewCreatedCallback(BannerViewController controller);
 class BannerView extends StatefulWidget {
   final IOSBannerAdConfig iOS;
   final AndroidBannerAdConfig android;
+  final VoidCallback onRemove;
+  final BannerViewCreatedCallback onBannerViewCreated;
 
   BannerView({
     Key key,
     this.iOS,
     this.android,
     this.onBannerViewCreated,
+    this.onRemove,
   }) : super(key: key);
-
-  final BannerViewCreatedCallback onBannerViewCreated;
 
   @override
   State<StatefulWidget> createState() => _BannerViewState();
@@ -36,7 +37,8 @@ class BannerViewKey extends GlobalObjectKey {
   const BannerViewKey(Object value) : super(value);
 }
 
-class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+class _BannerViewState extends State<BannerView>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   BannerViewController _controller;
   bool offstage = true;
   bool removed = false;
@@ -67,7 +69,8 @@ class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMi
     if (_lastSize == null) {
       _lastSize = size;
       _controller?._update(_createParams());
-    } else if (_lastSize.width != size.width || _lastSize.height != size.height) {
+    } else if (_lastSize.width != size.width ||
+        _lastSize.height != size.height) {
       _controller?._update(_createParams());
     }
   }
@@ -86,7 +89,8 @@ class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMi
       if (defaultTargetPlatform == TargetPlatform.android) {
         platformView = AndroidView(
           viewType: kBannerViewType,
-          onPlatformViewCreated: (index) => _onPlatformViewCreated(context, index),
+          onPlatformViewCreated: (index) =>
+              _onPlatformViewCreated(context, index),
           creationParams: _createParams(),
           creationParamsCodec: const StandardMessageCodec(),
           // BannerView content is not affected by the Android view's layout direction,
@@ -97,7 +101,8 @@ class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMi
       } else if (defaultTargetPlatform == TargetPlatform.iOS) {
         platformView = UiKitView(
           viewType: kBannerViewType,
-          onPlatformViewCreated: (index) => _onPlatformViewCreated(context, index),
+          onPlatformViewCreated: (index) =>
+              _onPlatformViewCreated(context, index),
           creationParams: _createParams(),
           creationParamsCodec: const StandardMessageCodec(),
           // BannerView content is not affected by the Android view's layout direction,
@@ -131,10 +136,14 @@ class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMi
 
   void _onPlatformViewCreated(BuildContext context, int id) {
     final removed = () {
-      setState(() {
-        this.removed = true;
-      });
-      clear();
+      if (widget.onRemove != null) {
+        widget.onRemove();
+      } else {
+        setState(() {
+          this.removed = true;
+        });
+        clear();
+      }
     };
     final updated = (args) {
       double width = args['width'];
@@ -146,7 +155,8 @@ class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMi
       });
     };
 
-    var controller = BannerViewController._(id, onRemove: removed, onUpdate: updated);
+    var controller =
+        BannerViewController._(id, onRemove: removed, onUpdate: updated);
     _controller = controller;
     if (widget.onBannerViewCreated == null) {
       return;

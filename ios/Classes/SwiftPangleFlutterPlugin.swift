@@ -65,11 +65,13 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
             let slotId: String = args["slotId"] as! String
             let imgSize: Int = args["imgSize"] as! Int
             let count = args["count"] as? Int ?? SwiftPangleFlutterPlugin.kDefaultFeedAdCount
-            let tag = args["tag"] as? String ?? SwiftPangleFlutterPlugin.kDefaultFeedTag
             let isSupportDeepLink: Bool = args["isSupportDeepLink"] as? Bool ?? true
-            
-            instance.loadFeedAd(slotId, result: result, tag: tag, count: count, imgSize: imgSize, isSupportDeepLink: isSupportDeepLink)
-            
+            let isExpress: Bool = args["isExpress"] as? Bool ?? false
+            if isExpress {
+                instance.loadFeedExpressAd(slotId, result: result, count: count, imgSize: imgSize, isSupportDeepLink: isSupportDeepLink)
+            } else {
+                instance.loadFeedAd(slotId, result: result, count: count, imgSize: imgSize, isSupportDeepLink: isSupportDeepLink)
+            }
         case "loadInterstitialAd":
             let slotId: String = args["slotId"] as! String
             let imgSize: Int = args["imgSize"] as! Int

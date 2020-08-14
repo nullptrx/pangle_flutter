@@ -12,14 +12,18 @@ public class PangleAdManager: NSObject {
     public static let shared = PangleAdManager()
     
     private var feedAdCollection: [String: BUNativeAd] = [:]
+    private var expressAdCollection: [String: BUNativeExpressAdView] = [:]
     // Splash Ad
     private var splashAdDelegate: BUSplashAdDelegate?
     // Rewarded Video Ad
     private var rewardVideoAdDelegate: BURewardedVideoAdDelegate?
     private var rewardedVideoAd: BURewardedVideoAd?
     // Feed Ad
-    private var feedAdDelegate: BUNativeAdsManagerDelegate?
     private var feedAdManager: BUNativeAdsManager?
+    private var feedAdDelegate: BUNativeAdsManagerDelegate?
+    // Feed Express Ad
+    private var feedExpressAdManager: BUNativeExpressAdManager?
+    private var feedExpressAdDelegate: BUNativeExpressAdViewDelegate?
     // Interstitial Ad
     private var interstitialAd: BUInterstitialAd?
     private var interstitialAdDelegate: BUInterstitialAdDelegate?
@@ -42,7 +46,30 @@ public class PangleAdManager: NSObject {
     }
     
     public func removeFeedAd(_ key: String) {
-        self.feedAdCollection.removeValue(forKey: key)
+        let nativeAd = self.feedAdCollection.removeValue(forKey: key)
+        nativeAd?.rootViewController = nil
+    }
+    
+    public func setExpressAd(_ nativeAds: [BUNativeExpressAdView]) -> [String] {
+        var expressAds: [String: BUNativeExpressAdView] = [:]
+        for nativeAd in nativeAds {
+            nativeAd.rootViewController = AppUtil.getVC()
+            nativeAd.render()
+            expressAds[String(nativeAd.hash)] = nativeAd
+        }
+        self.expressAdCollection.merge(expressAds, uniquingKeysWith: { _, last in last })
+        let array: [String] = Array(expressAds.keys)
+        return array
+    }
+    
+    public func getExpressAd(_ key: String) -> BUNativeExpressAdView? {
+        return self.expressAdCollection[key]
+    }
+    
+    public func removeExpressAd(_ key: String) {
+        let expressAd = self.expressAdCollection.removeValue(forKey: key)
+        expressAd?.removeFromSuperview()
+        expressAd?.rootViewController = nil
     }
     
     public func initialize(_ appId: String, logLevel: Int?, coppa: UInt?, isPaidApp: Bool?) {
@@ -105,7 +132,7 @@ public class PangleAdManager: NSObject {
         self.rewardedVideoAd = nil
     }
     
-    public func loadFeedAd(_ slotId: String, result: @escaping FlutterResult, tag: String, count: Int, imgSize: Int, isSupportDeepLink: Bool) {
+    public func loadFeedAd(_ slotId: String, result: @escaping FlutterResult, count: Int, imgSize: Int, isSupportDeepLink: Bool) {
         let nad = BUNativeAdsManager()
         let slot = BUAdSlot()
         slot.id = slotId
@@ -114,15 +141,40 @@ public class PangleAdManager: NSObject {
         slot.isSupportDeepLink = isSupportDeepLink
         slot.imgSize = BUSize(by: BUProposalSize(rawValue: imgSize)!)
         nad.adslot = slot
-        self.feedAdDelegate = FLTFeedAd(result, tag: tag)
+        self.feedAdDelegate = FLTFeedAd(result)
         nad.delegate = self.feedAdDelegate
         self.feedAdManager = nad
-        nad.loadAdData(withCount: 3)
+        nad.loadAdData(withCount: count)
     }
     
     public func loadFeedAdComplete() {
         self.feedAdManager = nil
         self.feedAdDelegate = nil
+    }
+    
+    public func loadFeedExpressAd(_ slotId: String, result: @escaping FlutterResult, count: Int, imgSize: Int, isSupportDeepLink: Bool) {
+        let size = BUSize(by: BUProposalSize(rawValue: imgSize)!)!
+        let width = Double(UIScreen.main.bounds.width)
+        let height = width / Double(size.width) * Double(size.height)
+        
+        let slot = BUAdSlot()
+        slot.id = slotId
+        slot.adType = .feed
+        slot.position = .feed
+        slot.isSupportDeepLink = isSupportDeepLink
+        slot.imgSize = size
+        
+        let nad = BUNativeExpressAdManager(slot: slot, adSize: CGSize(width: width, height: height))
+        self.feedExpressAdManager = nad
+        self.feedExpressAdDelegate = FLTFeedExpressAd(result)
+        nad.delegate = self.feedExpressAdDelegate
+        nad.adSize = CGSize(width: width, height: height)
+        nad.loadAd(count)
+    }
+    
+    public func loadFeedExpressAdComplete() {
+//        self.feedExpressAdManager = nil
+//        self.feedExpressAdDelegate = nil
     }
     
     public func loadInterstitialAd(_ slotId: String, result: @escaping FlutterResult, imgSize: Int) {
@@ -146,7 +198,6 @@ public class PangleAdManager: NSObject {
         
         let width = Double(UIScreen.main.bounds.width) * 0.9
         let height = width / Double(size.width) * Double(size.height)
-        
         self.interstitialExpressAd = BUNativeExpressInterstitialAd(slotID: slotId, adSize: CGSize(width: width, height: height))
         self.interstitialExpressAdDelegate = FLTInterstitialExpressAd(result)
         self.interstitialExpressAd?.delegate = self.interstitialExpressAdDelegate

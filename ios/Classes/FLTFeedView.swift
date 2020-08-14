@@ -11,6 +11,8 @@ import Flutter
 public class FLTFeedView: NSObject, FlutterPlatformView {
     private let methodChannel: FlutterMethodChannel
     private let container: UIView
+    private var isExpress = false
+    private var feedId: String?
 
     init(_ frame: CGRect, id: Int64, params: [String: Any], messenger: FlutterBinaryMessenger) {
         self.container = UIView(frame: frame)
@@ -22,11 +24,35 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
 
         self.methodChannel.setMethodCallHandler(self.handle(_:result:))
 
-        let feedId = params["feedId"] as? String
-        if feedId != nil {
-            let nad = PangleAdManager.shared.getFeedAd(feedId!)
-            self.loadAd(nad)
+        self.feedId = params["feedId"] as? String
+        self.isExpress = params["isExpress"] as? Bool ?? false
+        if self.feedId != nil {
+            if self.isExpress {
+                let nad = PangleAdManager.shared.getExpressAd(self.feedId!)
+                self.loadExpressAd(nad)
+            } else {
+                let nad = PangleAdManager.shared.getFeedAd(self.feedId!)
+                self.loadAd(nad)
+            }
         }
+
+        if self.isExpress {
+            initObserver()
+        }
+    }
+
+    deinit {
+        if self.isExpress {
+            deinitObserver()
+        }
+        if self.feedId != nil {
+            if self.isExpress {
+                PangleAdManager.shared.removeExpressAd(self.feedId!)
+            } else {
+                PangleAdManager.shared.removeFeedAd(self.feedId!)
+            }
+        }
+        removeAllView()
     }
 
     public func view() -> UIView {
@@ -38,14 +64,27 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
         case "update":
             let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
             let feedId = args["feedId"] as? String
+            let isExpress = args["isExpress"] as? Bool ?? false
             if feedId != nil {
-                let nad = PangleAdManager.shared.getFeedAd(feedId!)
-                self.loadAd(nad)
+                if isExpress {
+                    let nad = PangleAdManager.shared.getExpressAd(feedId!)
+                    self.loadExpressAd(nad)
+                } else {
+                    let nad = PangleAdManager.shared.getFeedAd(feedId!)
+                    self.loadAd(nad)
+                }
             }
             result(nil)
         default:
             result(FlutterMethodNotImplemented)
         }
+    }
+
+    private func invoke(width: CGFloat, height: CGFloat) {
+        var params = [String: Any]()
+        params["width"] = width
+        params["height"] = height
+        self.methodChannel.invokeMethod("update", arguments: params)
     }
 
     func loadAd(_ ad: BUNativeAd?) {
@@ -130,11 +169,34 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
         self.invoke(width: width, height: height)
     }
 
-    private func invoke(width: CGFloat, height: CGFloat) {
-        var params = [String: Any]()
-        params["width"] = width
-        params["height"] = height
-        self.methodChannel.invokeMethod("update", arguments: params)
+    func loadExpressAd(_ ad: BUNativeExpressAdView?) {
+        guard let expressAd: BUNativeExpressAdView = ad else {
+            return
+        }
+        expressAd.rootViewController = AppUtil.getVC()
+        let size = expressAd.bounds.size
+        let width = size.width
+        let height = size.height
+        let contentWidth = UIScreen.main.bounds.size.width
+        let contentHeight = contentWidth * height / width
+//        let leftPadding: CGFloat = 10
+//        let expressWidth = contentWidth - 2 * leftPadding
+//        let expressHeight = expressWidth * height / width
+
+        self.removeAllView()
+        let frame = CGRect.init(x: 0, y: 0, width: contentWidth, height: contentHeight)
+        expressAd.frame = frame
+
+        let rootFrame = CGRect(x: 0, y: 0, width: contentWidth, height: contentHeight)
+        self.container.frame = rootFrame
+
+        self.container.addSubview(expressAd)
+        self.container.updateConstraints()
+        self.invoke(width: contentWidth, height: contentHeight)
+    }
+
+    public func removeAllView() {
+        self.container.subviews.forEach { $0.removeFromSuperview() }
     }
 }
 
@@ -143,8 +205,7 @@ extension FLTFeedView: BUVideoAdViewDelegate {
 
     public func videoAdViewFinishViewDidClick(_ videoAdView: BUVideoAdView) {}
 
-    public func videoAdView(_ videoAdView: BUVideoAdView, didLoadFailWithError error: Error?) {
-    }
+    public func videoAdView(_ videoAdView: BUVideoAdView, didLoadFailWithError error: Error?) {}
 
     public func videoAdView(_ videoAdView: BUVideoAdView, stateDidChanged playerState: BUPlayerPlayState) {}
 
@@ -160,21 +221,43 @@ extension FLTFeedView: BUNativeAdDelegate {
 
     public func nativeAd(_ nativeAd: BUNativeAd, didFailWithError error: Error?) {
         self.methodChannel.invokeMethod("remove", arguments: nil)
-        PangleAdManager.shared.removeFeedAd(String(nativeAd.hash))
+        PangleAdManager.shared.removeFeedAd(self.feedId!)
         self.removeAllView()
     }
 
     public func nativeAd(_ nativeAd: BUNativeAd?, dislikeWithReason filterWords: [BUDislikeWords]?) {
         self.methodChannel.invokeMethod("remove", arguments: nil)
-        if nativeAd != nil {
-            PangleAdManager.shared.removeFeedAd(String(nativeAd!.hash))
-        }
+        PangleAdManager.shared.removeFeedAd(self.feedId!)
         self.removeAllView()
     }
 
     public func nativeAdDidCloseOtherController(_ nativeAd: BUNativeAd, interactionType: BUInteractionType) {}
+}
 
-    public func removeAllView() {
-        self.container.subviews.forEach { $0.removeFromSuperview() }
+extension FLTFeedView {
+    func initObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.handleFeedExpressViewEvent), name: NSNotification.Name(rawValue: Constant.kFeedView), object: nil)
+    }
+
+    func deinitObserver() {
+        NotificationCenter.default.removeObserver(self)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: Constant.kFeedView), object: nil)
+    }
+
+    @objc func handleFeedExpressViewEvent(notification: Notification) {
+        if !(notification.object is FLTFeedExpressAd) {
+            return
+        }
+        let info = notification.userInfo
+
+        guard let feedId: String = info?["feedId"] as? String else {
+            return
+        }
+        if self.feedId == feedId {
+            PangleAdManager.shared.removeExpressAd(feedId)
+            self.methodChannel.invokeMethod("remove", arguments: nil)
+            self.methodChannel.setMethodCallHandler(nil)
+            self.removeAllView()
+        }
     }
 }

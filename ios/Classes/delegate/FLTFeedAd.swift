@@ -10,14 +10,13 @@ import Flutter
 
 public class FLTFeedAd: NSObject, BUNativeAdsManagerDelegate {
     private var result: FlutterResult?
-    private var tag: String
-    init(_ result: @escaping FlutterResult, tag: String) {
+    init(_ result: @escaping FlutterResult) {
         self.result = result
-        self.tag = tag
     }
-
+    
     public func nativeAdsManager(_ adsManager: BUNativeAdsManager, didFailWithError error: Error?) {
-        invoke(code: -1, message: error?.localizedDescription)
+        let err = error as NSError?
+        invoke(code: err?.code ?? -1, message: error?.localizedDescription)
     }
 
     public func nativeAdsManagerSuccess(toLoad adsManager: BUNativeAdsManager, nativeAds nativeAdDataArray: [BUNativeAd]?) {

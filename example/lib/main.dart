@@ -98,11 +98,13 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _loadBannerAd() {
-    Navigator.push(context, CupertinoPageRoute(builder: (context) => BannerPage()));
+    Navigator.push(
+        context, CupertinoPageRoute(builder: (context) => BannerPage()));
   }
 
   void _loadFeedAd() {
-    Navigator.push(context, CupertinoPageRoute(builder: (context) => FeedPage()));
+    Navigator.push(
+        context, CupertinoPageRoute(builder: (context) => FeedPage()));
   }
 
   void _loadInterstitialAd() async {

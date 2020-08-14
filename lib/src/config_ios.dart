@@ -131,6 +131,7 @@ class IOSFeedAdConfig {
 
   final int count;
   final bool isSupportDeepLink;
+  final bool isExpress;
 
   /// The feed ad config for iOS
   ///
@@ -138,11 +139,13 @@ class IOSFeedAdConfig {
   /// [imgSize] required. Image size.
   /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
   /// [isSupportDeepLink] optional. Whether to support deeplink.
+  /// [isExpress] optional. 个性化模板广告.
   IOSFeedAdConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.feed690_388,
     this.count,
     this.isSupportDeepLink,
+    this.isExpress,
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
@@ -152,6 +155,7 @@ class IOSFeedAdConfig {
       'count': count,
       'imgSize': imgSize.index,
       'isSupportDeepLink': isSupportDeepLink,
+      'isExpress': isExpress,
     };
   }
 }

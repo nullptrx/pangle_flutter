@@ -21,7 +21,8 @@ class FeedView extends StatefulWidget {
   /// [id] feedId
   /// [isExpress] optional. 个性化模板广告
   /// [onRemove] when click dislike button
-  FeedView({Key key, this.id, this.isExpress, this.onRemove}) : super(key: _FeedViewKey(id));
+  FeedView({Key key, this.id, this.isExpress, this.onRemove})
+      : super(key: _FeedViewKey(id));
 
   @override
   State<StatefulWidget> createState() => _FeedViewState();
@@ -31,7 +32,8 @@ class _FeedViewKey extends GlobalObjectKey {
   const _FeedViewKey(Object value) : super(value);
 }
 
-class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+class _FeedViewState extends State<FeedView>
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   FeedViewController _controller;
   bool offstage = true;
   bool removed = false;
@@ -144,7 +146,8 @@ class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin,
         this.adHeight = height;
       });
     };
-    final controller = FeedViewController._(id, onRemove: removed, onUpdate: updated);
+    final controller =
+        FeedViewController._(id, onRemove: removed, onUpdate: updated);
     _controller = controller;
   }
 

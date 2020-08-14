@@ -9,30 +9,35 @@ import BUAdSDK
 import Foundation
 
 public class FLTSplashAd: NSObject, BUSplashAdDelegate {
-    private var isClicked = false
+//    private var isClicked = false
     private var result: FlutterResult?
 //    init(_ result: @escaping FlutterResult) {
 //        self.result = result
 //    }
     
+    func removeView(_ splashAd: BUSplashAdView) {
+        splashAd.removeFromSuperview()
+        splashAd.rootViewController = nil
+    }
+    
     public func splashAdDidClick(_ splashAd: BUSplashAdView) {
-        isClicked = true
+//        isClicked = true
     }
     
     public func splashAdDidClose(_ splashAd: BUSplashAdView) {
-        if isClicked {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                splashAd.removeFromSuperview()
-                self.invoke()
-            }
-        } else {
-            splashAd.removeFromSuperview()
-            invoke()
-        }
+//        if isClicked {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                splashAd.removeFromSuperview()
+//                self.invoke()
+//            }
+//        } else {
+//        }
+        removeView(splashAd)
+        invoke()
     }
     
     public func splashAd(_ splashAd: BUSplashAdView, didFailWithError error: Error?) {
-        splashAd.removeFromSuperview()
+        removeView(splashAd)
         let err = error as NSError?
         invoke(code: err?.code ?? -1, message: error?.localizedDescription)
     }

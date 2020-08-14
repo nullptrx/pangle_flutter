@@ -28,20 +28,15 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
         return self.container
     }
 
+    deinit {
+        self.contentView?.removeFromSuperview()
+        removeAllView()
+    }
+
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
         switch call.method {
         case "update":
-//            if self.contentView != nil {
-//                let imgSizeIndex = args["imgSize"] as! Int
-//                let imgSize = BUSize(by: BUProposalSize(rawValue: imgSizeIndex)!)!
-//                let screenWidth = Double(UIScreen.main.bounds.width)
-//                let bannerHeight = screenWidth * Double(imgSize.height) / Double(imgSize.width)
-//                self.contentView!.frame = CGRect(x: 0, y: 0, width: screenWidth, height: bannerHeight)
-//                self.container.frame = CGRect(x: 0, y: 0, width: screenWidth, height: bannerHeight)
-//                self.container.updateConstraints()
-//                self.invoke(width: CGFloat(screenWidth), height: CGFloat(bannerHeight))
-//            }
             self.loadAd(args)
             result(nil)
 
