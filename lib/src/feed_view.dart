@@ -25,8 +25,7 @@ class FeedView extends StatefulWidget {
   State<StatefulWidget> createState() => _FeedViewState();
 }
 
-class _FeedViewState extends State<FeedView>
-    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+class _FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   FeedViewController _controller;
   bool offstage = true;
   bool removed = false;
@@ -45,7 +44,7 @@ class _FeedViewState extends State<FeedView>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _controller = null;
+    remove();
     super.dispose();
   }
 
@@ -63,9 +62,6 @@ class _FeedViewState extends State<FeedView>
   void remove() {
     _controller?.remove();
     _controller = null;
-    setState(() {
-      this.removed = true;
-    });
   }
 
   @override
@@ -125,6 +121,9 @@ class _FeedViewState extends State<FeedView>
       if (widget.onRemove != null) {
         widget.onRemove();
       } else {
+        setState(() {
+          this.removed = true;
+        });
         remove();
       }
     };
@@ -137,8 +136,7 @@ class _FeedViewState extends State<FeedView>
         this.adHeight = height;
       });
     };
-    final controller =
-        FeedViewController._(id, onRemove: removed, onUpdate: updated);
+    final controller = FeedViewController._(id, onRemove: removed, onUpdate: updated);
     _controller = controller;
   }
 

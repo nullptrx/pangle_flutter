@@ -32,8 +32,7 @@ class BannerView extends StatefulWidget {
   State<StatefulWidget> createState() => _BannerViewState();
 }
 
-class _BannerViewState extends State<BannerView>
-    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+class _BannerViewState extends State<BannerView> with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   BannerViewController _controller;
   bool offstage = true;
   bool removed = false;
@@ -62,9 +61,6 @@ class _BannerViewState extends State<BannerView>
   }
 
   void remove() {
-    setState(() {
-      this.removed = true;
-    });
     _controller?.remove();
     _controller = null;
   }
@@ -78,8 +74,7 @@ class _BannerViewState extends State<BannerView>
       if (defaultTargetPlatform == TargetPlatform.android) {
         platformView = AndroidView(
           viewType: kBannerViewType,
-          onPlatformViewCreated: (index) =>
-              _onPlatformViewCreated(context, index),
+          onPlatformViewCreated: (index) => _onPlatformViewCreated(context, index),
           creationParams: _createParams(),
           creationParamsCodec: const StandardMessageCodec(),
           // BannerView content is not affected by the Android view's layout direction,
@@ -90,8 +85,7 @@ class _BannerViewState extends State<BannerView>
       } else if (defaultTargetPlatform == TargetPlatform.iOS) {
         platformView = UiKitView(
           viewType: kBannerViewType,
-          onPlatformViewCreated: (index) =>
-              _onPlatformViewCreated(context, index),
+          onPlatformViewCreated: (index) => _onPlatformViewCreated(context, index),
           creationParams: _createParams(),
           creationParamsCodec: const StandardMessageCodec(),
           // BannerView content is not affected by the Android view's layout direction,
@@ -131,6 +125,9 @@ class _BannerViewState extends State<BannerView>
 
   void _onPlatformViewCreated(BuildContext context, int id) {
     final removed = () {
+      setState(() {
+        this.removed = true;
+      });
       remove();
     };
     final updated = (args) {
@@ -143,8 +140,7 @@ class _BannerViewState extends State<BannerView>
       });
     };
 
-    var controller =
-        BannerViewController._(id, onRemove: removed, onUpdate: updated);
+    var controller = BannerViewController._(id, onRemove: removed, onUpdate: updated);
     _controller = controller;
     if (widget.onBannerViewCreated == null) {
       return;
