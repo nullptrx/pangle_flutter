@@ -1,48 +1,48 @@
 
 ## 0.1.3
 
-* 信息流广告支持模版渲染
-* 优化BannerView、FeedView刷新逻辑（使用GlobalObjectKey防止PlatformView被销毁）
+* Supports express feed ads.
+* Optimizes `BannerView`,`FeedView` (Using `GlobalObjectKey` to prevent destroying `PlatformView` ).
 
 ## 0.1.2
 
-* 插屏广告、Banner广告支持模版渲染
-* 优化BannerView、FeedView移除逻辑
+* Supports template rendering of interstitial ads & banner ads.
+* Optimizes `BannerView`, `FeedView` removing logic.
 
 ## 0.1.1
 
-* 新增插屏广告
-* Android原生请求权限不建议使用
+* Adds interstitial ads.
+* Makes android native permission request deprecated.
 
 ## 0.0.6
 
-* 移除弱引用实现，防止FlutterResult回调失败
+* Removes the weak reference call of `FlutterResult`.
 
 
 ## 0.0.5
 
-* 增加FeedView，BannerView点击移除时的默认实现
+* Adds the default implemention of removing  `FeedView`, `BannerView`.
 
 
 ## 0.0.4
 
-* Android布局使用ConstraintLayout减少布局嵌套
-* 优化FeedView，BannerView加载逻辑
+* Uses `ConstraintLayout`  to layout ads on Android.
+* Optimizes `FeedView`, `BannerView`  loading logic.
 
 
 ## 0.0.3
 
-* 格式化项目
+* Formats project files.
 
 
 ## 0.0.2
 
-* 修正Dart Analysis中的问题
+* Fixes the issues of `Dart Analysis`.
 
 
 ## 0.0.1
 
-* 初步实现开屏、激励视频、Banner、信息流广告
+* Init `Splash Ads`, `Rewarded Video Ads`, `Banner Ads`, `Feed Ads`.
 
 
 
