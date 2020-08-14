@@ -1,3 +1,9 @@
+
+## 0.1.3
+
+* 信息流广告支持模版渲染
+* 优化BannerView、FeedView刷新逻辑（使用GlobalObjectKey防止PlatformView被销毁）
+
 ## 0.1.2
 
 * 插屏广告、Banner广告支持模版渲染

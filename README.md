@@ -322,12 +322,14 @@ AndroidBannerAdConfig({
 /// [tag] optional. experimental. Mark it.
 /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
 /// [isSupportDeepLink] optional. Whether to support deeplink.
+/// [isExpress] optional. 个性化模板广告.
 IOSFeedAdConfig({
   @required this.slotId,
   this.imgSize = PangleImgSize.feed690_388,
   this.tag,
   this.count,
   this.isSupportDeepLink,
+  this.isExpress,
 });
 
 /// The feed ad config for iOS
@@ -337,12 +339,14 @@ IOSFeedAdConfig({
 /// [tag] optional. experimental. Mark it.
 /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
 /// [isSupportDeepLink] optional. Whether to support deeplink.
+/// [isExpress] optional. 个性化模板广告.
 AndroidFeedAdConfig({
   @required this.slotId,
   this.imgSize = PangleImgSize.feed690_388,
   this.tag,
   this.count,
   this.isSupportDeepLink,
+  this.isExpress,
 });
 ```
 
