@@ -1,4 +1,8 @@
 
+## 0.1.4
+
+* Fixes feed ads loading issue on Android
+
 ## 0.1.3
 
 * Supports express feed ads.
