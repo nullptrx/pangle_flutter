@@ -103,11 +103,11 @@ class FlutterFeedView(
   private fun invalidateView() {
     this.feedId?.also {
       if (this.isExpress) {
-        val ttFeedAd: TTFeedAd? = PangleAdManager.shared.getFeedAd(it)
-        loadAd(ttFeedAd)
-      } else {
         val ttExpressAd: TTNativeExpressAd? = PangleAdManager.shared.getExpressAd(it)
         loadExpressAd(ttExpressAd)
+      } else {
+        val ttFeedAd: TTFeedAd? = PangleAdManager.shared.getFeedAd(it)
+        loadAd(ttFeedAd)
       }
     }
   }

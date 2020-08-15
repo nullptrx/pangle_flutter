@@ -449,5 +449,5 @@ if (!this.k.isShowing() && !com.bytedance.sdk.openadsdk.core.i.c().a()) {
 ## 贡献
 
 - 有任何更好的实现方式或增加额外的功能，欢迎提交PR。
-- 有任何使用上的问题，请提交issue。
+- 有任何使用上的问题，欢迎提交issue。
 
