@@ -18,11 +18,13 @@ class FeedView extends StatefulWidget {
   final VoidCallback onRemove;
 
   /// constructor a feed view
+  ///
+  /// [key] 使用GlobalObjectKey，防止Widget被多次build，导致PlatformView频繁重建
   /// [id] feedId
   /// [isExpress] optional. 个性化模板广告
   /// [onRemove] when click dislike button
   FeedView({Key key, this.id, this.isExpress, this.onRemove})
-      : super(key: _FeedViewKey(id));
+      : super(key: key ?? _FeedViewKey(id));
 
   @override
   State<StatefulWidget> createState() => _FeedViewState();
