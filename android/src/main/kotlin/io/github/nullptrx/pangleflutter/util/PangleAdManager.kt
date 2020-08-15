@@ -94,7 +94,7 @@ class PangleAdManager {
   }
 
 
-  fun initialize(activity: Activity?, appId: String, debug: Boolean?, useTextureView: Boolean?, titleBarTheme: Int?, allowShowNotify: Boolean?, allowShowPageWhenScreenLock: Boolean?, directDownloadNetworkType: Int?, supportMultiProcess: Boolean?, paid: Boolean?) {
+  fun initialize(activity: Activity?, appId: String, debug: Boolean?, useTextureView: Boolean?, titleBarTheme: Int?, allowShowNotify: Boolean?, allowShowPageWhenScreenLock: Boolean?, directDownloadNetworkType: Int?, supportMultiProcess: Boolean?, paid: Boolean?, isCanUseLocation: Boolean?, isCanUsePhoneState: Boolean?, isCanUseWriteExternal: Boolean?, isCanUseWifiState: Boolean?, devImei: String?, devOaid: String?, location: TTLocation?) {
     activity ?: return
     val context: Context = activity
 
@@ -135,6 +135,37 @@ class PangleAdManager {
       paid?.also {
         paid(it)
       }
+
+      customController(object : TTCustomController() {
+        override fun isCanUseLocation(): Boolean {
+
+          return isCanUseLocation ?: super.isCanUseLocation()
+        }
+
+        override fun isCanUsePhoneState(): Boolean {
+          return isCanUsePhoneState ?: super.isCanUsePhoneState()
+        }
+
+        override fun isCanUseWriteExternal(): Boolean {
+          return isCanUseWriteExternal ?: super.isCanUseWriteExternal()
+        }
+
+        override fun isCanUseWifiState(): Boolean {
+          return isCanUseWifiState ?: super.isCanUseWifiState()
+        }
+
+        override fun getDevImei(): String {
+          return devImei ?: super.getDevImei()
+        }
+
+        override fun getTTLocation(): TTLocation {
+          return location ?: super.getTTLocation()
+        }
+
+        override fun getDevOaid(): String {
+          return devOaid ?: super.getDevOaid()
+        }
+      })
 
     }.build()
 

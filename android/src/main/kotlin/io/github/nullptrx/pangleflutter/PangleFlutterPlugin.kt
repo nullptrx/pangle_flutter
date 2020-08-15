@@ -2,6 +2,7 @@ package io.github.nullptrx.pangleflutter
 
 import android.app.Activity
 import android.content.Context
+import com.bytedance.sdk.openadsdk.TTLocation
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -95,12 +96,28 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
           val directDownloadNetworkType = call.argument<Int?>("directDownloadNetworkType")
           val isPaidApp = call.argument<Boolean?>("isPaidApp")
           val titleBarThemeIndex = call.argument<Int?>("titleBarTheme")
+          val isCanUseLocation = call.argument<Boolean?>("isCanUseLocation")
+          val isCanUsePhoneState = call.argument<Boolean?>("isCanUsePhoneState")
+          val isCanUseWriteExternal = call.argument<Boolean?>("isCanUseWriteExternal")
+          val isCanUseWifiState = call.argument<Boolean?>("isCanUseWifiState")
+          val devImei = call.argument<String?>("devImei")
+          val devOaid = call.argument<String?>("devOaid")
+          val location = call.argument<Map<String, Double>?>("location")
+          var ttLocation: TTLocation? = null
+          location?.also {
+            try {
+              val latitude = it["latitude"]!!
+              val longitude = it["longitude"]!!
+              ttLocation = TTLocation(latitude, longitude)
+            } catch (e: Exception) {
+            }
+          }
 
           var titleBarTheme: Int? = null
           if (titleBarThemeIndex != null) {
             titleBarTheme = PangleTitleBarTheme.values()[titleBarThemeIndex].value
           }
-          pangle.initialize(activity, appId, debug, useTextureView, titleBarTheme, allowShowNotify, allowShowPageWhenScreenLock, directDownloadNetworkType, supportMultiProcess, isPaidApp)
+          pangle.initialize(activity, appId, debug, useTextureView, titleBarTheme, allowShowNotify, allowShowPageWhenScreenLock, directDownloadNetworkType, supportMultiProcess, isPaidApp, isCanUseLocation, isCanUsePhoneState, isCanUseWriteExternal, isCanUseWifiState, devImei, devOaid, ttLocation)
         } catch (e: Exception) {
         }
         result.success(null)

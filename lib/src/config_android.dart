@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import 'constant.dart';
 import 'extension.dart';
+import 'model.dart';
 
 class AndroidConfig {
   final String appId;
@@ -13,6 +14,13 @@ class AndroidConfig {
   final int directDownloadNetworkType;
   final bool supportMultiProcess;
   final bool isPaidApp;
+  final bool isCanUseLocation;
+  final PangleLocation location;
+  final bool isCanUsePhoneState;
+  final String devImei;
+  final bool isCanUseWifiState;
+  final bool isCanUseWriteExternal;
+  final String devOaid;
 
   /// Register the ad config for Android
   ///
@@ -27,12 +35,13 @@ class AndroidConfig {
   /// [titleBarTheme] 可选参数，设置落地页主题，默认为light
   /// TODO [keywords] 可选参数，设置用户画像的关键词列表 **不能超过为1000个字符**。须征得用户同意才可传入该参数
   /// TODO [isAsyncInit] 是否异步初始化sdk
-  /// TODO [isCanUseLocation] 是否允许SDK主动使用地理位置信息。true可以获取，false禁止获取。默认为true
-  /// TODO [defaultLocation] 当isCanUseLocation=false时，可传入地理位置信息，穿山甲sdk使用您传入的地理位置信息
-  /// TODO [isCanUsePhoneState] 是否允许SDK主动使用手机硬件参数，如：imei。true可以使用，false禁止使用。默认为true
-  /// TODO [defaultImei] 当isCanUsePhoneState=false时，可传入imei信息，穿山甲sdk使用您传入的imei信息
-  /// TODO [isCanUseWifiState] 是否允许SDK主动使用ACCESS_WIFI_STATE权限。true可以使用，false禁止使用。默认为true
-  /// TODO [isCanUseWriteExternal] 是否允许SDK主动使用WRITE_EXTERNAL_STORAGE权限。true可以使用，false禁止使用。默认为true
+  /// [isCanUseLocation] 是否允许SDK主动使用地理位置信息。true可以获取，false禁止获取。默认为true
+  /// [location] 当isCanUseLocation=false时，可传入地理位置信息，穿山甲sdk使用您传入的地理位置信息
+  /// [isCanUsePhoneState] 是否允许SDK主动使用手机硬件参数，如：imei。true可以使用，false禁止使用。默认为true
+  /// [devImei] 当isCanUsePhoneState=false时，可传入imei信息，穿山甲sdk使用您传入的imei信息
+  /// [isCanUseWifiState] 是否允许SDK主动使用ACCESS_WIFI_STATE权限。true可以使用，false禁止使用。默认为true
+  /// [isCanUseWriteExternal] 是否允许SDK主动使用WRITE_EXTERNAL_STORAGE权限。true可以使用，false禁止使用。默认为true
+  /// [devOaid] 开发者可以传入oaid
   AndroidConfig({
     @required this.appId,
     this.debug,
@@ -43,6 +52,13 @@ class AndroidConfig {
     this.isPaidApp,
     this.useTextureView,
     this.titleBarTheme = AndroidTitleBarTheme.light,
+    this.isCanUseLocation,
+    this.location,
+    this.isCanUsePhoneState,
+    this.devImei,
+    this.isCanUseWifiState,
+    this.isCanUseWriteExternal,
+    this.devOaid,
   }) : assert(appId.isNotBlank);
 
   /// Convert config to json
@@ -57,6 +73,13 @@ class AndroidConfig {
       'paid': isPaidApp,
       'useTextureView': useTextureView,
       'titleBarTheme': titleBarTheme?.index,
+      'isCanUseLocation': isCanUseLocation,
+      'location': location?.toJSON(),
+      'isCanUsePhoneState': isCanUsePhoneState,
+      'devImei': devImei,
+      'isCanUseWifiState': isCanUseWifiState,
+      'isCanUseWriteExternal': isCanUseWriteExternal,
+      'devOaid': devOaid,
     };
   }
 }

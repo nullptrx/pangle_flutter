@@ -18,3 +18,20 @@ class PangleFeedAd {
         count = map["count"],
         data = map["data"] == null ? [] : List<String>.from(map["data"]);
 }
+
+class PangleLocation {
+  final double latitude;
+  final double longitude;
+
+  PangleLocation({
+    this.latitude = 0.0,
+    this.longitude = 0.0,
+  });
+
+  Map<String, double> toJSON() {
+    return {
+      'latitude': latitude,
+      'longitude': longitude,
+    };
+  }
+}
