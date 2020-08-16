@@ -31,56 +31,17 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         
         switch call.method {
         case "init":
-            let appId: String = args["appId"] as! String
-            let logLevel: Int? = args["logLevel"] as? Int
-            let coppa: UInt? = args["coppa"] as? UInt
-            let isPaidApp: Bool? = args["coppa"] as? Bool
-            instance.initialize(appId, logLevel: logLevel, coppa: coppa, isPaidApp: isPaidApp)
+            instance.initialize(args)
             result(nil)
         case "loadSplashAd":
-            let slotId: String = args["slotId"] as! String
-            let tolerateTimeout: Double? = args["tolerateTimeout"] as? Double
-            let hideSkipButton: Bool? = args["hideSkipButton"] as? Bool
-            instance.loadSplashAd(slotId, tolerateTimeout: tolerateTimeout, hideSkipButton: hideSkipButton)
+            instance.loadSplashAd(args)
             result(nil)
         case "loadRewardVideoAd":
-            let slotId: String = args["slotId"] as! String
-            let userId: String = args["userId"] as? String ?? ""
-            let rewardName: String? = args["rewardName"] as? String
-            let rewardAmount: Int? = args["rewardAmount"] as? Int
-            let extra: String? = args["extra"] as? String
-            let model = BURewardedVideoModel()
-            model.userId = userId
-            if rewardName != nil {
-                model.rewardName = rewardName
-            }
-            if rewardAmount != nil {
-                model.rewardAmount = rewardAmount!
-            }
-            if extra != nil {
-                model.extra = extra
-            }
-            instance.loadRewardVideoAd(slotId, result: result, model: model)
+            instance.loadRewardVideoAd(args, result: result)
         case "loadFeedAd":
-            let slotId: String = args["slotId"] as! String
-            let imgSize: Int = args["imgSize"] as! Int
-            let count = args["count"] as? Int ?? SwiftPangleFlutterPlugin.kDefaultFeedAdCount
-            let isSupportDeepLink: Bool = args["isSupportDeepLink"] as? Bool ?? true
-            let isExpress: Bool = args["isExpress"] as? Bool ?? false
-            if isExpress {
-                instance.loadFeedExpressAd(slotId, result: result, count: count, imgSize: imgSize, isSupportDeepLink: isSupportDeepLink)
-            } else {
-                instance.loadFeedAd(slotId, result: result, count: count, imgSize: imgSize, isSupportDeepLink: isSupportDeepLink)
-            }
+            instance.loadFeedAd(args, result: result)
         case "loadInterstitialAd":
-            let slotId: String = args["slotId"] as! String
-            let imgSize: Int = args["imgSize"] as! Int
-            let isExpress: Bool = args["isExpress"] as? Bool ?? false
-            if isExpress {
-                instance.loadInterstitialExpressAd(slotId, result: result, imgSize: imgSize)
-            } else {
-                instance.loadInterstitialAd(slotId, result: result, imgSize: imgSize)
-            }
+            instance.loadInterstitialAd(args, result: result)
         default:
             result(FlutterMethodNotImplemented)
         }

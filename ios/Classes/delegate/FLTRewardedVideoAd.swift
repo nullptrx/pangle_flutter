@@ -8,54 +8,42 @@
 import BUAdSDK
 import Foundation
 
-public class FLTRewardedVideoAd: NSObject, BURewardedVideoAdDelegate {
-    private var result: FlutterResult?
-    init(_ result: @escaping FlutterResult) {
-        self.result = result
+internal final class FLTRewardedVideoAd: NSObject, BURewardedVideoAdDelegate {
+    typealias Success = (BURewardedVideoAd) -> Void
+    typealias Fail = (BURewardedVideoAd, Error?) -> Void
+    
+    let success: Success?
+    let fail: Fail?
+    
+    init(success: Success?, fail: Fail?) {
+        self.success = success
+        self.fail = fail
     }
     
-    public func rewardedVideoAdDidLoad(_ rewardedVideoAd: BURewardedVideoAd) {
-    }
+    public func rewardedVideoAdDidLoad(_ rewardedVideoAd: BURewardedVideoAd) {}
     
     public func rewardedVideoAdVideoDidLoad(_ rewardedVideoAd: BURewardedVideoAd) {
         let vc = AppUtil.getVC()
         rewardedVideoAd.show(fromRootViewController: vc)
     }
     
-    public func rewardedVideoAdServerRewardDidFail(_ rewardedVideoAd: BURewardedVideoAd) {
-        invoke(code: -1, message: "video error")
-    }
-    
     public func rewardedVideoAdDidClose(_ rewardedVideoAd: BURewardedVideoAd) {
-        invoke()
+        self.success?(rewardedVideoAd)
     }
     
     public func rewardedVideoAd(_ rewardedVideoAd: BURewardedVideoAd, didFailWithError error: Error?) {
-        let err = error as NSError?
-        invoke(code: err?.code ?? -1, message: error?.localizedDescription)
+        self.fail?(rewardedVideoAd, error)
     }
     
-    public func rewardedVideoAdDidClick(_ rewardedVideoAd: BURewardedVideoAd) {}
+    public func rewardedVideoAdDidClickSkip(_ rewardedVideoAd: BURewardedVideoAd) {
+        self.fail?(rewardedVideoAd, NSError(domain: "skiped", code: -1, userInfo: nil))
+    }
     
-    public func rewardedVideoAdWillClose(_ rewardedVideoAd: BURewardedVideoAd) {}
-    
-    public func rewardedVideoAdDidClickSkip(_ rewardedVideoAd: BURewardedVideoAd) {}
+    public func rewardedVideoAdServerRewardDidFail(_ rewardedVideoAd: BURewardedVideoAd) {
+        self.fail?(rewardedVideoAd, nil)
+    }
     
     public func rewardedVideoAdServerRewardDidSucceed(_ rewardedVideoAd: BURewardedVideoAd, verify: Bool) {}
     
     public func rewardedVideoAdDidPlayFinish(_ rewardedVideoAd: BURewardedVideoAd, didFailWithError error: Error?) {}
-    
-    public func rewardedVideoAdCallback(_ rewardedVideoAd: BURewardedVideoAd, with rewardedVideoAdType: BURewardedVideoAdType) {}
-    
-    public func invoke(code: Int = 0, message: String? = nil) {
-        guard result != nil else {
-            return
-        }
-        
-        let params = NSMutableDictionary()
-        params["code"] = code
-        params["message"] = message
-        result!(params)
-        PangleAdManager.shared.loadRewardedVideoAdComplete()
-    }
 }

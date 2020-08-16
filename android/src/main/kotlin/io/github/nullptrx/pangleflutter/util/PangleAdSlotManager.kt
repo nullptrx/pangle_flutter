@@ -19,9 +19,8 @@ object PangleAdSlotManager {
           val expressViewHeight: Float = ScreenUtil.getHeight(it)
           setExpressViewAcceptedSize(expressViewWidth, expressViewHeight)
         }
-      } else {
-        setImageAcceptedSize(1080, 1920)
       }
+      setImageAcceptedSize(1080, 1920)
     }.build()
 
     return adSlot

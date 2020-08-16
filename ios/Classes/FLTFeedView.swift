@@ -35,16 +35,9 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
                 self.loadAd(nad)
             }
         }
-
-        if self.isExpress {
-            initObserver()
-        }
     }
 
     deinit {
-        if self.isExpress {
-            deinitObserver()
-        }
         if self.feedId != nil {
             if self.isExpress {
                 PangleAdManager.shared.removeExpressAd(self.feedId!)
@@ -85,6 +78,22 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
         params["width"] = width
         params["height"] = height
         self.methodChannel.invokeMethod("update", arguments: params)
+    }
+
+    private func removeAllView() {
+        self.container.subviews.forEach { $0.removeFromSuperview() }
+    }
+    
+    private func disposeView() {
+        self.removeAllView()
+        if self.isExpress {
+            PangleAdManager.shared.removeExpressAd(self.feedId)
+        } else {
+            PangleAdManager.shared.removeFeedAd(self.feedId)
+        }
+
+        self.methodChannel.invokeMethod("remove", arguments: nil)
+        self.methodChannel.setMethodCallHandler(nil)
     }
 
     func loadAd(_ ad: BUNativeAd?) {
@@ -137,7 +146,6 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
         let type = nativeAd.data!.interactionType
         if isVideoCell {
             let videoCell = cell as? BUDFeedVideoAdTableViewCell
-            videoCell!.nativeAdRelatedView.videoAdView?.delegate = self
             nativeAd.registerContainer(videoCell!, withClickableViews: [videoCell!.creativeButton!])
         } else {
             if type == .download {
@@ -174,6 +182,16 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
             return
         }
         expressAd.rootViewController = AppUtil.getVC()
+        expressAd.didReceiveRenderSuccess = { _ in
+        }
+        expressAd.didReceiveRenderFail = { _, _ in
+            PangleAdManager.shared.removeExpressAd(self.feedId)
+            self.removeAllView()
+        }
+        expressAd.didReceiveDislike = { _, _ in
+            self.disposeView()
+        }
+        expressAd.render()
         let size = expressAd.bounds.size
         let width = size.width
         let height = size.height
@@ -184,7 +202,7 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
 //        let expressHeight = expressWidth * height / width
 
         self.removeAllView()
-        let frame = CGRect.init(x: 0, y: 0, width: contentWidth, height: contentHeight)
+        let frame = CGRect(x: 0, y: 0, width: contentWidth, height: contentHeight)
         expressAd.frame = frame
 
         let rootFrame = CGRect(x: 0, y: 0, width: contentWidth, height: contentHeight)
@@ -194,70 +212,14 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
         self.container.updateConstraints()
         self.invoke(width: contentWidth, height: contentHeight)
     }
-
-    public func removeAllView() {
-        self.container.subviews.forEach { $0.removeFromSuperview() }
-    }
-}
-
-extension FLTFeedView: BUVideoAdViewDelegate {
-    public func videoAdViewDidClick(_ videoAdView: BUVideoAdView) {}
-
-    public func videoAdViewFinishViewDidClick(_ videoAdView: BUVideoAdView) {}
-
-    public func videoAdView(_ videoAdView: BUVideoAdView, didLoadFailWithError error: Error?) {}
-
-    public func videoAdView(_ videoAdView: BUVideoAdView, stateDidChanged playerState: BUPlayerPlayState) {}
-
-    public func videoAdViewDidCloseOtherController(_ videoAdView: BUVideoAdView, interactionType: BUInteractionType) {}
 }
 
 extension FLTFeedView: BUNativeAdDelegate {
-    public func nativeAdDidLoad(_ nativeAd: BUNativeAd) {}
-
-    public func nativeAdDidBecomeVisible(_ nativeAd: BUNativeAd) {}
-
-    public func nativeAdDidClick(_ nativeAd: BUNativeAd, with view: UIView?) {}
-
     public func nativeAd(_ nativeAd: BUNativeAd, didFailWithError error: Error?) {
-        self.methodChannel.invokeMethod("remove", arguments: nil)
-        PangleAdManager.shared.removeFeedAd(self.feedId!)
-        self.removeAllView()
+        self.disposeView()
     }
 
     public func nativeAd(_ nativeAd: BUNativeAd?, dislikeWithReason filterWords: [BUDislikeWords]?) {
-        self.methodChannel.invokeMethod("remove", arguments: nil)
-        PangleAdManager.shared.removeFeedAd(self.feedId!)
-        self.removeAllView()
-    }
-
-    public func nativeAdDidCloseOtherController(_ nativeAd: BUNativeAd, interactionType: BUInteractionType) {}
-}
-
-extension FLTFeedView {
-    func initObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.handleFeedExpressViewEvent), name: NSNotification.Name(rawValue: Constant.kFeedView), object: nil)
-    }
-
-    func deinitObserver() {
-        NotificationCenter.default.removeObserver(self)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: Constant.kFeedView), object: nil)
-    }
-
-    @objc func handleFeedExpressViewEvent(notification: Notification) {
-        if !(notification.object is FLTFeedExpressAd) {
-            return
-        }
-        let info = notification.userInfo
-
-        guard let feedId: String = info?["feedId"] as? String else {
-            return
-        }
-        if self.feedId == feedId {
-            PangleAdManager.shared.removeExpressAd(feedId)
-            self.methodChannel.invokeMethod("remove", arguments: nil)
-            self.methodChannel.setMethodCallHandler(nil)
-            self.removeAllView()
-        }
+        self.disposeView()
     }
 }

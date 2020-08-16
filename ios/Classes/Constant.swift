@@ -7,7 +7,10 @@
 
 import Foundation
 
-class Constant {
+internal final class Constant {
     static let kBannerView = "nullptrx.github.io/pangle_bannerview"
     static let kFeedView = "nullptrx.github.io/pangle_feedview"
+    
+    
+    static let kDefaultFeedAdCount = 3
 }

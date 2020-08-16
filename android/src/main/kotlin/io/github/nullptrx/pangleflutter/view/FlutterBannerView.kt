@@ -19,7 +19,7 @@ import io.flutter.plugin.platform.PlatformView
 import io.github.nullptrx.pangleflutter.common.PangleImgSize
 import io.github.nullptrx.pangleflutter.common.TTSize
 import io.github.nullptrx.pangleflutter.common.TTSizeF
-import io.github.nullptrx.pangleflutter.util.PangleAdManager
+import io.github.nullptrx.pangleflutter.PangleAdManager
 import io.github.nullptrx.pangleflutter.util.PangleAdSlotManager
 import io.github.nullptrx.pangleflutter.util.px
 

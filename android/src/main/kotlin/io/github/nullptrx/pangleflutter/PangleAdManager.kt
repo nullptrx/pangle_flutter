@@ -1,4 +1,4 @@
-package io.github.nullptrx.pangleflutter.util
+package io.github.nullptrx.pangleflutter
 
 import android.app.Activity
 import android.content.Context
@@ -223,3 +223,4 @@ class PangleAdManager {
 
 
 }
+

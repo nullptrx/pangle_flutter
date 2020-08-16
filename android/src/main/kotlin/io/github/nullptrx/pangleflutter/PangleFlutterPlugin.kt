@@ -14,7 +14,6 @@ import io.github.nullptrx.pangleflutter.common.PangleTitleBarTheme
 import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialAd
 import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialExpressAd
 import io.github.nullptrx.pangleflutter.delegate.FLTSplashAd
-import io.github.nullptrx.pangleflutter.util.PangleAdManager
 import io.github.nullptrx.pangleflutter.util.PangleAdSlotManager
 import io.github.nullptrx.pangleflutter.view.BannerViewFactory
 import io.github.nullptrx.pangleflutter.view.FeedViewFactory

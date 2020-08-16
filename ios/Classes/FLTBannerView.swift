@@ -11,7 +11,6 @@ import Flutter
 public class FLTBannerView: NSObject, FlutterPlatformView {
     private let methodChannel: FlutterMethodChannel
     private let container: UIView
-    private var contentView: UIView?
     private var methodResult: FlutterResult?
 
     init(_ frame: CGRect, id: Int64, params: [String: Any?], messenger: FlutterBinaryMessenger) {
@@ -29,8 +28,7 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
     }
 
     deinit {
-        self.contentView?.removeFromSuperview()
-        removeAllView()
+        self.disposeView()
     }
 
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -57,32 +55,28 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
         self.removeAllView()
         let screenWidth = Double(UIScreen.main.bounds.width)
         let bannerHeight = screenWidth * Double(imgSize.height) / Double(imgSize.width)
+        
+         self.container.frame = CGRect(x: 0, y: 0, width: screenWidth, height: bannerHeight)
+         self.container.updateConstraints()
         if isExpress {
             let size = CGSize(width: screenWidth, height: bannerHeight)
             let bannerAdView = BUNativeExpressBannerView(slotID: slotId, rootViewController: vc, adSize: size, isSupportDeepLink: isSupportDeepLink)
             bannerAdView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: bannerHeight)
-            bannerAdView.updateConstraints()
-            self.contentView = bannerAdView
-            self.container.frame = CGRect(x: 0, y: 0, width: screenWidth, height: bannerHeight)
             self.container.addSubview(bannerAdView)
-            self.container.updateConstraints()
             bannerAdView.delegate = self
             bannerAdView.loadAdData()
 
         } else {
             let bannerAdView = BUBannerAdView(slotID: slotId, size: imgSize, rootViewController: vc)
             bannerAdView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: bannerHeight)
-            bannerAdView.updateConstraints()
-            self.contentView = bannerAdView
-            self.container.frame = CGRect(x: 0, y: 0, width: screenWidth, height: bannerHeight)
             self.container.addSubview(bannerAdView)
-            self.container.updateConstraints()
+           
             bannerAdView.delegate = self
             bannerAdView.loadAdData()
         }
     }
 
-    private func invoke(width: CGFloat, height: CGFloat) {
+    private func refreshUI(width: CGFloat, height: CGFloat) {
         var params = [String: Any?]()
         params["width"] = width
         params["height"] = height
@@ -92,67 +86,45 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
     private func removeAllView() {
         self.container.subviews.forEach { $0.removeFromSuperview() }
     }
+
+    private func disposeView() {
+        self.removeAllView()
+        self.methodChannel.invokeMethod("remove", arguments: nil)
+        self.methodChannel.setMethodCallHandler(nil)
+    }
 }
 
 extension FLTBannerView: BUBannerAdViewDelegate {
     public func bannerAdView(_ bannerAdView: BUBannerAdView, didLoadFailWithError error: Error?) {
-//        self.invoke(message: error?.localizedDescription)
-        self.removeAllView()
-        self.methodChannel.invokeMethod("remove", arguments: nil)
+        self.disposeView()
     }
 
     public func bannerAdViewDidLoad(_ bannerAdView: BUBannerAdView, withAdmodel nativeAd: BUNativeAd?) {
         let frame = bannerAdView.frame
-        self.invoke(width: frame.width, height: frame.height)
+        self.refreshUI(width: frame.width, height: frame.height)
     }
-
-    public func bannerAdViewDidClick(_ bannerAdView: BUBannerAdView, withAdmodel nativeAd: BUNativeAd?) {}
 
     public func bannerAdView(_ bannerAdView: BUBannerAdView, dislikeWithReason filterwords: [BUDislikeWords]?) {
-        self.removeAllView()
-        self.methodChannel.invokeMethod("remove", arguments: nil)
+        self.disposeView()
     }
-
-    public func bannerAdViewDidBecomVisible(_ bannerAdView: BUBannerAdView, withAdmodel nativeAd: BUNativeAd?) {}
-
-    public func bannerAdViewDidCloseOtherController(_ bannerAdView: BUBannerAdView, interactionType: BUInteractionType) {}
-//    func invoke(message: String? = "") {
-//        guard let result = self.methodResult else {
-//            return
-//        }
-//
-//        let params = NSMutableDictionary()
-//        params["success"] = false
-//        params["message"] = message
-//        result(params)
-//        self.methodResult = nil
-//    }
 }
 
 extension FLTBannerView: BUNativeExpressBannerViewDelegate {
     public func nativeExpressBannerAdViewDidLoad(_ bannerAdView: BUNativeExpressBannerView) {
         let frame = bannerAdView.frame
-        self.invoke(width: frame.width, height: frame.height)
+        self.refreshUI(width: frame.width, height: frame.height)
     }
 
-    public func nativeExpressBannerAdViewDidClick(_ bannerAdView: BUNativeExpressBannerView) {}
-
-    public func nativeExpressBannerAdViewRenderSuccess(_ bannerAdView: BUNativeExpressBannerView) {}
-
-    public func nativeExpressBannerAdViewWillBecomVisible(_ bannerAdView: BUNativeExpressBannerView) {}
-
-    public func nativeExpressBannerAdViewRenderFail(_ bannerAdView: BUNativeExpressBannerView, error: Error?) {}
+    public func nativeExpressBannerAdViewRenderFail(_ bannerAdView: BUNativeExpressBannerView, error: Error?) {
+        self.disposeView()
+    }
 
     public func nativeExpressBannerAdView(_ bannerAdView: BUNativeExpressBannerView, didLoadFailWithError error: Error?) {
 //        invoke(code: err?.code ?? -1, message: error?.localizedDescription)
-        self.removeAllView()
-        self.methodChannel.invokeMethod("remove", arguments: nil)
+        self.disposeView()
     }
 
     public func nativeExpressBannerAdView(_ bannerAdView: BUNativeExpressBannerView, dislikeWithReason filterwords: [BUDislikeWords]?) {
-        self.removeAllView()
-        self.methodChannel.invokeMethod("remove", arguments: nil)
+        self.disposeView()
     }
-
-    public func nativeExpressBannerAdViewDidCloseOtherController(_ bannerAdView: BUNativeExpressBannerView, interactionType: BUInteractionType) {}
 }

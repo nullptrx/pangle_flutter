@@ -7,9 +7,8 @@ import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTSplashAd
 import io.github.nullptrx.pangleflutter.dialog.NativeSplashDialog
 import io.github.nullptrx.pangleflutter.dialog.SupportSplashDialog
-import java.lang.ref.WeakReference
 
-internal class FLTSplashAd(val hideSkipButton: Boolean?,var activity: Activity?) : TTAdNative.SplashAdListener {
+internal class FLTSplashAd(val hideSkipButton: Boolean?, var activity: Activity?) : TTAdNative.SplashAdListener {
   private var supportDialog: SupportSplashDialog? = null
   private var nativeDialog: NativeSplashDialog? = null
 
@@ -36,9 +35,7 @@ internal class FLTSplashAd(val hideSkipButton: Boolean?,var activity: Activity?)
     }
     ad.setSplashInteractionListener(object : TTSplashAd.AdInteractionListener {
       override fun onAdClicked(view: View, type: Int) {
-        view.postDelayed({
-          handleSplashEnd()
-        }, 500)
+        handleSplashEnd()
       }
 
       override fun onAdSkip() {

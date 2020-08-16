@@ -3,7 +3,7 @@ package io.github.nullptrx.pangleflutter.delegate
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTFeedAd
 import io.flutter.plugin.common.MethodChannel
-import io.github.nullptrx.pangleflutter.util.PangleAdManager
+import io.github.nullptrx.pangleflutter.PangleAdManager
 import kotlin.collections.set
 
 class FLTFeedAd(var result: MethodChannel.Result?) : TTAdNative.FeedAdListener {
