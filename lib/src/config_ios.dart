@@ -37,16 +37,19 @@ class IOSSplashConfig {
   final String slotId;
   final double tolerateTimeout;
   final bool hideSkipButton;
+  final bool isExpress;
 
   /// The splash ad config for iOS
   ///
   /// [slotId] The unique identifier of splash ad.
   /// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
   /// [hideSkipButton] optional. Whether hide skip button, default NO. If you hide the skip button, you need to customize the countdown.
+  /// [isExpress] optional. 个性化模板广告
   IOSSplashConfig({
     @required this.slotId,
     this.tolerateTimeout,
     this.hideSkipButton,
+    this.isExpress,
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
@@ -55,6 +58,7 @@ class IOSSplashConfig {
       'slotId': slotId,
       'tolerateTimeout': tolerateTimeout,
       'hideSkipButton': hideSkipButton,
+      'isExpress': isExpress,
     };
   }
 }

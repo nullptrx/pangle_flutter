@@ -24,6 +24,11 @@ internal final class FLTSplashAd: NSObject, BUSplashAdDelegate {
 //        isClicked = true
     }
     
+    func splashAdDidClickSkip(_ splashAd: BUSplashAdView) {
+        splashAd.removeFromSuperview()
+        self.success?(splashAd)
+    }
+    
     public func splashAdDidClose(_ splashAd: BUSplashAdView) {
         splashAd.removeFromSuperview()
         self.success?(splashAd)

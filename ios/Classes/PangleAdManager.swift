@@ -39,11 +39,21 @@ public final class PangleAdManager: NSObject {
     }
     
     public func loadSplashAd(_ args: [String: Any?]) {
-        let task = FLTSplashAdTask(args)
-        task.execute()({ [weak self] task, _ in
-            self?.taskList.removeAll(where: { $0 === task })
+        let isExpress: Bool = args["isExpress"] as? Bool ?? false
+        
+        if isExpress {
+            let task = FLTSplashExpressAdTask(args)
+            task.execute()({ [weak self] task, _ in
+                self?.taskList.removeAll(where: { $0 === task })
+                                            })
+            self.taskList.append(task)
+        } else {
+            let task = FLTSplashAdTask(args)
+            task.execute()({ [weak self] task, _ in
+                self?.taskList.removeAll(where: { $0 === task })
                                   })
-        self.taskList.append(task)
+            self.taskList.append(task)
+        }
     }
     
     public func loadRewardVideoAd(_ args: [String: Any?], result: @escaping FlutterResult) {
