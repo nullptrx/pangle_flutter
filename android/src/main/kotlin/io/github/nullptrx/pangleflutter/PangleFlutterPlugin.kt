@@ -145,7 +145,8 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val extra = call.argument<String>("extra")
         val isVertical = call.argument<Boolean>("isVertical") ?: true
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
-        val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(slotId, userId, rewardName, rewardAmount, isVertical, isSupportDeepLink, extra)
+        val isExpress = call.argument<Boolean>("isExpress") ?: false
+        val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(slotId, isExpress, userId, rewardName, rewardAmount, isVertical, isSupportDeepLink, extra)
         pangle.loadRewardVideoAd(adSlot, result, activity)
       }
 

@@ -26,11 +26,16 @@ internal class FLTRewardedVideoAd(var result: MethodChannel.Result?, var target:
 
   }
 
-  private fun invoke(code: Int = 0, message: String? = null) {
+  private fun invoke(code: Int = 0, message: String? = null, verify: Boolean = false) {
     result?.apply {
       val args = mutableMapOf<String, Any?>()
       args["code"] = code
-      args["message"] = message
+      message?.also {
+        args["message"] = it
+      }
+      if (code == 0) {
+        args["verify"] = verify
+      }
       success(args)
     }
     result = null
@@ -39,10 +44,13 @@ internal class FLTRewardedVideoAd(var result: MethodChannel.Result?, var target:
 
 
   inner class RewardAdInteractionImpl() : TTRewardVideoAd.RewardAdInteractionListener {
-    override fun onRewardVerify(p0: Boolean, p1: Int, p2: String?) {
+    // 视频广告播完验证奖励有效性回调，参数分别为是否有效，奖励数量，奖励名称
+    override fun onRewardVerify(verify: Boolean, amount: Int, rewardName: String?) {
+      invoke(verify = verify)
     }
 
     override fun onSkippedVideo() {
+      invoke(-1, "skipped")
     }
 
     override fun onAdShow() {
@@ -59,7 +67,7 @@ internal class FLTRewardedVideoAd(var result: MethodChannel.Result?, var target:
     }
 
     override fun onVideoError() {
-      invoke(-1, "video error")
+      invoke(-1, "error")
     }
 
   }

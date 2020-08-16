@@ -15,9 +15,8 @@ object PangleAdSlotManager {
         activity?.also {
           //个性化模板广告需要传入期望广告view的宽、高，单位dp，请传入实际需要的大小，
           //比如：广告下方拼接logo、适配刘海屏等，需要考虑实际广告大小
-          val expressViewWidth: Float = ScreenUtil.getScreenWidthDp()
-          val expressViewHeight: Float = ScreenUtil.getHeight(it)
-          setExpressViewAcceptedSize(expressViewWidth, expressViewHeight)
+          val size = ScreenUtil.getScreenSizeDp()
+          setExpressViewAcceptedSize(size.width, size.height)
         }
       }
       setImageAcceptedSize(1080, 1920)
@@ -26,7 +25,7 @@ object PangleAdSlotManager {
     return adSlot
   }
 
-  fun getRewardVideoAdSlot(slotId: String, userId: String?, rewardName: String?, rewardAmount: Int?, isVertical: Boolean, isSupportDeepLink: Boolean, extra: String?): AdSlot {
+  fun getRewardVideoAdSlot(slotId: String, isExpress: Boolean, userId: String?, rewardName: String?, rewardAmount: Int?, isVertical: Boolean, isSupportDeepLink: Boolean, extra: String?): AdSlot {
 
     val adSlot = AdSlot.Builder().apply {
 // 必选参数 设置您的CodeId
@@ -34,6 +33,11 @@ object PangleAdSlotManager {
       // 必选参数 设置广告图片的最大尺寸及期望的图片宽高比，单位Px
       // 注：如果您在头条广告平台选择了原生广告，返回的图片尺寸可能会与您期望的尺寸有较大差异
       setImageAcceptedSize(1080, 1920)
+      if (isExpress) {
+        val size = ScreenUtil.getScreenSizeDp()
+        setExpressViewAcceptedSize(size.width, size.height)
+//        setExpressViewAcceptedSize(500f, 500f)
+      }
       // 可选参数 设置是否支持deeplink
       setSupportDeepLink(isSupportDeepLink)
       //激励视频奖励的名称，针对激励视频参数

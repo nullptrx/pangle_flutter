@@ -126,6 +126,7 @@ class AndroidRewardedVideoConfig {
   final String extra;
   final bool isVertical;
   final bool isSupportDeepLink;
+  final bool isExpress;
 
   /// The rewarded video ad config for Android
   ///
@@ -141,6 +142,7 @@ class AndroidRewardedVideoConfig {
   /// [extra] optional. serialized string.
   /// [isVertical] optional. Whether video is vertical orientation. Vertical, if true. Otherwise, horizontal.
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
+  /// [isExpress] optional. 个性化模板广告
   AndroidRewardedVideoConfig({
     @required this.slotId,
     this.userId,
@@ -149,6 +151,7 @@ class AndroidRewardedVideoConfig {
     this.extra,
     this.isVertical = true,
     this.isSupportDeepLink,
+    this.isExpress,
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
@@ -161,6 +164,7 @@ class AndroidRewardedVideoConfig {
       'extra': extra,
       'isVertical': isVertical,
       'isSupportDeepLink': isSupportDeepLink,
+      'isExpress': isExpress,
     };
   }
 }

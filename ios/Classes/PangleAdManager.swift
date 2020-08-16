@@ -57,12 +57,22 @@ public final class PangleAdManager: NSObject {
     }
     
     public func loadRewardVideoAd(_ args: [String: Any?], result: @escaping FlutterResult) {
-        let task = FLTRewardedVideoAdTask(args)
-        task.execute()({ [weak self] task, object in
-            result(object)
-            self?.taskList.removeAll(where: { $0 === task })
+        let isExpress: Bool = args["isExpress"] as? Bool ?? false
+        if isExpress {
+            let task = FLTRewardedVideoExpressAdTask(args)
+            task.execute()({ [weak self] task, object in
+                result(object)
+                self?.taskList.removeAll(where: { $0 === task })
+                                     })
+            self.taskList.append(task)
+        } else {
+            let task = FLTRewardedVideoAdTask(args)
+            task.execute()({ [weak self] task, object in
+                result(object)
+                self?.taskList.removeAll(where: { $0 === task })
                            })
-        self.taskList.append(task)
+            self.taskList.append(task)
+        }
     }
     
     public func loadFeedAd(_ args: [String: Any?], result: @escaping FlutterResult) {

@@ -23,16 +23,16 @@ class FLTFeedAd(var result: MethodChannel.Result?) : TTAdNative.FeedAdListener {
 
   private fun invoke(code: Int = 0, message: String? = null, count: Int = 0, data: List<String>? = null) {
     result?.apply {
-      val params = mutableMapOf<String, Any>()
-      params["code"] = code
+      val args = mutableMapOf<String, Any>()
+      args["code"] = code
       message?.also {
-        params["message"] = it
+        args["message"] = it
       }
-      params["count"] = count
+      args["count"] = count
       data?.also {
-        params["data"] = it
+        args["data"] = it
       }
-      success(params)
+      success(args)
     }
     result = null
 

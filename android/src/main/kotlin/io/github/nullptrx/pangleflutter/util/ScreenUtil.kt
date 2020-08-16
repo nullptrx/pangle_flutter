@@ -7,6 +7,7 @@ import android.os.Build
 import android.view.View
 import android.view.WindowManager
 import io.github.nullptrx.pangleflutter.common.TTSize
+import io.github.nullptrx.pangleflutter.common.TTSizeF
 import java.lang.reflect.InvocationTargetException
 
 object ScreenUtil {
@@ -18,7 +19,12 @@ object ScreenUtil {
     val dm = Resources.getSystem().displayMetrics
     return TTSize(dm.widthPixels, dm.heightPixels)
   }
-  
+
+  fun getScreenSizeDp(): TTSizeF {
+    val dm = Resources.getSystem().displayMetrics
+    return TTSizeF(dm.widthPixels.px, dm.heightPixels.px)
+  }
+
   fun getScreenWidthDp(): Float {
     val displayMetrics = Resources.getSystem().displayMetrics
     val density = displayMetrics.density

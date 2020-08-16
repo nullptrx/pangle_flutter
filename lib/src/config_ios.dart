@@ -69,6 +69,7 @@ class IOSRewardedVideoConfig {
   final String rewardName;
   final int rewardAmount;
   final String extra;
+  final bool isExpress;
 
   /// The rewarded video ad config for Android
   ///
@@ -82,12 +83,14 @@ class IOSRewardedVideoConfig {
   /// [rewardName] optional. reward name.
   /// [rewardAmount] optional. number of rewards.
   /// [extra] optional. serialized string.
+  /// [isExpress] optional. 个性化模板广告
   IOSRewardedVideoConfig({
     @required this.slotId,
     this.userId,
     this.rewardName,
     this.rewardAmount,
     this.extra,
+    this.isExpress,
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
@@ -98,6 +101,7 @@ class IOSRewardedVideoConfig {
       'rewardName': rewardName,
       'rewardAmount': rewardAmount,
       'extra': extra,
+      'isExpress': isExpress,
     };
   }
 }

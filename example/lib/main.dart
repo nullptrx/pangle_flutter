@@ -18,7 +18,7 @@ void main() async {
   );
   await pangle.loadSplashAd(
     iOS: IOSSplashConfig(slotId: kSplashId, isExpress: true),
-    android: AndroidSplashConfig(slotId: kSplashId, isExpress: true),
+    android: AndroidSplashConfig(slotId: kSplashExpressId, isExpress: true),
   );
   runApp(MaterialApp(home: MyApp()));
 }
@@ -85,14 +85,20 @@ class _MyAppState extends State<MyApp> {
   _loadSplashAd() {
     pangle.loadSplashAd(
       iOS: IOSSplashConfig(slotId: kSplashId),
-      android: AndroidSplashConfig(slotId: kSplashId),
+      android: AndroidSplashConfig(slotId: kSplashId, isExpress: true),
     );
   }
 
   _loadRewardVideoAd() async {
     final result = await pangle.loadRewardVideoAd(
-      iOS: IOSRewardedVideoConfig(slotId: kRewardedVideoId),
-      android: AndroidRewardedVideoConfig(slotId: kRewardedVideoId),
+      iOS: IOSRewardedVideoConfig(
+        slotId: kRewardedVideoExpressId,
+        isExpress: true,
+      ),
+      android: AndroidRewardedVideoConfig(
+        slotId: kRewardedVideoExpressId,
+        isExpress: true,
+      ),
     );
     print(jsonEncode(result));
   }

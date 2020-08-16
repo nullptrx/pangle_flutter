@@ -9,7 +9,7 @@ import BUAdSDK
 import Foundation
 
 internal final class FLTRewardedVideoAd: NSObject, BURewardedVideoAdDelegate {
-    typealias Success = (BURewardedVideoAd) -> Void
+    typealias Success = (BURewardedVideoAd, Bool) -> Void
     typealias Fail = (BURewardedVideoAd, Error?) -> Void
     
     let success: Success?
@@ -20,15 +20,13 @@ internal final class FLTRewardedVideoAd: NSObject, BURewardedVideoAdDelegate {
         self.fail = fail
     }
     
-    public func rewardedVideoAdDidLoad(_ rewardedVideoAd: BURewardedVideoAd) {}
-    
     public func rewardedVideoAdVideoDidLoad(_ rewardedVideoAd: BURewardedVideoAd) {
         let vc = AppUtil.getVC()
         rewardedVideoAd.show(fromRootViewController: vc)
     }
     
     public func rewardedVideoAdDidClose(_ rewardedVideoAd: BURewardedVideoAd) {
-        self.success?(rewardedVideoAd)
+        self.success?(rewardedVideoAd, false)
     }
     
     public func rewardedVideoAd(_ rewardedVideoAd: BURewardedVideoAd, didFailWithError error: Error?) {
@@ -36,14 +34,16 @@ internal final class FLTRewardedVideoAd: NSObject, BURewardedVideoAdDelegate {
     }
     
     public func rewardedVideoAdDidClickSkip(_ rewardedVideoAd: BURewardedVideoAd) {
-        self.fail?(rewardedVideoAd, NSError(domain: "skiped", code: -1, userInfo: nil))
+        self.fail?(rewardedVideoAd, NSError(domain: "skipped", code: -1, userInfo: nil))
     }
     
     public func rewardedVideoAdServerRewardDidFail(_ rewardedVideoAd: BURewardedVideoAd) {
         self.fail?(rewardedVideoAd, nil)
     }
     
-    public func rewardedVideoAdServerRewardDidSucceed(_ rewardedVideoAd: BURewardedVideoAd, verify: Bool) {}
+    public func rewardedVideoAdServerRewardDidSucceed(_ rewardedVideoAd: BURewardedVideoAd, verify: Bool) {
+        self.success?(rewardedVideoAd, verify)
+    }
     
     public func rewardedVideoAdDidPlayFinish(_ rewardedVideoAd: BURewardedVideoAd, didFailWithError error: Error?) {}
 }

@@ -27,7 +27,9 @@ class FLTInterstitialAd(var result: MethodChannel.Result?, var target: Activity?
     result?.apply {
       val args = mutableMapOf<String, Any?>()
       args["code"] = code
-      args["message"] = message
+      message?.also {
+        args["message"] = it
+      }
       success(args)
     }
     result = null

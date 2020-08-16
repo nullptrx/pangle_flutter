@@ -7,11 +7,11 @@
 
 import BUAdSDK
 
-internal final class FLTRewardedVideoAdTask: FLTTaskProtocol {
-    private var manager: BURewardedVideoAd
-    private var delegate: BURewardedVideoAdDelegate?
+internal final class FLTRewardedVideoExpressAdTask: FLTTaskProtocol {
+    private var manager: BUNativeExpressRewardedVideoAd
+    private var delegate: BUNativeExpressRewardedVideoAdDelegate?
     
-    internal init(_ manager: BURewardedVideoAd) {
+    internal init(_ manager: BUNativeExpressRewardedVideoAd) {
         self.manager = manager
     }
     
@@ -32,13 +32,13 @@ internal final class FLTRewardedVideoAdTask: FLTTaskProtocol {
         if extra != nil {
             model.extra = extra
         }
-        let manager = BURewardedVideoAd(slotID: slotId, rewardedVideoModel: model)
+        let manager = BUNativeExpressRewardedVideoAd(slotID: slotId, rewardedVideoModel: model)
         self.init(manager)
     }
     
     func execute() -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
         return { result in
-            let delegate = FLTRewardedVideoAd(success: { [weak self] _, verify in
+            let delegate = FLTRewardedVideoExpressAd(success: { [weak self] _, verify in
                 guard let self = self else { return }
                 result(self, ["code": 0, "verify": verify])
             }, fail: { [weak self] _, error in
