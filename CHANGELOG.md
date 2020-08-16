@@ -1,7 +1,11 @@
+## 0.1.5
+
+* Refactors the ads loading logic of iOS.
+* Supports Splash Express Ad (No test), Rewarded Video Express Ad.
 
 ## 0.1.4
 
-* Fixes feed ads loading issue on Android
+* Fixes feed ads loading issue on Android.
 
 ## 0.1.3
 

@@ -207,10 +207,12 @@ AndroidConfig({
 /// [slotId] The unique identifier of splash ad.
 /// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
 /// [hideSkipButton] optional. Whether hide skip button, default NO. If you hide the skip button, you need to customize the countdown.
+/// [isExpress] optional. experimental. 个性化模板广告.
 IOSSplashConfig({
   @required this.slotId,
   this.tolerateTimeout,
   this.hideSkipButton,
+  this.isExpress,
 });
 
 /// The splash ad config for Android
@@ -218,7 +220,7 @@ IOSSplashConfig({
 /// [slotId] The unique identifier of splash ad.
 /// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
 /// [hideSkipButton] optional. Whether hide skip button, default NO. If you hide the skip button, you need to customize the countdown.
-/// [isExpress] optional. experimental. 个性化模板广告
+/// [isExpress] optional. experimental. 个性化模板广告.
 /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
 AndroidSplashConfig({
   @required this.slotId,
@@ -246,12 +248,14 @@ AndroidSplashConfig({
 /// [rewardName] optional. reward name.
 /// [rewardAmount] optional. number of rewards.
 /// [extra] optional. serialized string.
+/// [isExpress] optional. 个性化模板广告.
 IOSRewardedVideoConfig({
   @required this.slotId,
   this.userId,
   this.rewardName,
   this.rewardAmount,
   this.extra,
+  this.isExpress,
 });
 
 /// The rewarded video ad config for Android
@@ -268,6 +272,7 @@ IOSRewardedVideoConfig({
 /// [extra] optional. serialized string.
 /// [isVertical] optional. Whether video is vertical orientation. Vertical, if true. Otherwise, horizontal.
 /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
+/// [isExpress] optional. 个性化模板广告.
 AndroidRewardedVideoConfig({
   @required this.slotId,
   this.userId,
@@ -276,6 +281,7 @@ AndroidRewardedVideoConfig({
   this.extra,
   this.isVertical,
   this.isSupportDeepLink,
+  this.isExpress,
 });
 ```
 
@@ -390,26 +396,7 @@ AndroidInterstitialAdConfig({
 
 3. iOS信息流广告的点击事件需要传入`rootViewController`，使用的是`(UIApplication.shared.delegate?.window??.rootViewController)!`，暂未发现问题。
 
-4. 如果Android应用没有授予`READ_PHONE_STATE`权限，有可能出现这样的错误
-
-```
-U SHALL NOT PASS!
-E  java.lang.SecurityException: getDeviceId: The user 10285 does not meet the requirements to access device identifiers.
-E      at android.os.Parcel.createException(Parcel.java:2071)
-E      at android.os.Parcel.readException(Parcel.java:2039)
-E      at android.os.Parcel.readException(Parcel.java:1987)
-E      at com.android.internal.telephony.ITelephony$Stub$Proxy.getDeviceId(ITelephony.java:10590)
-E      at android.telephony.TelephonyManager.getDeviceId(TelephonyManager.java:1619)
-E      at com.bytedance.embedapplog.bm.a(SourceFile:12)
-E      at com.bytedance.embedapplog.an.a(SourceFile:38)
-E      at com.bytedance.embedapplog.aa.e(SourceFile:183)
-E      at com.bytedance.embedapplog.k.handleMessage(SourceFile:128)
-E      at android.os.Handler.dispatchMessage(Handler.java:103)
-E      at android.os.Looper.loop(Looper.java:214)
-E      at android.os.HandlerThread.run(HandlerThread.java:67)
-```
-
-5. 插屏广告不显示问题
+4. 插屏广告不显示问题
 
 ```java
 // open_ad_sdk:
@@ -440,7 +427,7 @@ if (!this.k.isShowing() && !com.bytedance.sdk.openadsdk.core.i.c().a()) {
 
 ```
 
-6. `BannerView`、`FeedView`通过PlatformView实现。在安卓上，PlatformView最低支持API 20。
+5. `BannerView`、`FeedView`通过`PlatformView`实现。在安卓上，`PlatformView`最低支持API 20。
 
 
 

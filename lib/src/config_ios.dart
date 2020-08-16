@@ -44,7 +44,7 @@ class IOSSplashConfig {
   /// [slotId] The unique identifier of splash ad.
   /// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
   /// [hideSkipButton] optional. Whether hide skip button, default NO. If you hide the skip button, you need to customize the countdown.
-  /// [isExpress] optional. 个性化模板广告
+  /// [isExpress] optional. experimental. 个性化模板广告.
   IOSSplashConfig({
     @required this.slotId,
     this.tolerateTimeout,
