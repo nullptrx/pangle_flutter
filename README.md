@@ -118,8 +118,8 @@ class Item {
 }
 final items = <Item>[];
 final feedAdDatas = feedAd.data;
-final item = Item(feedId: feedAdDatas[0]);
-item.insert(Random().nextInt(item.length), item);
+final items = Item(feedId: feedAdDatas[0]);
+items.insert(Random().nextInt(items.length), item);
 /// Widget使用
 FeedView(
   id: item.feedId,

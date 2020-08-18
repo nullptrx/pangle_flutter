@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'extension.dart';
 import 'size.dart';
 
 final kFeedViewType = 'nullptrx.github.io/pangle_feedview';
@@ -24,7 +25,8 @@ class FeedView extends StatefulWidget {
   /// [isExpress] optional. 个性化模板广告
   /// [onRemove] when click dislike button
   FeedView({Key key, this.id, this.isExpress, this.onRemove})
-      : super(key: key ?? _FeedViewKey(id));
+      : assert(id.isNotBlank),
+        super(key: key ?? _FeedViewKey(id));
 
   @override
   State<StatefulWidget> createState() => _FeedViewState();
