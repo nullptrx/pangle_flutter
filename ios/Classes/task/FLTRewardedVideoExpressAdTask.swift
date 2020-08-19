@@ -36,9 +36,11 @@ internal final class FLTRewardedVideoExpressAdTask: FLTTaskProtocol {
         self.init(manager)
     }
     
-    func execute() -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
+    func execute(_ loadingType: LoadingType) -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
+        let preload = loadingType == .preload || loadingType == .preload_only
+        
         return { result in
-            let delegate = FLTRewardedVideoExpressAd(success: { [weak self] _, verify in
+            let delegate = FLTRewardedVideoExpressAd(preload, success: { [weak self] _, verify in
                 guard let self = self else { return }
                 result(self, ["code": 0, "verify": verify])
             }, fail: { [weak self] _, error in

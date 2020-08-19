@@ -39,3 +39,14 @@ class AndroidDirectDownloadNetworkType {
   static const int kWiFi = 4;
   static const int k4G = 5;
 }
+
+/// The type of loading ads.
+///
+/// [normal] Showing ads up without preloading.
+/// [preload] Showing ads up and preloading next ads.
+/// [preload_only] Preloading ads only, not showing ads up.
+enum LoadingType {
+  normal,
+  preload,
+  preload_only,
+}

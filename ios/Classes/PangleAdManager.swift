@@ -15,6 +15,10 @@ public final class PangleAdManager: NSObject {
     
     private var expressAdCollection: [String: BUNativeExpressAdView] = [:]
     
+    private var rewardedVideoAdCollection: [BURewardedVideoAd] = []
+    
+    private var rewardedVideoExpressAdCollection: [BUNativeExpressRewardedVideoAd] = []
+    
     private var taskList: [FLTTaskProtocol] = []
     
     public func initialize(_ args: [String: Any?]) {
@@ -58,17 +62,32 @@ public final class PangleAdManager: NSObject {
     
     public func loadRewardVideoAd(_ args: [String: Any?], result: @escaping FlutterResult) {
         let isExpress: Bool = args["isExpress"] as? Bool ?? false
+        let loadingTypeIndex: Int = args["loadingType"] as! Int
+        var loadingType = LoadingType(rawValue: loadingTypeIndex)!
+        
+        var result: FlutterResult? = result
+        if loadingType == .preload {
+            let success = self.showRewardedVideoExpressAd(isExpress)({ object in
+                result?(object)
+            })
+            if success {
+                result = nil
+            } else {
+                loadingType = .normal
+            }
+        }
+        
         if isExpress {
             let task = FLTRewardedVideoExpressAdTask(args)
-            task.execute()({ [weak self] task, object in
-                result(object)
+            task.execute(loadingType)({ [weak self] task, object in
+                result?(object)
                 self?.taskList.removeAll(where: { $0 === task })
                                      })
             self.taskList.append(task)
         } else {
             let task = FLTRewardedVideoAdTask(args)
-            task.execute()({ [weak self] task, object in
-                result(object)
+            task.execute(loadingType)({ [weak self] task, object in
+                result?(object)
                 self?.taskList.removeAll(where: { $0 === task })
                            })
             self.taskList.append(task)
@@ -119,6 +138,12 @@ public final class PangleAdManager: NSObject {
     }
 }
 
+enum LoadingType: Int {
+    case normal
+    case preload
+    case preload_only
+}
+
 extension PangleAdManager {
     public func setFeedAd(_ nativeAds: [BUNativeAd]?) {
         guard let nativeAds = nativeAds else {
@@ -159,6 +184,52 @@ extension PangleAdManager {
     public func removeExpressAd(_ key: String?) {
         if key != nil {
             self.expressAdCollection.removeValue(forKey: key!)
+        }
+    }
+    
+    public func setRewardedVideoExpressAd(_ ad: NSObject?) {
+        if ad is BUNativeExpressRewardedVideoAd {
+            self.rewardedVideoExpressAdCollection.append(ad as! BUNativeExpressRewardedVideoAd)
+        } else if ad is BURewardedVideoAd {
+            self.rewardedVideoAdCollection.append(ad as! BURewardedVideoAd)
+        }
+    }
+    
+    public func showRewardedVideoExpressAd(_ isExpress: Bool) -> (@escaping (Any) -> Void) -> Bool {
+        return { result in
+            if isExpress {
+                if self.rewardedVideoExpressAdCollection.count > 0 {
+                    let ad = self.rewardedVideoExpressAdCollection[0]
+                    ad.didReceiveSuccess = { verify in
+                        self.rewardedVideoExpressAdCollection.removeFirst()
+                        result(["code": 0, "verify": verify])
+                    }
+                    ad.didReceiveFail = { error in
+                        let e = error as NSError?
+                        result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""])
+                    }
+                    let vc = AppUtil.getVC()
+                    ad.show(fromRootViewController: vc)
+                    return true
+                }
+            } else {
+                if self.rewardedVideoAdCollection.count > 0 {
+                    let ad = self.rewardedVideoAdCollection[0]
+                    ad.didReceiveSuccess = { verify in
+                        self.rewardedVideoAdCollection.removeFirst()
+                        result(["code": 0, "verify": verify])
+                    }
+                    ad.didReceiveFail = { error in
+                        let e = error as NSError?
+                        result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""])
+                    }
+                    let vc = AppUtil.getVC()
+                    ad.show(fromRootViewController: vc)
+                    return true
+                }
+            }
+            
+            return false
         }
     }
 }

@@ -32,6 +32,13 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    pangle.loadRewardVideoAd(
+      iOS: IOSRewardedVideoConfig(
+        slotId: kRewardedVideoExpressId,
+        isExpress: true,
+        loadingType: LoadingType.preload_only,
+      ),
+    );
   }
 
   @override
@@ -94,6 +101,7 @@ class _MyAppState extends State<MyApp> {
       iOS: IOSRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         isExpress: true,
+        loadingType: LoadingType.preload,
       ),
       android: AndroidRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,

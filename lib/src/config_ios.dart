@@ -70,6 +70,7 @@ class IOSRewardedVideoConfig {
   final int rewardAmount;
   final String extra;
   final bool isExpress;
+  final LoadingType loadingType;
 
   /// The rewarded video ad config for Android
   ///
@@ -84,6 +85,7 @@ class IOSRewardedVideoConfig {
   /// [rewardAmount] optional. number of rewards.
   /// [extra] optional. serialized string.
   /// [isExpress] optional. 个性化模板广告
+  /// [loadingType] optional. 加载广告的类型，默认[LoadingType.normal]
   IOSRewardedVideoConfig({
     @required this.slotId,
     this.userId,
@@ -91,6 +93,7 @@ class IOSRewardedVideoConfig {
     this.rewardAmount,
     this.extra,
     this.isExpress,
+    this.loadingType,
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
@@ -102,6 +105,7 @@ class IOSRewardedVideoConfig {
       'rewardAmount': rewardAmount,
       'extra': extra,
       'isExpress': isExpress,
+      'loadingType': loadingType.index,
     };
   }
 }
