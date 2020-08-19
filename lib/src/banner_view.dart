@@ -83,6 +83,9 @@ class _BannerViewState extends State<BannerView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    if (removed) {
+      return SizedBox.shrink();
+    }
     Widget body;
     try {
       Widget platformView;
@@ -112,19 +115,15 @@ class _BannerViewState extends State<BannerView>
         );
       }
       if (platformView != null) {
-        if (removed) {
-          body = SizedBox.shrink();
-        } else {
-          body = Offstage(
-            offstage: offstage,
-            child: Container(
-              color: Colors.white,
-              width: adWidth,
-              height: adHeight,
-              child: platformView,
-            ),
-          );
-        }
+        body = Offstage(
+          offstage: offstage,
+          child: Container(
+            color: Colors.white,
+            width: adWidth,
+            height: adHeight,
+            child: platformView,
+          ),
+        );
       }
     } on PlatformException {}
     if (body == null) {
