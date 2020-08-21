@@ -14,11 +14,16 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await pangle.init(
     iOS: IOSConfig(appId: kAppId, logLevel: PangleLogLevel.debug),
-    android: AndroidConfig(appId: kAppId, debug: true),
+    android: AndroidConfig(
+      appId: kAppId,
+      debug: true,
+      allowShowNotify: true,
+      allowShowPageWhenScreenLock: false,
+    ),
   );
   await pangle.loadSplashAd(
-    iOS: IOSSplashConfig(slotId: kSplashId, isExpress: true),
-    android: AndroidSplashConfig(slotId: kSplashExpressId, isExpress: true),
+    iOS: IOSSplashConfig(slotId: kSplashId),
+    android: AndroidSplashConfig(slotId: kSplashExpressId),
   );
   runApp(MaterialApp(home: MyApp()));
 }
@@ -92,7 +97,7 @@ class _MyAppState extends State<MyApp> {
   _loadSplashAd() {
     pangle.loadSplashAd(
       iOS: IOSSplashConfig(slotId: kSplashId),
-      android: AndroidSplashConfig(slotId: kSplashId, isExpress: true),
+      android: AndroidSplashConfig(slotId: kSplashId),
     );
   }
 

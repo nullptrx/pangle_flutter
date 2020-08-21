@@ -198,11 +198,12 @@ class FlutterFeedView(
     val feedHeight: Float = when (ad.imageMode) {
       // 16 + 150 * 9 /16 + 30 + 0.5
       TTAdConstant.IMAGE_MODE_SMALL_IMG -> 130.875.dp
-      // 16 + 6 + 28 + 4 + 40 + 30 + （sw - 2 * 16）* 9 / 16
-      TTAdConstant.IMAGE_MODE_LARGE_IMG -> (124 + (screenWidthDp - 32) * 9.0 / 16).dp
+      // 6 + 28 + 4 + 40 + 30 + （sw - 2 * 16）* 9 / 16
+      TTAdConstant.IMAGE_MODE_LARGE_IMG -> (108 + (screenWidthDp - 32) * 9.0 / 16).dp
       // 16 + 28 + 6 + 40 + 30 + (sw - 2 * 16 - 2 * 5) / 1.52 / 3
       TTAdConstant.IMAGE_MODE_GROUP_IMG -> (120 + (screenWidthDp - 42) / 4.56).dp // 180.dp
-      TTAdConstant.IMAGE_MODE_VIDEO -> (124 + (screenWidthDp - 32) * 9.0 / 16).dp // 310.dp
+      // 6 + 28 + 4 + 40 + 30 + （sw - 2 * 16）* 9 / 16
+      TTAdConstant.IMAGE_MODE_VIDEO -> (108 + (screenWidthDp - 32) * 9.0 / 16).dp // 310.dp
       // unimplemented
       TTAdConstant.IMAGE_MODE_VERTICAL_IMG -> 1.dp // 1
       else -> 1.dp // 1

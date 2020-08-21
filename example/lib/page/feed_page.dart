@@ -34,9 +34,10 @@ class _FeedPageState extends State<FeedPage> {
         isExpress: true,
       ),
       android: AndroidFeedAdConfig(
-        slotId: kFeedExpressId,
+//        slotId: kFeedExpressId,
+//        isExpress: true,
+        slotId: kFeedId,
         count: 3,
-        isExpress: true,
       ),
     );
     final data = <Item>[];
@@ -72,7 +73,7 @@ class _FeedPageState extends State<FeedPage> {
           if (item.isAd) {
             return FeedView(
               id: item.feedId,
-              isExpress: true,
+//              isExpress: true,
               onRemove: () {
                 setState(() {
                   this.items.removeAt(index);

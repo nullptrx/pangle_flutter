@@ -25,25 +25,29 @@
         android:layout_marginEnd="8dp"
         android:src="@drawable/tt_ad_logo_small"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/pangle_flutter_item_title"
         app:layout_constraintEnd_toStartOf="@id/pangle_flutter_item_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/pangle_flutter_item_title"
+        tools:visibility="gone" />
 
     <TextView
         android:id="@id/pangle_flutter_item_title"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="28dp"
         android:layout_marginEnd="10dp"
         android:ellipsize="end"
+        android:gravity="center_vertical"
         android:maxLines="1"
         android:singleLine="true"
         android:textColor="@color/pangle_flutter_title"
         android:textSize="16dp"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toBottomOf="@id/pangle_flutter_item_icon"
+        app:layout_constraintBottom_toTopOf="@id/pangle_flutter_item_desc"
         app:layout_constraintEnd_toStartOf="@id/pangle_flutter_item_image"
         app:layout_constraintStart_toEndOf="@id/pangle_flutter_item_icon"
-        app:layout_constraintTop_toTopOf="@id/pangle_flutter_item_icon"
+        app:layout_constraintTop_toTopOf="@id/pangle_flutter_item_image"
+        app:layout_constraintVertical_bias="0"
         tools:text="着陆无双" />
 
 
