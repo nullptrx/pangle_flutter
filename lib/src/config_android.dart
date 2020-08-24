@@ -48,7 +48,7 @@ class AndroidConfig {
     this.allowShowNotify,
     this.allowShowPageWhenScreenLock,
     this.supportMultiProcess,
-    this.directDownloadNetworkType = AndroidDirectDownloadNetworkType.kWiFi,
+    this.directDownloadNetworkType = AndroidDirectDownloadNetworkType.kNone,
     this.isPaidApp,
     this.useTextureView,
     this.titleBarTheme = AndroidTitleBarTheme.light,
