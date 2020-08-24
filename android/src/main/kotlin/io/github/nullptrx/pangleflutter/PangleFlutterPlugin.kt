@@ -2,7 +2,6 @@ package io.github.nullptrx.pangleflutter
 
 import android.app.Activity
 import android.content.Context
-import com.bytedance.sdk.openadsdk.TTLocation
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -10,11 +9,12 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import io.github.nullptrx.pangleflutter.common.PangleTitleBarTheme
+import io.github.nullptrx.pangleflutter.common.LoadingType
 import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialAd
 import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialExpressAd
 import io.github.nullptrx.pangleflutter.delegate.FLTSplashAd
 import io.github.nullptrx.pangleflutter.util.PangleAdSlotManager
+import io.github.nullptrx.pangleflutter.util.asMap
 import io.github.nullptrx.pangleflutter.view.BannerViewFactory
 import io.github.nullptrx.pangleflutter.view.FeedViewFactory
 
@@ -86,37 +86,8 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
     when (call.method) {
       "init" -> {
         try {
-          val appId = call.argument<String>("appId")!!
-          val debug = call.argument<Boolean?>("debug")
-          val allowShowNotify = call.argument<Boolean?>("allowShowNotify")
-          val allowShowPageWhenScreenLock = call.argument<Boolean?>("allowShowPageWhenScreenLock")
-          val supportMultiProcess = call.argument<Boolean?>("supportMultiProcess")
-          val useTextureView = call.argument<Boolean?>("useTextureView")
-          val directDownloadNetworkType = call.argument<Int?>("directDownloadNetworkType")
-          val isPaidApp = call.argument<Boolean?>("isPaidApp")
-          val titleBarThemeIndex = call.argument<Int?>("titleBarTheme")
-          val isCanUseLocation = call.argument<Boolean?>("isCanUseLocation")
-          val isCanUsePhoneState = call.argument<Boolean?>("isCanUsePhoneState")
-          val isCanUseWriteExternal = call.argument<Boolean?>("isCanUseWriteExternal")
-          val isCanUseWifiState = call.argument<Boolean?>("isCanUseWifiState")
-          val devImei = call.argument<String?>("devImei")
-          val devOaid = call.argument<String?>("devOaid")
-          val location = call.argument<Map<String, Double>?>("location")
-          var ttLocation: TTLocation? = null
-          location?.also {
-            try {
-              val latitude = it["latitude"]!!
-              val longitude = it["longitude"]!!
-              ttLocation = TTLocation(latitude, longitude)
-            } catch (e: Exception) {
-            }
-          }
 
-          var titleBarTheme: Int? = null
-          if (titleBarThemeIndex != null) {
-            titleBarTheme = PangleTitleBarTheme.values()[titleBarThemeIndex].value
-          }
-          pangle.initialize(activity, appId, debug, useTextureView, titleBarTheme, allowShowNotify, allowShowPageWhenScreenLock, directDownloadNetworkType, supportMultiProcess, isPaidApp, isCanUseLocation, isCanUsePhoneState, isCanUseWriteExternal, isCanUseWifiState, devImei, devOaid, ttLocation)
+          pangle.initialize(activity, call.arguments.asMap() ?: mapOf())
         } catch (e: Exception) {
         }
         result.success(null)
@@ -138,6 +109,26 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         result.success(null)
       }
       "loadRewardVideoAd" -> {
+
+        val loadingTypeIndex = call.argument<Int>("loadingType") ?: 0
+        var loadingType = LoadingType.values()[loadingTypeIndex]
+
+
+        if (LoadingType.preload == loadingType || LoadingType.normal == loadingType) {
+
+          val loadResult = pangle.showRewardedVideoAd(result, activity)
+          if (loadResult) {
+            if (loadingType == LoadingType.normal) {
+              return
+            }
+          } else {
+            loadingType = LoadingType.normal
+          }
+
+        }
+
+        val preload = LoadingType.preload == loadingType || LoadingType.preload_only == loadingType
+
         val slotId = call.argument<String>("slotId")!!
         val userId = call.argument<String>("userId")
         val rewardName = call.argument<String>("rewardName")
@@ -147,7 +138,8 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
         val isExpress = call.argument<Boolean>("isExpress") ?: false
         val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(slotId, isExpress, userId, rewardName, rewardAmount, isVertical, isSupportDeepLink, extra)
-        pangle.loadRewardVideoAd(adSlot, result, activity)
+
+        pangle.loadRewardVideoAd(adSlot, result, activity, preload)
       }
 
       "loadFeedAd" -> {

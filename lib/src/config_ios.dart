@@ -105,7 +105,7 @@ class IOSRewardedVideoConfig {
       'rewardAmount': rewardAmount,
       'extra': extra,
       'isExpress': isExpress,
-      'loadingType': loadingType.index,
+      'loadingType': loadingType?.index,
     };
   }
 }

@@ -5,9 +5,12 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import com.bytedance.sdk.openadsdk.*
 import io.flutter.plugin.common.MethodChannel
+import io.github.nullptrx.pangleflutter.common.PangleTitleBarTheme
 import io.github.nullptrx.pangleflutter.delegate.FLTFeedAd
 import io.github.nullptrx.pangleflutter.delegate.FLTFeedExpressAd
 import io.github.nullptrx.pangleflutter.delegate.FLTRewardedVideoAd
+import io.github.nullptrx.pangleflutter.delegate.RewardAdInteractionImpl
+import io.github.nullptrx.pangleflutter.util.asMap
 import java.util.*
 
 
@@ -21,6 +24,7 @@ class PangleAdManager {
   private val feedAdCollection = Collections.synchronizedMap<String, TTFeedAd>(mutableMapOf<String, TTFeedAd>())
   private val bannerAdCollection = Collections.synchronizedMap<String, TTBannerAd>(mutableMapOf<String, TTBannerAd>())
   private val expressAdCollection = Collections.synchronizedMap<String, TTNativeExpressAd>(mutableMapOf<String, TTNativeExpressAd>())
+  private val rewardedVideoAdCollection = Collections.synchronizedList<TTRewardVideoAd>(mutableListOf<TTRewardVideoAd>())
 
   private var ttAdManager: TTAdManager? = null
   private var ttAdNative: TTAdNative? = null
@@ -93,10 +97,60 @@ class PangleAdManager {
     it?.destroy()
   }
 
+  fun showRewardedVideoAd(result: MethodChannel.Result, activity: Activity?): Boolean {
+    activity ?: return false
+    if (rewardedVideoAdCollection.size > 0) {
+      val ad = rewardedVideoAdCollection.removeAt(0)
+      ad.setRewardAdInteractionListener(RewardAdInteractionImpl { obj ->
+        result.success(obj)
+      })
+      ad.showRewardVideoAd(activity)
+      return true
+    }
+    return false
+  }
 
-  fun initialize(activity: Activity?, appId: String, debug: Boolean?, useTextureView: Boolean?, titleBarTheme: Int?, allowShowNotify: Boolean?, allowShowPageWhenScreenLock: Boolean?, directDownloadNetworkType: Int?, supportMultiProcess: Boolean?, paid: Boolean?, isCanUseLocation: Boolean?, isCanUsePhoneState: Boolean?, isCanUseWriteExternal: Boolean?, isCanUseWifiState: Boolean?, devImei: String?, devOaid: String?, location: TTLocation?) {
+  fun setRewardedVideoAd(ad: TTRewardVideoAd?) {
+    ad?.also {
+      rewardedVideoAdCollection.add(it)
+    }
+  }
+
+
+  fun initialize(activity: Activity?, args: Map<String, Any?>) {
     activity ?: return
     val context: Context = activity
+
+    val appId = args["appId"] as String
+    val debug = args["debug"] as Boolean?
+    val allowShowNotify = args["allowShowNotify"] as Boolean?
+    val allowShowPageWhenScreenLock = args["allowShowPageWhenScreenLock"] as Boolean?
+    val supportMultiProcess = args["supportMultiProcess"] as Boolean?
+    val useTextureView = args["useTextureView"] as Boolean?
+    val directDownloadNetworkType = args["directDownloadNetworkType"] as Int?
+    val paid = args["paid"] as Boolean?
+    val titleBarThemeIndex = args["titleBarTheme"] as Int?
+    val isCanUseLocation = args["isCanUseLocation"] as Boolean?
+    val isCanUsePhoneState = args["isCanUsePhoneState"] as Boolean?
+    val isCanUseWriteExternal = args["isCanUseWriteExternal"] as Boolean?
+    val isCanUseWifiState = args["isCanUseWifiState"] as Boolean?
+    val devImei = args["devImei"] as String?
+    val devOaid = args["devOaid"] as String?
+    val location = args["location"]?.asMap<String, Double>()
+    var ttLocation: TTLocation? = null
+    location?.also {
+      try {
+        val latitude = it["latitude"]!!
+        val longitude = it["longitude"]!!
+        ttLocation = TTLocation(latitude, longitude)
+      } catch (e: Exception) {
+      }
+    }
+
+    var titleBarTheme: Int? = null
+    if (titleBarThemeIndex != null) {
+      titleBarTheme = PangleTitleBarTheme.values()[titleBarThemeIndex].value
+    }
 
     //强烈建议在应用对应的Application#onCreate()方法中调用，避免出现content为null的异常
     val packageManager = context.packageManager
@@ -159,7 +213,7 @@ class PangleAdManager {
         }
 
         override fun getTTLocation(): TTLocation {
-          return location ?: super.getTTLocation()
+          return ttLocation ?: super.getTTLocation()
         }
 
         override fun getDevOaid(): String {
@@ -189,11 +243,13 @@ class PangleAdManager {
 
   }
 
-  fun loadRewardVideoAd(adSlot: AdSlot, result: MethodChannel.Result, activity: Activity?) {
+  fun loadRewardVideoAd(adSlot: AdSlot, result: MethodChannel.Result, activity: Activity?, preload: Boolean) {
 
     activity ?: return
 
-    ttAdNative?.loadRewardVideoAd(adSlot, FLTRewardedVideoAd(result, activity))
+    ttAdNative?.loadRewardVideoAd(adSlot, FLTRewardedVideoAd({ obj ->
+      result.success(obj)
+    }, activity, preload))
 
   }
 

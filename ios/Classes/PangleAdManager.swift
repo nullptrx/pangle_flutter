@@ -66,12 +66,14 @@ public final class PangleAdManager: NSObject {
         var loadingType = LoadingType(rawValue: loadingTypeIndex)!
         
         var result: FlutterResult? = result
-        if loadingType == .preload {
-            let success = self.showRewardedVideoExpressAd(isExpress)({ object in
+        if loadingType == .preload || loadingType == .normal {
+            let success = self.showRewardedVideoAd(isExpress)({ object in
                 result?(object)
             })
             if success {
-                result = nil
+                if loadingType == .normal {
+                    return
+                }
             } else {
                 loadingType = .normal
             }
@@ -79,15 +81,17 @@ public final class PangleAdManager: NSObject {
         
         if isExpress {
             let task = FLTRewardedVideoExpressAdTask(args)
-            task.execute(loadingType)({ [weak self] task, object in
+            task.execute(loadingType)({ [weak self] task, object, ad in
                 result?(object)
+                self?.setRewardedVideoAd(ad)
                 self?.taskList.removeAll(where: { $0 === task })
                                      })
             self.taskList.append(task)
         } else {
             let task = FLTRewardedVideoAdTask(args)
-            task.execute(loadingType)({ [weak self] task, object in
+            task.execute(loadingType)({ [weak self] task, object, ad in
                 result?(object)
+                self?.setRewardedVideoAd(ad)
                 self?.taskList.removeAll(where: { $0 === task })
                            })
             self.taskList.append(task)
@@ -187,7 +191,7 @@ extension PangleAdManager {
         }
     }
     
-    public func setRewardedVideoExpressAd(_ ad: NSObject?) {
+    public func setRewardedVideoAd(_ ad: NSObject?) {
         if ad is BUNativeExpressRewardedVideoAd {
             self.rewardedVideoExpressAdCollection.append(ad as! BUNativeExpressRewardedVideoAd)
         } else if ad is BURewardedVideoAd {
@@ -195,7 +199,7 @@ extension PangleAdManager {
         }
     }
     
-    public func showRewardedVideoExpressAd(_ isExpress: Bool) -> (@escaping (Any) -> Void) -> Bool {
+    public func showRewardedVideoAd(_ isExpress: Bool) -> (@escaping (Any) -> Void) -> Bool {
         return { result in
             if isExpress {
                 if self.rewardedVideoExpressAdCollection.count > 0 {

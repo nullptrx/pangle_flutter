@@ -43,6 +43,11 @@ class _MyAppState extends State<MyApp> {
         isExpress: true,
         loadingType: LoadingType.preload_only,
       ),
+      android: AndroidRewardedVideoConfig(
+        slotId: kRewardedVideoExpressId,
+        isExpress: true,
+        loadingType: LoadingType.preload_only,
+      ),
     );
   }
 
@@ -111,6 +116,7 @@ class _MyAppState extends State<MyApp> {
       android: AndroidRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         isExpress: true,
+        loadingType: LoadingType.preload,
       ),
     );
     print(jsonEncode(result));

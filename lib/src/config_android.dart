@@ -127,6 +127,7 @@ class AndroidRewardedVideoConfig {
   final bool isVertical;
   final bool isSupportDeepLink;
   final bool isExpress;
+  final LoadingType loadingType;
 
   /// The rewarded video ad config for Android
   ///
@@ -143,6 +144,7 @@ class AndroidRewardedVideoConfig {
   /// [isVertical] optional. Whether video is vertical orientation. Vertical, if true. Otherwise, horizontal.
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
   /// [isExpress] optional. 个性化模板广告
+  /// [loadingType] optional. 加载广告的类型，默认[LoadingType.normal]
   AndroidRewardedVideoConfig({
     @required this.slotId,
     this.userId,
@@ -152,6 +154,7 @@ class AndroidRewardedVideoConfig {
     this.isVertical = true,
     this.isSupportDeepLink,
     this.isExpress,
+    this.loadingType,
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
@@ -165,6 +168,7 @@ class AndroidRewardedVideoConfig {
       'isVertical': isVertical,
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
+      'loadingType': loadingType?.index,
     };
   }
 }
