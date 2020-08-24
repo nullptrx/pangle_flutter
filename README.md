@@ -91,15 +91,12 @@ BannerView(
 ```dart
 /// 信息流实现逻辑
 /// 首先进行网络请求，得到信息流数据
-/// PangleFeedAd相应字段
-/// 响应码，0成功，-1失败
-/// final int code;
-/// 错误时，调试信息
-/// final String message;
-/// 获得信息流数量，一般同上面传入的count，最终结果以此count为主
-/// final int count;
-/// 用于获取信息流广告的键id
-/// final List<String> data;
+///
+/// PangleFeedAd相应字段: 
+/// [code] 响应码，0成功，-1失败
+/// [message] 错误时，调试信息
+/// [count] 获得信息流数量，一般同上面传入的count，最终结果以此count为主
+/// [data] (string list) 用于展示信息流广告的键id
  PangleFeedAd feedAd = await pangle.loadFeedAd(
    iOS: IOSFeedAdConfig(slotId: kFeedId, count: 2),
    android: AndroidFeedAdConfig(slotId: kFeedId, count: 2),
