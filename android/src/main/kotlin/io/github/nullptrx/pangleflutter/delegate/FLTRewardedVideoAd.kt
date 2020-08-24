@@ -5,7 +5,7 @@ import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTRewardVideoAd
 import io.github.nullptrx.pangleflutter.PangleAdManager
 
-internal class FLTRewardedVideoAd(var result: (Any) -> Unit, var target: Activity?, val preload: Boolean = false) : TTAdNative.RewardVideoAdListener {
+internal class FLTRewardedVideoAd(var target: Activity?, val preload: Boolean = false, var result: (Any) -> Unit = {}) : TTAdNative.RewardVideoAdListener {
 
   var ttVideoAd: TTRewardVideoAd? = null
 

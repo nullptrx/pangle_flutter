@@ -247,9 +247,9 @@ class PangleAdManager {
 
     activity ?: return
 
-    ttAdNative?.loadRewardVideoAd(adSlot, FLTRewardedVideoAd({ obj ->
+    ttAdNative?.loadRewardVideoAd(adSlot, FLTRewardedVideoAd(activity, preload) { obj ->
       result.success(obj)
-    }, activity, preload))
+    })
 
   }
 

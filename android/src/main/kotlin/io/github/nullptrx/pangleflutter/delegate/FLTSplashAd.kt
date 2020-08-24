@@ -8,7 +8,7 @@ import com.bytedance.sdk.openadsdk.TTSplashAd
 import io.github.nullptrx.pangleflutter.dialog.NativeSplashDialog
 import io.github.nullptrx.pangleflutter.dialog.SupportSplashDialog
 
-internal class FLTSplashAd(val hideSkipButton: Boolean?, var activity: Activity?) : TTAdNative.SplashAdListener {
+internal class FLTSplashAd(val hideSkipButton: Boolean?, var activity: Activity?, var result: (Any) -> Unit = {}) : TTAdNative.SplashAdListener {
   private var supportDialog: SupportSplashDialog? = null
   private var nativeDialog: NativeSplashDialog? = null
 
@@ -68,20 +68,21 @@ internal class FLTSplashAd(val hideSkipButton: Boolean?, var activity: Activity?
   private fun handleSplashEnd() {
     supportDialog?.dismiss()
     nativeDialog?.dismiss()
+    // TODO 暂不处理返回消息
+    invoke()
   }
 
 
-//  @Deprecated("TODO")
-//  fun invoke(code: Int = 0, message: String = "") {
-//
-//    result.get()?.apply {
-//      val params = mutableMapOf<String, Any>()
-//      params["code"] = code
-//      params["message"] = message
-//      success(params)
-//    }
-//    result.clear()
-//  }
+  fun invoke(code: Int = 0, message: String = "") {
+
+    result.apply {
+      val params = mutableMapOf<String, Any>()
+      params["code"] = code
+      params["message"] = message
+      invoke(params)
+    }
+    result = {}
+  }
 
 
 }
