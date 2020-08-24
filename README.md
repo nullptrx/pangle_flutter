@@ -249,6 +249,7 @@ AndroidSplashConfig({
 /// [rewardAmount] optional. number of rewards.
 /// [extra] optional. serialized string.
 /// [isExpress] optional. 个性化模板广告.
+/// [loadingType] optional. 加载广告的类型，默认[LoadingType.normal]
 IOSRewardedVideoConfig({
   @required this.slotId,
   this.userId,
@@ -256,6 +257,7 @@ IOSRewardedVideoConfig({
   this.rewardAmount,
   this.extra,
   this.isExpress,
+  this.loadingType,
 });
 
 /// The rewarded video ad config for Android

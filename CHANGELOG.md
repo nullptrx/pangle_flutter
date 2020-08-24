@@ -1,7 +1,12 @@
+## 0.1.6
+
+* Fix feed ads showing incorrect height.
+* Supports preloading rewarded video ads
+
 ## 0.1.5
 
 * Refactors the ads loading logic of iOS.
-* Supports Splash Express Ad (No test), Rewarded Video Express Ad.
+* Supports splash express ads (No test), rewarded video express ads.
 
 ## 0.1.4
 
