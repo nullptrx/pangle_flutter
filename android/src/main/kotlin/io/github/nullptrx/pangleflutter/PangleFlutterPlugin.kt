@@ -9,7 +9,8 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import io.github.nullptrx.pangleflutter.common.LoadingType
+import io.github.nullptrx.pangleflutter.common.PangleLoadingType
+import io.github.nullptrx.pangleflutter.common.PangleOrientation
 import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialAd
 import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialExpressAd
 import io.github.nullptrx.pangleflutter.delegate.FLTSplashAd
@@ -113,23 +114,23 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
       "loadRewardVideoAd" -> {
 
         val loadingTypeIndex = call.argument<Int>("loadingType") ?: 0
-        var loadingType = LoadingType.values()[loadingTypeIndex]
+        var loadingType = PangleLoadingType.values()[loadingTypeIndex]
 
 
-        if (LoadingType.preload == loadingType || LoadingType.normal == loadingType) {
+        if (PangleLoadingType.preload == loadingType || PangleLoadingType.normal == loadingType) {
 
           val loadResult = pangle.showRewardedVideoAd(result, activity)
           if (loadResult) {
-            if (loadingType == LoadingType.normal) {
+            if (loadingType == PangleLoadingType.normal) {
               return
             }
           } else {
-            loadingType = LoadingType.normal
+            loadingType = PangleLoadingType.normal
           }
 
         }
 
-        val preload = LoadingType.preload == loadingType || LoadingType.preload_only == loadingType
+        val preload = PangleLoadingType.preload == loadingType || PangleLoadingType.preload_only == loadingType
 
         val slotId = call.argument<String>("slotId")!!
         val userId = call.argument<String>("userId")
@@ -142,6 +143,9 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(slotId, isExpress, userId, rewardName, rewardAmount, isVertical, isSupportDeepLink, extra)
 
         pangle.loadRewardVideoAd(adSlot, result, activity, preload)
+        if (PangleLoadingType.preload_only == loadingType) {
+          result.success(null)
+        }
       }
 
       "loadFeedAd" -> {
@@ -170,6 +174,43 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
           pangle.loadInteractionExpressAd(adSlot, FLTInterstitialExpressAd(result, activity))
         } else {
           pangle.loadInteractionAd(adSlot, FLTInterstitialAd(result, activity))
+        }
+      }
+
+      "loadFullScreenVideoAd" -> {
+
+        val loadingTypeIndex = call.argument<Int>("loadingType") ?: 0
+        var loadingType = PangleLoadingType.values()[loadingTypeIndex]
+
+
+        if (PangleLoadingType.preload == loadingType || PangleLoadingType.normal == loadingType) {
+
+          val loadResult = pangle.showFullScreenVideoAd(result, activity)
+          if (loadResult) {
+            if (loadingType == PangleLoadingType.normal) {
+              return
+            }
+          } else {
+            loadingType = PangleLoadingType.normal
+          }
+
+        }
+
+        val preload = PangleLoadingType.preload == loadingType || PangleLoadingType.preload_only == loadingType
+
+        val slotId = call.argument<String>("slotId")!!
+        val extra = call.argument<String>("extra")
+//        val isVertical = call.argument<Boolean>("isVertical") ?: true
+        val orientationIndex = call.argument<Int>("orientation")
+            ?: PangleOrientation.veritical.ordinal
+        val orientation = PangleOrientation.values()[orientationIndex]
+        val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+        val isExpress = call.argument<Boolean>("isExpress") ?: false
+        val adSlot = PangleAdSlotManager.getFullScreenVideoAdSlot(slotId, isExpress, orientation, isSupportDeepLink, extra)
+
+        pangle.loadFullScreenVideoAd(adSlot, result, activity, preload)
+        if (PangleLoadingType.preload_only == loadingType) {
+          result.success(null)
         }
       }
       else -> result.notImplemented()

@@ -4,6 +4,7 @@ import android.app.Activity
 import com.bytedance.sdk.openadsdk.AdSlot
 import com.bytedance.sdk.openadsdk.TTAdConstant
 import io.github.nullptrx.pangleflutter.common.PangleImgSize
+import io.github.nullptrx.pangleflutter.common.PangleOrientation
 
 object PangleAdSlotManager {
 
@@ -119,6 +120,33 @@ object PangleAdSlotManager {
       }
     }
         .build()
+    return adSlot
+  }
+
+
+  fun getFullScreenVideoAdSlot(slotId: String, isExpress: Boolean, orientation: PangleOrientation, isSupportDeepLink: Boolean, extra: String?): AdSlot {
+
+    val adSlot = AdSlot.Builder().apply {
+// 必选参数 设置您的CodeId
+      setCodeId(slotId)
+      // 必选参数 设置广告图片的最大尺寸及期望的图片宽高比，单位Px
+      // 注：如果您在头条广告平台选择了原生广告，返回的图片尺寸可能会与您期望的尺寸有较大差异
+      setImageAcceptedSize(1080, 1920)
+      if (isExpress) {
+        val size = ScreenUtil.getScreenSizeDp()
+        setExpressViewAcceptedSize(size.width, size.height)
+//        setExpressViewAcceptedSize(500f, 500f)
+      }
+      // 可选参数 设置是否支持deeplink
+      setSupportDeepLink(isSupportDeepLink)
+      //设置期望视频播放的方向，为TTAdConstant.HORIZONTAL或TTAdConstant.VERTICAL
+//      setOrientation(if (isVertical) TTAdConstant.VERTICAL else TTAdConstant.HORIZONTAL)
+      setOrientation(orientation.ordinal)
+      //激励视频奖励透传参数，字符串，如果用json对象，必须使用序列化为String类型,可为空
+      extra?.also {
+        setMediaExtra(it)
+      }
+    }.build()
     return adSlot
   }
 }

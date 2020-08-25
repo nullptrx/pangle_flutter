@@ -12,7 +12,6 @@ internal class FLTRewardedVideoAd(var target: Activity?, val preload: Boolean = 
   override fun onRewardVideoAdLoad(ad: TTRewardVideoAd?) {
     if (preload) {
       PangleAdManager.shared.setRewardedVideoAd(ad)
-      invoke(verify = false)
     } else {
       target?.also {
         ttVideoAd = ad

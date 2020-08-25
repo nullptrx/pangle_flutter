@@ -2,11 +2,10 @@ package io.github.nullptrx.pangleflutter.delegate
 
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd
-import io.flutter.plugin.common.MethodChannel
 import io.github.nullptrx.pangleflutter.PangleAdManager
 import kotlin.collections.set
 
-class FLTFeedExpressAd(var result: MethodChannel.Result?) : TTAdNative.NativeExpressAdListener {
+class FLTFeedExpressAd(var result: (Any) -> Unit = {}) : TTAdNative.NativeExpressAdListener {
 
   override fun onError(code: Int, message: String) {
     invoke(code, message)
@@ -22,7 +21,7 @@ class FLTFeedExpressAd(var result: MethodChannel.Result?) : TTAdNative.NativeExp
   }
 
   private fun invoke(code: Int = 0, message: String? = null, count: Int = 0, data: List<String>? = null) {
-    result?.apply {
+    result.apply {
       val params = mutableMapOf<String, Any>()
       params["code"] = code
       message?.also {
@@ -32,9 +31,9 @@ class FLTFeedExpressAd(var result: MethodChannel.Result?) : TTAdNative.NativeExp
       data?.also {
         params["data"] = it
       }
-      success(params)
+      invoke(params)
     }
-    result = null
+    result = {}
 
 
   }
