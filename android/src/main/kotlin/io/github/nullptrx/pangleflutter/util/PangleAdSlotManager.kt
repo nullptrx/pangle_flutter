@@ -124,7 +124,7 @@ object PangleAdSlotManager {
   }
 
 
-  fun getFullScreenVideoAdSlot(slotId: String, isExpress: Boolean, orientation: PangleOrientation, isSupportDeepLink: Boolean, extra: String?): AdSlot {
+  fun getFullScreenVideoAdSlot(slotId: String, isExpress: Boolean, orientation: PangleOrientation, isSupportDeepLink: Boolean): AdSlot {
 
     val adSlot = AdSlot.Builder().apply {
 // 必选参数 设置您的CodeId
@@ -143,9 +143,6 @@ object PangleAdSlotManager {
 //      setOrientation(if (isVertical) TTAdConstant.VERTICAL else TTAdConstant.HORIZONTAL)
       setOrientation(orientation.ordinal)
       //激励视频奖励透传参数，字符串，如果用json对象，必须使用序列化为String类型,可为空
-      extra?.also {
-        setMediaExtra(it)
-      }
     }.build()
     return adSlot
   }

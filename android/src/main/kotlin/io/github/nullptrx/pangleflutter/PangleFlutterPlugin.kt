@@ -202,14 +202,13 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val preload = PangleLoadingType.preload == loadingType || PangleLoadingType.preload_only == loadingType
 
         val slotId = call.argument<String>("slotId")!!
-        val extra = call.argument<String>("extra")
 //        val isVertical = call.argument<Boolean>("isVertical") ?: true
         val orientationIndex = call.argument<Int>("orientation")
             ?: PangleOrientation.veritical.ordinal
         val orientation = PangleOrientation.values()[orientationIndex]
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
         val isExpress = call.argument<Boolean>("isExpress") ?: false
-        val adSlot = PangleAdSlotManager.getFullScreenVideoAdSlot(slotId, isExpress, orientation, isSupportDeepLink, extra)
+        val adSlot = PangleAdSlotManager.getFullScreenVideoAdSlot(slotId, isExpress, orientation, isSupportDeepLink)
 
         pangle.loadFullscreenVideoAd(adSlot, result, activity, preload)
       }

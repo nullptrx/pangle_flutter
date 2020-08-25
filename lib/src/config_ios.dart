@@ -246,23 +246,17 @@ class IOSInterstitialConfig {
 
 class IOSFullscreenVideoConfig {
   final String slotId;
-  final bool isSupportDeepLink;
   final bool isExpress;
-  final PangleOrientation orientation;
   final PangleLoadingType loadingType;
 
   /// The full screen video ad config for iOS
   ///
   /// [slotId] required. The unique identifier of a full screen video ad.
   /// [isExpress] optional. 个性化模板广告
-  /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-  /// [orientation] 设置期望视频播放的方向，默认[PangleOrientation.veritical]
   /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
   IOSFullscreenVideoConfig({
     @required this.slotId,
-    this.isSupportDeepLink = true,
     this.isExpress,
-    this.orientation = PangleOrientation.veritical,
     this.loadingType = PangleLoadingType.normal,
   }) : assert(slotId.isNotBlank);
 
@@ -270,9 +264,7 @@ class IOSFullscreenVideoConfig {
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
-      'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
-      'orientation': orientation?.index,
       'loadingType': loadingType?.index,
     };
   }
