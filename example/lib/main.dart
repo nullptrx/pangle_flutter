@@ -49,14 +49,14 @@ class _MyAppState extends State<MyApp> {
         loadingType: PangleLoadingType.preload_only,
       ),
     );
-    pangle.loadFullScreenVideoAd(
-      iOS: IOSFullScreenVideoConfig(
-        slotId: kRewardedVideoExpressId,
+    pangle.loadFullscreenVideoAd(
+      iOS: IOSFullscreenVideoConfig(
+        slotId: kFullscreenVideoExpressId,
         isExpress: true,
         loadingType: PangleLoadingType.preload_only,
       ),
-      android: AndroidFullScreenVideoConfig(
-        slotId: kRewardedVideoExpressId,
+      android: AndroidFullscreenVideoConfig(
+        slotId: kFullscreenVideoExpressId,
         isExpress: true,
         loadingType: PangleLoadingType.preload_only,
       ),
@@ -100,7 +100,7 @@ class _MyAppState extends State<MyApp> {
               child: Text('Interstitial AD'),
             ),
             RaisedButton(
-              onPressed: _loadFullScreenVideoAd,
+              onPressed: _loadFullscreenVideoAd,
               child: Text('FullScreenVideo AD'),
             ),
           ],
@@ -169,15 +169,17 @@ class _MyAppState extends State<MyApp> {
     print(jsonEncode(result));
   }
 
-  void _loadFullScreenVideoAd() async {
-    final result = await pangle.loadFullScreenVideoAd(
-      iOS: IOSFullScreenVideoConfig(
-        slotId: kFullScreenVideoId,
+  void _loadFullscreenVideoAd() async {
+    final result = await pangle.loadFullscreenVideoAd(
+      iOS: IOSFullscreenVideoConfig(
+        slotId: kFullscreenVideoExpressId,
         isExpress: true,
+        loadingType: PangleLoadingType.preload,
       ),
-      android: AndroidFullScreenVideoConfig(
-        slotId: kFullScreenVideoId,
+      android: AndroidFullscreenVideoConfig(
+        slotId: kFullscreenVideoExpressId,
         isExpress: true,
+        loadingType: PangleLoadingType.preload,
       ),
     );
     print(jsonEncode(result));

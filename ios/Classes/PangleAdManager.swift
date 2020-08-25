@@ -15,9 +15,9 @@ public final class PangleAdManager: NSObject {
     
     private var expressAdCollection: [String: BUNativeExpressAdView] = [:]
     
-    private var rewardedVideoAdCollection: [BURewardedVideoAd] = []
+    private var rewardedVideoAdCollection: [Any] = []
     
-    private var rewardedVideoExpressAdCollection: [BUNativeExpressRewardedVideoAd] = []
+    private var fullscreenVideoAdCollection: [Any] = []
     
     private var taskList: [FLTTaskProtocol] = []
     
@@ -65,10 +65,9 @@ public final class PangleAdManager: NSObject {
         let loadingTypeIndex: Int = args["loadingType"] as! Int
         var loadingType = LoadingType(rawValue: loadingTypeIndex)!
         
-        var result: FlutterResult? = result
         if loadingType == .preload || loadingType == .normal {
             let success = self.showRewardedVideoAd(isExpress)({ object in
-                result?(object)
+                result(object)
             })
             if success {
                 if loadingType == .normal {
@@ -82,16 +81,22 @@ public final class PangleAdManager: NSObject {
         if isExpress {
             let task = FLTRewardedVideoExpressAdTask(args)
             task.execute(loadingType)({ [weak self] task, object, ad in
-                result?(object)
-                self?.setRewardedVideoAd(ad)
+                if loadingType == .normal {
+                    result(object)
+                } else {
+                    self?.setRewardedVideoAd(ad)
+                }
                 self?.taskList.removeAll(where: { $0 === task })
                                      })
             self.taskList.append(task)
         } else {
             let task = FLTRewardedVideoAdTask(args)
             task.execute(loadingType)({ [weak self] task, object, ad in
-                result?(object)
-                self?.setRewardedVideoAd(ad)
+                if loadingType == .normal {
+                    result(object)
+                } else {
+                    self?.setRewardedVideoAd(ad)
+                }
                 self?.taskList.removeAll(where: { $0 === task })
                            })
             self.taskList.append(task)
@@ -137,6 +142,51 @@ public final class PangleAdManager: NSObject {
                 result(object)
                 self?.taskList.removeAll(where: { $0 === task })
             })
+            self.taskList.append(task)
+        }
+    }
+    
+    public func loadFullscreenVideoAd(_ args: [String: Any?], result: @escaping FlutterResult) {
+        let isExpress: Bool = args["isExpress"] as? Bool ?? false
+        let loadingTypeIndex: Int = args["loadingType"] as! Int
+        var loadingType = LoadingType(rawValue: loadingTypeIndex)!
+        
+        if loadingType == .preload || loadingType == .normal {
+            let success = self.showFullScreenVideoAd(isExpress)({ object in
+                result(object)
+               })
+            if success {
+                if loadingType == .normal {
+                    return
+                }
+            } else {
+                loadingType = .normal
+            }
+        } else {
+            result(nil)
+        }
+        
+        if isExpress {
+            let task = FLTFullscreenVideoExpressAdTask(args)
+            task.execute(loadingType)({ [weak self] task, object, ad in
+                if loadingType == .normal {
+                    result(object)
+                } else {
+                    self?.setFullScreenVideoAd(ad)
+                }
+                self?.taskList.removeAll(where: { $0 === task })
+                                        })
+            self.taskList.append(task)
+        } else {
+            let task = FLTFullscreenVideoAdTask(args)
+            task.execute(loadingType)({ [weak self] task, object, ad in
+                if loadingType == .normal {
+                    result(object)
+                } else {
+                    self?.setFullScreenVideoAd(ad)
+                }
+                self?.taskList.removeAll(where: { $0 === task })
+                              })
             self.taskList.append(task)
         }
     }
@@ -192,20 +242,37 @@ extension PangleAdManager {
     }
     
     public func setRewardedVideoAd(_ ad: NSObject?) {
-        if ad is BUNativeExpressRewardedVideoAd {
-            self.rewardedVideoExpressAdCollection.append(ad as! BUNativeExpressRewardedVideoAd)
-        } else if ad is BURewardedVideoAd {
-            self.rewardedVideoAdCollection.append(ad as! BURewardedVideoAd)
+//        if ad is BUNativeExpressRewardedVideoAd {
+//            self.rewardedVideoExpressAdCollection.append(ad as! BUNativeExpressRewardedVideoAd)
+//        } else if ad is BURewardedVideoAd {
+//            self.rewardedVideoAdCollection.append(ad as! BURewardedVideoAd)
+//        }
+        if ad != nil {
+            self.rewardedVideoAdCollection.append(ad!)
         }
     }
     
     public func showRewardedVideoAd(_ isExpress: Bool) -> (@escaping (Any) -> Void) -> Bool {
         return { result in
-            if isExpress {
-                if self.rewardedVideoExpressAdCollection.count > 0 {
-                    let ad = self.rewardedVideoExpressAdCollection[0]
+            if self.rewardedVideoAdCollection.count > 0 {
+                let obj = self.rewardedVideoAdCollection[0]
+                
+                if obj is BURewardedVideoAd {
+                    let ad = obj as! BURewardedVideoAd
                     ad.didReceiveSuccess = { verify in
-                        self.rewardedVideoExpressAdCollection.removeFirst()
+                        self.rewardedVideoAdCollection.removeFirst()
+                        result(["code": 0, "verify": verify])
+                    }
+                    ad.didReceiveFail = { error in
+                        let e = error as NSError?
+                        result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""])
+                    }
+                    let vc = AppUtil.getVC()
+                    ad.show(fromRootViewController: vc)
+                } else if obj is BUNativeExpressRewardedVideoAd {
+                    let ad = obj as! BUNativeExpressRewardedVideoAd
+                    ad.didReceiveSuccess = { verify in
+                        self.rewardedVideoAdCollection.removeFirst()
                         result(["code": 0, "verify": verify])
                     }
                     ad.didReceiveFail = { error in
@@ -216,12 +283,40 @@ extension PangleAdManager {
                     ad.show(fromRootViewController: vc)
                     return true
                 }
-            } else {
-                if self.rewardedVideoAdCollection.count > 0 {
-                    let ad = self.rewardedVideoAdCollection[0]
-                    ad.didReceiveSuccess = { verify in
-                        self.rewardedVideoAdCollection.removeFirst()
-                        result(["code": 0, "verify": verify])
+            }
+            
+            return false
+        }
+    }
+    
+    public func setFullScreenVideoAd(_ ad: NSObject?) {
+        if ad != nil {
+            self.fullscreenVideoAdCollection.append(ad!)
+        }
+    }
+    
+    public func showFullScreenVideoAd(_ isExpress: Bool) -> (@escaping (Any) -> Void) -> Bool {
+        return { result in
+            if self.fullscreenVideoAdCollection.count > 0 {
+                let obj = self.fullscreenVideoAdCollection[0]
+                
+                if obj is BUFullscreenVideoAd {
+                    let ad = obj as! BUFullscreenVideoAd
+                    ad.didReceiveSuccess = {
+                        self.fullscreenVideoAdCollection.removeFirst()
+                        result(["code": 0])
+                    }
+                    ad.didReceiveFail = { error in
+                        let e = error as NSError?
+                        result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""])
+                    }
+                    let vc = AppUtil.getVC()
+                    ad.show(fromRootViewController: vc)
+                } else if obj is BUNativeExpressFullscreenVideoAd {
+                    let ad = obj as! BUNativeExpressFullscreenVideoAd
+                    ad.didReceiveSuccess = {
+                        self.fullscreenVideoAdCollection.removeFirst()
+                        result(["code": 0])
                     }
                     ad.didReceiveFail = { error in
                         let e = error as NSError?

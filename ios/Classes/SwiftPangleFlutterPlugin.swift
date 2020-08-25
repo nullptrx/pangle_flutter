@@ -4,7 +4,6 @@ import UIKit
 public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
     public static let kDefaultFeedAdCount = 3
     public static let kDefaultRewardAmount = 1
-    public static let kDefaultFeedTag = "FeedAd"
     public static let kDefaultSplashTimeout = 3000
     
     public static func register(with registrar: FlutterPluginRegistrar) {
@@ -42,6 +41,8 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
             instance.loadFeedAd(args, result: result)
         case "loadInterstitialAd":
             instance.loadInterstitialAd(args, result: result)
+        case "loadFullscreenVideoAd":
+            instance.loadFullscreenVideoAd(args, result: result)
         default:
             result(FlutterMethodNotImplemented)
         }

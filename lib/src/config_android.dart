@@ -317,7 +317,7 @@ class AndroidInterstitialConfig {
   }
 }
 
-class AndroidFullScreenVideoConfig {
+class AndroidFullscreenVideoConfig {
   final String slotId;
   final bool isSupportDeepLink;
   final bool isExpress;
@@ -331,7 +331,7 @@ class AndroidFullScreenVideoConfig {
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
   /// [orientation] 设置期望视频播放的方向，默认[PangleOrientation.veritical]
   /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
-  AndroidFullScreenVideoConfig({
+  AndroidFullscreenVideoConfig({
     @required this.slotId,
     this.isSupportDeepLink = true,
     this.isExpress,

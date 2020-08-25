@@ -134,16 +134,16 @@ class PanglePlugin {
   /// [iOS] config for iOS
   /// [android] config for Android
   /// return code & message.
-  Future<Map<String, dynamic>> loadFullScreenVideoAd({
-    IOSFullScreenVideoConfig iOS,
-    AndroidFullScreenVideoConfig android,
+  Future<Map<String, dynamic>> loadFullscreenVideoAd({
+    IOSFullscreenVideoConfig iOS,
+    AndroidFullscreenVideoConfig android,
   }) async {
     if (Platform.isIOS && iOS != null) {
       return await _methodChannel.invokeMapMethod(
-          'loadFullScreenVideoAd', iOS.toJSON());
+          'loadFullscreenVideoAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
       return await _methodChannel.invokeMapMethod(
-          'loadFullScreenVideoAd', android.toJSON());
+          'loadFullscreenVideoAd', android.toJSON());
     }
     return {};
   }

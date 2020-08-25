@@ -49,9 +49,11 @@ internal class FLTRewardedVideoAd(var target: Activity?, val preload: Boolean = 
 }
 
 class RewardAdInteractionImpl(var result: (Any) -> Unit?) : TTRewardVideoAd.RewardAdInteractionListener {
+  private var verify = false
+
   // 视频广告播完验证奖励有效性回调，参数分别为是否有效，奖励数量，奖励名称
   override fun onRewardVerify(verify: Boolean, amount: Int, rewardName: String?) {
-    invoke(verify = verify)
+    this.verify = verify
   }
 
   override fun onSkippedVideo() {
@@ -68,7 +70,7 @@ class RewardAdInteractionImpl(var result: (Any) -> Unit?) : TTRewardVideoAd.Rewa
   }
 
   override fun onAdClose() {
-    invoke()
+    invoke(verify = verify)
   }
 
   override fun onVideoError() {

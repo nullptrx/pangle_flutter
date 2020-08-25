@@ -1,5 +1,5 @@
 //
-//  FLTRewardedVideoAdTask.swift
+//  FLTRewardedVideoExpressAdTask.swift
 //  pangle_flutter
 //
 //  Created by nullptrX on 2020/8/16.

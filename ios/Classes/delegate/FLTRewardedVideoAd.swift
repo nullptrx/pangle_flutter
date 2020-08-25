@@ -1,5 +1,5 @@
 //
-//  RewardedVideoAdImpl.swift
+//  FLTRewardedVideoAd.swift
 //  ttad
 //
 //  Created by Jerry on 2020/7/20.
@@ -11,6 +11,8 @@ import Foundation
 internal final class FLTRewardedVideoAd: NSObject, BURewardedVideoAdDelegate {
     typealias Success = (BURewardedVideoAd, Bool) -> Void
     typealias Fail = (BURewardedVideoAd, Error?) -> Void
+    
+    private var verify = false
     
     let success: Success?
     let fail: Fail?
@@ -35,6 +37,8 @@ internal final class FLTRewardedVideoAd: NSObject, BURewardedVideoAdDelegate {
     
     public func rewardedVideoAdDidClose(_ rewardedVideoAd: BURewardedVideoAd) {
 //        self.success?(rewardedVideoAd, false)
+        rewardedVideoAd.didReceiveSuccess?(self.verify)
+        self.success?(rewardedVideoAd, self.verify)
     }
     
     public func rewardedVideoAd(_ rewardedVideoAd: BURewardedVideoAd, didFailWithError error: Error?) {
@@ -53,11 +57,13 @@ internal final class FLTRewardedVideoAd: NSObject, BURewardedVideoAdDelegate {
     }
     
     public func rewardedVideoAdServerRewardDidSucceed(_ rewardedVideoAd: BURewardedVideoAd, verify: Bool) {
-        rewardedVideoAd.didReceiveSuccess?(verify)
-        self.success?(rewardedVideoAd, verify)
+        /// handle in close
+        self.verify = verify
     }
     
-    public func rewardedVideoAdDidPlayFinish(_ rewardedVideoAd: BURewardedVideoAd, didFailWithError error: Error?) {}
+    public func rewardedVideoAdDidPlayFinish(_ rewardedVideoAd: BURewardedVideoAd, didFailWithError error: Error?) {
+        rewardedVideoAd.didReceiveFail?(error)
+    }
 }
 
 private var delegateKey = "nullptrx.github.io/delegate"

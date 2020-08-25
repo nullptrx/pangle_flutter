@@ -1,5 +1,5 @@
 //
-//  SplashAdImpl.swift
+//  FLTSplashAd.swift
 //  Pods-Runner
 //
 //  Created by Jerry on 2020/7/20.

@@ -244,7 +244,7 @@ class IOSInterstitialConfig {
   }
 }
 
-class IOSFullScreenVideoConfig {
+class IOSFullscreenVideoConfig {
   final String slotId;
   final bool isSupportDeepLink;
   final bool isExpress;
@@ -258,7 +258,7 @@ class IOSFullScreenVideoConfig {
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
   /// [orientation] 设置期望视频播放的方向，默认[PangleOrientation.veritical]
   /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
-  IOSFullScreenVideoConfig({
+  IOSFullscreenVideoConfig({
     @required this.slotId,
     this.isSupportDeepLink = true,
     this.isExpress,

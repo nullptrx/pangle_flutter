@@ -298,7 +298,7 @@ class PangleAdManager {
     ttAdNative?.loadInteractionExpressAd(adSlot, listener)
   }
 
-  fun loadFullScreenVideoAd(adSlot: AdSlot, result: MethodChannel.Result, activity: Activity?, preload: Boolean) {
+  fun loadFullscreenVideoAd(adSlot: AdSlot, result: MethodChannel.Result, activity: Activity?, preload: Boolean) {
 
     activity ?: return
 

@@ -10,4 +10,4 @@ const kFeedExpressId = '945399537';
 const kNativeBannerId = '920801177';
 const kInterstitialId = '920801184';
 const kInterstitialExpressId = '945388068';
-const kFullScreenVideoId = '945428786';
+const kFullscreenVideoExpressId = '945428786';

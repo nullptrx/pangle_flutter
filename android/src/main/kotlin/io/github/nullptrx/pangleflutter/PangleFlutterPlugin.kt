@@ -128,8 +128,9 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
             loadingType = PangleLoadingType.normal
           }
 
+        } else {
+          result.success(null)
         }
-
         val preload = PangleLoadingType.preload == loadingType || PangleLoadingType.preload_only == loadingType
 
         val slotId = call.argument<String>("slotId")!!
@@ -177,7 +178,7 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         }
       }
 
-      "loadFullScreenVideoAd" -> {
+      "loadFullscreenVideoAd" -> {
 
         val loadingTypeIndex = call.argument<Int>("loadingType") ?: 0
         var loadingType = PangleLoadingType.values()[loadingTypeIndex]
@@ -194,6 +195,8 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
             loadingType = PangleLoadingType.normal
           }
 
+        } else {
+          result.success(null)
         }
 
         val preload = PangleLoadingType.preload == loadingType || PangleLoadingType.preload_only == loadingType
@@ -208,10 +211,7 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val isExpress = call.argument<Boolean>("isExpress") ?: false
         val adSlot = PangleAdSlotManager.getFullScreenVideoAdSlot(slotId, isExpress, orientation, isSupportDeepLink, extra)
 
-        pangle.loadFullScreenVideoAd(adSlot, result, activity, preload)
-        if (PangleLoadingType.preload_only == loadingType) {
-          result.success(null)
-        }
+        pangle.loadFullscreenVideoAd(adSlot, result, activity, preload)
       }
       else -> result.notImplemented()
     }
