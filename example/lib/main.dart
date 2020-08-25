@@ -41,12 +41,24 @@ class _MyAppState extends State<MyApp> {
       iOS: IOSRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         isExpress: true,
-        loadingType: LoadingType.preload_only,
+        loadingType: PangleLoadingType.preload_only,
       ),
       android: AndroidRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         isExpress: true,
-        loadingType: LoadingType.preload_only,
+        loadingType: PangleLoadingType.preload_only,
+      ),
+    );
+    pangle.loadFullScreenVideoAd(
+      iOS: IOSFullScreenVideoConfig(
+        slotId: kRewardedVideoExpressId,
+        isExpress: true,
+        loadingType: PangleLoadingType.preload_only,
+      ),
+      android: AndroidFullScreenVideoConfig(
+        slotId: kRewardedVideoExpressId,
+        isExpress: true,
+        loadingType: PangleLoadingType.preload_only,
       ),
     );
   }
@@ -87,6 +99,10 @@ class _MyAppState extends State<MyApp> {
               onPressed: _loadInterstitialAd,
               child: Text('Interstitial AD'),
             ),
+            RaisedButton(
+              onPressed: _loadFullScreenVideoAd,
+              child: Text('FullScreenVideo AD'),
+            ),
           ],
         ),
       ),
@@ -111,12 +127,12 @@ class _MyAppState extends State<MyApp> {
       iOS: IOSRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         isExpress: true,
-        loadingType: LoadingType.preload,
+        loadingType: PangleLoadingType.preload,
       ),
       android: AndroidRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         isExpress: true,
-        loadingType: LoadingType.preload,
+        loadingType: PangleLoadingType.preload,
       ),
     );
     print(jsonEncode(result));
@@ -138,15 +154,29 @@ class _MyAppState extends State<MyApp> {
 
   void _loadInterstitialAd() async {
     final result = await pangle.loadInterstitialAd(
-      iOS: IOSInterstitialAdConfig(
+      iOS: IOSInterstitialConfig(
         slotId: kInterstitialExpressId,
         isExpress: true,
 
         /// 该宽高为你申请的广告位宽高，请根据实际情况赋值
         imgSize: PangleImgSize.interstitial600_400,
       ),
-      android: AndroidInterstitialAdConfig(
+      android: AndroidInterstitialConfig(
         slotId: kInterstitialExpressId,
+        isExpress: true,
+      ),
+    );
+    print(jsonEncode(result));
+  }
+
+  void _loadFullScreenVideoAd() async {
+    final result = await pangle.loadFullScreenVideoAd(
+      iOS: IOSFullScreenVideoConfig(
+        slotId: kFullScreenVideoId,
+        isExpress: true,
+      ),
+      android: AndroidFullScreenVideoConfig(
+        slotId: kFullScreenVideoId,
         isExpress: true,
       ),
     );

@@ -70,7 +70,7 @@ class IOSRewardedVideoConfig {
   final int rewardAmount;
   final String extra;
   final bool isExpress;
-  final LoadingType loadingType;
+  final PangleLoadingType loadingType;
 
   /// The rewarded video ad config for Android
   ///
@@ -85,7 +85,7 @@ class IOSRewardedVideoConfig {
   /// [rewardAmount] optional. number of rewards.
   /// [extra] optional. serialized string.
   /// [isExpress] optional. 个性化模板广告
-  /// [loadingType] optional. 加载广告的类型，默认[LoadingType.normal]
+  /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
   IOSRewardedVideoConfig({
     @required this.slotId,
     this.userId,
@@ -93,7 +93,7 @@ class IOSRewardedVideoConfig {
     this.rewardAmount,
     this.extra,
     this.isExpress,
-    this.loadingType,
+    this.loadingType = PangleLoadingType.normal,
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
@@ -110,7 +110,21 @@ class IOSRewardedVideoConfig {
   }
 }
 
-class IOSBannerAdConfig {
+@Deprecated('Use `IOSBannerConfig` instead.')
+class IOSBannerAdConfig extends IOSBannerConfig {
+  IOSBannerAdConfig({
+    @required String slotId,
+    PangleImgSize imgSize,
+    bool isExpress,
+  })  : assert(slotId.isNotBlank),
+        super(
+          slotId: slotId,
+          imgSize: imgSize,
+          isExpress: isExpress,
+        );
+}
+
+class IOSBannerConfig {
   final String slotId;
   final PangleImgSize imgSize;
 
@@ -121,7 +135,7 @@ class IOSBannerAdConfig {
   /// [slotId] required. The unique identifier of a banner ad.
   /// [imgSize] required. Image size.
   /// [isExpress] optional. 个性化模板广告.
-  IOSBannerAdConfig({
+  IOSBannerConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.banner600_150,
     this.isExpress,
@@ -137,7 +151,25 @@ class IOSBannerAdConfig {
   }
 }
 
-class IOSFeedAdConfig {
+@Deprecated('Use `IOSFeedConfig` instead.')
+class IOSFeedAdConfig extends IOSFeedConfig {
+  IOSFeedAdConfig({
+    @required String slotId,
+    PangleImgSize imgSize,
+    int count,
+    bool isSupportDeepLink,
+    bool isExpress,
+  })  : assert(slotId.isNotBlank),
+        super(
+          slotId: slotId,
+          imgSize: imgSize,
+          count: count,
+          isSupportDeepLink: isSupportDeepLink,
+          isExpress: isExpress,
+        );
+}
+
+class IOSFeedConfig {
   final String slotId;
   final PangleImgSize imgSize;
 
@@ -152,11 +184,11 @@ class IOSFeedAdConfig {
   /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
   /// [isSupportDeepLink] optional. Whether to support deeplink.
   /// [isExpress] optional. 个性化模板广告.
-  IOSFeedAdConfig({
+  IOSFeedConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.feed690_388,
     this.count,
-    this.isSupportDeepLink,
+    this.isSupportDeepLink = true,
     this.isExpress,
   }) : assert(slotId.isNotBlank);
 
@@ -172,7 +204,21 @@ class IOSFeedAdConfig {
   }
 }
 
-class IOSInterstitialAdConfig {
+@Deprecated('Use `IOSInterstitialConfig` instead.')
+class IOSInterstitialAdConfig extends IOSInterstitialConfig {
+  IOSInterstitialAdConfig({
+    @required String slotId,
+    PangleImgSize imgSize,
+    bool isExpress,
+  })  : assert(slotId.isNotBlank),
+        super(
+          slotId: slotId,
+          imgSize: imgSize,
+          isExpress: isExpress,
+        );
+}
+
+class IOSInterstitialConfig {
   final String slotId;
   final PangleImgSize imgSize;
   final bool isExpress;
@@ -182,7 +228,7 @@ class IOSInterstitialAdConfig {
   /// [slotId] required. The unique identifier of a interstitial ad.
   /// [imgSize] required. Image size.
   /// [isExpress] optional. 个性化模板广告.
-  IOSInterstitialAdConfig({
+  IOSInterstitialConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.interstitial600_400,
     this.isExpress,
@@ -194,6 +240,40 @@ class IOSInterstitialAdConfig {
       'slotId': slotId,
       'imgSize': imgSize.index,
       'isExpress': isExpress,
+    };
+  }
+}
+
+class IOSFullScreenVideoConfig {
+  final String slotId;
+  final bool isSupportDeepLink;
+  final bool isExpress;
+  final PangleOrientation orientation;
+  final PangleLoadingType loadingType;
+
+  /// The full screen video ad config for iOS
+  ///
+  /// [slotId] required. The unique identifier of a full screen video ad.
+  /// [isExpress] optional. 个性化模板广告
+  /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
+  /// [orientation] 设置期望视频播放的方向，默认[PangleOrientation.veritical]
+  /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
+  IOSFullScreenVideoConfig({
+    @required this.slotId,
+    this.isSupportDeepLink = true,
+    this.isExpress,
+    this.orientation = PangleOrientation.veritical,
+    this.loadingType = PangleLoadingType.normal,
+  }) : assert(slotId.isNotBlank);
+
+  /// Convert config to json
+  Map<String, dynamic> toJSON() {
+    return {
+      'slotId': slotId,
+      'isSupportDeepLink': isSupportDeepLink,
+      'isExpress': isExpress,
+      'orientation': orientation?.index,
+      'loadingType': loadingType?.index,
     };
   }
 }

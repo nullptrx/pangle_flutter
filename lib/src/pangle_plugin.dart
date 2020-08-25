@@ -94,8 +94,8 @@ class PanglePlugin {
   /// [android] config for Android
   /// return loaded ad count.
   Future<PangleFeedAd> loadFeedAd({
-    IOSFeedAdConfig iOS,
-    AndroidFeedAdConfig android,
+    IOSFeedConfig iOS,
+    AndroidFeedConfig android,
   }) async {
     Map<dynamic, dynamic> ret;
     if (Platform.isIOS && iOS != null) {
@@ -116,8 +116,8 @@ class PanglePlugin {
   /// [android] config for Android
   /// return loaded ad count.
   Future<Map<String, dynamic>> loadInterstitialAd({
-    IOSInterstitialAdConfig iOS,
-    AndroidInterstitialAdConfig android,
+    IOSInterstitialConfig iOS,
+    AndroidInterstitialConfig android,
   }) async {
     if (Platform.isIOS && iOS != null) {
       return await _methodChannel.invokeMapMethod(
@@ -125,6 +125,25 @@ class PanglePlugin {
     } else if (Platform.isAndroid && android != null) {
       return await _methodChannel.invokeMapMethod(
           'loadInterstitialAd', android.toJSON());
+    }
+    return {};
+  }
+
+  /// Request full screen video ad data.
+  ///
+  /// [iOS] config for iOS
+  /// [android] config for Android
+  /// return code & message.
+  Future<Map<String, dynamic>> loadFullScreenVideoAd({
+    IOSFullScreenVideoConfig iOS,
+    AndroidFullScreenVideoConfig android,
+  }) async {
+    if (Platform.isIOS && iOS != null) {
+      return await _methodChannel.invokeMapMethod(
+          'loadFullScreenVideoAd', iOS.toJSON());
+    } else if (Platform.isAndroid && android != null) {
+      return await _methodChannel.invokeMapMethod(
+          'loadFullScreenVideoAd', android.toJSON());
     }
     return {};
   }

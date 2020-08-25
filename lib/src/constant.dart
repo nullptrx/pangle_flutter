@@ -46,8 +46,23 @@ class AndroidDirectDownloadNetworkType {
 /// [normal] Showing ads up without preloading.
 /// [preload] Showing ads up and preloading next ads.
 /// [preload_only] Preloading ads only, not showing ads up.
-enum LoadingType {
+enum PangleLoadingType {
   normal,
   preload,
   preload_only,
+}
+
+@Deprecated('Use `PangleLoadingType` instead.')
+class LoadingType {
+  static PangleLoadingType get normal => PangleLoadingType.normal;
+
+  static PangleLoadingType get preload => PangleLoadingType.preload;
+
+  static PangleLoadingType get preload_only => PangleLoadingType.preload_only;
+}
+
+enum PangleOrientation {
+  _,
+  veritical,
+  horizontal,
 }
