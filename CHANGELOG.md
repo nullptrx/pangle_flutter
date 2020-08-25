@@ -1,3 +1,8 @@
+## 0.1.7
+
+* Fix rewarded video ads callback not works.
+* Supports fullscreen video ads.
+
 ## 0.1.6
 
 * Fix feed ads showing incorrect height.
