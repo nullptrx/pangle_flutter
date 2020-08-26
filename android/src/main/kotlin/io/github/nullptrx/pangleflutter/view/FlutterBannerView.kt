@@ -16,10 +16,10 @@ import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
+import io.github.nullptrx.pangleflutter.PangleAdManager
 import io.github.nullptrx.pangleflutter.common.PangleImgSize
 import io.github.nullptrx.pangleflutter.common.TTSize
 import io.github.nullptrx.pangleflutter.common.TTSizeF
-import io.github.nullptrx.pangleflutter.PangleAdManager
 import io.github.nullptrx.pangleflutter.util.PangleAdSlotManager
 import io.github.nullptrx.pangleflutter.util.px
 
@@ -41,18 +41,21 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
     container.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
 
-    val slotId = params["slotId"] as String
-    val imgSizeIndex = params["imgSize"] as Int
-    val isSupportDeepLink = params["isSupportDeepLink"] as? Boolean ?: true
-    val isExpress = params["isExpress"] as? Boolean ?: false
-    val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
-//    val count = params["count"] as Int ?: 1
-    val adSlot = PangleAdSlotManager.getBannerAdSlot(slotId, isExpress, imgSizeIndex, isSupportDeepLink)
+    val slotId = params["slotId"] as? String
+    if (slotId != null) {
 
-    if (isExpress) {
-      PangleAdManager.shared.loadBannerExpressAd(adSlot, FLTBannerExpressAd(imgSize))
-    } else {
-      PangleAdManager.shared.loadBannerAd(adSlot, FLTBannerAd(imgSize))
+      val imgSizeIndex = params["imgSize"] as Int
+      val isSupportDeepLink = params["isSupportDeepLink"] as? Boolean ?: true
+      val isExpress = params["isExpress"] as? Boolean ?: false
+      val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
+//    val count = params["count"] as Int ?: 1
+      val adSlot = PangleAdSlotManager.getBannerAdSlot(slotId, isExpress, imgSizeIndex, isSupportDeepLink)
+
+      if (isExpress) {
+        PangleAdManager.shared.loadBannerExpressAd(adSlot, FLTBannerExpressAd(imgSize))
+      } else {
+        PangleAdManager.shared.loadBannerAd(adSlot, FLTBannerAd(imgSize))
+      }
     }
   }
 

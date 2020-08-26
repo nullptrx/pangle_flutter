@@ -14,45 +14,48 @@ class _BannerPageState extends State<BannerPage> {
       appBar: AppBar(
         title: Text('Banner AD'),
       ),
-      body: Column(
-        children: <Widget>[
-          BannerView(
-            iOS: IOSBannerConfig(
-              slotId: kBannerExpressId,
-              imgSize: PangleImgSize.banner600_300,
-              isExpress: true,
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            BannerView(
+              iOS: IOSBannerConfig(
+                slotId: kBannerExpressId,
+                imgSize: PangleImgSize.banner600_300,
+                isExpress: true,
+              ),
+              android: AndroidBannerConfig(
+                slotId: kBannerExpressId,
+                imgSize: PangleImgSize.banner600_300,
+                isExpress: true,
+              ),
             ),
-            android: AndroidBannerConfig(
-              slotId: kBannerExpressId,
-              imgSize: PangleImgSize.banner600_300,
-              isExpress: true,
+            FlutterLogo(),
+            BannerView(
+              iOS: IOSBannerConfig(
+                slotId: kBannerExpressId,
+                imgSize: PangleImgSize.banner600_300,
+                isExpress: true,
+              ),
+              android: AndroidBannerConfig(
+                slotId: kBannerExpressId,
+                imgSize: PangleImgSize.banner600_150,
+                isExpress: true,
+              ),
             ),
-          ),
-          BannerView(
-            iOS: IOSBannerConfig(
-              slotId: kBannerExpressId,
-              imgSize: PangleImgSize.banner600_300,
-              isExpress: true,
+            BannerView(
+              iOS: IOSBannerConfig(
+                slotId: kBannerExpressId,
+                imgSize: PangleImgSize.banner600_300,
+                isExpress: true,
+              ),
+              android: AndroidBannerConfig(
+                slotId: kBannerExpressId,
+                imgSize: PangleImgSize.banner600_260,
+                isExpress: true,
+              ),
             ),
-            android: AndroidBannerConfig(
-              slotId: kBannerExpressId,
-              imgSize: PangleImgSize.banner600_150,
-              isExpress: true,
-            ),
-          ),
-          BannerView(
-            iOS: IOSBannerConfig(
-              slotId: kBannerExpressId,
-              imgSize: PangleImgSize.banner600_300,
-              isExpress: true,
-            ),
-            android: AndroidBannerConfig(
-              slotId: kBannerExpressId,
-              imgSize: PangleImgSize.banner600_260,
-              isExpress: true,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

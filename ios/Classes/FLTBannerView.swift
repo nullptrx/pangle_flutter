@@ -44,8 +44,10 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
     }
 
     private func loadAd(_ params: [String: Any?]) {
-        let vc = AppUtil.getVC()
-        let slotId = params["slotId"] as! String
+        let slotId = params["slotId"] as? String
+        guard slotId != nil else {
+            return
+        }
         let imgSizeIndex = params["imgSize"] as! Int
         let imgSize = BUSize(by: BUProposalSize(rawValue: imgSizeIndex)!)!
 
@@ -55,22 +57,23 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
         self.removeAllView()
         let screenWidth = Double(UIScreen.main.bounds.width)
         let bannerHeight = screenWidth * Double(imgSize.height) / Double(imgSize.width)
-        
-         self.container.frame = CGRect(x: 0, y: 0, width: screenWidth, height: bannerHeight)
-         self.container.updateConstraints()
+
+        self.container.frame = CGRect(x: 0, y: 0, width: screenWidth, height: bannerHeight)
+        self.container.updateConstraints()
+        let vc = AppUtil.getVC()
         if isExpress {
             let size = CGSize(width: screenWidth, height: bannerHeight)
-            let bannerAdView = BUNativeExpressBannerView(slotID: slotId, rootViewController: vc, adSize: size, isSupportDeepLink: isSupportDeepLink)
+            let bannerAdView = BUNativeExpressBannerView(slotID: slotId!, rootViewController: vc, adSize: size, isSupportDeepLink: isSupportDeepLink)
             bannerAdView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: bannerHeight)
             self.container.addSubview(bannerAdView)
             bannerAdView.delegate = self
             bannerAdView.loadAdData()
 
         } else {
-            let bannerAdView = BUBannerAdView(slotID: slotId, size: imgSize, rootViewController: vc)
+            let bannerAdView = BUBannerAdView(slotID: slotId!, size: imgSize, rootViewController: vc)
             bannerAdView.frame = CGRect(x: 0, y: 0, width: screenWidth, height: bannerHeight)
             self.container.addSubview(bannerAdView)
-           
+
             bannerAdView.delegate = self
             bannerAdView.loadAdData()
         }

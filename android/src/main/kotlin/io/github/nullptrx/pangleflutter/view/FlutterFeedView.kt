@@ -27,7 +27,10 @@ import io.flutter.plugin.platform.PlatformView
 import io.github.nullptrx.pangleflutter.PangleAdManager
 import io.github.nullptrx.pangleflutter.R
 import io.github.nullptrx.pangleflutter.common.TTSizeF
-import io.github.nullptrx.pangleflutter.util.*
+import io.github.nullptrx.pangleflutter.util.ScreenUtil
+import io.github.nullptrx.pangleflutter.util.dp
+import io.github.nullptrx.pangleflutter.util.get
+import io.github.nullptrx.pangleflutter.util.px
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
@@ -42,7 +45,6 @@ class FlutterFeedView(
 
   companion object {
     private val ttAppDownloadListenerMap = WeakHashMap<AdViewHolder, TTAppDownloadListener>()
-    private val ttFeedAdMap = mutableMapOf<Int, TTFeedAd>()
   }
 
   var activity: Activity? = null
