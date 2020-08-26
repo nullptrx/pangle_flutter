@@ -9,7 +9,7 @@
     android:paddingHorizontal="16dp"
     android:paddingTop="16dp">
 
-    <androidx.constraintlayout.widget.Group
+    <androidx.constraintlayout.widget.Placeholder
         android:id="@id/pangle_flutter_item_group"
         android:layout_width="0dp"
         android:layout_height="30dp"

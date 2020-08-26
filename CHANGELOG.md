@@ -1,3 +1,7 @@
+## 0.1.9
+
+* Fix the height of ConstraintLayout's  Group widget not working.
+
 ## 0.1.8
 
 * Optimizes `BannerView`, makes its config null safety.

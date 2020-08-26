@@ -9,7 +9,7 @@
     android:paddingHorizontal="16dp"
     android:paddingTop="10dp">
     <!-- icon+广告源+关闭按钮 layout -->
-    <androidx.constraintlayout.widget.Group
+    <androidx.constraintlayout.widget.Placeholder
         android:id="@id/pangle_flutter_item_group"
         android:layout_width="0dp"
         android:layout_height="40dp"
@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="@id/pangle_flutter_item_image1"
         app:layout_constraintTop_toBottomOf="@id/pangle_flutter_item_image1" />
 
-    <androidx.constraintlayout.widget.Group
+    <androidx.constraintlayout.widget.Placeholder
         android:id="@id/pangle_flutter_item_group2"
         android:layout_width="0dp"
         android:layout_height="30dp"

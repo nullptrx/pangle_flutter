@@ -1,3 +1,7 @@
+## 0.1.9
+
+* 修复ConstraintLayout的Group控件高度不起作用的问题。
+
 ## 0.1.8
 
 * 优化BannerView，使它的配置信息空时不再崩溃。
