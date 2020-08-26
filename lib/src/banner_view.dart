@@ -16,8 +16,8 @@ typedef void BannerViewCreatedCallback(BannerViewController controller);
 /// Display banner AD
 /// PlatformView does not support Android API level 19 or below.
 class BannerView extends StatefulWidget {
-  final IOSBannerAdConfig iOS;
-  final AndroidBannerAdConfig android;
+  final IOSBannerConfig iOS;
+  final AndroidBannerConfig android;
   final VoidCallback onRemove;
   final BannerViewCreatedCallback onBannerViewCreated;
 

@@ -144,7 +144,7 @@ class AndroidRewardedVideoConfig {
   /// [isVertical] optional. Whether video is vertical orientation. Vertical, if true. Otherwise, horizontal.
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
   /// [isExpress] optional. 个性化模板广告
-  /// [loadingType] optional. 加载广告的类型，默认[LoadingType.normal]
+  /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
   AndroidRewardedVideoConfig({
     @required this.slotId,
     this.userId,

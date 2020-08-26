@@ -28,12 +28,12 @@ class _FeedPageState extends State<FeedPage> {
 
   _loadFeedAd() async {
     PangleFeedAd feedAd = await pangle.loadFeedAd(
-      iOS: IOSFeedAdConfig(
+      iOS: IOSFeedConfig(
         slotId: kFeedExpressId,
         count: 3,
         isExpress: true,
       ),
-      android: AndroidFeedAdConfig(
+      android: AndroidFeedConfig(
 //        slotId: kFeedExpressId,
 //        isExpress: true,
         slotId: kFeedId,

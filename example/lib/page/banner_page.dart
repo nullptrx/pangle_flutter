@@ -17,36 +17,36 @@ class _BannerPageState extends State<BannerPage> {
       body: Column(
         children: <Widget>[
           BannerView(
-            iOS: IOSBannerAdConfig(
+            iOS: IOSBannerConfig(
               slotId: kBannerExpressId,
               imgSize: PangleImgSize.banner600_300,
               isExpress: true,
             ),
-            android: AndroidBannerAdConfig(
+            android: AndroidBannerConfig(
               slotId: kBannerExpressId,
               imgSize: PangleImgSize.banner600_300,
               isExpress: true,
             ),
           ),
           BannerView(
-            iOS: IOSBannerAdConfig(
+            iOS: IOSBannerConfig(
               slotId: kBannerExpressId,
               imgSize: PangleImgSize.banner600_300,
               isExpress: true,
             ),
-            android: AndroidBannerAdConfig(
+            android: AndroidBannerConfig(
               slotId: kBannerExpressId,
               imgSize: PangleImgSize.banner600_150,
               isExpress: true,
             ),
           ),
           BannerView(
-            iOS: IOSBannerAdConfig(
+            iOS: IOSBannerConfig(
               slotId: kBannerExpressId,
               imgSize: PangleImgSize.banner600_300,
               isExpress: true,
             ),
-            android: AndroidBannerAdConfig(
+            android: AndroidBannerConfig(
               slotId: kBannerExpressId,
               imgSize: PangleImgSize.banner600_260,
               isExpress: true,
