@@ -29,7 +29,6 @@ class _BannerPageState extends State<BannerPage> {
                 isExpress: true,
               ),
             ),
-            FlutterLogo(),
             BannerView(
               iOS: IOSBannerConfig(
                 slotId: kBannerExpressId,
