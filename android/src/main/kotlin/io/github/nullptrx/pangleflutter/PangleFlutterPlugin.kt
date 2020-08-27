@@ -158,11 +158,11 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
 
         var size: TTSizeF? = null
         if (isExpress) {
-          val expressSize = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
+          val expectSize = call.argument<Map<String, Double>>("expectSize") ?: mapOf()
 
           val pangleImgSize = PangleImgSize.values()[imgSizeIndex]
-          var w: Float? = expressSize["width"]?.toFloat()
-          var h: Float? = expressSize["height"]?.toFloat()
+          var w: Float? = expectSize["width"]?.toFloat()
+          var h: Float? = expectSize["height"]?.toFloat()
           val aspectRatio = pangleImgSize.width * 1.0f / pangleImgSize.height
           if (w == null && h == null) {
             w = ScreenUtil.getScreenWidthDp() - kDoublePadding

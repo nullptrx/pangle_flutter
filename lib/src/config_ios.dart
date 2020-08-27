@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:pangle_flutter/pangle_flutter.dart';
 
 import 'constant.dart';
 import 'extension.dart';
@@ -129,16 +130,19 @@ class IOSBannerConfig {
   final PangleImgSize imgSize;
 
   final bool isExpress;
+  final PangleExpectSize expectSize;
 
   /// The feed ad config for iOS
   ///
   /// [slotId] required. The unique identifier of a banner ad.
   /// [imgSize] required. Image size.
   /// [isExpress] optional. 个性化模板广告.
+  /// [expectSize] optional. 预期宽高
   IOSBannerConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.banner600_150,
     this.isExpress,
+    this.expectSize,
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
@@ -147,6 +151,8 @@ class IOSBannerConfig {
       'slotId': slotId,
       'imgSize': imgSize?.index,
       'isExpress': isExpress,
+      'width': expectSize?.width,
+      'height': expectSize?.height,
     };
   }
 }
@@ -184,6 +190,7 @@ class IOSFeedConfig {
   /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
   /// [isSupportDeepLink] optional. Whether to support deeplink.
   /// [isExpress] optional. 个性化模板广告.
+  /// [expectSize] ??， iOS无需在此传入expected宽高，见[FeedView]
   IOSFeedConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.feed690_388,

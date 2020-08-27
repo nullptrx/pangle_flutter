@@ -20,7 +20,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 import io.github.nullptrx.pangleflutter.PangleAdManager
 import io.github.nullptrx.pangleflutter.common.TTSizeF
-import io.github.nullptrx.pangleflutter.common.kPadding
 import io.github.nullptrx.pangleflutter.util.ScreenUtil
 import io.github.nullptrx.pangleflutter.util.dp
 import io.github.nullptrx.pangleflutter.view.feed.ItemBinding
@@ -57,8 +56,8 @@ class FlutterFeedView(
 
     val feedId = params["feedId"] as? String
     val isExpress = params["isExpress"] as? Boolean ?: false
-    width = (params["width"] as? Double)?.toFloat()
-    height = (params["height"] as? Double)?.toFloat()
+    this.width = (params["width"] as? Double)?.toFloat()
+    this.height = (params["height"] as? Double)?.toFloat()
     this.feedId = feedId
     this.isExpress = isExpress
     loadAd()
@@ -179,7 +178,17 @@ class FlutterFeedView(
     invoke(size.width, size.height)
   }
 
-  private fun invalidateView(width: Float, height: Float): TTSizeF {
+  private fun invalidateView(viewWidth: Float, viewHeight: Float): TTSizeF {
+    container.layoutParams = FrameLayout.LayoutParams(viewWidth.dp, viewHeight.dp).apply {
+      gravity = Gravity.CENTER
+    }
+//    container.clipChildren = false
+    container.clipToPadding = false
+    return TTSizeF(viewWidth, viewHeight)
+  }
+
+  private fun invalidateExpressView(width: Float, height: Float) {
+
     val viewWidth: Float
     val viewHeight: Float
     if (this.width != null && this.height != null) {
@@ -192,15 +201,15 @@ class FlutterFeedView(
       viewHeight = this.height
       viewWidth = viewHeight * width / height
     } else {
-      viewWidth = width
-      viewHeight = height
+      val screenWidth = ScreenUtil.getScreenWidthDp()
+      val feedHeight = screenWidth * height / width
+      viewWidth = screenWidth
+      viewHeight = feedHeight
     }
     container.layoutParams = FrameLayout.LayoutParams(viewWidth.dp, viewHeight.dp).apply {
       gravity = Gravity.CENTER
     }
-//    container.clipChildren = false
-    container.clipToPadding = false
-    return TTSizeF(viewWidth, viewHeight)
+    invoke(viewWidth, viewHeight)
   }
 
   fun loadExpressAd(ad: TTNativeExpressAd?) {
@@ -231,8 +240,8 @@ class FlutterFeedView(
       }
 
       override fun onRenderSuccess(view: View, width: Float, height: Float) {
-        val renderSize = invalidateView(width, height)
-        invoke(renderSize.width, renderSize.height)
+        invalidateExpressView(width, height)
+
         view.invalidate()
       }
 

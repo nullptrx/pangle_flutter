@@ -15,10 +15,12 @@ class FeedView extends StatefulWidget {
   final String id;
   final bool isExpress;
 
-  /// default implementation, if null.
+  /// Execute default implementation, if null.
   final VoidCallback onRemove;
-  final double width;
-  final double height;
+
+  /// Only works for express ads.
+  final double expectWidth;
+  final double expectHeight;
 
   /// constructor a feed view
   ///
@@ -31,8 +33,8 @@ class FeedView extends StatefulWidget {
       this.id,
       this.isExpress,
       this.onRemove,
-      this.width,
-      this.height})
+      this.expectWidth,
+      this.expectHeight})
       : assert(id.isNotBlank),
         super(key: key ?? _FeedViewKey(id));
 
@@ -165,8 +167,8 @@ class _FeedViewState extends State<FeedView>
     return {
       'feedId': widget.id,
       'isExpress': widget.isExpress,
-      'width': widget.width,
-      'height': widget.height,
+      'width': widget.expectWidth,
+      'height': widget.expectHeight,
     };
   }
 }

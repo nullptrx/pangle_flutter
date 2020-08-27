@@ -13,6 +13,8 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
     private let container: UIView
     private var isExpress = false
     private var feedId: String?
+    private let width: Float?
+    private let height: Float?
 
     init(_ frame: CGRect, id: Int64, params: [String: Any], messenger: FlutterBinaryMessenger) {
         self.container = UIView(frame: frame)
@@ -20,12 +22,13 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
         let channelName = String(format: "nullptrx.github.io/pangle_feedview_%ld", id)
         self.methodChannel = FlutterMethodChannel(name: channelName, binaryMessenger: messenger)
 
+        self.feedId = params["feedId"] as? String
+        self.isExpress = params["isExpress"] as? Bool ?? false
+        self.width = params["width"] as? Float
+        self.height = params["height"] as? Float
         super.init()
 
         self.methodChannel.setMethodCallHandler(self.handle(_:result:))
-
-        self.feedId = params["feedId"] as? String
-        self.isExpress = params["isExpress"] as? Bool ?? false
         if self.feedId != nil {
             if self.isExpress {
                 let nad = PangleAdManager.shared.getExpressAd(self.feedId!)
@@ -83,7 +86,7 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
     private func removeAllView() {
         self.container.subviews.forEach { $0.removeFromSuperview() }
     }
-    
+
     private func disposeView() {
         self.removeAllView()
         if self.isExpress {
@@ -181,6 +184,43 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
         guard let expressAd: BUNativeExpressAdView = ad else {
             return
         }
+        let size = expressAd.bounds.size
+        let width = size.width
+        let height = size.height
+        let contentWidth = UIScreen.main.bounds.size.width
+        let contentHeight = contentWidth * height / width
+//        let leftPadding: CGFloat = 10
+//        let expressWidth = contentWidth - 2 * leftPadding
+//        let expressHeight = expressWidth * height / width
+
+        self.removeAllView()
+
+        let viewWidth: CGFloat
+        let viewHeight: CGFloat
+        if self.width != nil, self.height != nil {
+            viewWidth = CGFloat(self.width!)
+            viewHeight = CGFloat(self.height!)
+        } else if self.width != nil {
+            viewWidth = CGFloat(self.width!)
+            viewHeight = viewWidth * height / width
+        } else if self.height != nil {
+            viewHeight = CGFloat(self.height!)
+            viewWidth = viewHeight * width / height
+        } else {
+            viewWidth = contentWidth
+            viewHeight = contentHeight
+        }
+
+        let frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
+        expressAd.frame = frame
+        expressAd.center = CGPoint(x: viewWidth / 2, y: viewHeight / 2)
+        let rootFrame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
+        self.container.frame = rootFrame
+
+        self.container.addSubview(expressAd)
+        self.container.updateConstraints()
+        self.invoke(width: viewWidth, height: viewHeight)
+
         expressAd.rootViewController = AppUtil.getVC()
         expressAd.didReceiveRenderSuccess = { _ in
         }
@@ -192,25 +232,6 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
             self.disposeView()
         }
         expressAd.render()
-        let size = expressAd.bounds.size
-        let width = size.width
-        let height = size.height
-        let contentWidth = UIScreen.main.bounds.size.width
-        let contentHeight = contentWidth * height / width
-//        let leftPadding: CGFloat = 10
-//        let expressWidth = contentWidth - 2 * leftPadding
-//        let expressHeight = expressWidth * height / width
-
-        self.removeAllView()
-        let frame = CGRect(x: 0, y: 0, width: contentWidth, height: contentHeight)
-        expressAd.frame = frame
-
-        let rootFrame = CGRect(x: 0, y: 0, width: contentWidth, height: contentHeight)
-        self.container.frame = rootFrame
-
-        self.container.addSubview(expressAd)
-        self.container.updateConstraints()
-        self.invoke(width: contentWidth, height: contentHeight)
     }
 }
 

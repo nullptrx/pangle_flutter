@@ -47,19 +47,17 @@ class PangleLocation {
   }
 }
 
-/// express size
-class PangleExpressSize {
+/// expect size
+class PangleExpectSize {
   final double width;
   final double height;
 
-  /// 因ByteDance Android的express广告宽高在加载时就要传入，并且之后不可动态修改，
-  /// 因此有了此类。详情查看`open_ad_sdk`中的`NativeExpressView`
   /// Android的express广告如果需要自定义宽高，如果不想广告变形，只需要提供[width]或
   /// [height]其中一个即可。之后会以期望[PangleImgSize]的广告宽高进行缩放。
   ///
   /// [width] 宽度，可选
   /// [height] 高度，可选
-  PangleExpressSize({this.width, this.height});
+  PangleExpectSize({this.width, this.height});
 
   Map<String, dynamic> toJSON() {
     return {

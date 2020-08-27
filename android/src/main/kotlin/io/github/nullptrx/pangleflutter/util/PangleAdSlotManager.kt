@@ -64,13 +64,13 @@ object PangleAdSlotManager {
   }
 
 
-  fun getBannerAdSlot(slotId: String, isExpress: Boolean, imgSizeIndex: Int, isSupportDeepLink: Boolean): AdSlot {
+  fun getBannerAdSlot(slotId: String, isExpress: Boolean, imgSizeIndex: Int, isSupportDeepLink: Boolean, expectSize: TTSizeF?): AdSlot {
     val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
 
     val adSlot = AdSlot.Builder().apply {
       setCodeId(slotId)
       if (isExpress) {
-        setExpressViewAcceptedSize(imgSize.width.px, imgSize.height.px)
+        setExpressViewAcceptedSize(expectSize!!.width, expectSize.height)
       } else {
         setImageAcceptedSize(imgSize.width, imgSize.height)
       }

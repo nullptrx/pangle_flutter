@@ -194,6 +194,7 @@ class AndroidBannerConfig {
   final PangleImgSize imgSize;
   final bool isSupportDeepLink;
   final bool isExpress;
+  final PangleExpectSize expectSize;
 
   /// The feed ad config for Android
   ///
@@ -201,11 +202,13 @@ class AndroidBannerConfig {
   /// [imgSize] required. Image size.
   /// [isExpress] optional. 个性化模板广告
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
+  /// [expectSize] optional. 预期宽高
   AndroidBannerConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.banner600_150,
     this.isSupportDeepLink = true,
     this.isExpress,
+    this.expectSize,
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
@@ -215,6 +218,8 @@ class AndroidBannerConfig {
       'imgSize': imgSize?.index,
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
+      'width': expectSize?.width,
+      'height': expectSize?.height,
     };
   }
 }
@@ -243,7 +248,7 @@ class AndroidFeedConfig {
   final int count;
   final bool isSupportDeepLink;
   final bool isExpress;
-  final PangleExpressSize expressSize;
+  final PangleExpectSize expectSize;
 
   /// The feed ad config for Android
   ///
@@ -252,14 +257,14 @@ class AndroidFeedConfig {
   /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
   /// [isSupportDeepLink] optional. Whether to support deeplink.
   /// [isExpress] optional. 个性化模板广告
-  /// [expressSize] optional. 个性化广告宽高
+  /// [expectSize] optional. 预期宽高，暂只支持Express广告
   AndroidFeedConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.feed690_388,
     this.count,
     this.isSupportDeepLink = true,
     this.isExpress,
-    this.expressSize,
+    this.expectSize,
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
@@ -270,7 +275,7 @@ class AndroidFeedConfig {
       'imgSize': imgSize?.index,
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
-      'expressSize': expressSize?.toJSON(),
+      'expectSize': expectSize?.toJSON(),
     };
   }
 }

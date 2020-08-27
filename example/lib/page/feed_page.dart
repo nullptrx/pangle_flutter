@@ -35,11 +35,11 @@ class _FeedPageState extends State<FeedPage> {
         isExpress: true,
       ),
       android: AndroidFeedConfig(
-//        slotId: kFeedExpressId,
-//        isExpress: true,
+        slotId: kFeedExpressId,
+        isExpress: true,
         imgSize: PangleImgSize.feed228_150,
-        slotId: kFeedId,
-//        expressSize: PangleExpressSize(width: 300),
+//        slotId: kFeedId,
+        expectSize: PangleExpectSize(width: 300),
         count: 3,
       ),
     );
@@ -83,21 +83,15 @@ class _FeedPageState extends State<FeedPage> {
 //                });
 //              },
 //            );
-            return Row(
-              children: [
-                Expanded(child: FlutterLogo()),
-                FeedView(
-                  id: item.feedId,
-//                  isExpress: true,
-                  width: 300,
-                  onRemove: () {
-                    setState(() {
-                      this.items.removeAt(index);
-                    });
-                  },
-                ),
-                Expanded(child: FlutterLogo()),
-              ],
+            return FeedView(
+              id: item.feedId,
+              isExpress: true,
+              expectWidth: 300,
+              onRemove: () {
+                setState(() {
+                  this.items.removeAt(index);
+                });
+              },
             );
           }
 
