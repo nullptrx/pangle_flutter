@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:pangle_flutter/pangle_flutter.dart';
 
 /// 信息流响应信息
 ///
@@ -51,38 +51,20 @@ class PangleLocation {
 class PangleExpressSize {
   final double width;
   final double height;
-  final double aspectRatio;
 
-  /// 以下参数三选二，或者只选[aspectRatio]
+  /// 因ByteDance Android的express广告宽高在加载时就要传入，并且之后不可动态修改，
+  /// 因此有了此类。详情查看`open_ad_sdk`中的`NativeExpressView`
+  /// Android的express广告如果需要自定义宽高，如果不想广告变形，只需要提供[width]或
+  /// [height]其中一个即可。之后会以期望[PangleImgSize]的广告宽高进行缩放。
   ///
-  /// [width] 宽度，可选，[aspectRatio]为空时，不可空
-  /// [height] 高度，可选，[aspectRatio]为空时，不可空
-  /// [aspectRatio] 比例，[width]和[height]都为空时，将默认使用屏幕宽
-  PangleExpressSize({this.width, this.height, this.aspectRatio});
+  /// [width] 宽度，可选
+  /// [height] 高度，可选
+  PangleExpressSize({this.width, this.height});
 
   Map<String, dynamic> toJSON() {
-    double w, h;
-    if (width == null && height == null) {
-      assert(aspectRatio != null);
-      var size = WidgetsBinding.instance.window.physicalSize;
-      w = size.width;
-      h = size.width / aspectRatio;
-    } else if (width == null) {
-      assert(height != null && aspectRatio != null);
-      w = height * aspectRatio;
-      h = height;
-    } else if (height == null) {
-      assert(width != null && aspectRatio != null);
-      w = width;
-      h = width / aspectRatio;
-    } else {
-      w = width;
-      h = height;
-    }
-
     return {
-      'width': w,
-      'height': h,
+      'width': width,
+      'height': height,
     };
   }
 }

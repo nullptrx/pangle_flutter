@@ -17,6 +17,8 @@ class FeedView extends StatefulWidget {
 
   /// default implementation, if null.
   final VoidCallback onRemove;
+  final double width;
+  final double height;
 
   /// constructor a feed view
   ///
@@ -24,7 +26,13 @@ class FeedView extends StatefulWidget {
   /// [id] feedId
   /// [isExpress] optional. 个性化模板广告
   /// [onRemove] when click dislike button
-  FeedView({Key key, this.id, this.isExpress, this.onRemove})
+  FeedView(
+      {Key key,
+      this.id,
+      this.isExpress,
+      this.onRemove,
+      this.width,
+      this.height})
       : assert(id.isNotBlank),
         super(key: key ?? _FeedViewKey(id));
 
@@ -113,8 +121,7 @@ class _FeedViewState extends State<FeedView>
       if (platformView != null) {
         body = Offstage(
           offstage: offstage,
-          child: Container(
-            color: Colors.white,
+          child: SizedBox(
             width: adWidth,
             height: adHeight,
             child: platformView,
@@ -158,6 +165,8 @@ class _FeedViewState extends State<FeedView>
     return {
       'feedId': widget.id,
       'isExpress': widget.isExpress,
+      'width': widget.width,
+      'height': widget.height,
     };
   }
 }

@@ -1,7 +1,6 @@
 package io.github.nullptrx.pangleflutter.common
 
 import android.content.res.Resources
-import io.github.nullptrx.pangleflutter.util.ScreenUtil
 
 enum class PangleImgSize(val width: Int = 0, val height: Int = 0) {
   banner640_90(640, 90),
@@ -26,4 +25,12 @@ enum class PangleImgSize(val width: Int = 0, val height: Int = 0) {
     val h = displayMetrics.widthPixels * height / width.toFloat()
     return TTSize(w, h.toInt())
   }
+  
+  fun toDeviceSizeF(): TTSizeF {
+    val displayMetrics = Resources.getSystem().displayMetrics
+    val w = displayMetrics.widthPixels
+    val h = displayMetrics.widthPixels * height / width.toFloat()
+    return TTSizeF(w.toFloat(), h)
+  }
+
 }

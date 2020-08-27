@@ -9,3 +9,6 @@ data class TTSizeF(
     val width: Float,
     val height: Float
 )
+
+const val kPadding = 8
+const val kDoublePadding = 16

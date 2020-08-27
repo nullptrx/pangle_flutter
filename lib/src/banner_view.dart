@@ -117,8 +117,7 @@ class _BannerViewState extends State<BannerView>
       if (platformView != null) {
         body = Offstage(
           offstage: offstage,
-          child: Container(
-            color: Colors.white,
+          child: SizedBox(
             width: adWidth,
             height: adHeight,
             child: platformView,

@@ -5,6 +5,7 @@ import com.bytedance.sdk.openadsdk.AdSlot
 import com.bytedance.sdk.openadsdk.TTAdConstant
 import io.github.nullptrx.pangleflutter.common.PangleImgSize
 import io.github.nullptrx.pangleflutter.common.PangleOrientation
+import io.github.nullptrx.pangleflutter.common.TTSizeF
 
 object PangleAdSlotManager {
 
@@ -73,15 +74,15 @@ object PangleAdSlotManager {
       } else {
         setImageAcceptedSize(imgSize.width, imgSize.height)
       }
-      setImageAcceptedSize(imgSize.width, imgSize.height)
       setSupportDeepLink(isSupportDeepLink)
     }
         .build()
     return adSlot
   }
 
-  fun getFeedAdSlot(slotId: String, isExpress: Boolean, count: Int, imgSizeIndex: Int, isSupportDeepLink: Boolean): AdSlot {
-    val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
+  fun getFeedAdSlot(slotId: String, isExpress: Boolean, count: Int, imgSizeIndex: Int, isSupportDeepLink: Boolean, expressSize: TTSizeF?): AdSlot {
+    val pangleImgSize = PangleImgSize.values()[imgSizeIndex]
+    val size = pangleImgSize.toDeviceSize()
     val adSlot = AdSlot.Builder().apply {
       setCodeId(slotId)
       setSupportDeepLink(isSupportDeepLink)
@@ -90,9 +91,9 @@ object PangleAdSlotManager {
       // setNativeAdType()
       setAdCount(count)
       if (isExpress) {
-        setExpressViewAcceptedSize(imgSize.width.px, imgSize.height.px)
+        setExpressViewAcceptedSize(expressSize!!.width, expressSize.height)
       } else {
-        setImageAcceptedSize(imgSize.width, imgSize.height)
+        setImageAcceptedSize(size.width, size.height)
       }
     }
         .build()

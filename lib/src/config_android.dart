@@ -302,7 +302,7 @@ class AndroidInterstitialConfig {
   /// [slotId] required. The unique identifier of a interstitial ad.
   /// [imgSize] required. Image size.
   /// [isExpress] optional. 个性化模板广告
-  /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
+  /// [isSupportDeepLink] optional. Whether to support deep link. default true.
   AndroidInterstitialConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.interstitial600_400,

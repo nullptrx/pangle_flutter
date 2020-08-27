@@ -9,12 +9,12 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import io.github.nullptrx.pangleflutter.common.PangleLoadingType
-import io.github.nullptrx.pangleflutter.common.PangleOrientation
+import io.github.nullptrx.pangleflutter.common.*
 import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialAd
 import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialExpressAd
 import io.github.nullptrx.pangleflutter.delegate.FLTSplashAd
 import io.github.nullptrx.pangleflutter.util.PangleAdSlotManager
+import io.github.nullptrx.pangleflutter.util.ScreenUtil
 import io.github.nullptrx.pangleflutter.util.asMap
 import io.github.nullptrx.pangleflutter.view.BannerViewFactory
 import io.github.nullptrx.pangleflutter.view.FeedViewFactory
@@ -155,7 +155,29 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val imgSizeIndex = call.argument<Int>("imgSize")!!
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
         val isExpress = call.argument<Boolean>("isExpress") ?: false
-        val adSlot = PangleAdSlotManager.getFeedAdSlot(slotId, isExpress, count, imgSizeIndex, isSupportDeepLink)
+
+        var size: TTSizeF? = null
+        if (isExpress) {
+          val expressSize = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
+
+          val pangleImgSize = PangleImgSize.values()[imgSizeIndex]
+          var w: Float? = expressSize["width"]?.toFloat()
+          var h: Float? = expressSize["height"]?.toFloat()
+          val aspectRatio = pangleImgSize.width * 1.0f / pangleImgSize.height
+          if (w == null && h == null) {
+            w = ScreenUtil.getScreenWidthDp() - kDoublePadding
+            h = w / aspectRatio
+          } else if (w == null) {
+            checkNotNull(h)
+            w = h * aspectRatio
+          } else if (h == null) {
+            checkNotNull(w)
+            w -= kDoublePadding
+            h = w / aspectRatio
+          }
+          size = TTSizeF(w.toFloat(), h.toFloat())
+        }
+        val adSlot = PangleAdSlotManager.getFeedAdSlot(slotId, isExpress, count, imgSizeIndex, isSupportDeepLink, size)
         if (isExpress) {
           pangle.loadFeedExpressAd(adSlot, result)
         } else {

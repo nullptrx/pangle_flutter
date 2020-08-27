@@ -26,6 +26,7 @@ class _FeedPageState extends State<FeedPage> {
     _loadFeedAd();
   }
 
+  /// 加载广告
   _loadFeedAd() async {
     PangleFeedAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedConfig(
@@ -36,7 +37,9 @@ class _FeedPageState extends State<FeedPage> {
       android: AndroidFeedConfig(
 //        slotId: kFeedExpressId,
 //        isExpress: true,
+        imgSize: PangleImgSize.feed228_150,
         slotId: kFeedId,
+//        expressSize: PangleExpressSize(width: 300),
         count: 3,
       ),
     );
@@ -71,14 +74,30 @@ class _FeedPageState extends State<FeedPage> {
         itemBuilder: (context, index) {
           var item = items[index];
           if (item.isAd) {
-            return FeedView(
-              id: item.feedId,
+//            return FeedView(
+//              id: item.feedId,
 //              isExpress: true,
-              onRemove: () {
-                setState(() {
-                  this.items.removeAt(index);
-                });
-              },
+//              onRemove: () {
+//                setState(() {
+//                  this.items.removeAt(index);
+//                });
+//              },
+//            );
+            return Row(
+              children: [
+                Expanded(child: FlutterLogo()),
+                FeedView(
+                  id: item.feedId,
+//                  isExpress: true,
+                  width: 300,
+                  onRemove: () {
+                    setState(() {
+                      this.items.removeAt(index);
+                    });
+                  },
+                ),
+                Expanded(child: FlutterLogo()),
+              ],
             );
           }
 

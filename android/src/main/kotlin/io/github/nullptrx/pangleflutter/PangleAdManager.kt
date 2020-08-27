@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageInfo
 import com.bytedance.sdk.openadsdk.*
+import com.bytedance.sdk.openadsdk.core.nativeexpress.NativeExpressView
 import io.flutter.plugin.common.MethodChannel
 import io.github.nullptrx.pangleflutter.common.PangleTitleBarTheme
 import io.github.nullptrx.pangleflutter.delegate.*
@@ -77,8 +78,6 @@ class PangleAdManager {
   fun setExpressAd(ttBannerAds: List<TTNativeExpressAd>): List<String> {
     val data = mutableListOf<String>()
     ttBannerAds.forEach {
-      // 预先渲染
-      it.render()
       val key = it.hashCode().toString()
       expressAdCollection[key] = it
       data.add(key)
@@ -90,9 +89,9 @@ class PangleAdManager {
     return expressAdCollection[key]
   }
 
-  fun removeExpressAd(key: String) {
+  fun removeExpressAd(key: String): TTNativeExpressAd? {
     val it = expressAdCollection.remove(key)
-    it?.destroy()
+    return it
   }
 
   fun showRewardedVideoAd(result: MethodChannel.Result, activity: Activity?): Boolean {
