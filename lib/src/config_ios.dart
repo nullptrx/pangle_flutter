@@ -145,7 +145,7 @@ class IOSBannerConfig {
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
-      'imgSize': imgSize.index,
+      'imgSize': imgSize?.index,
       'isExpress': isExpress,
     };
   }
@@ -197,7 +197,7 @@ class IOSFeedConfig {
     return {
       'slotId': slotId,
       'count': count,
-      'imgSize': imgSize.index,
+      'imgSize': imgSize?.index,
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
     };
@@ -238,7 +238,7 @@ class IOSInterstitialConfig {
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
-      'imgSize': imgSize.index,
+      'imgSize': imgSize?.index,
       'isExpress': isExpress,
     };
   }

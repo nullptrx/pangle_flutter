@@ -5,7 +5,8 @@ enum PangleLogLevel {
   debug,
 }
 
-/// pick image size for ad
+/// Pick image size for ad
+/// From [v0.2.0] not works for express ads.
 enum PangleImgSize {
   banner640_90,
   banner640_100,

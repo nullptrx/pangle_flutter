@@ -212,7 +212,7 @@ class AndroidBannerConfig {
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
-      'imgSize': imgSize.index,
+      'imgSize': imgSize?.index,
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
     };
@@ -243,6 +243,7 @@ class AndroidFeedConfig {
   final int count;
   final bool isSupportDeepLink;
   final bool isExpress;
+  final PangleExpressSize expressSize;
 
   /// The feed ad config for Android
   ///
@@ -251,12 +252,14 @@ class AndroidFeedConfig {
   /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
   /// [isSupportDeepLink] optional. Whether to support deeplink.
   /// [isExpress] optional. 个性化模板广告
+  /// [expressSize] optional. 个性化广告宽高
   AndroidFeedConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.feed690_388,
     this.count,
     this.isSupportDeepLink = true,
     this.isExpress,
+    this.expressSize,
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
@@ -264,9 +267,10 @@ class AndroidFeedConfig {
     return {
       'slotId': slotId,
       'count': count,
-      'imgSize': imgSize.index,
+      'imgSize': imgSize?.index,
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
+      'expressSize': expressSize?.toJSON(),
     };
   }
 }
@@ -310,7 +314,7 @@ class AndroidInterstitialConfig {
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
-      'imgSize': imgSize.index,
+      'imgSize': imgSize?.index,
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
     };
