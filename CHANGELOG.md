@@ -1,3 +1,12 @@
+## 0.1.9
+
+* Fix the height of ConstraintLayout's  Group widget not working.
+
+## 0.1.8
+
+* Optimizes `BannerView`, makes its config null safety.
+* Use new config class name.
+
 ## 0.1.7
 
 * Fix rewarded video ads callback not works.
@@ -6,7 +15,7 @@
 ## 0.1.6
 
 * Fix feed ads showing incorrect height.
-* Supports preloading rewarded video ads
+* Supports preloading rewarded video ads.
 
 ## 0.1.5
 
