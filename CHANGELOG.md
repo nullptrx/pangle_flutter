@@ -1,3 +1,8 @@
+## 0.1.11
+
+* Splash ads `loadAwait` function.
+* Interestitial ads callbacks after closing.
+
 ## 0.1.10
 
 * Supports setting the size of feed express ads, banner ads.
