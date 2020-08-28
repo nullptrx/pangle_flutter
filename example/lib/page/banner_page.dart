@@ -30,7 +30,7 @@ class _BannerPageState extends State<BannerPage> {
                   slotId: kBannerExpressId,
                   imgSize: PangleImgSize.banner600_300,
                   isExpress: true,
-                  expectSize: PangleExpectSize(width: 100),
+                  expectSize: PangleExpectSize(width: 300),
                 ),
               ),
             ),

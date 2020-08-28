@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/tt_white"
     android:clipToPadding="false"
     android:paddingHorizontal="16dp">
 
@@ -14,6 +15,7 @@
         android:background="@color/pangle_flutter_grey"
         app:constraint_referenced_ids="pangle_flutter_item_desc,pangle_flutter_item_creative"
         app:layout_constraintEnd_toEndOf="@id/pangle_flutter_item_video"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@id/pangle_flutter_item_video"
         app:layout_constraintTop_toBottomOf="@id/pangle_flutter_item_video" />
 
@@ -70,6 +72,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pangle_flutter_item_title" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="@color/pangle_flutter_grey"
+        app:layout_constraintEnd_toEndOf="@id/pangle_flutter_item_video"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@id/pangle_flutter_item_video"
+        app:layout_constraintTop_toBottomOf="@id/pangle_flutter_item_video" />
 
     <TextView
         android:id="@+id/pangle_flutter_item_desc"

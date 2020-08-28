@@ -23,7 +23,7 @@ void main() async {
   );
   await pangle.loadSplashAd(
     iOS: IOSSplashConfig(slotId: kSplashId),
-    android: AndroidSplashConfig(slotId: kSplashExpressId),
+    android: AndroidSplashConfig(slotId: kSplashId),
   );
   runApp(MaterialApp(home: MyApp()));
 }

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/tt_white"
     android:clipToPadding="false"
     android:paddingHorizontal="16dp"
     android:paddingTop="10dp">
@@ -83,6 +84,15 @@
         app:layout_constraintStart_toEndOf="@id/pangle_flutter_item_image2"
         app:layout_constraintTop_toTopOf="@id/pangle_flutter_item_image1" />
 
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:background="@color/pangle_flutter_grey"
+        app:layout_constraintEnd_toEndOf="@id/pangle_flutter_item_group"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@id/pangle_flutter_item_group"
+        app:layout_constraintTop_toBottomOf="@id/pangle_flutter_item_image1" />
     <!-- title+creativeBtn layout -->
     <TextView
         android:id="@+id/pangle_flutter_item_desc"

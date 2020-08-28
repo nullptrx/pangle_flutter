@@ -97,7 +97,7 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
 
     when (call.method) {
       "update" -> {
-        val imgSizeIndex = call.argument<Int>("imgSize") as Int
+        val imgSizeIndex: Int = call.argument<Int>("imgSize")!!
         val imgSize = PangleImgSize.values()[imgSizeIndex]
 
         invalidateView(imgSize.width, imgSize.height)
