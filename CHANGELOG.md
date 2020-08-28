@@ -1,3 +1,7 @@
+## 0.1.10
+
+* Supports setting the size of feed express ads, banner ads.
+
 ## 0.1.9
 
 * Fix the height of ConstraintLayout's  Group widget not working.
