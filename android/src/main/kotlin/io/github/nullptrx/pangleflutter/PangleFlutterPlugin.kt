@@ -104,11 +104,16 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val tolerateTimeout = call.argument<Float>("tolerateTimeout")
         val hideSkipButton = call.argument<Boolean>("hideSkipButton")
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+        val loadAwait = call.argument<Boolean>("loadAwait") ?: true
         val adSlot = PangleAdSlotManager.getSplashAdSlot(slotId, isExpress, activity, isSupportDeepLink)
         pangle.loadSplashAd(adSlot, FLTSplashAd(hideSkipButton, activity) {
-//          result.success(null)
+          if (loadAwait) {
+            result.success(null)
+          }
         }, tolerateTimeout)
-        result.success(null)
+        if (!loadAwait) {
+          result.success(null)
+        }
       }
       "loadRewardVideoAd" -> {
 
