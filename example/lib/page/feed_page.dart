@@ -37,9 +37,8 @@ class _FeedPageState extends State<FeedPage> {
       android: AndroidFeedConfig(
         slotId: kFeedExpressId,
         isExpress: true,
-        imgSize: PangleImgSize.feed228_150,
 //        slotId: kFeedId,
-        expectSize: PangleExpectSize(width: 300),
+        expectSize: PangleExpectSize(width: 300, height: 300 / 1.667),
         count: 3,
       ),
     );

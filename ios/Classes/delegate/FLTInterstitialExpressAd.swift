@@ -23,7 +23,6 @@ internal final class FLTInterstitialExpressAd: NSObject, BUNativeExpresInterstit
     func nativeExpresInterstitialAdRenderSuccess(_ interstitialAd: BUNativeExpressInterstitialAd) {
         let vc = AppUtil.getVC()
         interstitialAd.show(fromRootViewController: vc)
-        self.success?(interstitialAd)
     }
     
     func nativeExpresInterstitialAd(_ interstitialAd: BUNativeExpressInterstitialAd, didFailWithError error: Error?) {
@@ -32,5 +31,9 @@ internal final class FLTInterstitialExpressAd: NSObject, BUNativeExpresInterstit
     
     func nativeExpresInterstitialAdRenderFail(_ interstitialAd: BUNativeExpressInterstitialAd, error: Error?) {
         self.fail?(interstitialAd, error)
+    }
+    
+    func nativeExpresInterstitialAdDidClose(_ interstitialAd: BUNativeExpressInterstitialAd) {
+        self.success?(interstitialAd)
     }
 }

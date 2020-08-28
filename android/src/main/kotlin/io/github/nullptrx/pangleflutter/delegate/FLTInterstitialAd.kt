@@ -4,9 +4,8 @@ import android.app.Activity
 import com.bytedance.sdk.openadsdk.TTAdDislike
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTInteractionAd
-import io.flutter.plugin.common.MethodChannel
 
-class FLTInterstitialAd(var result: MethodChannel.Result?, var target: Activity?) : TTAdNative.InteractionAdListener, TTInteractionAd.AdInteractionListener, TTAdDislike.DislikeInteractionCallback {
+class FLTInterstitialAd(var target: Activity?, var result: (Any) -> Unit) : TTAdNative.InteractionAdListener, TTInteractionAd.AdInteractionListener, TTAdDislike.DislikeInteractionCallback {
 
   override fun onInteractionAdLoad(ttInteractionAd: TTInteractionAd) {
     target?.also {
@@ -30,9 +29,9 @@ class FLTInterstitialAd(var result: MethodChannel.Result?, var target: Activity?
       message?.also {
         args["message"] = it
       }
-      success(args)
+      invoke(args)
     }
-    result = null
+    result = {}
     target = null
   }
 

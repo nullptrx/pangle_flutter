@@ -13,7 +13,6 @@ import io.github.nullptrx.pangleflutter.common.*
 import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialAd
 import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialExpressAd
 import io.github.nullptrx.pangleflutter.delegate.FLTSplashAd
-import io.github.nullptrx.pangleflutter.util.PangleAdSlotManager
 import io.github.nullptrx.pangleflutter.util.ScreenUtil
 import io.github.nullptrx.pangleflutter.util.asMap
 import io.github.nullptrx.pangleflutter.view.BannerViewFactory
@@ -194,9 +193,13 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val isNativeAd = call.argument<Boolean>("isNativeAd") ?: false
         val adSlot = PangleAdSlotManager.getInterstitialAdSlot(slotId, isExpress, imgSizeIndex, isSupportDeepLink, isNativeAd)
         if (isExpress) {
-          pangle.loadInteractionExpressAd(adSlot, FLTInterstitialExpressAd(result, activity))
+          pangle.loadInteractionExpressAd(adSlot, FLTInterstitialExpressAd(activity) {
+            result.success(it)
+          })
         } else {
-          pangle.loadInteractionAd(adSlot, FLTInterstitialAd(result, activity))
+          pangle.loadInteractionAd(adSlot, FLTInterstitialAd(activity) {
+            result.success(it)
+          })
         }
       }
 

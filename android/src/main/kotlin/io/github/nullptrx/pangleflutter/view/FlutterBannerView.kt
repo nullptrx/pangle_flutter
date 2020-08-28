@@ -21,7 +21,7 @@ import io.github.nullptrx.pangleflutter.common.PangleImgSize
 import io.github.nullptrx.pangleflutter.common.TTSize
 import io.github.nullptrx.pangleflutter.common.TTSizeF
 import io.github.nullptrx.pangleflutter.common.kDoublePadding
-import io.github.nullptrx.pangleflutter.util.PangleAdSlotManager
+import io.github.nullptrx.pangleflutter.PangleAdSlotManager
 import io.github.nullptrx.pangleflutter.util.ScreenUtil
 import io.github.nullptrx.pangleflutter.util.dp
 

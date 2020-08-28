@@ -5,9 +5,8 @@ import android.view.View
 import com.bytedance.sdk.openadsdk.TTAdDislike
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd
-import io.flutter.plugin.common.MethodChannel
 
-class FLTInterstitialExpressAd(var result: MethodChannel.Result?, var target: Activity?) : TTAdNative.NativeExpressAdListener, TTAdDislike.DislikeInteractionCallback, TTNativeExpressAd.AdInteractionListener {
+class FLTInterstitialExpressAd(var target: Activity?, var result: (Any) -> Unit) : TTAdNative.NativeExpressAdListener, TTAdDislike.DislikeInteractionCallback, TTNativeExpressAd.AdInteractionListener {
 
   private var ttNativeAd: TTNativeExpressAd? = null
 
@@ -29,7 +28,7 @@ class FLTInterstitialExpressAd(var result: MethodChannel.Result?, var target: Ac
   }
 
   override fun onSelected(index: Int, selection: String) {
-    
+
   }
 
   override fun onCancel() {
@@ -44,6 +43,7 @@ class FLTInterstitialExpressAd(var result: MethodChannel.Result?, var target: Ac
       ttNativeAd = null
     } catch (e: Exception) {
     }
+    invoke()
   }
 
   override fun onAdClicked(view: View, type: Int) {
@@ -56,7 +56,7 @@ class FLTInterstitialExpressAd(var result: MethodChannel.Result?, var target: Ac
     target?.also {
       ttNativeAd?.showInteractionExpressAd(it)
     }
-    invoke()
+
   }
 
   override fun onRenderFail(view: View?, msg: String?, code: Int) {
@@ -65,15 +65,15 @@ class FLTInterstitialExpressAd(var result: MethodChannel.Result?, var target: Ac
 
 
   private fun invoke(code: Int = 0, message: String? = null) {
-    result?.apply {
+    result.apply {
       val args = mutableMapOf<String, Any?>()
       args["code"] = code
       message?.also {
         args["message"] = it
       }
-      success(args)
+      invoke(args)
     }
-    result = null
+    result = {}
     target = null
   }
 

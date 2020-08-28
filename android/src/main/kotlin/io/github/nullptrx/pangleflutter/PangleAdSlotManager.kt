@@ -1,4 +1,4 @@
-package io.github.nullptrx.pangleflutter.util
+package io.github.nullptrx.pangleflutter
 
 import android.app.Activity
 import com.bytedance.sdk.openadsdk.AdSlot
@@ -6,6 +6,8 @@ import com.bytedance.sdk.openadsdk.TTAdConstant
 import io.github.nullptrx.pangleflutter.common.PangleImgSize
 import io.github.nullptrx.pangleflutter.common.PangleOrientation
 import io.github.nullptrx.pangleflutter.common.TTSizeF
+import io.github.nullptrx.pangleflutter.util.ScreenUtil
+import io.github.nullptrx.pangleflutter.util.px
 
 object PangleAdSlotManager {
 

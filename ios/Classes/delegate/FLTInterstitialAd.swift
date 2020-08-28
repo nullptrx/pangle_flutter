@@ -22,10 +22,13 @@ internal final class FLTInterstitialAd: NSObject, BUInterstitialAdDelegate {
     func interstitialAdDidLoad(_ interstitialAd: BUInterstitialAd) {
         let vc = AppUtil.getVC()
         interstitialAd.show(fromRootViewController: vc)
-        self.success?(interstitialAd)
     }
     
     func interstitialAd(_ interstitialAd: BUInterstitialAd, didFailWithError error: Error?) {
         self.fail?(interstitialAd, error)
+    }
+    
+    func interstitialAdDidClose(_ interstitialAd: BUInterstitialAd) {
+        self.success?(interstitialAd)
     }
 }
