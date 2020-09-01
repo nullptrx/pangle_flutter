@@ -11,11 +11,11 @@ Flutter plugin for Pangle Ad SDK.
                        DESC
   s.homepage         = 'https://github.com/nullptrX/pangle_flutter'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Nikola X' => 'liujunhong.z@gmail.com' }
+  s.author           = { 'nullptrX' => 'liujunhong.z@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.platform = :ios, '8.0'
+  s.platform = :ios, '9.0'
 
   s.static_framework = true
   s.ios.dependency 'Bytedance-UnionAD', '~> 3.2.5.1'
