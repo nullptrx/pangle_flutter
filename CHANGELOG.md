@@ -1,3 +1,7 @@
+## 0.1.12
+
+* Update Bytedance-UnionAD to v3.2.5.1.
+
 ## 0.1.11
 
 * Splash ads `loadAwait` function.

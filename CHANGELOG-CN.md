@@ -1,3 +1,7 @@
+## 0.1.12
+
+* 升级Bytedance-UnionAD到v3.2.5.1.
+
 ## 0.1.11
 
 * 闪屏广告 `loadAwait` 功能.

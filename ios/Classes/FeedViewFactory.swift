@@ -24,6 +24,6 @@ public class FeedViewFactory: NSObject, FlutterPlatformViewFactory {
     }
 
     public func create(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?) -> FlutterPlatformView {
-        return FLTFeedView(frame, id: viewId, params: (args as? [String: Any?]) ?? [:], messenger: messenger)
+        return FLTFeedView(frame, id: viewId, params: (args as? [String: Any]) ?? [:] as [String : Any], messenger: messenger)
     }
 }
