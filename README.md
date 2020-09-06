@@ -490,4 +490,4 @@ if (!this.k.isShowing() && !com.bytedance.sdk.openadsdk.core.i.c().a()) {
 
 ## 交流
 
-<img src="./pictures/pangle_flutter_group.jpg" alt="Flutter开发交流" width="300" align="left" />
+<img src="https://raw.githubusercontent.com/nullptrX/pangle_flutter/master/pictures/pangle_flutter_group.jpg" alt="Flutter开发交流" width="300" align="left" />

@@ -10,9 +10,11 @@ fi
 case $PARAM in
 dev|develop)
   dartfmt -w .
-  flutter packages pub publish --dry-run
+  # flutter packages pub publish --dry-run
+  pub publish --dry-run
   ;;
 rel|release)
-  flutter packages pub publish --server=https://pub.dartlang.org
+  # flutter packages pub publish --server=https://pub.dartlang.org
+  pub publish
   ;;
 esac
