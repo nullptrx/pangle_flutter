@@ -31,14 +31,14 @@ class _FeedPageState extends State<FeedPage> {
     PangleFeedAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedConfig(
         slotId: kFeedExpressId,
-        count: 3,
         isExpress: true,
+        // slotId: kFeedId,
+        count: 3,
       ),
       android: AndroidFeedConfig(
         slotId: kFeedExpressId,
         isExpress: true,
-//        slotId: kFeedId,
-        expectSize: PangleExpectSize(width: 300, height: 300 / 1.667),
+        // slotId: kFeedId,
         count: 3,
       ),
     );
@@ -57,7 +57,9 @@ class _FeedPageState extends State<FeedPage> {
       data.insert(index, item);
     }
     setState(() {
-      this.items.addAll(data);
+      this.items
+        ..clear()
+        ..addAll(data);
     });
   }
 
@@ -73,19 +75,9 @@ class _FeedPageState extends State<FeedPage> {
         itemBuilder: (context, index) {
           var item = items[index];
           if (item.isAd) {
-//            return FeedView(
-//              id: item.feedId,
-//              isExpress: true,
-//              onRemove: () {
-//                setState(() {
-//                  this.items.removeAt(index);
-//                });
-//              },
-//            );
             return FeedView(
               id: item.feedId,
               isExpress: true,
-              expectWidth: 300,
               onRemove: () {
                 setState(() {
                   this.items.removeAt(index);
@@ -94,19 +86,11 @@ class _FeedPageState extends State<FeedPage> {
             );
           }
 
-          return GestureDetector(
-            onTap: () {
-              setState(() {
-                this.items.removeAt(index);
-              });
-            },
-            behavior: HitTestBehavior.opaque,
-            child: Container(
-              height: 50,
-              alignment: Alignment.center,
-              padding: EdgeInsets.all(8),
-              child: Text('item ${item.id}'),
-            ),
+          return Container(
+            height: 50,
+            alignment: Alignment.center,
+            padding: EdgeInsets.all(8),
+            child: Text('item ${item.id}'),
           );
         },
         separatorBuilder: (BuildContext context, int index) {
@@ -116,6 +100,13 @@ class _FeedPageState extends State<FeedPage> {
           );
         },
       )),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _loadFeedAd();
+        },
+        child: Icon(Icons.refresh),
+      ),
     );
   }
 }

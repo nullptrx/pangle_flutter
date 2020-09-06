@@ -7,6 +7,7 @@
 
 import BUAdSDK
 import Flutter
+import WebKit
 
 public class FLTBannerView: NSObject, FlutterPlatformView {
     private let methodChannel: FlutterMethodChannel
@@ -97,6 +98,23 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
 
         } else {
             let bannerAdView = BUBannerAdView(slotID: slotId!, size: imgSize, rootViewController: vc)
+
+            bannerAdView.subviews.forEach {
+                if String(describing: $0.classForCoder) == "BUWKWebViewClient" {
+                    let webview = $0 as! WKWebView
+                    if #available(iOS 11.0, *) {
+                        webview.scrollView.contentInsetAdjustmentBehavior = .never
+                        if #available(iOS 13.0, *) {
+                            webview.scrollView.automaticallyAdjustsScrollIndicatorInsets = false
+                        }
+                    }
+
+                    bannerAdView.sendSubviewToBack(webview)
+                } else {
+                    $0.isUserInteractionEnabled = true
+                }
+            }
+
             bannerAdView.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
             bannerAdView.center = CGPoint(x: viewWidth / 2, y: viewHeight / 2)
             self.container.addSubview(bannerAdView)

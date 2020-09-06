@@ -7,6 +7,7 @@
 
 import BUAdSDK
 import Flutter
+import WebKit
 
 public class FLTFeedView: NSObject, FlutterPlatformView {
     private let methodChannel: FlutterMethodChannel
@@ -18,7 +19,6 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
 
     init(_ frame: CGRect, id: Int64, params: [String: Any], messenger: FlutterBinaryMessenger) {
         self.container = UIView(frame: frame)
-
         let channelName = String(format: "nullptrx.github.io/pangle_feedview_%ld", id)
         self.methodChannel = FlutterMethodChannel(name: channelName, binaryMessenger: messenger)
 
@@ -175,8 +175,8 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
         cell.refreshUI(withModel: nativeAd)
         self.container.frame = frame
         self.container.addSubview(cell)
+//        self.container.sendSubviewToBack(cell)
         self.container.updateConstraints()
-
         self.invoke(width: width, height: height)
     }
 
@@ -210,6 +210,26 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
             viewWidth = contentWidth
             viewHeight = contentHeight
         }
+//        expressAd.isUserInteractionEnabled
+        expressAd.subviews.forEach {
+//            print($0.description) // FlutterOverlayView
+//            let classname = String(describing: $0.superclass)
+            if String(describing: $0.classForCoder) == "BUWKWebViewClient" {
+                let webview = $0 as! WKWebView
+                if #available(iOS 11.0, *) {
+                    webview.scrollView.contentInsetAdjustmentBehavior = .never
+                    if #available(iOS 13.0, *) {
+                        webview.scrollView.automaticallyAdjustsScrollIndicatorInsets = false
+                    }
+                }
+
+                expressAd.sendSubviewToBack(webview)
+//                print($0.superclass)
+//                print(String(describing: $0.classForCoder))
+            } else {
+                $0.isUserInteractionEnabled = true
+            }
+        }
 
         let frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
         expressAd.frame = frame
@@ -218,6 +238,7 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
         self.container.frame = rootFrame
 
         self.container.addSubview(expressAd)
+//        self.container.sendSubviewToBack(expressAd)
         self.container.updateConstraints()
         self.invoke(width: viewWidth, height: viewHeight)
 
@@ -244,3 +265,13 @@ extension FLTFeedView: BUNativeAdDelegate {
         self.disposeView()
     }
 }
+
+// class FeedView: UIView {
+//    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+//        let windowPoint = self.convert(point, to: UIApplication.shared.delegate?.window!!)
+//        if windowPoint.y < UIScreen.main.bounds.size.height - 49 {
+//            return super.hitTest(point, with: event)
+//        }
+//       return super.hitTest(point, with: event)
+//    }
+// }

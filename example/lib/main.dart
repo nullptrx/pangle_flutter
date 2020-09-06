@@ -13,7 +13,10 @@ import 'page/feed_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await pangle.init(
-    iOS: IOSConfig(appId: kAppId, logLevel: PangleLogLevel.debug),
+    iOS: IOSConfig(
+      appId: kAppId,
+      logLevel: PangleLogLevel.debug,
+    ),
     android: AndroidConfig(
       appId: kAppId,
       debug: true,
