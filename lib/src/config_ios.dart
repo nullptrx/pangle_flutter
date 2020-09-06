@@ -39,18 +39,22 @@ class IOSSplashConfig {
   final double tolerateTimeout;
   final bool hideSkipButton;
   final bool isExpress;
+  final PangleExpressSize expressSize;
 
   /// The splash ad config for iOS
   ///
   /// [slotId] The unique identifier of splash ad.
   /// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
-  /// [hideSkipButton] optional. Whether hide skip button, default NO. If you hide the skip button, you need to customize the countdown.
+  /// [hideSkipButton] optional. Whether hide skip button, default NO.
+  ///    If you hide the skip button, you need to customize the countdown.
   /// [isExpress] optional. experimental. 个性化模板广告.
+  /// [expressSize] optional. 模板宽高
   IOSSplashConfig({
     @required this.slotId,
     this.tolerateTimeout,
     this.hideSkipButton,
-    this.isExpress,
+    this.isExpress = true,
+    this.expressSize,
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
@@ -60,6 +64,7 @@ class IOSSplashConfig {
       'tolerateTimeout': tolerateTimeout,
       'hideSkipButton': hideSkipButton,
       'isExpress': isExpress,
+      'expressSize': expressSize?.toJSON(),
     };
   }
 }
@@ -70,8 +75,9 @@ class IOSRewardedVideoConfig {
   final String rewardName;
   final int rewardAmount;
   final String extra;
-  final bool isExpress;
   final PangleLoadingType loadingType;
+  final bool isExpress;
+  final PangleExpressSize expressSize;
 
   /// The rewarded video ad config for Android
   ///
@@ -85,17 +91,20 @@ class IOSRewardedVideoConfig {
   /// [rewardName] optional. reward name.
   /// [rewardAmount] optional. number of rewards.
   /// [extra] optional. serialized string.
-  /// [isExpress] optional. 个性化模板广告
   /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
+  /// [isExpress] optional. 个性化模板广告
+  /// [expressSize] optional. 模板宽高
   IOSRewardedVideoConfig({
     @required this.slotId,
     this.userId,
     this.rewardName,
     this.rewardAmount,
     this.extra,
-    this.isExpress,
     this.loadingType = PangleLoadingType.normal,
-  }) : assert(slotId.isNotBlank);
+    this.isExpress = true,
+    this.expressSize,
+  })  : assert(slotId.isNotBlank),
+        assert(!isExpress || (isExpress && expressSize != null));
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -105,45 +114,32 @@ class IOSRewardedVideoConfig {
       'rewardName': rewardName,
       'rewardAmount': rewardAmount,
       'extra': extra,
-      'isExpress': isExpress,
       'loadingType': loadingType?.index,
+      'isExpress': isExpress,
+      'expressSize': expressSize?.toJSON(),
     };
   }
-}
-
-@Deprecated('Use `IOSBannerConfig` instead.')
-class IOSBannerAdConfig extends IOSBannerConfig {
-  IOSBannerAdConfig({
-    @required String slotId,
-    PangleImgSize imgSize,
-    bool isExpress,
-  })  : assert(slotId.isNotBlank),
-        super(
-          slotId: slotId,
-          imgSize: imgSize,
-          isExpress: isExpress,
-        );
 }
 
 class IOSBannerConfig {
   final String slotId;
   final PangleImgSize imgSize;
-
   final bool isExpress;
-  final PangleExpectSize expectSize;
+  final PangleExpressSize expressSize;
 
   /// The feed ad config for iOS
   ///
   /// [slotId] required. The unique identifier of a banner ad.
   /// [imgSize] required. Image size.
   /// [isExpress] optional. 个性化模板广告.
-  /// [expectSize] optional. 预期宽高
+  /// [expressSize] optional. 模板宽高
   IOSBannerConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.banner600_150,
-    this.isExpress,
-    this.expectSize,
-  }) : assert(slotId.isNotBlank);
+    this.isExpress = true,
+    this.expressSize,
+  })  : assert(slotId.isNotBlank),
+        assert(!isExpress || (isExpress && expressSize != null));
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -151,28 +147,9 @@ class IOSBannerConfig {
       'slotId': slotId,
       'imgSize': imgSize?.index,
       'isExpress': isExpress,
-      'width': expectSize?.width,
-      'height': expectSize?.height,
+      'expressSize': expressSize?.toJSON(),
     };
   }
-}
-
-@Deprecated('Use `IOSFeedConfig` instead.')
-class IOSFeedAdConfig extends IOSFeedConfig {
-  IOSFeedAdConfig({
-    @required String slotId,
-    PangleImgSize imgSize,
-    int count,
-    bool isSupportDeepLink,
-    bool isExpress,
-  })  : assert(slotId.isNotBlank),
-        super(
-          slotId: slotId,
-          imgSize: imgSize,
-          count: count,
-          isSupportDeepLink: isSupportDeepLink,
-          isExpress: isExpress,
-        );
 }
 
 class IOSFeedConfig {
@@ -182,6 +159,7 @@ class IOSFeedConfig {
   final int count;
   final bool isSupportDeepLink;
   final bool isExpress;
+  final PangleExpressSize expressSize;
 
   /// The feed ad config for iOS
   ///
@@ -190,14 +168,16 @@ class IOSFeedConfig {
   /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
   /// [isSupportDeepLink] optional. Whether to support deeplink.
   /// [isExpress] optional. 个性化模板广告.
-  /// [expectSize] ??， iOS无需在此传入expected宽高，见[FeedView]
+  /// [expressSize] optional. 模板宽高.
   IOSFeedConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.feed690_388,
     this.count,
     this.isSupportDeepLink = true,
-    this.isExpress,
-  }) : assert(slotId.isNotBlank);
+    this.isExpress = true,
+    this.expressSize,
+  })  : assert(slotId.isNotBlank),
+        assert(!isExpress || (isExpress && expressSize != null));
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -207,39 +187,30 @@ class IOSFeedConfig {
       'imgSize': imgSize?.index,
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
+      'expressSize': expressSize?.toJSON(),
     };
   }
-}
-
-@Deprecated('Use `IOSInterstitialConfig` instead.')
-class IOSInterstitialAdConfig extends IOSInterstitialConfig {
-  IOSInterstitialAdConfig({
-    @required String slotId,
-    PangleImgSize imgSize,
-    bool isExpress,
-  })  : assert(slotId.isNotBlank),
-        super(
-          slotId: slotId,
-          imgSize: imgSize,
-          isExpress: isExpress,
-        );
 }
 
 class IOSInterstitialConfig {
   final String slotId;
   final PangleImgSize imgSize;
   final bool isExpress;
+  final PangleExpressSize expressSize;
 
   /// The interstitial ad config for iOS
   ///
   /// [slotId] required. The unique identifier of a interstitial ad.
-  /// [imgSize] required. Image size.
+  /// [imgSize] required. Image size. 该宽高为你申请的广告位宽高，请根据实际情况赋值
   /// [isExpress] optional. 个性化模板广告.
+  /// [expressSize] optional. 模板宽高.
   IOSInterstitialConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.interstitial600_400,
-    this.isExpress,
-  }) : assert(slotId.isNotBlank);
+    this.isExpress = true,
+    this.expressSize,
+  })  : assert(slotId.isNotBlank),
+        assert(!isExpress || (isExpress && expressSize != null));
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -247,32 +218,38 @@ class IOSInterstitialConfig {
       'slotId': slotId,
       'imgSize': imgSize?.index,
       'isExpress': isExpress,
+      'expressSize': expressSize?.toJSON(),
     };
   }
 }
 
 class IOSFullscreenVideoConfig {
   final String slotId;
-  final bool isExpress;
   final PangleLoadingType loadingType;
+  final bool isExpress;
+  final PangleExpressSize expressSize;
 
   /// The full screen video ad config for iOS
   ///
   /// [slotId] required. The unique identifier of a full screen video ad.
-  /// [isExpress] optional. 个性化模板广告
   /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
+  /// [isExpress] optional. 个性化模板广告
+  /// [expressSize] optional. 模板宽高.
   IOSFullscreenVideoConfig({
     @required this.slotId,
-    this.isExpress,
     this.loadingType = PangleLoadingType.normal,
-  }) : assert(slotId.isNotBlank);
+    this.isExpress = true,
+    this.expressSize,
+  })  : assert(slotId.isNotBlank),
+        assert(!isExpress || (isExpress && expressSize != null));
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
-      'isExpress': isExpress,
       'loadingType': loadingType?.index,
+      'isExpress': isExpress,
+      'expressSize': expressSize?.toJSON(),
     };
   }
 }

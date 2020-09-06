@@ -53,6 +53,8 @@ class _BannerViewState extends State<BannerView>
   @override
   void initState() {
     super.initState();
+    var size = WidgetsBinding.instance.window.physicalSize;
+    _lastSize = size;
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -66,11 +68,8 @@ class _BannerViewState extends State<BannerView>
   @override
   void didChangeMetrics() {
     var size = WidgetsBinding.instance.window.physicalSize;
-    if (_lastSize == null) {
+    if (_lastSize?.width != size.width || _lastSize?.height != size.height) {
       _lastSize = size;
-      _controller?._update(_createParams());
-    } else if (_lastSize.width != size.width ||
-        _lastSize.height != size.height) {
       _controller?._update(_createParams());
     }
   }

@@ -32,12 +32,14 @@ class _FeedPageState extends State<FeedPage> {
       iOS: IOSFeedConfig(
         slotId: kFeedExpressId,
         isExpress: true,
+        expressSize: PangleExpressSize(width: 375, height: 284),
         // slotId: kFeedId,
         count: 3,
       ),
       android: AndroidFeedConfig(
         slotId: kFeedExpressId,
         isExpress: true,
+        expressSize: PangleExpressSize(width: 375, height: 284),
         // slotId: kFeedId,
         count: 3,
       ),

@@ -1,4 +1,4 @@
-import 'package:pangle_flutter/pangle_flutter.dart';
+import 'package:flutter/cupertino.dart';
 
 /// 信息流响应信息
 ///
@@ -47,17 +47,35 @@ class PangleLocation {
   }
 }
 
+final _kDevicePixelRatio = WidgetsBinding.instance.window.devicePixelRatio;
+final _kPhysicalSize = WidgetsBinding.instance.window.physicalSize;
+
+final kScreenWidth = _kPhysicalSize.width / _kDevicePixelRatio;
+
 /// expect size
-class PangleExpectSize {
+class PangleExpressSize {
   final double width;
   final double height;
 
-  /// Android的express广告如果需要自定义宽高，如果不想广告变形，只需要提供[width]或
-  /// [height]其中一个即可。之后会以期望[PangleImgSize]的广告宽高进行缩放。
+  /// 模板渲染时必填
   ///
-  /// [width] 宽度，可选
-  /// [height] 高度，可选
-  PangleExpectSize({this.width, this.height});
+  /// [width] 宽度，必选, 如果width超过屏幕，默认使用屏幕宽
+  /// [height] 高度，必选
+  PangleExpressSize({double width, double height})
+      : assert(width != null && width > 0),
+        assert(height != null && height > 0),
+        this.width = width > kScreenWidth ? kScreenWidth : width,
+        this.height = height > kScreenWidth / width * height
+            ? kScreenWidth / width * height
+            : height;
+
+  /// 模板渲染时必填
+  ///
+  /// [aspectRatio] item宽高比例
+  PangleExpressSize.aspectRatio(double aspectRatio)
+      : assert(aspectRatio != null && aspectRatio > 0),
+        this.width = kScreenWidth,
+        this.height = kScreenWidth / aspectRatio;
 
   Map<String, dynamic> toJSON() {
     return {

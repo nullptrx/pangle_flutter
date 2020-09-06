@@ -9,11 +9,12 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.PluginRegistry.Registrar
-import io.github.nullptrx.pangleflutter.common.*
+import io.github.nullptrx.pangleflutter.common.PangleLoadingType
+import io.github.nullptrx.pangleflutter.common.PangleOrientation
+import io.github.nullptrx.pangleflutter.common.TTSizeF
 import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialAd
 import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialExpressAd
 import io.github.nullptrx.pangleflutter.delegate.FLTSplashAd
-import io.github.nullptrx.pangleflutter.util.ScreenUtil
 import io.github.nullptrx.pangleflutter.util.asMap
 import io.github.nullptrx.pangleflutter.view.BannerViewFactory
 import io.github.nullptrx.pangleflutter.view.FeedViewFactory
@@ -104,8 +105,15 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val tolerateTimeout = call.argument<Float>("tolerateTimeout")
         val hideSkipButton = call.argument<Boolean>("hideSkipButton")
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
-        val loadAwait = call.argument<Boolean>("loadAwait") ?: true
-        val adSlot = PangleAdSlotManager.getSplashAdSlot(slotId, isExpress, activity, isSupportDeepLink)
+        val loadAwait = call.argument<Boolean>("loadAwait") ?: false
+        var expressSize: TTSizeF? = null
+        if (isExpress) {
+          val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
+          val w: Float = expressArgs.getValue("width").toFloat()
+          val h: Float = expressArgs.getValue("height").toFloat()
+          expressSize = TTSizeF(w, h)
+        }
+        val adSlot = PangleAdSlotManager.getSplashAdSlot(slotId, isExpress, expressSize, activity, isSupportDeepLink)
         pangle.loadSplashAd(adSlot, FLTSplashAd(hideSkipButton, activity) {
           if (loadAwait) {
             result.success(null)
@@ -145,7 +153,14 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val isVertical = call.argument<Boolean>("isVertical") ?: true
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
         val isExpress = call.argument<Boolean>("isExpress") ?: false
-        val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(slotId, isExpress, userId, rewardName, rewardAmount, isVertical, isSupportDeepLink, extra)
+        var expressSize: TTSizeF? = null
+        if (isExpress) {
+          val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
+          val w: Float = expressArgs.getValue("width").toFloat()
+          val h: Float = expressArgs.getValue("height").toFloat()
+          expressSize = TTSizeF(w, h)
+        }
+        val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(slotId, isExpress, expressSize, userId, rewardName, rewardAmount, isVertical, isSupportDeepLink, extra)
 
         pangle.loadRewardVideoAd(adSlot, result, activity, preload)
         if (PangleLoadingType.preload_only == loadingType) {
@@ -160,28 +175,14 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
         val isExpress = call.argument<Boolean>("isExpress") ?: false
 
-        var size: TTSizeF? = null
+        var expressSize: TTSizeF? = null
         if (isExpress) {
-          val expectSize = call.argument<Map<String, Double>>("expectSize") ?: mapOf()
-
-          val pangleImgSize = PangleImgSize.values()[imgSizeIndex]
-          var w: Float? = expectSize["width"]?.toFloat()
-          var h: Float? = expectSize["height"]?.toFloat()
-          val aspectRatio = pangleImgSize.width * 1.0f / pangleImgSize.height
-          if (w == null && h == null) {
-            w = ScreenUtil.getScreenWidthDp() - kDoublePadding
-            h = w / aspectRatio
-          } else if (w == null) {
-            checkNotNull(h)
-            w = h * aspectRatio
-          } else if (h == null) {
-            checkNotNull(w)
-            w -= kDoublePadding
-            h = w / aspectRatio
-          }
-          size = TTSizeF(w.toFloat(), h.toFloat())
+          val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
+          val w: Float = expressArgs.getValue("width").toFloat()
+          val h: Float = expressArgs.getValue("height").toFloat()
+          expressSize = TTSizeF(w, h)
         }
-        val adSlot = PangleAdSlotManager.getFeedAdSlot(slotId, isExpress, count, imgSizeIndex, isSupportDeepLink, size)
+        val adSlot = PangleAdSlotManager.getFeedAdSlot(slotId, isExpress, expressSize, count, imgSizeIndex, isSupportDeepLink)
         if (isExpress) {
           pangle.loadFeedExpressAd(adSlot, result)
         } else {
@@ -196,7 +197,16 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val imgSizeIndex = call.argument<Int>("imgSize")!!
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
         val isNativeAd = call.argument<Boolean>("isNativeAd") ?: false
-        val adSlot = PangleAdSlotManager.getInterstitialAdSlot(slotId, isExpress, imgSizeIndex, isSupportDeepLink, isNativeAd)
+
+        var expressSize: TTSizeF? = null
+        if (isExpress) {
+          val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
+          val w: Float = expressArgs.getValue("width").toFloat()
+          val h: Float = expressArgs.getValue("height").toFloat()
+          expressSize = TTSizeF(w, h)
+        }
+
+        val adSlot = PangleAdSlotManager.getInterstitialAdSlot(slotId, isExpress, expressSize, imgSizeIndex, isSupportDeepLink, isNativeAd)
         if (isExpress) {
           pangle.loadInteractionExpressAd(adSlot, FLTInterstitialExpressAd(activity) {
             result.success(it)
@@ -238,7 +248,14 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val orientation = PangleOrientation.values()[orientationIndex]
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
         val isExpress = call.argument<Boolean>("isExpress") ?: false
-        val adSlot = PangleAdSlotManager.getFullScreenVideoAdSlot(slotId, isExpress, orientation, isSupportDeepLink)
+        var expressSize: TTSizeF? = null
+        if (isExpress) {
+          val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
+          val w: Float = expressArgs.getValue("width").toFloat()
+          val h: Float = expressArgs.getValue("height").toFloat()
+          expressSize = TTSizeF(w, h)
+        }
+        val adSlot = PangleAdSlotManager.getFullScreenVideoAdSlot(slotId, isExpress, expressSize, orientation, isSupportDeepLink)
 
         pangle.loadFullscreenVideoAd(adSlot, result, activity, preload)
       }

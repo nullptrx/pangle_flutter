@@ -4,16 +4,19 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.webkit.WebView
 import android.widget.FrameLayout
 import com.bytedance.sdk.openadsdk.TTAdConstant
 import com.bytedance.sdk.openadsdk.TTAdDislike.DislikeInteractionCallback
 import com.bytedance.sdk.openadsdk.TTFeedAd
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd
+import com.bytedance.sdk.openadsdk.core.nativeexpress.NativeExpressView
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -40,8 +43,6 @@ class FlutterFeedView(
   private val container: FrameLayout
   private var feedId: String? = null
   private var isExpress: Boolean = false
-  private val width: Float?
-  private val height: Float?
 
 
   init {
@@ -56,8 +57,6 @@ class FlutterFeedView(
 
     val feedId = params["feedId"] as? String
     val isExpress = params["isExpress"] as? Boolean ?: false
-    this.width = (params["width"] as? Double)?.toFloat()
-    this.height = (params["height"] as? Double)?.toFloat()
     this.feedId = feedId
     this.isExpress = isExpress
     loadAd()
@@ -191,21 +190,10 @@ class FlutterFeedView(
 
     val viewWidth: Float
     val viewHeight: Float
-    if (this.width != null && this.height != null) {
-      viewWidth = this.width
-      viewHeight = this.height
-    } else if (this.width != null) {
-      viewWidth = this.width
-      viewHeight = viewWidth * height / width
-    } else if (this.height != null) {
-      viewHeight = this.height
-      viewWidth = viewHeight * width / height
-    } else {
-      val screenWidth = ScreenUtil.getScreenWidthDp()
-      val feedHeight = screenWidth * height / width
-      viewWidth = screenWidth
-      viewHeight = feedHeight
-    }
+    val screenWidth = ScreenUtil.getScreenWidthDp()
+    val feedHeight = screenWidth * height / width
+    viewWidth = screenWidth
+    viewHeight = feedHeight
     container.layoutParams = FrameLayout.LayoutParams(viewWidth.dp, viewHeight.dp).apply {
       gravity = Gravity.CENTER
     }
@@ -216,22 +204,20 @@ class FlutterFeedView(
     ad ?: return
     val expressAdView = ad.expressAdView
     container.removeAllViews()
-    val params = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-    params.gravity = Gravity.CENTER
-    container.addView(expressAdView, params)
-//    val screenWidth = ScreenUtil.getScreenSizeDp().width
-//    val feedHeight = when (ad.imageMode) {
-//      TTAdConstant.IMAGE_MODE_VIDEO_VERTICAL -> (screenWidth / 0.56f)
-//      TTAdConstant.IMAGE_MODE_VIDEO -> (screenWidth / 1.78f)
-//      TTAdConstant.IMAGE_MODE_LARGE_IMG -> (screenWidth / 1.78f)
-//      TTAdConstant.IMAGE_MODE_VERTICAL_IMG -> (screenWidth / 1.78f)
-//      TTAdConstant.IMAGE_MODE_SMALL_IMG -> (screenWidth / 1.52f)
-//      TTAdConstant.IMAGE_MODE_GROUP_IMG -> (screenWidth / 1.52f)
-//      TTAdConstant.IMAGE_MODE_UNKNOWN -> (screenWidth / 1.52f)
-//      else -> 0.0f
-//    }
-//    val size = invalidateView(screenWidth, feedHeight)
-//    invoke(size.width, size.height)
+    if (expressAdView is NativeExpressView) {
+      val expectExpressWidth = expressAdView.expectExpressWidth
+      val expectExpressHeight = expressAdView.expectExpressHeight
+//      val screenWidth = ScreenUtil.getScreenWidthDp()
+//      val feedHeight = screenWidth * expectExpressHeight / expectExpressWidth
+//      val params = FrameLayout.LayoutParams(screenWidth.dp, feedHeight.dp)
+      val params = FrameLayout.LayoutParams(expectExpressWidth.dp, expectExpressHeight.dp)
+//      disableWebViewAutoPlay(expressAdView.webView)
+      params.gravity = Gravity.CENTER
+
+      container.addView(expressAdView, params)
+    }
+
+    ad.setCanInterruptVideoPlay(true)
     ad.setExpressInteractionListener(object : TTNativeExpressAd.ExpressAdInteractionListener {
       override fun onAdClicked(view: View, type: Int) {
       }
@@ -241,8 +227,7 @@ class FlutterFeedView(
 
       override fun onRenderSuccess(view: View, width: Float, height: Float) {
         invalidateExpressView(width, height)
-
-        view.invalidate()
+//        view.invalidate()
       }
 
       override fun onRenderFail(view: View?, msg: String?, code: Int) {
@@ -263,6 +248,15 @@ class FlutterFeedView(
     })
     ad.render()
 
+  }
+
+  private fun disableWebViewAutoPlay(webView: WebView?) {
+    webView ?: return
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+      val settings = webView.settings
+      settings.mediaPlaybackRequiresUserGesture = true
+    }
+    webView.isSoundEffectsEnabled = false
   }
 
 

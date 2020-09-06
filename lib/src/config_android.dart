@@ -91,23 +91,27 @@ class AndroidSplashConfig {
   final bool isExpress;
   final bool isSupportDeepLink;
   final bool loadAwait;
+  final PangleExpressSize expressSize;
 
   /// The splash ad config for Android
   ///
   /// [slotId] The unique identifier of splash ad.
   /// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
   /// [hideSkipButton] optional. Whether hide skip button, default NO. If you hide the skip button, you need to customize the countdown.
-  /// [isExpress] optional. experimental. 个性化模板广告.
   /// [isSupportDeepLink] optional. Whether to support deeplink. Default true.
   /// [loadAwait] optional. Callback will return immediately, if false. Default true.
+  /// [isExpress] optional. experimental. 个性化模板广告.
+  /// [expressSize] optional. 模板宽高
   AndroidSplashConfig({
     @required this.slotId,
     this.tolerateTimeout,
     this.hideSkipButton,
-    this.isExpress,
     this.isSupportDeepLink = true,
-    this.loadAwait = true,
-  }) : assert(slotId.isNotBlank);
+    this.loadAwait = false,
+    this.isExpress = true,
+    this.expressSize,
+  })  : assert(slotId.isNotBlank),
+        assert(!isExpress || (isExpress && expressSize != null));
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -115,8 +119,10 @@ class AndroidSplashConfig {
       'slotId': slotId,
       'tolerateTimeout': tolerateTimeout,
       'hideSkipButton': hideSkipButton,
-      'isExpress': isExpress,
       'isSupportDeepLink': isSupportDeepLink,
+      'loadAwait': loadAwait,
+      'isExpress': isExpress,
+      'expressSize': expressSize?.toJSON(),
     };
   }
 }
@@ -129,8 +135,9 @@ class AndroidRewardedVideoConfig {
   final String extra;
   final bool isVertical;
   final bool isSupportDeepLink;
-  final bool isExpress;
   final PangleLoadingType loadingType;
+  final bool isExpress;
+  final PangleExpressSize expressSize;
 
   /// The rewarded video ad config for Android
   ///
@@ -146,8 +153,9 @@ class AndroidRewardedVideoConfig {
   /// [extra] optional. serialized string.
   /// [isVertical] optional. Whether video is vertical orientation. Vertical, if true. Otherwise, horizontal.
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-  /// [isExpress] optional. 个性化模板广告
   /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
+  /// [isExpress] optional. 个性化模板广告
+  /// [expressSize] optional. 模板宽高
   AndroidRewardedVideoConfig({
     @required this.slotId,
     this.userId,
@@ -156,9 +164,11 @@ class AndroidRewardedVideoConfig {
     this.extra,
     this.isVertical = true,
     this.isSupportDeepLink = true,
-    this.isExpress,
     this.loadingType,
-  }) : assert(slotId.isNotBlank);
+    this.isExpress = true,
+    this.expressSize,
+  })  : assert(slotId.isNotBlank),
+        assert(!isExpress || (isExpress && expressSize != null));
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -170,26 +180,11 @@ class AndroidRewardedVideoConfig {
       'extra': extra,
       'isVertical': isVertical,
       'isSupportDeepLink': isSupportDeepLink,
-      'isExpress': isExpress,
       'loadingType': loadingType?.index,
+      'isExpress': isExpress,
+      'expressSize': expressSize?.toJSON(),
     };
   }
-}
-
-@Deprecated('Use `AndroidFeedConfig` instead.')
-class AndroidBannerAdConfig extends AndroidBannerConfig {
-  AndroidBannerAdConfig({
-    @required String slotId,
-    PangleImgSize imgSize,
-    bool isSupportDeepLink,
-    bool isExpress,
-  })  : assert(slotId.isNotBlank),
-        super(
-          slotId: slotId,
-          imgSize: imgSize,
-          isSupportDeepLink: isSupportDeepLink,
-          isExpress: isExpress,
-        );
 }
 
 class AndroidBannerConfig {
@@ -197,7 +192,7 @@ class AndroidBannerConfig {
   final PangleImgSize imgSize;
   final bool isSupportDeepLink;
   final bool isExpress;
-  final PangleExpectSize expectSize;
+  final PangleExpressSize expressSize;
 
   /// The feed ad config for Android
   ///
@@ -205,14 +200,15 @@ class AndroidBannerConfig {
   /// [imgSize] required. Image size.
   /// [isExpress] optional. 个性化模板广告
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-  /// [expectSize] optional. 预期宽高
+  /// [expressSize] optional. 模板宽高
   AndroidBannerConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.banner600_150,
     this.isSupportDeepLink = true,
-    this.isExpress,
-    this.expectSize,
-  }) : assert(slotId.isNotBlank);
+    this.isExpress = true,
+    this.expressSize,
+  })  : assert(slotId.isNotBlank),
+        assert(!isExpress || (isExpress && expressSize != null));
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -221,28 +217,9 @@ class AndroidBannerConfig {
       'imgSize': imgSize?.index,
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
-      'width': expectSize?.width,
-      'height': expectSize?.height,
+      'expressSize': expressSize?.toJSON(),
     };
   }
-}
-
-@Deprecated('Use `AndroidFeedConfig` instead.')
-class AndroidFeedAdConfig extends AndroidFeedConfig {
-  AndroidFeedAdConfig({
-    @required String slotId,
-    PangleImgSize imgSize,
-    int count,
-    bool isSupportDeepLink,
-    bool isExpress,
-  })  : assert(slotId.isNotBlank),
-        super(
-          slotId: slotId,
-          imgSize: imgSize,
-          count: count,
-          isSupportDeepLink: isSupportDeepLink,
-          isExpress: isExpress,
-        );
 }
 
 class AndroidFeedConfig {
@@ -251,7 +228,7 @@ class AndroidFeedConfig {
   final int count;
   final bool isSupportDeepLink;
   final bool isExpress;
-  final PangleExpectSize expectSize;
+  final PangleExpressSize expressSize;
 
   /// The feed ad config for Android
   ///
@@ -260,15 +237,16 @@ class AndroidFeedConfig {
   /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
   /// [isSupportDeepLink] optional. Whether to support deeplink.
   /// [isExpress] optional. 个性化模板广告
-  /// [expectSize] optional. 预期宽高，暂只支持Express广告
+  /// [expressSize] optional. 模板宽高
   AndroidFeedConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.feed690_388,
     this.count,
     this.isSupportDeepLink = true,
-    this.isExpress,
-    this.expectSize,
-  }) : assert(slotId.isNotBlank);
+    this.isExpress = true,
+    this.expressSize,
+  })  : assert(slotId.isNotBlank),
+        assert(!isExpress || (isExpress && expressSize != null));
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -278,25 +256,9 @@ class AndroidFeedConfig {
       'imgSize': imgSize?.index,
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
-      'expectSize': expectSize?.toJSON(),
+      'expressSize': expressSize?.toJSON(),
     };
   }
-}
-
-@Deprecated('Use `AndroidInterstitialConfig` instead.')
-class AndroidInterstitialAdConfig extends AndroidInterstitialConfig {
-  AndroidInterstitialAdConfig({
-    @required String slotId,
-    PangleImgSize imgSize,
-    bool isSupportDeepLink,
-    bool isExpress,
-  })  : assert(slotId.isNotBlank),
-        super(
-          slotId: slotId,
-          imgSize: imgSize,
-          isSupportDeepLink: isSupportDeepLink,
-          isExpress: isExpress,
-        );
 }
 
 class AndroidInterstitialConfig {
@@ -304,19 +266,23 @@ class AndroidInterstitialConfig {
   final PangleImgSize imgSize;
   final bool isSupportDeepLink;
   final bool isExpress;
+  final PangleExpressSize expressSize;
 
   /// The interstitial ad config for Android
   ///
   /// [slotId] required. The unique identifier of a interstitial ad.
   /// [imgSize] required. Image size.
-  /// [isExpress] optional. 个性化模板广告
   /// [isSupportDeepLink] optional. Whether to support deep link. default true.
+  /// [isExpress] optional. 个性化模板广告
+  /// [expressSize] optional. 模板宽高
   AndroidInterstitialConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.interstitial600_400,
     this.isSupportDeepLink = true,
-    this.isExpress,
-  }) : assert(slotId.isNotBlank);
+    this.isExpress = true,
+    this.expressSize,
+  })  : assert(slotId.isNotBlank),
+        assert(!isExpress || (isExpress && expressSize != null));
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -325,6 +291,7 @@ class AndroidInterstitialConfig {
       'imgSize': imgSize?.index,
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
+      'expressSize': expressSize?.toJSON(),
     };
   }
 }
@@ -332,23 +299,26 @@ class AndroidInterstitialConfig {
 class AndroidFullscreenVideoConfig {
   final String slotId;
   final bool isSupportDeepLink;
-  final bool isExpress;
   final PangleOrientation orientation;
   final PangleLoadingType loadingType;
+  final bool isExpress;
+  final PangleExpressSize expressSize;
 
   /// The full screen video ad config for Android
   ///
   /// [slotId] required. The unique identifier of a full screen video ad.
-  /// [isExpress] optional. 个性化模板广告
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
   /// [orientation] 设置期望视频播放的方向，默认[PangleOrientation.veritical]
   /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
+  /// [isExpress] optional. 个性化模板广告
+  /// [expressSize] optional. 模板宽高
   AndroidFullscreenVideoConfig({
     @required this.slotId,
     this.isSupportDeepLink = true,
-    this.isExpress,
     this.orientation = PangleOrientation.veritical,
     this.loadingType = PangleLoadingType.normal,
+    this.isExpress = true,
+    this.expressSize,
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
@@ -359,6 +329,7 @@ class AndroidFullscreenVideoConfig {
       'isExpress': isExpress,
       'orientation': orientation?.index,
       'loadingType': loadingType?.index,
+      'expressSize': expressSize?.toJSON(),
     };
   }
 }

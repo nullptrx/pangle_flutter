@@ -17,12 +17,12 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 import io.github.nullptrx.pangleflutter.PangleAdManager
+import io.github.nullptrx.pangleflutter.PangleAdSlotManager
 import io.github.nullptrx.pangleflutter.common.PangleImgSize
 import io.github.nullptrx.pangleflutter.common.TTSize
 import io.github.nullptrx.pangleflutter.common.TTSizeF
-import io.github.nullptrx.pangleflutter.common.kDoublePadding
-import io.github.nullptrx.pangleflutter.PangleAdSlotManager
 import io.github.nullptrx.pangleflutter.util.ScreenUtil
+import io.github.nullptrx.pangleflutter.util.asMap
 import io.github.nullptrx.pangleflutter.util.dp
 
 
@@ -34,8 +34,10 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
   private val methodChannel: MethodChannel
   private val container: FrameLayout
   private val context: Context
-  private val width: Float?
   private val height: Float?
+  private lateinit var expressSize: TTSizeF
+  private lateinit var imgSize: TTSize
+  private var isExpress: Boolean = false
 
   init {
     methodChannel = MethodChannel(messenger, "nullptrx.github.io/pangle_bannerview_$id")
@@ -46,40 +48,27 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
 
 
     val slotId = params["slotId"] as? String
-    this.width = (params["width"] as? Double)?.toFloat()
     this.height = (params["height"] as? Double)?.toFloat()
     if (slotId != null) {
 
       val imgSizeIndex = params["imgSize"] as Int
       val isSupportDeepLink = params["isSupportDeepLink"] as? Boolean ?: true
-      val isExpress = params["isExpress"] as? Boolean ?: false
+      isExpress = params["isExpress"] as? Boolean ?: false
+      imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
 
-      val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
-//    val count = params["count"] as Int ?: 1
-      var size: TTSizeF? = null
       if (isExpress) {
-        val pangleImgSize = PangleImgSize.values()[imgSizeIndex]
-        var w: Float? = (params["width"] as? Double)?.toFloat()
-        var h: Float? = (params["height"] as? Double)?.toFloat()
-        val aspectRatio = pangleImgSize.width * 1.0f / pangleImgSize.height
-        if (w == null && h == null) {
-          w = ScreenUtil.getScreenWidthDp() - kDoublePadding
-          h = w / aspectRatio
-        } else if (w == null) {
-          checkNotNull(h)
-          w = h * aspectRatio
-        } else if (h == null) {
-          checkNotNull(w)
-          w -= kDoublePadding
-          h = w / aspectRatio
-        }
-        size = TTSizeF(w.toFloat(), h.toFloat())
-      }
-      val adSlot = PangleAdSlotManager.getBannerAdSlot(slotId, isExpress, imgSizeIndex, isSupportDeepLink, size)
-      if (isExpress) {
-        PangleAdManager.shared.loadBannerExpressAd(adSlot, FLTBannerExpressAd(imgSize))
+        val expressArgs: Map<String, Double> = params["expressSize"]?.asMap() ?: mapOf()
+        val w: Float = expressArgs.getValue("width").toFloat()
+        val h: Float = expressArgs.getValue("height").toFloat()
+        expressSize = TTSizeF(w, h)
       } else {
-        PangleAdManager.shared.loadBannerAd(adSlot, FLTBannerAd(imgSize))
+        expressSize = TTSizeF()
+      }
+      val adSlot = PangleAdSlotManager.getBannerAdSlot(slotId, isExpress, expressSize, imgSizeIndex, isSupportDeepLink)
+      if (isExpress) {
+        PangleAdManager.shared.loadBannerExpressAd(adSlot, FLTBannerExpressAd())
+      } else {
+        PangleAdManager.shared.loadBannerAd(adSlot, FLTBannerAd())
       }
     }
   }
@@ -97,10 +86,15 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
 
     when (call.method) {
       "update" -> {
-        val imgSizeIndex: Int = call.argument<Int>("imgSize")!!
-        val imgSize = PangleImgSize.values()[imgSizeIndex]
+//        val imgSizeIndex: Int = call.argument<Int>("imgSize")!!
+//        val imgSize = PangleImgSize.values()[imgSizeIndex]
+//        invalidateView(imgSize.width, imgSize.height)
 
-        invalidateView(imgSize.width, imgSize.height)
+        if (isExpress) {
+          invalidateView(expressSize.width, expressSize.height)
+        } else {
+          invalidateView(imgSize.width, imgSize.height)
+        }
         result.success(null)
       }
       else -> result.notImplemented()
@@ -108,28 +102,23 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
   }
 
   private fun invalidateView(width: Int, height: Int) {
-    val viewWidth: Float
-    val viewHeight: Float
-    if (this.width != null && this.height != null) {
-      viewWidth = this.width
-      viewHeight = this.height
-    } else if (this.width != null) {
-      viewWidth = this.width
-      viewHeight = viewWidth * height / width
-    } else if (this.height != null) {
-      viewHeight = this.height
-      viewWidth = viewHeight * width / height
-    } else {
-      val screenWidth = ScreenUtil.getScreenWidthDp()
-      val bannerHeight = screenWidth * height / width
-      viewWidth = screenWidth
-      viewHeight = bannerHeight
-    }
+    val screenWidth = ScreenUtil.getScreenWidthDp()
+    val bannerHeight = screenWidth * height / width
 
-    container.layoutParams = FrameLayout.LayoutParams(viewWidth.dp, viewHeight.dp).apply {
+    container.layoutParams = FrameLayout.LayoutParams(screenWidth.dp, bannerHeight.dp).apply {
       gravity = Gravity.CENTER
     }
-    invoke(viewWidth, viewHeight)
+    invoke(screenWidth.toFloat(), bannerHeight.toFloat())
+  }
+
+  private fun invalidateView(width: Float, height: Float) {
+//    val screenWidth = ScreenUtil.getScreenWidthDp()
+//    val bannerHeight = screenWidth * height / width
+
+    container.layoutParams = FrameLayout.LayoutParams(width.dp, height.dp).apply {
+      gravity = Gravity.CENTER
+    }
+    invoke(width, height)
   }
 
   internal enum class Method {
@@ -153,7 +142,7 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
   }
 
 
-  internal inner class FLTBannerAd(val imgSize: TTSize) : TTAdNative.BannerAdListener,
+  internal inner class FLTBannerAd() : TTAdNative.BannerAdListener,
       TTBannerAd.AdInteractionListener, TTAdDislike.DislikeInteractionCallback {
 
     override fun onError(code: Int, message: String?) {
@@ -172,7 +161,7 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
       container.removeAllViews()
       val params = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
       container.addView(view, params)
-      view.invalidate()
+//      view.invalidate()
       //设置轮播的时间间隔  间隔在30s到120秒之间的值，不设置默认不轮播
 //      ad.setSlideIntervalTime(30_000)
       invalidateView(imgSize.width, imgSize.height)
@@ -200,7 +189,7 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
     }
   }
 
-  internal inner class FLTBannerExpressAd(val imgSize: TTSize) : TTAdNative.NativeExpressAdListener,
+  internal inner class FLTBannerExpressAd() : TTAdNative.NativeExpressAdListener,
       TTNativeExpressAd.AdInteractionListener, TTAdDislike.DislikeInteractionCallback {
 
     override fun onError(code: Int, message: String?) {
@@ -227,7 +216,12 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
       val params = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
       val expressAdView = ad.expressAdView
       container.addView(expressAdView, params)
-      invalidateView(imgSize.width, imgSize.height)
+
+      val expectExpressWidth = expressSize.width
+      val expectExpressHeight = expressSize.height
+      invalidateView(expectExpressWidth, expectExpressHeight)
+
+
       ad.render()
 
     }

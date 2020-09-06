@@ -6,12 +6,10 @@ import com.bytedance.sdk.openadsdk.TTAdConstant
 import io.github.nullptrx.pangleflutter.common.PangleImgSize
 import io.github.nullptrx.pangleflutter.common.PangleOrientation
 import io.github.nullptrx.pangleflutter.common.TTSizeF
-import io.github.nullptrx.pangleflutter.util.ScreenUtil
-import io.github.nullptrx.pangleflutter.util.px
 
 object PangleAdSlotManager {
 
-  fun getSplashAdSlot(slotId: String, isExpress: Boolean, activity: Activity?, isSupportDeepLink: Boolean): AdSlot {
+  fun getSplashAdSlot(slotId: String, isExpress: Boolean, expressSize: TTSizeF?, activity: Activity?, isSupportDeepLink: Boolean): AdSlot {
     val adSlot = AdSlot.Builder().apply {
       setCodeId(slotId)
       setSupportDeepLink(isSupportDeepLink)
@@ -19,28 +17,29 @@ object PangleAdSlotManager {
         activity?.also {
           //个性化模板广告需要传入期望广告view的宽、高，单位dp，请传入实际需要的大小，
           //比如：广告下方拼接logo、适配刘海屏等，需要考虑实际广告大小
-          val size = ScreenUtil.getScreenSizeDp()
-          setExpressViewAcceptedSize(size.width, size.height)
+          setExpressViewAcceptedSize(expressSize!!.width, expressSize.height)
         }
+      } else {
+        setImageAcceptedSize(1080, 1920)
       }
-      setImageAcceptedSize(1080, 1920)
     }.build()
 
     return adSlot
   }
 
-  fun getRewardVideoAdSlot(slotId: String, isExpress: Boolean, userId: String?, rewardName: String?, rewardAmount: Int?, isVertical: Boolean, isSupportDeepLink: Boolean, extra: String?): AdSlot {
+  fun getRewardVideoAdSlot(slotId: String, isExpress: Boolean, expressSize: TTSizeF?, userId: String?, rewardName: String?, rewardAmount: Int?, isVertical: Boolean, isSupportDeepLink: Boolean, extra: String?): AdSlot {
 
     val adSlot = AdSlot.Builder().apply {
 // 必选参数 设置您的CodeId
       setCodeId(slotId)
       // 必选参数 设置广告图片的最大尺寸及期望的图片宽高比，单位Px
       // 注：如果您在头条广告平台选择了原生广告，返回的图片尺寸可能会与您期望的尺寸有较大差异
-      setImageAcceptedSize(1080, 1920)
+
       if (isExpress) {
-        val size = ScreenUtil.getScreenSizeDp()
-        setExpressViewAcceptedSize(size.width, size.height)
+        setExpressViewAcceptedSize(expressSize!!.width, expressSize.height)
 //        setExpressViewAcceptedSize(500f, 500f)
+      } else {
+        setImageAcceptedSize(1080, 1920)
       }
       // 可选参数 设置是否支持deeplink
       setSupportDeepLink(isSupportDeepLink)
@@ -66,14 +65,14 @@ object PangleAdSlotManager {
   }
 
 
-  fun getBannerAdSlot(slotId: String, isExpress: Boolean, imgSizeIndex: Int, isSupportDeepLink: Boolean, expectSize: TTSizeF?): AdSlot {
-    val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
+  fun getBannerAdSlot(slotId: String, isExpress: Boolean, expressSize: TTSizeF?, imgSizeIndex: Int, isSupportDeepLink: Boolean): AdSlot {
 
     val adSlot = AdSlot.Builder().apply {
       setCodeId(slotId)
       if (isExpress) {
-        setExpressViewAcceptedSize(expectSize!!.width, expectSize.height)
+        setExpressViewAcceptedSize(expressSize!!.width, expressSize.height)
       } else {
+        val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
         setImageAcceptedSize(imgSize.width, imgSize.height)
       }
       setSupportDeepLink(isSupportDeepLink)
@@ -82,7 +81,7 @@ object PangleAdSlotManager {
     return adSlot
   }
 
-  fun getFeedAdSlot(slotId: String, isExpress: Boolean, count: Int, imgSizeIndex: Int, isSupportDeepLink: Boolean, expressSize: TTSizeF?): AdSlot {
+  fun getFeedAdSlot(slotId: String, isExpress: Boolean, expressSize: TTSizeF?, count: Int, imgSizeIndex: Int, isSupportDeepLink: Boolean): AdSlot {
     val pangleImgSize = PangleImgSize.values()[imgSizeIndex]
     val size = pangleImgSize.toDeviceSize()
     val adSlot = AdSlot.Builder().apply {
@@ -102,16 +101,16 @@ object PangleAdSlotManager {
     return adSlot
   }
 
-  fun getInterstitialAdSlot(slotId: String, isExpress: Boolean, imgSizeIndex: Int, isSupportDeepLink: Boolean, isNativeAd: Boolean): AdSlot {
-    val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
+  fun getInterstitialAdSlot(slotId: String, isExpress: Boolean, expressSize: TTSizeF?, imgSizeIndex: Int, isSupportDeepLink: Boolean, isNativeAd: Boolean): AdSlot {
 
-    val width = imgSize.width * 0.9
-    val height = imgSize.height * 0.9
     val adSlot = AdSlot.Builder().apply {
       setCodeId(slotId)
       if (isExpress) {
-        setExpressViewAcceptedSize(width.px, height.px)
+        setExpressViewAcceptedSize(expressSize!!.width, expressSize.height)
       } else {
+        val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
+        val width = imgSize.width * 0.9
+        val height = imgSize.height * 0.9
         setImageAcceptedSize(width.toInt(), height.toInt())
       }
       setSupportDeepLink(isSupportDeepLink)
@@ -127,18 +126,18 @@ object PangleAdSlotManager {
   }
 
 
-  fun getFullScreenVideoAdSlot(slotId: String, isExpress: Boolean, orientation: PangleOrientation, isSupportDeepLink: Boolean): AdSlot {
+  fun getFullScreenVideoAdSlot(slotId: String, isExpress: Boolean, expressSize: TTSizeF?, orientation: PangleOrientation, isSupportDeepLink: Boolean): AdSlot {
 
     val adSlot = AdSlot.Builder().apply {
 // 必选参数 设置您的CodeId
       setCodeId(slotId)
       // 必选参数 设置广告图片的最大尺寸及期望的图片宽高比，单位Px
       // 注：如果您在头条广告平台选择了原生广告，返回的图片尺寸可能会与您期望的尺寸有较大差异
-      setImageAcceptedSize(1080, 1920)
       if (isExpress) {
-        val size = ScreenUtil.getScreenSizeDp()
-        setExpressViewAcceptedSize(size.width, size.height)
+        setExpressViewAcceptedSize(expressSize!!.width, expressSize.height)
 //        setExpressViewAcceptedSize(500f, 500f)
+      } else {
+        setImageAcceptedSize(1080, 1920)
       }
       // 可选参数 设置是否支持deeplink
       setSupportDeepLink(isSupportDeepLink)

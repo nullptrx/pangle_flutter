@@ -25,8 +25,15 @@ void main() async {
     ),
   );
   await pangle.loadSplashAd(
-    iOS: IOSSplashConfig(slotId: kSplashId),
-    android: AndroidSplashConfig(slotId: kSplashId),
+    iOS: IOSSplashConfig(
+      slotId: kSplashId,
+      isExpress: false,
+    ),
+    android: AndroidSplashConfig(
+      slotId: kSplashId,
+      isExpress: false,
+      loadAwait: false,
+    ),
   );
   runApp(MaterialApp(home: MyApp()));
 }
@@ -43,25 +50,25 @@ class _MyAppState extends State<MyApp> {
     pangle.loadRewardVideoAd(
       iOS: IOSRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
-        isExpress: true,
         loadingType: PangleLoadingType.preload_only,
+        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
       android: AndroidRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
-        isExpress: true,
         loadingType: PangleLoadingType.preload_only,
+        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
     );
     pangle.loadFullscreenVideoAd(
       iOS: IOSFullscreenVideoConfig(
         slotId: kFullscreenVideoExpressId,
-        isExpress: true,
         loadingType: PangleLoadingType.preload_only,
+        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
       android: AndroidFullscreenVideoConfig(
         slotId: kFullscreenVideoExpressId,
-        isExpress: true,
         loadingType: PangleLoadingType.preload_only,
+        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
     );
   }
@@ -120,8 +127,8 @@ class _MyAppState extends State<MyApp> {
 
   _loadSplashAd() {
     pangle.loadSplashAd(
-      iOS: IOSSplashConfig(slotId: kSplashId),
-      android: AndroidSplashConfig(slotId: kSplashId),
+      iOS: IOSSplashConfig(slotId: kSplashId, isExpress: false),
+      android: AndroidSplashConfig(slotId: kSplashId, isExpress: false),
     );
   }
 
@@ -129,13 +136,13 @@ class _MyAppState extends State<MyApp> {
     final result = await pangle.loadRewardVideoAd(
       iOS: IOSRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
-        isExpress: true,
         loadingType: PangleLoadingType.preload,
+        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
       android: AndroidRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
-        isExpress: true,
         loadingType: PangleLoadingType.preload,
+        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
     );
     print(jsonEncode(result));
@@ -156,17 +163,19 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _loadInterstitialAd() async {
+    final width = kScreenWidth - 30;
+    final height = width / 1.667;
+
     final result = await pangle.loadInterstitialAd(
       iOS: IOSInterstitialConfig(
         slotId: kInterstitialExpressId,
-        isExpress: true,
-
-        /// 该宽高为你申请的广告位宽高，请根据实际情况赋值
-        imgSize: PangleImgSize.interstitial600_400,
+        expressSize: PangleExpressSize(width: width, height: height),
+        // 该宽高为你申请的广告位宽高，请根据实际情况赋值
+        // imgSize: PangleImgSize.interstitial600_400,
       ),
       android: AndroidInterstitialConfig(
         slotId: kInterstitialExpressId,
-        isExpress: true,
+        expressSize: PangleExpressSize(width: width, height: height),
       ),
     );
     print(jsonEncode(result));
@@ -176,13 +185,13 @@ class _MyAppState extends State<MyApp> {
     final result = await pangle.loadFullscreenVideoAd(
       iOS: IOSFullscreenVideoConfig(
         slotId: kFullscreenVideoExpressId,
-        isExpress: true,
         loadingType: PangleLoadingType.preload,
+        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
       android: AndroidFullscreenVideoConfig(
         slotId: kFullscreenVideoExpressId,
-        isExpress: true,
         loadingType: PangleLoadingType.preload,
+        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
     );
     print(jsonEncode(result));

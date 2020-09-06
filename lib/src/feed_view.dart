@@ -18,23 +18,13 @@ class FeedView extends StatefulWidget {
   /// Execute default implementation, if null.
   final VoidCallback onRemove;
 
-  /// Only works for express ads.
-  final double expectWidth;
-  final double expectHeight;
-
   /// constructor a feed view
   ///
   /// [key] 使用GlobalObjectKey，防止Widget被多次build，导致PlatformView频繁重建
   /// [id] feedId
   /// [isExpress] optional. 个性化模板广告
   /// [onRemove] when click dislike button
-  FeedView(
-      {Key key,
-      this.id,
-      this.isExpress,
-      this.onRemove,
-      this.expectWidth,
-      this.expectHeight})
+  FeedView({Key key, this.id, this.isExpress, this.onRemove})
       : assert(id.isNotBlank),
         super(key: key ?? FeedViewKey(id));
 
@@ -78,6 +68,7 @@ class _FeedViewState extends State<FeedView>
   void didChangeMetrics() {
     var size = WidgetsBinding.instance.window.physicalSize;
     if (_lastSize?.width != size.width || _lastSize?.height != size.height) {
+      _lastSize = size;
       _controller?._update(_createParams());
     }
   }
@@ -167,8 +158,6 @@ class _FeedViewState extends State<FeedView>
     return {
       'feedId': widget.id,
       'isExpress': widget.isExpress,
-      'width': widget.expectWidth,
-      'height': widget.expectHeight,
     };
   }
 }
