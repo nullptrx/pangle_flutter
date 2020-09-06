@@ -13,16 +13,11 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
     private let methodChannel: FlutterMethodChannel
     private let container: UIView
     private var methodResult: FlutterResult?
-    private let width: Float?
-    private let height: Float?
 
     init(_ frame: CGRect, id: Int64, params: [String: Any?], messenger: FlutterBinaryMessenger) {
         let channelName = String(format: "nullptrx.github.io/pangle_bannerview_%lld", id)
         self.methodChannel = FlutterMethodChannel(name: channelName, binaryMessenger: messenger)
         self.container = UIView(frame: frame)
-
-        self.width = params["width"] as? Float
-        self.height = params["height"] as? Float
 
         super.init()
 
@@ -62,34 +57,21 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
         let isExpress = params["isExpress"] as? Bool ?? false
         let isSupportDeepLink = params["isSupportDeepLink"] as? Bool ?? true
 
-        let width = imgSize.width
-        let height = imgSize.height
+        let viewWidth: Double
+        let viewHeight: Double
         self.removeAllView()
-        let screenWidth = UIScreen.main.bounds.width
-        let bannerHeight = screenWidth * CGFloat(imgSize.height) / CGFloat(imgSize.width)
 
-        let viewWidth: CGFloat
-        let viewHeight: CGFloat
-        if self.width != nil, self.height != nil {
-            viewWidth = CGFloat(self.width!)
-            viewHeight = CGFloat(self.height!)
-        } else if self.width != nil {
-            viewWidth = CGFloat(self.width!)
-            viewHeight = viewWidth * CGFloat(height) / CGFloat(width)
-        } else if self.height != nil {
-            viewHeight = CGFloat(self.height!)
-            viewWidth = viewHeight * CGFloat(width) / CGFloat(height)
-        } else {
-            viewWidth = screenWidth
-            viewHeight = bannerHeight
-        }
-
-        self.container.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
-        self.container.updateConstraints()
         let vc = AppUtil.getVC()
         if isExpress {
-            let size = CGSize(width: viewWidth, height: viewHeight)
-            let bannerAdView = BUNativeExpressBannerView(slotID: slotId!, rootViewController: vc, adSize: size, isSupportDeepLink: isSupportDeepLink)
+            let expressArgs: [String: Double] = params["expressSize"] as! [String: Double]
+            let width = expressArgs["width"]!
+            let height = expressArgs["height"]!
+            let adSize = CGSize(width: width, height: height)
+
+            viewWidth = width
+            viewHeight = height
+
+            let bannerAdView = BUNativeExpressBannerView(slotID: slotId!, rootViewController: vc, adSize: adSize, isSupportDeepLink: isSupportDeepLink)
             bannerAdView.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
             bannerAdView.center = CGPoint(x: viewWidth / 2, y: viewHeight / 2)
             self.container.addSubview(bannerAdView)
@@ -97,6 +79,9 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
             bannerAdView.loadAdData()
 
         } else {
+            viewWidth = Double(UIScreen.main.bounds.width)
+            viewHeight = viewWidth * Double(imgSize.height) / Double(imgSize.width)
+
             let bannerAdView = BUBannerAdView(slotID: slotId!, size: imgSize, rootViewController: vc)
 
             bannerAdView.subviews.forEach {
@@ -122,6 +107,8 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
             bannerAdView.delegate = self
             bannerAdView.loadAdData()
         }
+        self.container.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
+        self.container.updateConstraints()
     }
 
     private func refreshUI(width: CGFloat, height: CGFloat) {
