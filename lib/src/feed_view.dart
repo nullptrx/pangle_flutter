@@ -36,14 +36,14 @@ class FeedView extends StatefulWidget {
       this.expectWidth,
       this.expectHeight})
       : assert(id.isNotBlank),
-        super(key: key ?? _FeedViewKey(id));
+        super(key: key ?? FeedViewKey(id));
 
   @override
   State<StatefulWidget> createState() => _FeedViewState();
 }
 
-class _FeedViewKey extends GlobalObjectKey {
-  const _FeedViewKey(Object value) : super(value);
+class FeedViewKey extends GlobalObjectKey {
+  const FeedViewKey(Object value) : super(value);
 }
 
 class _FeedViewState extends State<FeedView>

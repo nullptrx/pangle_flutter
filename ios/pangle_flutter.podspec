@@ -11,7 +11,7 @@ Flutter plugin for Pangle Ad SDK.
                        DESC
   s.homepage         = 'https://github.com/nullptrX/pangle_flutter'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'nullptrX' => 'liujunhong.z@gmail.com' }
+  s.author           = { 'nullptrX' => 'nullptrxxx@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
