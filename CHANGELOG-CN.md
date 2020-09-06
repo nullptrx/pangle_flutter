@@ -1,6 +1,9 @@
-## 0.1.12
+## 0.2.1
 
 * 升级Bytedance-UnionAD到v3.2.5.1.
+* 升级open_ad_sdk到v3.2.5.0
+* 全新expressSize请求广告（之前使用错误，导致广告错位或渲染不全）
+* 修复iOS的BannerView、FeedView触摸事件无效的问题
 
 ## 0.1.11
 

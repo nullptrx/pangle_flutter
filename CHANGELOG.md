@@ -1,6 +1,9 @@
-## 0.1.12
+## 0.2.1
 
-* Update Bytedance-UnionAD to v3.2.5.1.
+* Update `Bytedance-UnionAD` to `v3.2.5.1`.
+* Update `open_ad_sdk`到 `v3.2.5.0`.
+* New expressSize parameter to request ads. ()（The previous releases make ads dislocation & rendering incompletely ）
+* Fix `BannerView`、`FeedView`  touch events not work on iOS.
 
 ## 0.1.11
 
