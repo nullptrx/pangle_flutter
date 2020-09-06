@@ -57,6 +57,7 @@ class _BannerPageState extends State<BannerPage> {
                 expressSize: PangleExpressSize.aspectRatio(1.667),
               ),
             ),
+            FlutterLogo(),
           ],
         ),
       ),

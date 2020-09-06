@@ -51,24 +51,20 @@ class _MyAppState extends State<MyApp> {
       iOS: IOSRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         loadingType: PangleLoadingType.preload_only,
-        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
       android: AndroidRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         loadingType: PangleLoadingType.preload_only,
-        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
     );
     pangle.loadFullscreenVideoAd(
       iOS: IOSFullscreenVideoConfig(
         slotId: kFullscreenVideoExpressId,
         loadingType: PangleLoadingType.preload_only,
-        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
       android: AndroidFullscreenVideoConfig(
         slotId: kFullscreenVideoExpressId,
         loadingType: PangleLoadingType.preload_only,
-        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
     );
   }
@@ -137,12 +133,10 @@ class _MyAppState extends State<MyApp> {
       iOS: IOSRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         loadingType: PangleLoadingType.preload,
-        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
       android: AndroidRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         loadingType: PangleLoadingType.preload,
-        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
     );
     print(jsonEncode(result));
@@ -186,12 +180,10 @@ class _MyAppState extends State<MyApp> {
       iOS: IOSFullscreenVideoConfig(
         slotId: kFullscreenVideoExpressId,
         loadingType: PangleLoadingType.preload,
-        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
       android: AndroidFullscreenVideoConfig(
         slotId: kFullscreenVideoExpressId,
         loadingType: PangleLoadingType.preload,
-        expressSize: PangleExpressSize.aspectRatio(16 / 9),
       ),
     );
     print(jsonEncode(result));

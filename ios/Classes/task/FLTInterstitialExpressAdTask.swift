@@ -17,10 +17,11 @@ internal final class FLTInterstitialExpressAdTask: FLTTaskProtocol {
     
     convenience init(_ args: [String: Any?]) {
         let slotId: String = args["slotId"] as! String
-        let imgSize: Int = args["imgSize"] as! Int
-        let size = BUSize(by: BUProposalSize(rawValue: imgSize)!)!
-        let width = Double(UIScreen.main.bounds.width) * 0.9
-        let height = width / Double(size.width) * Double(size.height)
+        let expressArgs = args["expressSize"] as! [String: Double]
+        let width = expressArgs["width"]!
+        let height = expressArgs["height"]!
+//        let width = Double(UIScreen.main.bounds.width) * 0.9
+//        let height = width / Double(size.width) * Double(size.height)
         let adSize = CGSize(width: width, height: height)
         let manager = BUNativeExpressInterstitialAd(slotID: slotId, adSize: adSize)
         self.init(manager)

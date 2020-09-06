@@ -167,11 +167,15 @@ class AndroidRewardedVideoConfig {
     this.loadingType,
     this.isExpress = true,
     this.expressSize,
-  })  : assert(slotId.isNotBlank),
-        assert(!isExpress || (isExpress && expressSize != null));
+  }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
+    var expressSize = this.expressSize;
+    if (isExpress && expressSize == null) {
+      expressSize = PangleExpressSize.aspectRatio9_16();
+    }
+
     return {
       'slotId': slotId,
       'userId': userId,
@@ -323,6 +327,10 @@ class AndroidFullscreenVideoConfig {
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
+    var expressSize = this.expressSize;
+    if (isExpress && expressSize == null) {
+      expressSize = PangleExpressSize.aspectRatio9_16();
+    }
     return {
       'slotId': slotId,
       'isSupportDeepLink': isSupportDeepLink,

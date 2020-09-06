@@ -202,6 +202,7 @@ class PangleAdManager {
       supportMultiProcess?.also {
         supportMultiProcess(it)
       }
+      supportMultiProcess(true)
       paid?.also {
         paid(it)
       }

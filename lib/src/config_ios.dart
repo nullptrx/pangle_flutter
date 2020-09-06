@@ -93,7 +93,7 @@ class IOSRewardedVideoConfig {
   /// [extra] optional. serialized string.
   /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
   /// [isExpress] optional. 个性化模板广告
-  /// [expressSize] optional. 模板宽高
+  /// [expressSize] optional. 模板宽高，保留字段(iOS暂不支持该类型指定宽高)
   IOSRewardedVideoConfig({
     @required this.slotId,
     this.userId,
@@ -103,8 +103,7 @@ class IOSRewardedVideoConfig {
     this.loadingType = PangleLoadingType.normal,
     this.isExpress = true,
     this.expressSize,
-  })  : assert(slotId.isNotBlank),
-        assert(!isExpress || (isExpress && expressSize != null));
+  }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
@@ -234,14 +233,13 @@ class IOSFullscreenVideoConfig {
   /// [slotId] required. The unique identifier of a full screen video ad.
   /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
   /// [isExpress] optional. 个性化模板广告
-  /// [expressSize] optional. 模板宽高.
+  /// [expressSize] optional. 模板宽高，保留字段(iOS暂不支持该类型指定宽高)
   IOSFullscreenVideoConfig({
     @required this.slotId,
     this.loadingType = PangleLoadingType.normal,
     this.isExpress = true,
     this.expressSize,
-  })  : assert(slotId.isNotBlank),
-        assert(!isExpress || (isExpress && expressSize != null));
+  }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {

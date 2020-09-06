@@ -22,23 +22,28 @@ internal final class FLTNativeExpressAdTask: FLTTaskProtocol {
     
     convenience init(_ args: [String: Any?]) {
         let slotId: String = args["slotId"] as! String
-        let imgSize: Int = args["imgSize"] as! Int
         let count = args["count"] as? Int ?? Constant.kDefaultFeedAdCount
         let isSupportDeepLink: Bool = args["isSupportDeepLink"] as? Bool ?? true
         
-        let size = BUSize(by: BUProposalSize(rawValue: imgSize)!)!
-        let width = Double(UIScreen.main.bounds.width)
-        let height = width / Double(size.width) * Double(size.height)
+        let expressArgs = args["expressSize"] as! [String: Double]
+        let width = expressArgs["width"]!
+        let height = expressArgs["height"]!
+        let imgSizeIndex = args["imgSize"] as! Int
+        let imgSize = BUSize(by: BUProposalSize(rawValue: imgSizeIndex)!)!
+        
+//        let width = Double(UIScreen.main.bounds.width)
+//        let height = width / Double(size.width) * Double(size.height)
+        let adSize = CGSize(width: width, height: height)
         
         let slot = BUAdSlot()
         slot.id = slotId
         slot.adType = .feed
         slot.position = .feed
         slot.isSupportDeepLink = isSupportDeepLink
-        slot.imgSize = size
+        slot.imgSize = imgSize
         
-        let nad = BUNativeExpressAdManager(slot: slot, adSize: CGSize(width: width, height: height))
-        nad.adSize = CGSize(width: width, height: height)
+        let nad = BUNativeExpressAdManager(slot: slot, adSize: adSize)
+        nad.adSize = adSize
         
         self.init(manager: nad, count: count)
     }

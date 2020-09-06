@@ -22,6 +22,7 @@ internal final class FLTRewardedVideoExpressAdTask: FLTTaskProtocol {
         let rewardAmount: Int? = args["rewardAmount"] as? Int
         let extra: String? = args["extra"] as? String
         let model = BURewardedVideoModel()
+        
         model.userId = userId
         if rewardName != nil {
             model.rewardName = rewardName

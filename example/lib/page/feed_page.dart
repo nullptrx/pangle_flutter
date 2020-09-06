@@ -31,14 +31,12 @@ class _FeedPageState extends State<FeedPage> {
     PangleFeedAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedConfig(
         slotId: kFeedExpressId,
-        isExpress: true,
         expressSize: PangleExpressSize(width: 375, height: 284),
         // slotId: kFeedId,
         count: 3,
       ),
       android: AndroidFeedConfig(
         slotId: kFeedExpressId,
-        isExpress: true,
         expressSize: PangleExpressSize(width: 375, height: 284),
         // slotId: kFeedId,
         count: 3,
@@ -79,7 +77,6 @@ class _FeedPageState extends State<FeedPage> {
           if (item.isAd) {
             return FeedView(
               id: item.feedId,
-              isExpress: true,
               onRemove: () {
                 setState(() {
                   this.items.removeAt(index);

@@ -24,7 +24,7 @@ class FeedView extends StatefulWidget {
   /// [id] feedId
   /// [isExpress] optional. 个性化模板广告
   /// [onRemove] when click dislike button
-  FeedView({Key key, this.id, this.isExpress, this.onRemove})
+  FeedView({Key key, this.id, this.isExpress = true, this.onRemove})
       : assert(id.isNotBlank),
         super(key: key ?? FeedViewKey(id));
 

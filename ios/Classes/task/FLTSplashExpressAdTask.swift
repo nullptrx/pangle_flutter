@@ -19,8 +19,11 @@ internal final class FLTSplashExpressAdTask: FLTTaskProtocol {
         let slotId: String = args["slotId"] as! String
         let tolerateTimeout: Double? = args["tolerateTimeout"] as? Double
         let hideSkipButton: Bool? = args["hideSkipButton"] as? Bool
-        let frame = UIScreen.main.bounds
-        let adSize = CGSize(width: frame.width, height: frame.height)
+
+        let expressArgs = args["expressSize"] as! [String: Double]
+        let width = expressArgs["width"]!
+        let height = expressArgs["height"]!
+        let adSize = CGSize(width: width, height: height)
         let vc = AppUtil.getVC()
         let splashView = BUNativeExpressSplashView(slotID: slotId, adSize: adSize, rootViewController: vc)
         if tolerateTimeout != nil {
@@ -29,7 +32,6 @@ internal final class FLTSplashExpressAdTask: FLTTaskProtocol {
         if hideSkipButton != nil {
             splashView.hideSkipButton = hideSkipButton!
         }
-
         vc.view.addSubview(splashView)
         self.init(splashView)
     }
