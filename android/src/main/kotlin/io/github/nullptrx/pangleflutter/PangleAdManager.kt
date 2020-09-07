@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageInfo
 import com.bytedance.sdk.openadsdk.*
-import com.bytedance.sdk.openadsdk.core.nativeexpress.NativeExpressView
 import io.flutter.plugin.common.MethodChannel
 import io.github.nullptrx.pangleflutter.common.PangleTitleBarTheme
 import io.github.nullptrx.pangleflutter.delegate.*
@@ -137,21 +136,21 @@ class PangleAdManager {
     activity ?: return
     val context: Context = activity
 
-    val appId = args["appId"] as String
-    val debug = args["debug"] as Boolean?
-    val allowShowNotify = args["allowShowNotify"] as Boolean?
-    val allowShowPageWhenScreenLock = args["allowShowPageWhenScreenLock"] as Boolean?
-    val supportMultiProcess = args["supportMultiProcess"] as Boolean?
-    val useTextureView = args["useTextureView"] as Boolean?
+    val appId: String = args["appId"] as String
+    val debug: Boolean? = args["debug"] as Boolean?
+    val allowShowNotify: Boolean? = args["allowShowNotify"] as Boolean?
+    val allowShowPageWhenScreenLock: Boolean? = args["allowShowPageWhenScreenLock"] as Boolean?
+    val supportMultiProcess: Boolean? = args["supportMultiProcess"] as Boolean?
+    val useTextureView: Boolean? = args["useTextureView"] as Boolean?
     val directDownloadNetworkType = args["directDownloadNetworkType"] as Int?
-    val paid = args["paid"] as Boolean?
-    val titleBarThemeIndex = args["titleBarTheme"] as Int?
-    val isCanUseLocation = args["isCanUseLocation"] as Boolean?
-    val isCanUsePhoneState = args["isCanUsePhoneState"] as Boolean?
-    val isCanUseWriteExternal = args["isCanUseWriteExternal"] as Boolean?
-    val isCanUseWifiState = args["isCanUseWifiState"] as Boolean?
-    val devImei = args["devImei"] as String?
-    val devOaid = args["devOaid"] as String?
+    val paid: Boolean? = args["paid"] as Boolean?
+    val titleBarThemeIndex: Int? = args["titleBarTheme"] as Int?
+    val isCanUseLocation: Boolean? = args["isCanUseLocation"] as Boolean?
+    val isCanUsePhoneState: Boolean? = args["isCanUsePhoneState"] as Boolean?
+    val isCanUseWriteExternal: Boolean? = args["isCanUseWriteExternal"] as Boolean?
+    val isCanUseWifiState: Boolean? = args["isCanUseWifiState"] as Boolean?
+    val devImei: String? = args["devImei"] as String?
+    val devOaid: String? = args["devOaid"] as String?
     val location = args["location"]?.asMap<String, Double>()
     var ttLocation: TTLocation? = null
     location?.also {
@@ -210,31 +209,31 @@ class PangleAdManager {
       customController(object : TTCustomController() {
         override fun isCanUseLocation(): Boolean {
 
-          return isCanUseLocation ?: super.isCanUseLocation()
+          return isCanUseLocation ?: true
         }
 
         override fun isCanUsePhoneState(): Boolean {
-          return isCanUsePhoneState ?: super.isCanUsePhoneState()
+          return isCanUsePhoneState ?: true
         }
 
         override fun isCanUseWriteExternal(): Boolean {
-          return isCanUseWriteExternal ?: super.isCanUseWriteExternal()
+          return isCanUseWriteExternal ?: true
         }
 
         override fun isCanUseWifiState(): Boolean {
-          return isCanUseWifiState ?: super.isCanUseWifiState()
+          return isCanUseWifiState ?: true
         }
 
-        override fun getDevImei(): String {
-          return devImei ?: super.getDevImei()
+        override fun getDevImei(): String? {
+          return devImei
         }
 
-        override fun getTTLocation(): TTLocation {
-          return ttLocation ?: super.getTTLocation()
+        override fun getTTLocation(): TTLocation? {
+          return ttLocation
         }
 
-        override fun getDevOaid(): String {
-          return devOaid ?: super.getDevOaid()
+        override fun getDevOaid(): String? {
+          return devOaid?:super.getDevOaid()
         }
       })
 
