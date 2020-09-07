@@ -232,8 +232,14 @@ class PangleAdManager {
           return ttLocation
         }
 
+        // 之前的问题代码，这里kotlin不会报错
+//        override fun getDevOaid(): String {
+//          return devOaid?:super.getDevOaid()
+//        }
+        
+        // 修改后，返回String?
         override fun getDevOaid(): String? {
-          return devOaid?:super.getDevOaid()
+          return devOaid
         }
       })
 
