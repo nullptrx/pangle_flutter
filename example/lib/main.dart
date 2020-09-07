@@ -157,7 +157,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   void _loadInterstitialAd() async {
-    final width = kScreenWidth - 30;
+    final width = kPangleScreenWidth - 30;
     final height = width / 1.667;
 
     final result = await pangle.loadInterstitialAd(
@@ -169,7 +169,7 @@ class _MyAppState extends State<MyApp> {
       ),
       android: AndroidInterstitialConfig(
         slotId: kInterstitialExpressId,
-        expressSize: PangleExpressSize(width: width, height: height),
+        expressSize: PangleExpressSize.widthPercent(0.8, aspectRatio: 1.667),
       ),
     );
     print(jsonEncode(result));

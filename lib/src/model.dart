@@ -50,7 +50,8 @@ class PangleLocation {
 final _kDevicePixelRatio = WidgetsBinding.instance.window.devicePixelRatio;
 final _kPhysicalSize = WidgetsBinding.instance.window.physicalSize;
 
-final kScreenWidth = _kPhysicalSize.width / _kDevicePixelRatio;
+final kPangleScreenWidth = _kPhysicalSize.width / _kDevicePixelRatio;
+final kPangleScreenHeight = _kPhysicalSize.height / _kDevicePixelRatio;
 
 /// expect size
 class PangleExpressSize {
@@ -64,9 +65,9 @@ class PangleExpressSize {
   PangleExpressSize({double width, double height})
       : assert(width != null && width > 0),
         assert(height != null && height > 0),
-        this.width = width > kScreenWidth ? kScreenWidth : width,
-        this.height = height > kScreenWidth / width * height
-            ? kScreenWidth / width * height
+        this.width = width > kPangleScreenWidth ? kPangleScreenWidth : width,
+        this.height = height > kPangleScreenWidth / width * height
+            ? kPangleScreenWidth / width * height
             : height;
 
   /// 模板渲染时必填
@@ -74,16 +75,28 @@ class PangleExpressSize {
   /// [aspectRatio] item宽高比例
   PangleExpressSize.aspectRatio(double aspectRatio)
       : assert(aspectRatio != null && aspectRatio > 0),
-        this.width = kScreenWidth,
-        this.height = kScreenWidth / aspectRatio;
+        this.width = kPangleScreenWidth,
+        this.height = kPangleScreenWidth / aspectRatio;
 
   PangleExpressSize.aspectRatio9_16()
-      : this.width = kScreenWidth,
-        this.height = kScreenWidth / 0.5625;
+      : this.width = kPangleScreenWidth,
+        this.height = kPangleScreenWidth / 0.5625;
 
   PangleExpressSize.aspectRatio16_9()
-      : this.width = kScreenWidth,
-        this.height = kScreenWidth * 0.5625;
+      : this.width = kPangleScreenWidth,
+        this.height = kPangleScreenWidth * 0.5625;
+
+  PangleExpressSize.percent(double widthPercent, double heightPercent)
+      : this.width = kPangleScreenWidth * widthPercent,
+        this.height = kPangleScreenHeight * heightPercent;
+
+  PangleExpressSize.widthPercent(double widthPercent, {double aspectRatio})
+      : this.width = kPangleScreenWidth * widthPercent,
+        this.height = kPangleScreenWidth * widthPercent / aspectRatio;
+
+  PangleExpressSize.heightPercent(double heightPercent, {double aspectRatio})
+      : this.width = kPangleScreenHeight * heightPercent * aspectRatio,
+        this.height = kPangleScreenHeight * heightPercent;
 
   Map<String, dynamic> toJSON() {
     return {
