@@ -1,14 +1,19 @@
+## 0.3.1
+
+* 适配 `open_ad_sdk`到 `v3.2.5.1`
+* 修复SDK打印日志的问题 (#7)
+
 ## 0.2.1
 
-* 升级Bytedance-UnionAD到v3.2.5.1.
+* 升级Bytedance-UnionAD到v3.2.5.1
 * 升级open_ad_sdk到v3.2.5.0
 * 全新expressSize请求广告（之前使用错误，导致广告错位或渲染不全）
 * 修复iOS的BannerView、FeedView触摸事件无效的问题
 
 ## 0.1.11
 
-* 闪屏广告 `loadAwait` 功能.
-* 插屏广告结束后再产生回调.
+* 闪屏广告 `loadAwait` 功能
+* 插屏广告结束后再产生回调
 
 ## 0.1.10
 
