@@ -1,3 +1,7 @@
+## 0.3.2
+
+* Downgrade `Bytedance-UnionAD` to `v3.2.5.1`.
+
 ## 0.3.1
 
 * Adapt `open_ad_sdk`to `v3.2.5.1`.
