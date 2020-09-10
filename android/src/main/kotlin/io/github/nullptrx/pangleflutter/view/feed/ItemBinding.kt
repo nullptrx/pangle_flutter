@@ -11,12 +11,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.NonNull
 import com.bytedance.sdk.openadsdk.*
-import com.squareup.picasso.Picasso
 import io.github.nullptrx.pangleflutter.R
 import io.github.nullptrx.pangleflutter.util.get
+import io.github.nullptrx.pangleflutter.util.imageloader.ImageLoader
 import java.util.*
 
 open class ItemBinding(val activity: Activity?, val onRemove: () -> Unit = {}) {
+  var imageLoader: ImageLoader? = null
+
+  init {
+    imageLoader = ImageLoader.build(activity)
+  }
 
   private val ttAppDownloadListenerMap = WeakHashMap<AdViewHolder, TTAppDownloadListener>()
 
@@ -50,7 +55,7 @@ open class ItemBinding(val activity: Activity?, val onRemove: () -> Unit = {}) {
     if (ad.imageList != null && !ad.imageList.isEmpty()) {
       val image = ad.imageList[0]
       if (image != null && image.isValid && holder.smallImage != null) {
-        Picasso.get().load(image.imageUrl).into(holder.smallImage)
+        imageLoader?.bindBitmap(image.imageUrl, holder.smallImage)
       }
     }
     return view
@@ -83,7 +88,7 @@ open class ItemBinding(val activity: Activity?, val onRemove: () -> Unit = {}) {
     if (ad.imageList != null && !ad.imageList.isEmpty()) {
       val image = ad.imageList[0]
       if (image != null && image.isValid && holder.verticalImage != null) {
-        Picasso.get().load(image.imageUrl).into(holder.verticalImage)
+        imageLoader?.bindBitmap(image.imageUrl, holder.verticalImage)
       }
     }
     return view
@@ -107,8 +112,7 @@ open class ItemBinding(val activity: Activity?, val onRemove: () -> Unit = {}) {
     if (ad.imageList != null && !ad.imageList.isEmpty()) {
       val image = ad.imageList[0]
       if (image != null && image.isValid && holder.largeImage != null) {
-        Picasso.get().load(image.imageUrl).into(holder.largeImage)
-
+        imageLoader?.bindBitmap(image.imageUrl, holder.largeImage)
       }
     }
     return view
@@ -136,13 +140,13 @@ open class ItemBinding(val activity: Activity?, val onRemove: () -> Unit = {}) {
       val image2 = ad.imageList[1]
       val image3 = ad.imageList[2]
       if (image1 != null && image1.isValid && holder.groupImage1 != null) {
-        Picasso.get().load(image1.imageUrl).into(holder.groupImage1)
+        imageLoader?.bindBitmap(image1.imageUrl, holder.groupImage1)
       }
       if (image2 != null && image2.isValid && holder.groupImage2 != null) {
-        Picasso.get().load(image2.imageUrl).into(holder.groupImage2)
+        imageLoader?.bindBitmap(image2.imageUrl, holder.groupImage2)
       }
       if (image3 != null && image3.isValid && holder.groupImage3 != null) {
-        Picasso.get().load(image3.imageUrl).into(holder.groupImage3)
+        imageLoader?.bindBitmap(image3.imageUrl, holder.groupImage3)
       }
     }
     return view
@@ -211,7 +215,7 @@ open class ItemBinding(val activity: Activity?, val onRemove: () -> Unit = {}) {
     val icon = ad.icon
 //    holder.icon?.setImageBitmap(icon)
     if (icon != null && icon.isValid && holder.icon != null) {
-      Picasso.get().load(icon.imageUrl).into(holder.icon)
+      imageLoader?.bindBitmap(icon.imageUrl, holder.icon)
     }
     val adCreativeButton: Button? = holder.creativeButton
     when (ad.interactionType) {

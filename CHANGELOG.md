@@ -1,3 +1,7 @@
+## 0.3.3
+
+* Remove third party image loading framework dependency from Android & iOS.
+
 ## 0.3.2
 
 * Downgrade `Bytedance-UnionAD` to `v3.2.5.1`.

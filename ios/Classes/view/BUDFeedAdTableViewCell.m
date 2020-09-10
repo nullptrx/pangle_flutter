@@ -8,7 +8,7 @@
 
 #import "BUDFeedAdTableViewCell.h"
 
-#import "UIImageView+AFNetworking.h"
+#import "UIImageView+NBL.h"
 #import "BUDFeedStyleHelper.h"
 #import "BUDMacros.h"
 #import "NSString+LocalizedString.h"
@@ -110,7 +110,8 @@ static UIEdgeInsets const padding = {10, 15, 10, 15};
     const CGFloat imageHeight = imageWidth * (image.height / image.width);
     CGFloat imageX = width - margin - imageWidth;
     self.iv1.frame = CGRectMake(imageX, y, imageWidth, imageHeight);
-    [self.iv1 setImageWithURL:[NSURL URLWithString:image.imageURL] placeholderImage:nil];
+    
+    [self.iv1 loadImageFromUrl:image.imageURL];
     self.nativeAdRelatedView.logoImageView.frame = CGRectMake(imageWidth - logoSize.width, imageHeight - logoSize.height, logoSize.width, logoSize.height);
     
     CGFloat maxTitleWidth =  contentWidth - imageWidth - margin;
@@ -165,7 +166,7 @@ static UIEdgeInsets const padding = {10, 15, 10, 15};
     BUImage *image = model.data.imageAry.firstObject;
     const CGFloat imageHeight = contentWidth * (image.height / image.width);
     self.iv1.frame = CGRectMake(padding.left, y, contentWidth, imageHeight);
-    [self.iv1 setImageWithURL:[NSURL URLWithString:image.imageURL] placeholderImage:nil];
+    [self.iv1 loadImageFromUrl: image.imageURL];
     self.nativeAdRelatedView.logoImageView.frame = CGRectMake(contentWidth - logoSize.width, imageHeight - logoSize.height, logoSize.width, logoSize.height);
     
     y += imageHeight;
@@ -248,13 +249,13 @@ static UIEdgeInsets const padding = {10, 15, 10, 15};
     
     CGFloat originX = padding.left;
     self.iv1.frame = CGRectMake(originX, y, imageWidth, imageHeight);
-    [self.iv1 setImageWithURL:[NSURL URLWithString: model.data.imageAry[0].imageURL] placeholderImage:nil];
+    [self.iv1 loadImageFromUrl: model.data.imageAry[0].imageURL];
     originX += (imageWidth + 5);
     self.iv2.frame = CGRectMake(originX, y, imageWidth, imageHeight);
-    [self.iv2 setImageWithURL:[NSURL URLWithString: model.data.imageAry[1].imageURL] placeholderImage:nil];
+    [self.iv2 loadImageFromUrl: model.data.imageAry[1].imageURL];
     originX += (imageWidth + 5);
     self.iv3.frame = CGRectMake(originX, y, imageWidth, imageHeight);
-    [self.iv3 setImageWithURL:[NSURL URLWithString: model.data.imageAry[2].imageURL] placeholderImage:nil];
+    [self.iv3 loadImageFromUrl: model.data.imageAry[2].imageURL];
     self.nativeAdRelatedView.logoImageView.frame = CGRectMake(imageWidth - logoSize.width, imageHeight - logoSize.height, logoSize.width, logoSize.height);
     
     y += imageHeight;
