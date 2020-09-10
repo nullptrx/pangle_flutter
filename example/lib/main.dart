@@ -5,13 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:logger/logger.dart';
-import 'package:logger_flutter/logger_flutter.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'common/constant.dart';
 import 'page/banner_page.dart';
-import 'page/feed_page.dart';
+import 'page/feed_express_page.dart';
 
 final logger = Logger(
   printer: PrettyPrinter(),
@@ -103,45 +102,41 @@ class _MyAppState extends State<MyApp> {
       appBar: AppBar(
         title: const Text('Pangle Flutter Examples'),
       ),
-      body: LogConsoleOnShake(
-        debugOnly: false,
-        dark: Theme.of(context).brightness == Brightness.dark,
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              RaisedButton(
-                onPressed: _requestPermissions,
-                child: Text('Request Permissions'),
-              ),
-              RaisedButton(
-                onPressed: _loadSplashAd,
-                child: Text('Splash AD'),
-              ),
-              RaisedButton(
-                onPressed: _loadRewardVideoAd,
-                child: Text('Reward Video AD'),
-              ),
-              RaisedButton(
-                onPressed: _loadBannerAd,
-                child: Text('Banner AD'),
-              ),
-              RaisedButton(
-                onPressed: _loadFeedAd,
-                child: Text('Feed AD'),
-              ),
-              RaisedButton(
-                onPressed: _loadInterstitialAd,
-                child: Text('Interstitial AD'),
-              ),
-              RaisedButton(
-                onPressed: _loadFullscreenVideoAd,
-                child: Text('FullScreenVideo AD'),
-              ),
-            ],
-          ),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            RaisedButton(
+              onPressed: _requestPermissions,
+              child: Text('Request Permissions'),
+            ),
+            RaisedButton(
+              onPressed: _loadSplashAd,
+              child: Text('Splash AD'),
+            ),
+            RaisedButton(
+              onPressed: _loadRewardVideoAd,
+              child: Text('Reward Video AD'),
+            ),
+            RaisedButton(
+              onPressed: _loadBannerAd,
+              child: Text('Banner AD'),
+            ),
+            RaisedButton(
+              onPressed: _loadFeedAd,
+              child: Text('Feed AD'),
+            ),
+            RaisedButton(
+              onPressed: _loadInterstitialAd,
+              child: Text('Interstitial AD'),
+            ),
+            RaisedButton(
+              onPressed: _loadFullscreenVideoAd,
+              child: Text('FullScreenVideo AD'),
+            ),
+          ],
         ),
       ),
     );
@@ -184,7 +179,7 @@ class _MyAppState extends State<MyApp> {
   void _loadFeedAd() {
     Navigator.push(
       context,
-      CupertinoPageRoute(builder: (context) => FeedPage()),
+      CupertinoPageRoute(builder: (context) => FeedExpressPage()),
     );
   }
 

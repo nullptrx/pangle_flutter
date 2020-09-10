@@ -87,7 +87,6 @@ object PangleAdSlotManager {
     val adSlot = AdSlot.Builder().apply {
       setCodeId(slotId)
       setSupportDeepLink(isSupportDeepLink)
-      setIsAutoPlay(false)
       // 请求原生广告时候，请务必调用该方法，设置参数为TYPE_BANNER或TYPE_INTERACTION_AD
       // setNativeAdType()
       setAdCount(count)

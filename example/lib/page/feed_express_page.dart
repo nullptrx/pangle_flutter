@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 import 'package:pangle_flutter_example/common/constant.dart';
 
-class FeedPage extends StatefulWidget {
+class FeedExpressPage extends StatefulWidget {
   @override
-  _FeedPageState createState() => _FeedPageState();
+  _FeedExpressPageState createState() => _FeedExpressPageState();
 }
 
 class Item {
@@ -17,7 +17,7 @@ class Item {
   Item({this.isAd = false, this.feedId, this.id});
 }
 
-class _FeedPageState extends State<FeedPage> {
+class _FeedExpressPageState extends State<FeedExpressPage> {
   final items = <Item>[];
 
   @override
@@ -26,48 +26,11 @@ class _FeedPageState extends State<FeedPage> {
     _loadFeedAd();
   }
 
-  /// 加载广告
-  _loadFeedAd() async {
-    PangleFeedAd feedAd = await pangle.loadFeedAd(
-      iOS: IOSFeedConfig(
-        slotId: kFeedExpressId,
-        expressSize: PangleExpressSize(width: 375, height: 284),
-        // slotId: kFeedId,
-        count: 3,
-      ),
-      android: AndroidFeedConfig(
-        slotId: kFeedExpressId,
-        expressSize: PangleExpressSize(width: 375, height: 284),
-        // slotId: kFeedId,
-        count: 3,
-      ),
-    );
-    final data = <Item>[];
-    int totalCount = 20;
-
-    var item;
-    for (var i = 0; i < totalCount; i++) {
-      item = Item(id: i.toString());
-      data.add(item);
-    }
-
-    for (var i = 0; i < feedAd.count; i++) {
-      int index = Random().nextInt(totalCount);
-      final item = Item(isAd: true, feedId: feedAd.data[i]);
-      data.insert(index, item);
-    }
-    setState(() {
-      this.items
-        ..clear()
-        ..addAll(data);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Feed AD'),
+        title: Text('Feed Express AD'),
       ),
       body: Container(
           child: ListView.separated(
@@ -107,5 +70,42 @@ class _FeedPageState extends State<FeedPage> {
         child: Icon(Icons.refresh),
       ),
     );
+  }
+
+  /// 加载广告
+  _loadFeedAd() async {
+    PangleFeedAd feedAd = await pangle.loadFeedAd(
+      iOS: IOSFeedConfig(
+        slotId: kFeedExpressId,
+        expressSize: PangleExpressSize(width: 375, height: 284),
+        // slotId: kFeedId,
+        count: 3,
+      ),
+      android: AndroidFeedConfig(
+        slotId: kFeedExpressId,
+        expressSize: PangleExpressSize(width: 375, height: 284),
+        // slotId: kFeedId,
+        count: 3,
+      ),
+    );
+    final data = <Item>[];
+    int totalCount = 20;
+
+    var item;
+    for (var i = 0; i < totalCount; i++) {
+      item = Item(id: i.toString());
+      data.add(item);
+    }
+
+    for (var i = 0; i < feedAd.count; i++) {
+      int index = Random().nextInt(totalCount);
+      final item = Item(isAd: true, feedId: feedAd.data[i]);
+      data.insert(index, item);
+    }
+    setState(() {
+      this.items
+        ..clear()
+        ..addAll(data);
+    });
   }
 }
