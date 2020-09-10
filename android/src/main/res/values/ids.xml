@@ -26,5 +26,7 @@
 
     <item name="pangle_flutter_item_group2" type="id" />
 
+    <item name="pangle_flutter_imageloader_uri" type="id" />
+
 
 </resources>

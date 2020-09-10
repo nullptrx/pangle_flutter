@@ -163,9 +163,6 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(slotId, isExpress, expressSize, userId, rewardName, rewardAmount, isVertical, isSupportDeepLink, extra)
 
         pangle.loadRewardVideoAd(adSlot, result, activity, preload)
-        if (PangleLoadingType.preload_only == loadingType) {
-          result.success(null)
-        }
       }
 
       "loadFeedAd" -> {

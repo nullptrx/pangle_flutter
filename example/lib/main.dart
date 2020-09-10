@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:logger/logger.dart';
+import 'package:logger_flutter/logger_flutter.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -10,32 +13,57 @@ import 'common/constant.dart';
 import 'page/banner_page.dart';
 import 'page/feed_page.dart';
 
+final logger = Logger(
+  printer: PrettyPrinter(),
+);
+final loggerNoStack = Logger(
+  printer: PrettyPrinter(methodCount: 0),
+);
+
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await pangle.init(
-    iOS: IOSConfig(
-      appId: kAppId,
-      logLevel: PangleLogLevel.debug,
-    ),
-    android: AndroidConfig(
-      appId: kAppId,
-      debug: true,
-      allowShowNotify: true,
-      allowShowPageWhenScreenLock: false,
-    ),
-  );
-  await pangle.loadSplashAd(
-    iOS: IOSSplashConfig(
-      slotId: kSplashId,
-      isExpress: false,
-    ),
-    android: AndroidSplashConfig(
-      slotId: kSplashId,
-      isExpress: false,
-      loadAwait: false,
-    ),
-  );
-  runApp(MaterialApp(home: MyApp()));
+  runZoned(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await pangle.init(
+      iOS: IOSConfig(
+        appId: kAppId,
+        logLevel: PangleLogLevel.debug,
+      ),
+      android: AndroidConfig(
+        appId: kAppId,
+        debug: true,
+        allowShowNotify: true,
+        allowShowPageWhenScreenLock: false,
+      ),
+    );
+    await pangle.loadSplashAd(
+      iOS: IOSSplashConfig(
+        slotId: kSplashId,
+        isExpress: false,
+      ),
+      android: AndroidSplashConfig(
+        slotId: kSplashId,
+        isExpress: false,
+        loadAwait: false,
+      ),
+    );
+    runApp(MaterialApp(home: MyApp()));
+  }, zoneSpecification: ZoneSpecification(
+    print: (Zone self, ZoneDelegate parent, Zone zone, String line) {
+      printStr(self, parent, zone, line);
+    },
+  ), onError: (Object obj, StackTrace stack) {
+    print(obj);
+    print(stack);
+  });
+}
+
+void printStr(Zone self, ZoneDelegate parent, Zone zone, String line) {
+  if (line.length > 1000) {
+    parent.print(zone, line.substring(0, 1000));
+    printStr(self, parent, zone, line.substring(1000));
+  } else {
+    parent.print(zone, line);
+  }
 }
 
 class MyApp extends StatefulWidget {
@@ -75,41 +103,45 @@ class _MyAppState extends State<MyApp> {
       appBar: AppBar(
         title: const Text('Pangle Flutter Examples'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            RaisedButton(
-              onPressed: _requestPermissions,
-              child: Text('Request Permissions'),
-            ),
-            RaisedButton(
-              onPressed: _loadSplashAd,
-              child: Text('Splash AD'),
-            ),
-            RaisedButton(
-              onPressed: _loadRewardVideoAd,
-              child: Text('Reward Video AD'),
-            ),
-            RaisedButton(
-              onPressed: _loadBannerAd,
-              child: Text('Banner AD'),
-            ),
-            RaisedButton(
-              onPressed: _loadFeedAd,
-              child: Text('Feed AD'),
-            ),
-            RaisedButton(
-              onPressed: _loadInterstitialAd,
-              child: Text('Interstitial AD'),
-            ),
-            RaisedButton(
-              onPressed: _loadFullscreenVideoAd,
-              child: Text('FullScreenVideo AD'),
-            ),
-          ],
+      body: LogConsoleOnShake(
+        debugOnly: false,
+        dark: Theme.of(context).brightness == Brightness.dark,
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              RaisedButton(
+                onPressed: _requestPermissions,
+                child: Text('Request Permissions'),
+              ),
+              RaisedButton(
+                onPressed: _loadSplashAd,
+                child: Text('Splash AD'),
+              ),
+              RaisedButton(
+                onPressed: _loadRewardVideoAd,
+                child: Text('Reward Video AD'),
+              ),
+              RaisedButton(
+                onPressed: _loadBannerAd,
+                child: Text('Banner AD'),
+              ),
+              RaisedButton(
+                onPressed: _loadFeedAd,
+                child: Text('Feed AD'),
+              ),
+              RaisedButton(
+                onPressed: _loadInterstitialAd,
+                child: Text('Interstitial AD'),
+              ),
+              RaisedButton(
+                onPressed: _loadFullscreenVideoAd,
+                child: Text('FullScreenVideo AD'),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -139,7 +171,7 @@ class _MyAppState extends State<MyApp> {
         loadingType: PangleLoadingType.preload,
       ),
     );
-    print(jsonEncode(result));
+    logger.d(jsonEncode(result));
   }
 
   void _loadBannerAd() {
@@ -172,7 +204,7 @@ class _MyAppState extends State<MyApp> {
         expressSize: PangleExpressSize.widthPercent(0.8, aspectRatio: 1.667),
       ),
     );
-    print(jsonEncode(result));
+    logger.d(jsonEncode(result));
   }
 
   void _loadFullscreenVideoAd() async {
@@ -186,6 +218,6 @@ class _MyAppState extends State<MyApp> {
         loadingType: PangleLoadingType.preload,
       ),
     );
-    print(jsonEncode(result));
+    logger.d(jsonEncode(result));
   }
 }
