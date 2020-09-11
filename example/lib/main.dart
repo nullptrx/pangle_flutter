@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    pangle.loadRewardVideoAd(
+    pangle.loadRewardedVideoAd(
       iOS: IOSRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         loadingType: PangleLoadingType.preload_only,
@@ -117,8 +117,8 @@ class _MyAppState extends State<MyApp> {
               child: Text('Splash AD'),
             ),
             RaisedButton(
-              onPressed: _loadRewardVideoAd,
-              child: Text('Reward Video AD'),
+              onPressed: _loadRewardedVideoAd,
+              child: Text('Rewarded Video AD'),
             ),
             RaisedButton(
               onPressed: _loadBannerAd,
@@ -155,8 +155,8 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  _loadRewardVideoAd() async {
-    final result = await pangle.loadRewardVideoAd(
+  _loadRewardedVideoAd() async {
+    final result = await pangle.loadRewardedVideoAd(
       iOS: IOSRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         loadingType: PangleLoadingType.preload,

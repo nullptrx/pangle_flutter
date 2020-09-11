@@ -144,7 +144,7 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
           result.success(null)
         }
       }
-      "loadRewardVideoAd" -> {
+      "loadRewardedVideoAd" -> {
 
         val loadingTypeIndex = call.argument<Int>("loadingType") ?: 0
         var loadingType = PangleLoadingType.values()[loadingTypeIndex]

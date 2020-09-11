@@ -35,7 +35,7 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         case "loadSplashAd":
             instance.loadSplashAd(args)
             result(nil)
-        case "loadRewardVideoAd":
+        case "loadRewardedVideoAd":
             instance.loadRewardVideoAd(args, result: result)
         case "loadFeedAd":
             instance.loadFeedAd(args, result: result)
