@@ -1,3 +1,8 @@
+## 0.3.4
+
+* On flutter android sdk, support `registerWith` method  to load this plugin.
+* Rename `loadRewardVideoAd` to `loadRewardedVideoAd`.
+
 ## 0.3.3
 
 * Remove third party image loading framework dependency from Android & iOS.

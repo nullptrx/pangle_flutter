@@ -1,3 +1,8 @@
+## 0.3.4
+
+* 在flutter android sdk上, 支持 `registerWith` 方式加载本插件。
+* 重命名 `loadRewardVideoAd` 为 `loadRewardedVideoAd`.
+
 ## 0.3.3
 
 * 从Android和iOS移除第三方图像加载框架的依赖性。
