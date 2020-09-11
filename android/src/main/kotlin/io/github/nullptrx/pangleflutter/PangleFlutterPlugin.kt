@@ -23,11 +23,32 @@ import io.github.nullptrx.pangleflutter.view.FeedViewFactory
 public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
   companion object {
     val kDefaultFeedAdCount = 3
+    val kChannelName = "nullptrx.github.io/pangle"
 
     @JvmStatic
     fun registerWith(registrar: Registrar) {
-      val channel = MethodChannel(registrar.messenger(), "pangle_flutter")
-      channel.setMethodCallHandler(PangleFlutterPlugin())
+
+      PangleFlutterPlugin().apply {
+
+        val messenger = registrar.messenger()
+        val activity = registrar.activity()
+        this.activity = activity
+        this.context = registrar.context().applicationContext
+
+        methodChannel = MethodChannel(messenger, kChannelName)
+        methodChannel?.setMethodCallHandler(this)
+
+        bannerViewFactory = BannerViewFactory(messenger)
+        registrar.platformViewRegistry().registerViewFactory("nullptrx.github.io/pangle_bannerview",
+            bannerViewFactory)
+        feedViewFactory = FeedViewFactory(messenger)
+        registrar.platformViewRegistry().registerViewFactory("nullptrx.github.io/pangle_feedview",
+            feedViewFactory)
+
+        feedViewFactory?.attachActivity(activity)
+        bannerViewFactory?.attachActivity(activity)
+
+      }
     }
   }
 
@@ -62,10 +83,10 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
   }
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-    val channelName = "nullptrx.github.io/pangle"
+
     context = binding.applicationContext
 
-    methodChannel = MethodChannel(binding.binaryMessenger, channelName)
+    methodChannel = MethodChannel(binding.binaryMessenger, kChannelName)
     methodChannel?.setMethodCallHandler(this)
 
     bannerViewFactory = BannerViewFactory(binding.binaryMessenger)
