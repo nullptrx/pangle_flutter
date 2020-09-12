@@ -12,6 +12,8 @@ class RewardedVideoPage extends StatefulWidget {
 }
 
 class _RewardedVideoPageState extends State<RewardedVideoPage> {
+  bool _loaded = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +32,7 @@ class _RewardedVideoPageState extends State<RewardedVideoPage> {
             ),
             Center(
               child: RaisedButton(
-                onPressed: _onTapShow,
+                onPressed: _loaded ? _onTapShow : null,
                 child: Text('Show Ad'),
               ),
             ),
@@ -41,7 +43,7 @@ class _RewardedVideoPageState extends State<RewardedVideoPage> {
   }
 
   _onTapLoad() async {
-    await pangle.loadRewardedVideoAd(
+    final result = await pangle.loadRewardedVideoAd(
       iOS: IOSRewardedVideoConfig(
         slotId: kRewardedVideoId,
         isExpress: false,
@@ -53,6 +55,10 @@ class _RewardedVideoPageState extends State<RewardedVideoPage> {
         loadingType: PangleLoadingType.preload_only,
       ),
     );
+
+    setState(() {
+      _loaded = result['code'] == 0;
+    });
   }
 
   _onTapShow() async {
@@ -60,14 +66,17 @@ class _RewardedVideoPageState extends State<RewardedVideoPage> {
       iOS: IOSRewardedVideoConfig(
         slotId: kRewardedVideoId,
         isExpress: false,
-        loadingType: PangleLoadingType.preload,
+        loadingType: PangleLoadingType.normal,
       ),
       android: AndroidRewardedVideoConfig(
         slotId: kRewardedVideoId,
         isExpress: false,
-        loadingType: PangleLoadingType.preload,
+        loadingType: PangleLoadingType.normal,
       ),
     );
     logger.d(jsonEncode(result));
+    setState(() {
+      _loaded = false;
+    });
   }
 }

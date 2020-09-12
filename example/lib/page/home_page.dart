@@ -7,6 +7,17 @@ import '../common/ext.dart';
 import 'home/express_page.dart';
 import 'home/native_page.dart';
 
+const kEnv = '''
+Flutter 1.20.3
+Dart 2.9.2
+Kotlin 1.4.10
+Swift 5.2.4 
+''';
+const kDependencies = '''
+Android SDK V3.2.5.1
+iOS SDK V3.2.5.2
+''';
+
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
@@ -30,14 +41,30 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            ListTile(
+              title: Text('Environment:'),
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(kEnv),
+              ),
+            ),
+            ListTile(
+              title: Text('Dependencies:'),
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(kDependencies),
+              ),
+            ),
             RaisedButton(
               onPressed: _requestPermissions,
               child: Text('Request Permissions'),
             ),
+            SizedBox(height: 30),
             RaisedButton(
               onPressed: _loadNativeAd,
               child: Text('Native AD'),
             ),
+            SizedBox(height: 30),
             RaisedButton(
               onPressed: _loadExpressAd,
               child: Text('Express AD'),

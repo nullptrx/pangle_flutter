@@ -14,6 +14,8 @@ class FullscreenVideoExpressPage extends StatefulWidget {
 
 class _FullscreenVideoExpressPageState
     extends State<FullscreenVideoExpressPage> {
+  bool _loaded = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +34,7 @@ class _FullscreenVideoExpressPageState
             ),
             Center(
               child: RaisedButton(
-                onPressed: _onTapShow,
+                onPressed: _loaded ? _onTapShow : null,
                 child: Text('Show Ad'),
               ),
             ),
@@ -43,7 +45,7 @@ class _FullscreenVideoExpressPageState
   }
 
   _onTapLoad() async {
-    await pangle.loadFullscreenVideoAd(
+    final result = await pangle.loadFullscreenVideoAd(
       iOS: IOSFullscreenVideoConfig(
         slotId: kFullscreenVideoExpressId,
         loadingType: PangleLoadingType.preload_only,
@@ -53,19 +55,26 @@ class _FullscreenVideoExpressPageState
         loadingType: PangleLoadingType.preload_only,
       ),
     );
+
+    setState(() {
+      _loaded = result['code'] == 0;
+    });
   }
 
   _onTapShow() async {
     final result = await pangle.loadFullscreenVideoAd(
       iOS: IOSFullscreenVideoConfig(
         slotId: kFullscreenVideoExpressId,
-        loadingType: PangleLoadingType.preload,
+        loadingType: PangleLoadingType.normal,
       ),
       android: AndroidFullscreenVideoConfig(
         slotId: kFullscreenVideoExpressId,
-        loadingType: PangleLoadingType.preload,
+        loadingType: PangleLoadingType.normal,
       ),
     );
     logger.d(jsonEncode(result));
+    setState(() {
+      _loaded = false;
+    });
   }
 }
