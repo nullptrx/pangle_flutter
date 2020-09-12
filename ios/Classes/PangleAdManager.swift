@@ -92,14 +92,14 @@ public final class PangleAdManager: NSObject {
         if isExpress {
             let task = FLTRewardedVideoExpressAdTask(args)
             self.execTask(task, loadingType)({ data in
-                if loadingType == .normal {
+                if loadingType == .normal || loadingType == .preload_only {
                     result(data)
                 }
             })
         } else {
             let task = FLTRewardedVideoAdTask(args)
             self.execTask(task, loadingType)({ data in
-                if loadingType == .normal {
+                if loadingType == .normal || loadingType == .preload_only {
                     result(data)
                 }
             })
@@ -161,14 +161,14 @@ public final class PangleAdManager: NSObject {
         if isExpress {
             let task = FLTFullscreenVideoExpressAdTask(args)
             self.execTask(task, loadingType)({ data in
-                if loadingType == .normal {
+                if loadingType == .normal || loadingType == .preload_only {
                     result(data)
                 }
             })
         } else {
             let task = FLTFullscreenVideoAdTask(args)
             self.execTask(task, loadingType)({ data in
-                if loadingType == .normal {
+                if loadingType == .normal || loadingType == .preload_only {
                     result(data)
                 }
             })
