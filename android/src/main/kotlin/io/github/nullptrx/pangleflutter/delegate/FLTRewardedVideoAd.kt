@@ -4,14 +4,19 @@ import android.app.Activity
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTRewardVideoAd
 import io.github.nullptrx.pangleflutter.PangleAdManager
+import io.github.nullptrx.pangleflutter.common.PangleLoadingType
+import io.github.nullptrx.pangleflutter.common.kBlock
 
-internal class FLTRewardedVideoAd(var target: Activity?, val preload: Boolean = false, var result: (Any) -> Unit = {}) : TTAdNative.RewardVideoAdListener {
+internal class FLTRewardedVideoAd(var target: Activity?, val loadingType: PangleLoadingType, var result: (Any) -> Unit = {}) : TTAdNative.RewardVideoAdListener {
 
   var ttVideoAd: TTRewardVideoAd? = null
 
   override fun onRewardVideoAdLoad(ad: TTRewardVideoAd?) {
-    if (preload) {
+    if (loadingType == PangleLoadingType.preload || loadingType == PangleLoadingType.preload_only) {
       PangleAdManager.shared.setRewardedVideoAd(ad)
+      if (loadingType == PangleLoadingType.preload_only) {
+        invoke(0, verify = false)
+      }
     } else {
       target?.also {
         ttVideoAd = ad
@@ -48,7 +53,7 @@ internal class FLTRewardedVideoAd(var target: Activity?, val preload: Boolean = 
 
 }
 
-class RewardAdInteractionImpl(var result: (Any) -> Unit?) : TTRewardVideoAd.RewardAdInteractionListener {
+internal class RewardAdInteractionImpl(var result: (Any) -> Unit?) : TTRewardVideoAd.RewardAdInteractionListener {
   private var verify = false
 
   // 视频广告播完验证奖励有效性回调，参数分别为是否有效，奖励数量，奖励名称
@@ -57,7 +62,7 @@ class RewardAdInteractionImpl(var result: (Any) -> Unit?) : TTRewardVideoAd.Rewa
   }
 
   override fun onSkippedVideo() {
-    invoke(-1, "skipped")
+    invoke(-1, "skip")
   }
 
   override fun onAdShow() {
@@ -79,6 +84,9 @@ class RewardAdInteractionImpl(var result: (Any) -> Unit?) : TTRewardVideoAd.Rewa
 
 
   private fun invoke(code: Int = 0, message: String? = null, verify: Boolean = false) {
+    if (result == kBlock) {
+      return
+    }
     result.apply {
       val args = mutableMapOf<String, Any?>()
       args["code"] = code
@@ -89,8 +97,8 @@ class RewardAdInteractionImpl(var result: (Any) -> Unit?) : TTRewardVideoAd.Rewa
         args["verify"] = verify
       }
       invoke(args)
+      result = kBlock
     }
-    result = {}
   }
 }
 

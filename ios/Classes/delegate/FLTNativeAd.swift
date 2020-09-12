@@ -8,8 +8,8 @@
 import BUAdSDK
 
 internal final class FLTNativeAd: NSObject, BUNativeAdsManagerDelegate {
-    typealias Success = (BUNativeAdsManager, [BUNativeAd]) -> Void
-    typealias Fail = (BUNativeAdsManager, Error?) -> Void
+    typealias Success = ([BUNativeAd]?) -> Void
+    typealias Fail = (Error?) -> Void
 
     let success: Success?
     let fail: Fail?
@@ -20,10 +20,12 @@ internal final class FLTNativeAd: NSObject, BUNativeAdsManagerDelegate {
     }
 
     public func nativeAdsManager(_ adsManager: BUNativeAdsManager, didFailWithError error: Error?) {
-        fail?(adsManager, error)
+        fail?(error)
     }
 
     public func nativeAdsManagerSuccess(toLoad adsManager: BUNativeAdsManager, nativeAds nativeAdDataArray: [BUNativeAd]?) {
-        success?(adsManager, nativeAdDataArray ?? [])
+        /// 存入缓存
+        PangleAdManager.shared.setFeedAd(nativeAdDataArray)
+        success?(nativeAdDataArray)
     }
 }

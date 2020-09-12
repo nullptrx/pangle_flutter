@@ -35,15 +35,15 @@ internal final class FLTNativeAdTask: FLTTaskProtocol {
         self.init(manager, count: count)
     }
     
-    func execute() -> (@escaping (FLTTaskProtocol, Any, [BUNativeAd]?) -> Void) -> Void {
+    func execute() -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
         return { result in
-            let delegate = FLTNativeAd(success: { [weak self] _, data in
+            let delegate = FLTNativeAd(success: { [weak self] data in
                 guard let self = self else { return }
-                result(self, ["code": 0, "count": data.count, "data": data.map { String($0.hash) }], data)
-            }, fail: { [weak self] _, error in
+                result(self, ["code": 0, "count": data?.count ?? 0, "data": data?.map { String($0.hash) } ?? []])
+            }, fail: { [weak self] error in
                 guard let self = self else { return }
                 let e = error as NSError?
-                result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? "", "count": 0, "data": []], nil)
+                result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? "", "count": 0, "data": []])
                })
             
             self.manager.delegate = delegate

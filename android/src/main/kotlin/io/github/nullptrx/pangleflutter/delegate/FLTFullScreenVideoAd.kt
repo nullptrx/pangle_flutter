@@ -5,9 +5,11 @@ import androidx.annotation.MainThread
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTFullScreenVideoAd
 import io.github.nullptrx.pangleflutter.PangleAdManager
+import io.github.nullptrx.pangleflutter.common.PangleLoadingType
+import io.github.nullptrx.pangleflutter.common.kBlock
 
 
-class FLTFullScreenVideoAd(var target: Activity?, val preload: Boolean = false, var result: (Any) -> Unit = {}) : TTAdNative.FullScreenVideoAdListener {
+class FLTFullScreenVideoAd(var target: Activity?, val loadingType: PangleLoadingType, var result: (Any) -> Unit = {}) : TTAdNative.FullScreenVideoAdListener {
   private var ttVideoAd: TTFullScreenVideoAd? = null
 
   /**
@@ -17,8 +19,11 @@ class FLTFullScreenVideoAd(var target: Activity?, val preload: Boolean = false, 
    */
   @MainThread
   override fun onFullScreenVideoAdLoad(ad: TTFullScreenVideoAd?) {
-    if (preload) {
+    if (loadingType == PangleLoadingType.preload || loadingType == PangleLoadingType.preload_only) {
       PangleAdManager.shared.setFullScreenVideoAd(ad)
+      if (loadingType == PangleLoadingType.preload_only) {
+        invoke(0)
+      }
     } else {
       target?.also {
         ttVideoAd = ad
@@ -47,6 +52,9 @@ class FLTFullScreenVideoAd(var target: Activity?, val preload: Boolean = false, 
   }
 
   private fun invoke(code: Int = 0, message: String? = null) {
+    if (result == kBlock) {
+      return
+    }
     result.apply {
       val args = mutableMapOf<String, Any?>()
       args["code"] = code
@@ -54,8 +62,8 @@ class FLTFullScreenVideoAd(var target: Activity?, val preload: Boolean = false, 
         args["message"] = it
       }
       invoke(args)
+      result = kBlock
     }
-    result = {}
   }
 }
 
@@ -64,7 +72,7 @@ class FullScreenVideoAdInteractionImpl(var result: (Any) -> Unit?) : TTFullScree
 
   // 视频广告播完验证奖励有效性回调，参数分别为是否有效，奖励数量，奖励名称
   override fun onSkippedVideo() {
-    invoke(-1, "skipped")
+    invoke(-1, "skip")
   }
 
   override fun onAdShow() {
@@ -86,6 +94,9 @@ class FullScreenVideoAdInteractionImpl(var result: (Any) -> Unit?) : TTFullScree
 
 
   private fun invoke(code: Int = 0, message: String? = null) {
+    if (result == kBlock) {
+      return
+    }
     result.apply {
       val args = mutableMapOf<String, Any?>()
       args["code"] = code
@@ -93,8 +104,8 @@ class FullScreenVideoAdInteractionImpl(var result: (Any) -> Unit?) : TTFullScree
         args["message"] = it
       }
       invoke(args)
+      result = kBlock
     }
-    result = {}
   }
 }
 

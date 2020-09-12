@@ -13,8 +13,6 @@ internal final class FLTNativeExpressAdTask: FLTTaskProtocol {
     private var delegate: FLTNativeExpressAdViewDelegate?
     private var count: Int
     
-    public private(set) var isCanceled: Bool = false
-    
     internal init(manager: BUNativeExpressAdManager, count: Int) {
         self.manager = manager
         self.count = count
@@ -48,15 +46,15 @@ internal final class FLTNativeExpressAdTask: FLTTaskProtocol {
         self.init(manager: nad, count: count)
     }
     
-    func execute() -> (@escaping (FLTTaskProtocol, Any, [BUNativeExpressAdView]?) -> Void) -> Void {
+    func execute() -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
         return { result in
-            let delegate = FLTNativeExpressAdViewDelegate(success: { [weak self] _, data in
-                guard let self = self, !self.isCanceled else { return }
-                result(self, ["code": 0, "count": data.count, "data": data.map { String($0.hash) }], data)
-            }, fail: { [weak self] _, error in
-                guard let self = self, !self.isCanceled else { return }
+            let delegate = FLTNativeExpressAdViewDelegate(success: { [weak self] data in
+                guard let self = self else { return }
+                result(self, ["code": 0, "count": data.count, "data": data.map { String($0.hash) }])
+            }, fail: { [weak self] error in
+                guard let self = self else { return }
                 let e = error as NSError?
-                result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? "", "count": 0, "data": []], nil)
+                result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? "", "count": 0, "data": []])
             })
             
             self.manager.delegate = delegate
@@ -66,8 +64,4 @@ internal final class FLTNativeExpressAdTask: FLTTaskProtocol {
         }
     }
     
-    func cancel() {
-        guard isCanceled else { return }
-        isCanceled = true
-    }
 }

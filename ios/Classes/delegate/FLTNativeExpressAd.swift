@@ -8,8 +8,8 @@
 import BUAdSDK
 
 internal final class FLTNativeExpressAdViewDelegate: NSObject, BUNativeExpressAdViewDelegate {
-    typealias Success = (BUNativeExpressAdManager, [BUNativeExpressAdView]) -> Void
-    typealias Fail = (BUNativeExpressAdManager, Error?) -> Void
+    typealias Success = ([BUNativeExpressAdView]) -> Void
+    typealias Fail = (Error?) -> Void
 
     let success: Success?
     let fail: Fail?
@@ -25,11 +25,13 @@ internal final class FLTNativeExpressAdViewDelegate: NSObject, BUNativeExpressAd
             $0.delegate = self
             $0.manager = nativeExpressAd
         }
-        self.success?(nativeExpressAd, views)
+        /// 存入缓存
+        PangleAdManager.shared.setExpressAd(views)
+        self.success?(views)
     }
 
     public func nativeExpressAdFail(toLoad nativeExpressAd: BUNativeExpressAdManager, error: Error?) {
-        self.fail?(nativeExpressAd, error)
+        self.fail?(error)
     }
 
     public func nativeExpressAdViewRenderFail(_ nativeExpressAdView: BUNativeExpressAdView, error: Error?) {

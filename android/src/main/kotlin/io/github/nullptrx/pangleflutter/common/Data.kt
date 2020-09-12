@@ -8,8 +8,10 @@ data class TTSize(
 data class TTSizeF(
     val width: Float = 0f,
     val height: Float = 0f
-    
+
 )
 
 const val kPadding = 8
 const val kDoublePadding = 16
+
+val kBlock: (Any) -> Unit = {}

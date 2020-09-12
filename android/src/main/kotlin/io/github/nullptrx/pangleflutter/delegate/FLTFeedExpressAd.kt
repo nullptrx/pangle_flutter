@@ -3,6 +3,7 @@ package io.github.nullptrx.pangleflutter.delegate
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd
 import io.github.nullptrx.pangleflutter.PangleAdManager
+import io.github.nullptrx.pangleflutter.common.kBlock
 import kotlin.collections.set
 
 class FLTFeedExpressAd(var result: (Any) -> Unit = {}) : TTAdNative.NativeExpressAdListener {
@@ -21,6 +22,9 @@ class FLTFeedExpressAd(var result: (Any) -> Unit = {}) : TTAdNative.NativeExpres
   }
 
   private fun invoke(code: Int = 0, message: String? = null, count: Int = 0, data: List<String>? = null) {
+    if (result == kBlock) {
+      return
+    }
     result.apply {
       val params = mutableMapOf<String, Any>()
       params["code"] = code
@@ -32,8 +36,8 @@ class FLTFeedExpressAd(var result: (Any) -> Unit = {}) : TTAdNative.NativeExpres
         params["data"] = it
       }
       invoke(params)
+      result = kBlock
     }
-    result = {}
 
 
   }

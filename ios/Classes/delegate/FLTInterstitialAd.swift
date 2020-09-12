@@ -8,8 +8,8 @@
 import BUAdSDK
 
 internal final class FLTInterstitialAd: NSObject, BUInterstitialAdDelegate {
-    typealias Success = (BUInterstitialAd) -> Void
-    typealias Fail = (BUInterstitialAd, Error?) -> Void
+    typealias Success = () -> Void
+    typealias Fail = (Error?) -> Void
     
     let success: Success?
     let fail: Fail?
@@ -25,10 +25,10 @@ internal final class FLTInterstitialAd: NSObject, BUInterstitialAdDelegate {
     }
     
     func interstitialAd(_ interstitialAd: BUInterstitialAd, didFailWithError error: Error?) {
-        self.fail?(interstitialAd, error)
+        self.fail?(error)
     }
     
     func interstitialAdDidClose(_ interstitialAd: BUInterstitialAd) {
-        self.success?(interstitialAd)
+        self.success?()
     }
 }

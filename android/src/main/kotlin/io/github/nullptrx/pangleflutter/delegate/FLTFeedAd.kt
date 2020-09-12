@@ -3,6 +3,7 @@ package io.github.nullptrx.pangleflutter.delegate
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTFeedAd
 import io.github.nullptrx.pangleflutter.PangleAdManager
+import io.github.nullptrx.pangleflutter.common.kBlock
 import kotlin.collections.set
 
 class FLTFeedAd(var result: (Any) -> Unit = {}) : TTAdNative.FeedAdListener {
@@ -21,6 +22,9 @@ class FLTFeedAd(var result: (Any) -> Unit = {}) : TTAdNative.FeedAdListener {
   }
 
   private fun invoke(code: Int = 0, message: String? = null, count: Int = 0, data: List<String>? = null) {
+    if (result == kBlock) {
+      return
+    }
     result.apply {
       val args = mutableMapOf<String, Any>()
       args["code"] = code
@@ -32,8 +36,8 @@ class FLTFeedAd(var result: (Any) -> Unit = {}) : TTAdNative.FeedAdListener {
         args["data"] = it
       }
       invoke(args)
+      result = kBlock
     }
-    result = {}
 
 
   }

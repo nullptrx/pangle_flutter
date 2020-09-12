@@ -5,6 +5,7 @@ import android.view.View
 import com.bytedance.sdk.openadsdk.TTAdDislike
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd
+import io.github.nullptrx.pangleflutter.common.kBlock
 
 class FLTInterstitialExpressAd(var target: Activity?, var result: (Any) -> Unit) : TTAdNative.NativeExpressAdListener, TTAdDislike.DislikeInteractionCallback, TTNativeExpressAd.AdInteractionListener {
 
@@ -65,6 +66,9 @@ class FLTInterstitialExpressAd(var target: Activity?, var result: (Any) -> Unit)
 
 
   private fun invoke(code: Int = 0, message: String? = null) {
+    if (result == kBlock) {
+      return
+    }
     result.apply {
       val args = mutableMapOf<String, Any?>()
       args["code"] = code
@@ -72,8 +76,8 @@ class FLTInterstitialExpressAd(var target: Activity?, var result: (Any) -> Unit)
         args["message"] = it
       }
       invoke(args)
+      result = kBlock
     }
-    result = {}
     target = null
   }
 

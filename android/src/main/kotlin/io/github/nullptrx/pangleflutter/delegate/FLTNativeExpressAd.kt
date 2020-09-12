@@ -1,12 +1,12 @@
 package io.github.nullptrx.pangleflutter.delegate
 
 import com.bytedance.sdk.openadsdk.TTAdNative
-import com.bytedance.sdk.openadsdk.TTNativeAd
+import com.bytedance.sdk.openadsdk.TTNativeExpressAd
 import io.github.nullptrx.pangleflutter.common.kBlock
 
-internal class FLTNativeAd(var result: (Any) -> Unit) : TTAdNative.NativeAdListener {
+internal class FLTNativeExpressAd(var result: (Any) -> Unit) : TTAdNative.NativeExpressAdListener {
 
-  override fun onNativeAdLoad(ads: List<TTNativeAd>?) {
+  override fun onNativeExpressAdLoad(ads: MutableList<TTNativeExpressAd>?) {
     invoke()
   }
 

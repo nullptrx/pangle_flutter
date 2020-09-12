@@ -8,8 +8,8 @@
 import BUAdSDK
 
 internal final class FLTSplashExpressAd: NSObject, BUNativeExpressSplashViewDelegate {
-    typealias Success = (BUNativeExpressSplashView) -> Void
-    typealias Fail = (BUNativeExpressSplashView, Error?) -> Void
+    typealias Success = () -> Void
+    typealias Fail = (Error?) -> Void
     
     let success: Success?
     let fail: Fail?
@@ -21,22 +21,22 @@ internal final class FLTSplashExpressAd: NSObject, BUNativeExpressSplashViewDele
     
     func nativeExpressSplashViewDidClickSkip(_ splashAdView: BUNativeExpressSplashView) {
         splashAdView.removeFromSuperview()
-        self.success?(splashAdView)
+        self.success?()
     }
     
     func nativeExpressSplashView(_ splashAdView: BUNativeExpressSplashView, didFailWithError error: Error?) {
         splashAdView.removeFromSuperview()
-        self.fail?(splashAdView, error)
+        self.fail?(error)
     }
     
     func nativeExpressSplashViewDidClose(_ splashAdView: BUNativeExpressSplashView) {
         splashAdView.removeFromSuperview()
-        self.success?(splashAdView)
+        self.success?()
     }
     
     func nativeExpressSplashViewRenderFail(_ splashAdView: BUNativeExpressSplashView, error: Error?) {
         splashAdView.removeFromSuperview()
-        self.fail?(splashAdView, error)
+        self.fail?(error)
     }
     
     func nativeExpressSplashViewDidLoad(_ splashAdView: BUNativeExpressSplashView) {}

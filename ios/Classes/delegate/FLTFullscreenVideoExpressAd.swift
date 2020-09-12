@@ -8,25 +8,30 @@
 import Foundation
 
 internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFullscreenVideoAdDelegate {
-    typealias Success = (BUNativeExpressFullscreenVideoAd) -> Void
-    typealias Fail = (BUNativeExpressFullscreenVideoAd, Error?) -> Void
+    typealias Success = () -> Void
+    typealias Fail = (Error?) -> Void
     
-    var preload: Bool
+    private var isSkipped = false
+    private var loadingType: LoadingType
     
     let success: Success?
     let fail: Fail?
     
-    init(_ preload: Bool, success: Success?, fail: Fail?) {
-        self.preload = preload
+    init(_ loadingType: LoadingType, success: Success?, fail: Fail?) {
+        self.loadingType = loadingType
         self.success = success
         self.fail = fail
     }
     
     func nativeExpressFullscreenVideoAdDidLoad(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {
-        if self.preload {
-            self.preload = false
+        let preload = self.loadingType == .preload || self.loadingType == .preload_only
+        if preload {
+            self.loadingType = .normal
             fullscreenVideoAd.extraDelegate = self
-            self.success?(fullscreenVideoAd)
+            /// 存入缓存
+            PangleAdManager.shared.setFullScreenVideoAd(fullscreenVideoAd)
+            /// 必须回调，否则task不能销毁，导致内存泄漏
+            self.success?()
         } else {
             let vc = AppUtil.getVC()
             fullscreenVideoAd.show(fromRootViewController: vc)
@@ -34,13 +39,24 @@ internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFulls
     }
     
     func nativeExpressFullscreenVideoAdDidClose(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {
-        fullscreenVideoAd.didReceiveSuccess?()
-        self.success?(fullscreenVideoAd)
+        if self.isSkipped {
+            return
+        }
+        if fullscreenVideoAd.didReceiveSuccess != nil {
+            fullscreenVideoAd.didReceiveSuccess?()
+        } else {
+            self.success?()
+        }
     }
     
     func nativeExpressFullscreenVideoAdDidClickSkip(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {
-        fullscreenVideoAd.didReceiveFail?(NSError(domain: "skipped", code: -1, userInfo: nil))
-        self.fail?(fullscreenVideoAd, NSError(domain: "skipped", code: -1, userInfo: nil))
+        self.isSkipped = true
+        let error = NSError(domain: "skip", code: -1, userInfo: nil)
+        if fullscreenVideoAd.didReceiveFail != nil {
+            fullscreenVideoAd.didReceiveFail?(error)
+        } else {
+            self.fail?(error)
+        }
     }
     
     func nativeExpressFullscreenVideoAdViewRenderSuccess(_ rewardedVideoAd: BUNativeExpressFullscreenVideoAd) {}
@@ -48,17 +64,23 @@ internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFulls
     func nativeExpressFullscreenVideoAdDidDownLoadVideo(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {}
     
     func nativeExpressFullscreenVideoAdViewRenderFail(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd, error: Error?) {
-        fullscreenVideoAd.didReceiveFail?(error)
-        self.fail?(fullscreenVideoAd, error)
+        if fullscreenVideoAd.didReceiveFail != nil {
+            fullscreenVideoAd.didReceiveFail?(error)
+        } else {
+            self.fail?(error)
+        }
     }
     
     func nativeExpressFullscreenVideoAd(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd, didFailWithError error: Error?) {
-        fullscreenVideoAd.didReceiveFail?(error)
-        self.fail?(fullscreenVideoAd, error)
+        if fullscreenVideoAd.didReceiveFail != nil {
+            fullscreenVideoAd.didReceiveFail?(error)
+        } else {
+            self.fail?(error)
+        }
     }
     
-    func nativeExpressFullscreenVideoAdDidPlayFinish(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd, didFailWithError error: Error?) {
-    }
+    func nativeExpressFullscreenVideoAdDidPlayFinish(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd, didFailWithError error: Error?) {}
+    
 }
 
 private var delegateKey = "nullptrx.github.io/delegate"

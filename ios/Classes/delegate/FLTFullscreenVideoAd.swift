@@ -8,24 +8,30 @@
 import Foundation
 
 internal final class FLTFullscreenVideoAd: NSObject, BUFullscreenVideoAdDelegate {
-    typealias Success = (BUFullscreenVideoAd) -> Void
-    typealias Fail = (BUFullscreenVideoAd, Error?) -> Void
+    typealias Success = () -> Void
+    typealias Fail = (Error?) -> Void
+    
+    private var isSkipped = false
     
     let success: Success?
     let fail: Fail?
-    var preload: Bool
+    private var loadingType: LoadingType
     
-    init(_ preload: Bool, success: Success?, fail: Fail?) {
-        self.preload = preload
+    init(_ loadingType: LoadingType, success: Success?, fail: Fail?) {
+        self.loadingType = loadingType
         self.success = success
         self.fail = fail
     }
     
     func fullscreenVideoAdVideoDataDidLoad(_ fullscreenVideoAd: BUFullscreenVideoAd) {
-        if self.preload {
-            self.preload = false
+        let preload = self.loadingType == .preload || self.loadingType == .preload_only
+        if preload {
+            self.loadingType = .normal
             fullscreenVideoAd.extraDelegate = self
-            self.success?(fullscreenVideoAd)
+            /// 存入缓存
+            PangleAdManager.shared.setFullScreenVideoAd(fullscreenVideoAd)
+            /// 必须回调，否则task不能销毁，导致内存泄漏
+            self.success?()
         } else {
             let vc = AppUtil.getVC()
             fullscreenVideoAd.show(fromRootViewController: vc)
@@ -33,23 +39,35 @@ internal final class FLTFullscreenVideoAd: NSObject, BUFullscreenVideoAdDelegate
     }
     
     func fullscreenVideoAdDidClose(_ fullscreenVideoAd: BUFullscreenVideoAd) {
-        fullscreenVideoAd.didReceiveSuccess?()
-        self.success?(fullscreenVideoAd)
+        if self.isSkipped {
+            return
+        }
+        if fullscreenVideoAd.didReceiveSuccess != nil {
+            fullscreenVideoAd.didReceiveSuccess?()
+        } else {
+            self.success?()
+        }
     }
     
     func fullscreenVideoAdDidClickSkip(_ fullscreenVideoAd: BUFullscreenVideoAd) {
-        fullscreenVideoAd.didReceiveFail?(NSError(domain: "skipped", code: -1, userInfo: nil))
-        self.fail?(fullscreenVideoAd, NSError(domain: "skipped", code: -1, userInfo: nil))
+        self.isSkipped = true
+        let error = NSError(domain: "skip", code: -1, userInfo: nil)
+        if fullscreenVideoAd.didReceiveFail != nil {
+            fullscreenVideoAd.didReceiveFail?(error)
+        } else {
+            self.fail?(error)
+        }
     }
     
     func fullscreenVideoAd(_ fullscreenVideoAd: BUFullscreenVideoAd, didFailWithError error: Error?) {
-        fullscreenVideoAd.didReceiveFail?(error)
-        self.fail?(fullscreenVideoAd, error)
+        if fullscreenVideoAd.didReceiveFail != nil {
+            fullscreenVideoAd.didReceiveFail?(error)
+        } else {
+            self.fail?(error)
+        }
     }
     
-    func fullscreenVideoAdDidPlayFinish(_ fullscreenVideoAd: BUFullscreenVideoAd, didFailWithError error: Error?) {
-        fullscreenVideoAd.didReceiveFail?(error)
-    }
+    func fullscreenVideoAdDidPlayFinish(_ fullscreenVideoAd: BUFullscreenVideoAd, didFailWithError error: Error?) {}
 }
 
 private var delegateKey = "nullptrx.github.io/delegate"

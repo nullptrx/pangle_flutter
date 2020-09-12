@@ -100,7 +100,7 @@ object PangleAdSlotManager {
     return adSlot
   }
 
-  fun getInterstitialAdSlot(slotId: String, isExpress: Boolean, expressSize: TTSizeF?, imgSizeIndex: Int, isSupportDeepLink: Boolean, isNativeAd: Boolean): AdSlot {
+  fun getInterstitialAdSlot(slotId: String, isExpress: Boolean, expressSize: TTSizeF?, imgSizeIndex: Int, isSupportDeepLink: Boolean): AdSlot {
 
     val adSlot = AdSlot.Builder().apply {
       setCodeId(slotId)
@@ -108,17 +108,13 @@ object PangleAdSlotManager {
         setExpressViewAcceptedSize(expressSize!!.width, expressSize.height)
       } else {
         val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
-        val width = imgSize.width * 0.9
-        val height = imgSize.height * 0.9
-        setImageAcceptedSize(width.toInt(), height.toInt())
+        val width = imgSize.width
+        val height = imgSize.height
+        setImageAcceptedSize(width, height)
       }
       setSupportDeepLink(isSupportDeepLink)
       //请求原生广告时候，请务必调用该方法，设置参数为TYPE_BANNER或TYPE_INTERACTION_AD
       setAdCount(1)
-      // TODO support native ad type
-      if (isNativeAd) {
-        setNativeAdType(AdSlot.TYPE_INTERACTION_AD)
-      }
     }
         .build()
     return adSlot
@@ -145,6 +141,28 @@ object PangleAdSlotManager {
       setOrientation(orientation.ordinal)
       //激励视频奖励透传参数，字符串，如果用json对象，必须使用序列化为String类型,可为空
     }.build()
+    return adSlot
+  }
+
+
+  fun getNativeAdSlot(slotId: String, isExpress: Boolean, expressSize: TTSizeF?, imgSizeIndex: Int, isSupportDeepLink: Boolean, nativeAdType: Int): AdSlot {
+
+    val adSlot = AdSlot.Builder().apply {
+      setCodeId(slotId)
+      if (isExpress) {
+        setExpressViewAcceptedSize(expressSize!!.width, expressSize.height)
+      } else {
+        val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
+        val width = imgSize.width
+        val height = imgSize.height
+        setImageAcceptedSize(width, height)
+      }
+      setSupportDeepLink(isSupportDeepLink)
+      //请求原生广告时候，请务必调用该方法，设置参数为TYPE_BANNER或TYPE_INTERACTION_AD
+      setAdCount(1)
+      setNativeAdType(nativeAdType)
+    }
+        .build()
     return adSlot
   }
 }

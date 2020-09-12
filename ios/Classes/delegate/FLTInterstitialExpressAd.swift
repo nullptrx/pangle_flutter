@@ -9,8 +9,8 @@ import BUAdSDK
 import Flutter
 
 internal final class FLTInterstitialExpressAd: NSObject, BUNativeExpresInterstitialAdDelegate {
-    typealias Success = (BUNativeExpressInterstitialAd) -> Void
-    typealias Fail = (BUNativeExpressInterstitialAd, Error?) -> Void
+    typealias Success = () -> Void
+    typealias Fail = (Error?) -> Void
     
     let success: Success?
     let fail: Fail?
@@ -26,14 +26,14 @@ internal final class FLTInterstitialExpressAd: NSObject, BUNativeExpresInterstit
     }
     
     func nativeExpresInterstitialAd(_ interstitialAd: BUNativeExpressInterstitialAd, didFailWithError error: Error?) {
-        self.fail?(interstitialAd, error)
+        self.fail?(error)
     }
     
     func nativeExpresInterstitialAdRenderFail(_ interstitialAd: BUNativeExpressInterstitialAd, error: Error?) {
-        self.fail?(interstitialAd, error)
+        self.fail?(error)
     }
     
     func nativeExpresInterstitialAdDidClose(_ interstitialAd: BUNativeExpressInterstitialAd) {
-        self.success?(interstitialAd)
+        self.success?()
     }
 }

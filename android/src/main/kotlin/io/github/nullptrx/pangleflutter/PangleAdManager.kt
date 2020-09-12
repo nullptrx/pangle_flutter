@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageInfo
 import com.bytedance.sdk.openadsdk.*
 import io.flutter.plugin.common.MethodChannel
+import io.github.nullptrx.pangleflutter.common.PangleLoadingType
 import io.github.nullptrx.pangleflutter.common.PangleTitleBarTheme
 import io.github.nullptrx.pangleflutter.delegate.*
 import io.github.nullptrx.pangleflutter.util.asMap
@@ -236,7 +237,7 @@ class PangleAdManager {
 //        override fun getDevOaid(): String {
 //          return devOaid?:super.getDevOaid()
 //        }
-        
+
         // 修改后，返回String?
         override fun getDevOaid(): String? {
           return devOaid
@@ -265,26 +266,20 @@ class PangleAdManager {
 
   }
 
-  fun loadRewardVideoAd(adSlot: AdSlot, result: MethodChannel.Result, activity: Activity?, preload: Boolean) {
+  fun loadRewardVideoAd(adSlot: AdSlot, activity: Activity?, loadingType: PangleLoadingType, result: (Any) -> Unit = {}) {
 
     activity ?: return
 
-    ttAdNative?.loadRewardVideoAd(adSlot, FLTRewardedVideoAd(activity, preload) {
-      result.success(it)
-    })
+    ttAdNative?.loadRewardVideoAd(adSlot, FLTRewardedVideoAd(activity, loadingType, result))
 
   }
 
-  fun loadFeedAd(adSlot: AdSlot, result: MethodChannel.Result) {
-    ttAdNative?.loadFeedAd(adSlot, FLTFeedAd {
-      result.success(it)
-    })
+  fun loadFeedAd(adSlot: AdSlot, result: (Any) -> Unit = {}) {
+    ttAdNative?.loadFeedAd(adSlot, FLTFeedAd(result))
   }
 
-  fun loadFeedExpressAd(adSlot: AdSlot, result: MethodChannel.Result) {
-    ttAdNative?.loadNativeExpressAd(adSlot, FLTFeedExpressAd {
-      result.success(it)
-    })
+  fun loadFeedExpressAd(adSlot: AdSlot, result: (Any) -> Unit = {}) {
+    ttAdNative?.loadNativeExpressAd(adSlot, FLTFeedExpressAd(result))
   }
 
   fun loadBannerAd(adSlot: AdSlot, listener: TTAdNative.BannerAdListener) {
@@ -303,13 +298,19 @@ class PangleAdManager {
     ttAdNative?.loadInteractionExpressAd(adSlot, listener)
   }
 
-  fun loadFullscreenVideoAd(adSlot: AdSlot, result: MethodChannel.Result, activity: Activity?, preload: Boolean) {
+  fun loadNativeAd(adSlot: AdSlot, listener: TTAdNative.NativeAdListener) {
+    ttAdNative?.loadNativeAd(adSlot, listener)
+  }
+
+  fun loadNativeExpressAd(adSlot: AdSlot, listener: TTAdNative.NativeExpressAdListener) {
+    ttAdNative?.loadNativeExpressAd(adSlot, listener)
+  }
+
+  fun loadFullscreenVideoAd(adSlot: AdSlot, activity: Activity?, loadingType: PangleLoadingType, result: (Any) -> Unit = {}) {
 
     activity ?: return
 
-    ttAdNative?.loadFullScreenVideoAd(adSlot, FLTFullScreenVideoAd(activity, preload) {
-      result.success(it)
-    })
+    ttAdNative?.loadFullScreenVideoAd(adSlot, FLTFullScreenVideoAd(activity, loadingType, result))
 
   }
 

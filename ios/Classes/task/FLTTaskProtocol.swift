@@ -8,4 +8,17 @@
 import Foundation
 
 protocol FLTTaskProtocol: class {
+    func execute() -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void
+
+    func execute(_ loadingType: LoadingType) -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void
+}
+
+extension FLTTaskProtocol {
+    func execute() -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
+        return { _ in }
+    }
+
+    func execute(_ loadingType: LoadingType) -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
+        return { _ in }
+    }
 }

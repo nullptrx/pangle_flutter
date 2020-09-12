@@ -161,10 +161,7 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
             loadingType = PangleLoadingType.normal
           }
 
-        } else {
-          result.success(null)
         }
-        val preload = PangleLoadingType.preload == loadingType || PangleLoadingType.preload_only == loadingType
 
         val slotId = call.argument<String>("slotId")!!
         val userId = call.argument<String>("userId")
@@ -183,7 +180,9 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         }
         val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(slotId, isExpress, expressSize, userId, rewardName, rewardAmount, isVertical, isSupportDeepLink, extra)
 
-        pangle.loadRewardVideoAd(adSlot, result, activity, preload)
+        pangle.loadRewardVideoAd(adSlot, activity, loadingType) {
+          result.success(it)
+        }
       }
 
       "loadFeedAd" -> {
@@ -202,9 +201,13 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         }
         val adSlot = PangleAdSlotManager.getFeedAdSlot(slotId, isExpress, expressSize, count, imgSizeIndex, isSupportDeepLink)
         if (isExpress) {
-          pangle.loadFeedExpressAd(adSlot, result)
+          pangle.loadFeedExpressAd(adSlot) {
+            result.success(it)
+          }
         } else {
-          pangle.loadFeedAd(adSlot, result)
+          pangle.loadFeedAd(adSlot) {
+            result.success(it)
+          }
         }
 
       }
@@ -214,7 +217,6 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val isExpress = call.argument<Boolean>("isExpress") ?: false
         val imgSizeIndex = call.argument<Int>("imgSize")!!
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
-        val isNativeAd = call.argument<Boolean>("isNativeAd") ?: false
 
         var expressSize: TTSizeF? = null
         if (isExpress) {
@@ -224,7 +226,7 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
           expressSize = TTSizeF(w, h)
         }
 
-        val adSlot = PangleAdSlotManager.getInterstitialAdSlot(slotId, isExpress, expressSize, imgSizeIndex, isSupportDeepLink, isNativeAd)
+        val adSlot = PangleAdSlotManager.getInterstitialAdSlot(slotId, isExpress, expressSize, imgSizeIndex, isSupportDeepLink)
         if (isExpress) {
           pangle.loadInteractionExpressAd(adSlot, FLTInterstitialExpressAd(activity) {
             result.success(it)
@@ -253,11 +255,7 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
             loadingType = PangleLoadingType.normal
           }
 
-        } else {
-          result.success(null)
         }
-
-        val preload = PangleLoadingType.preload == loadingType || PangleLoadingType.preload_only == loadingType
 
         val slotId = call.argument<String>("slotId")!!
 //        val isVertical = call.argument<Boolean>("isVertical") ?: true
@@ -275,7 +273,9 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         }
         val adSlot = PangleAdSlotManager.getFullScreenVideoAdSlot(slotId, isExpress, expressSize, orientation, isSupportDeepLink)
 
-        pangle.loadFullscreenVideoAd(adSlot, result, activity, preload)
+        pangle.loadFullscreenVideoAd(adSlot, activity, loadingType) {
+          result.success(it)
+        }
       }
       else -> result.notImplemented()
     }

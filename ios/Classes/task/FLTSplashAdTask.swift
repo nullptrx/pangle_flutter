@@ -36,10 +36,10 @@ internal final class FLTSplashAdTask: FLTTaskProtocol {
 
     func execute() -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
         return { result in
-            let delegate = FLTSplashAd(success: { [weak self] _ in
+            let delegate = FLTSplashAd(success: { [weak self] in
                 guard let self = self else { return }
                 result(self, ["code": 0])
-            }, fail: { [weak self] _, error in
+            }, fail: { [weak self] error in
                 guard let self = self else { return }
                 let e = error as NSError?
                 result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? ""])

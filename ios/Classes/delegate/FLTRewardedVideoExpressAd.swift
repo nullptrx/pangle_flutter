@@ -9,27 +9,30 @@ import BUAdSDK
 import Foundation
 
 internal final class FLTRewardedVideoExpressAd: NSObject, BUNativeExpressRewardedVideoAdDelegate {
-    typealias Success = (BUNativeExpressRewardedVideoAd, Bool) -> Void
-    typealias Fail = (BUNativeExpressRewardedVideoAd, Error?) -> Void
+    typealias Success = (Bool) -> Void
+    typealias Fail = (Error?) -> Void
     
     private var verify = false
-    
-    var preload: Bool
+    private var isSkipped = false
+    private var loadingType: LoadingType
     
     let success: Success?
     let fail: Fail?
     
-    init(_ preload: Bool, success: Success?, fail: Fail?) {
-        self.preload = preload
+    init(_ loadingType: LoadingType, success: Success?, fail: Fail?) {
+        self.loadingType = loadingType
         self.success = success
         self.fail = fail
     }
     
     func nativeExpressRewardedVideoAdDidLoad(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd) {
-        if self.preload {
-            self.preload = false
+        let preload = self.loadingType == .preload || self.loadingType == .preload_only
+        if preload {
             rewardedVideoAd.extraDelegate = self
-            self.success?(rewardedVideoAd, false)
+            /// 存入缓存
+            PangleAdManager.shared.setRewardedVideoAd(rewardedVideoAd)
+            /// 必须回调，否则task不能销毁，导致内存泄漏
+            self.success?(false)
         } else {
             let vc = AppUtil.getVC()
             rewardedVideoAd.show(fromRootViewController: vc)
@@ -37,24 +40,41 @@ internal final class FLTRewardedVideoExpressAd: NSObject, BUNativeExpressRewarde
     }
     
     func nativeExpressRewardedVideoAdDidClose(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd) {
-//        self.success?(rewardedVideoAd, false)
-        rewardedVideoAd.didReceiveSuccess?(self.verify)
-        self.success?(rewardedVideoAd, self.verify)
+        if self.isSkipped {
+            return
+        }
+        if rewardedVideoAd.didReceiveSuccess != nil {
+            rewardedVideoAd.didReceiveSuccess?(self.verify)
+        } else {
+            self.success?(self.verify)
+        }
     }
     
     func nativeExpressRewardedVideoAd(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd, didFailWithError error: Error?) {
-        rewardedVideoAd.didReceiveFail?(error)
-        self.fail?(rewardedVideoAd, error)
+        if rewardedVideoAd.didReceiveFail != nil {
+            rewardedVideoAd.didReceiveFail?(error)
+        } else {
+            self.fail?(error)
+        }
     }
     
     func nativeExpressRewardedVideoAdDidClickSkip(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd) {
-        rewardedVideoAd.didReceiveFail?(NSError(domain: "skipped", code: -1, userInfo: nil))
-        self.fail?(rewardedVideoAd, NSError(domain: "skipped", code: -1, userInfo: nil))
+        self.isSkipped = true
+        let error = NSError(domain: "skip", code: -1, userInfo: nil)
+        if rewardedVideoAd.didReceiveFail != nil {
+            rewardedVideoAd.didReceiveFail?(error)
+        } else {
+            self.fail?(error)
+        }
     }
     
     func nativeExpressRewardedVideoAdServerRewardDidFail(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd) {
-        rewardedVideoAd.didReceiveFail?(NSError(domain: "verify_failed", code: -1, userInfo: nil))
-        self.fail?(rewardedVideoAd, nil)
+        let error = NSError(domain: "verify_fail", code: -1, userInfo: nil)
+        if rewardedVideoAd.didReceiveFail != nil {
+            rewardedVideoAd.didReceiveFail?(error)
+        } else {
+            self.fail?(error)
+        }
     }
     
     func nativeExpressRewardedVideoAdServerRewardDidSucceed(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd, verify: Bool) {

@@ -21,17 +21,15 @@ internal final class FLTFullscreenVideoExpressAdTask: FLTTaskProtocol {
         self.init(manager)
     }
     
-    func execute(_ loadingType: LoadingType) -> (@escaping (FLTTaskProtocol, Any, BUNativeExpressFullscreenVideoAd?) -> Void) -> Void {
-        let preload = loadingType == .preload || loadingType == .preload_only
-        
+    func execute(_ loadingType: LoadingType) -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
         return { result in
-            let delegate = FLTFullscreenVideoExpressAd(preload, success: { [weak self] ad in
+            let delegate = FLTFullscreenVideoExpressAd(loadingType, success: { [weak self] () in
                 guard let self = self else { return }
-                result(self, ["code": 0], ad)
-            }, fail: { [weak self] _, error in
+                result(self, ["code": 0])
+            }, fail: { [weak self] error in
                 guard let self = self else { return }
                 let e = error as NSError?
-                result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? ""], nil)
+                result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? ""])
                })
             
             self.manager.delegate = delegate

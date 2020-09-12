@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.FragmentActivity
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTSplashAd
+import io.github.nullptrx.pangleflutter.common.kBlock
 import io.github.nullptrx.pangleflutter.dialog.NativeSplashDialog
 import io.github.nullptrx.pangleflutter.dialog.SupportSplashDialog
 
@@ -74,14 +75,16 @@ internal class FLTSplashAd(val hideSkipButton: Boolean?, var activity: Activity?
 
 
   fun invoke(code: Int = 0, message: String = "") {
-
+    if (result == kBlock) {
+      return
+    }
     result.apply {
       val params = mutableMapOf<String, Any>()
       params["code"] = code
       params["message"] = message
       invoke(params)
+      result = kBlock
     }
-    result = {}
   }
 
 

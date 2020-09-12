@@ -21,6 +21,23 @@ public final class PangleAdManager: NSObject {
     
     private var taskList: [FLTTaskProtocol] = []
     
+    fileprivate func execTask(_ task: FLTTaskProtocol, _ loadingType: LoadingType? = nil) -> (@escaping (Any) -> Void) -> Void {
+        self.taskList.append(task)
+        return { result in
+            if loadingType == nil {
+                task.execute()({ [weak self] task, data in
+                    self?.taskList.removeAll(where: { $0 === task })
+                    result(data)
+                })
+            } else {
+                task.execute(loadingType!)({ [weak self] task, data in
+                    self?.taskList.removeAll(where: { $0 === task })
+                    result(data)
+                })
+            }
+        }
+    }
+    
     public func initialize(_ args: [String: Any?]) {
         let appId: String = args["appId"] as! String
         let logLevel: Int? = args["logLevel"] as? Int
@@ -47,16 +64,10 @@ public final class PangleAdManager: NSObject {
         
         if isExpress {
             let task = FLTSplashExpressAdTask(args)
-            task.execute()({ [weak self] task, _ in
-                self?.taskList.removeAll(where: { $0 === task })
-                                            })
-            self.taskList.append(task)
+            self.execTask(task)({ _ in })
         } else {
             let task = FLTSplashAdTask(args)
-            task.execute()({ [weak self] task, _ in
-                self?.taskList.removeAll(where: { $0 === task })
-                                  })
-            self.taskList.append(task)
+            self.execTask(task)({ _ in })
         }
     }
     
@@ -80,26 +91,18 @@ public final class PangleAdManager: NSObject {
         
         if isExpress {
             let task = FLTRewardedVideoExpressAdTask(args)
-            task.execute(loadingType)({ [weak self] task, object, ad in
+            self.execTask(task, loadingType)({ data in
                 if loadingType == .normal {
-                    result(object)
-                } else {
-                    self?.setRewardedVideoAd(ad)
+                    result(data)
                 }
-                self?.taskList.removeAll(where: { $0 === task })
-                                     })
-            self.taskList.append(task)
+            })
         } else {
             let task = FLTRewardedVideoAdTask(args)
-            task.execute(loadingType)({ [weak self] task, object, ad in
+            self.execTask(task, loadingType)({ data in
                 if loadingType == .normal {
-                    result(object)
-                } else {
-                    self?.setRewardedVideoAd(ad)
+                    result(data)
                 }
-                self?.taskList.removeAll(where: { $0 === task })
-                           })
-            self.taskList.append(task)
+            })
         }
     }
     
@@ -108,20 +111,14 @@ public final class PangleAdManager: NSObject {
         
         if isExpress {
             let task = FLTNativeExpressAdTask(args)
-            task.execute()({ [weak self] task, object, views in
-                result(object)
-                self?.setExpressAd(views)
-                self?.taskList.removeAll(where: { $0 === task })
-                            })
-            self.taskList.append(task)
+            self.execTask(task)({ data in
+                result(data)
+            })
         } else {
             let task = FLTNativeAdTask(args)
-            task.execute()({ [weak self] task, object, ads in
-                result(object)
-                self?.setFeedAd(ads)
-                self?.taskList.removeAll(where: { $0 === task })
-                               })
-            self.taskList.append(task)
+            self.execTask(task)({ data in
+                result(data)
+            })
         }
     }
     
@@ -130,19 +127,15 @@ public final class PangleAdManager: NSObject {
         
         if isExpress {
             let task = FLTInterstitialExpressAdTask(args)
-            task.execute()({ [weak self] task, object in
-                result(object)
-                self?.taskList.removeAll(where: { $0 === task })
-                       })
-            self.taskList.append(task)
+            self.execTask(task)({ data in
+                result(data)
+            })
             
         } else {
             let task = FLTInterstitialAdTask(args)
-            task.execute()({ [weak self] task, object in
-                result(object)
-                self?.taskList.removeAll(where: { $0 === task })
+            self.execTask(task)({ data in
+                result(data)
             })
-            self.taskList.append(task)
         }
     }
     
@@ -154,40 +147,31 @@ public final class PangleAdManager: NSObject {
         if loadingType == .preload || loadingType == .normal {
             let success = self.showFullScreenVideoAd(isExpress)({ object in
                 result(object)
-               })
+            })
             if success {
                 if loadingType == .normal {
                     return
                 }
+                return
             } else {
                 loadingType = .normal
             }
-        } else {
-            result(nil)
         }
         
         if isExpress {
             let task = FLTFullscreenVideoExpressAdTask(args)
-            task.execute(loadingType)({ [weak self] task, object, ad in
+            self.execTask(task, loadingType)({ data in
                 if loadingType == .normal {
-                    result(object)
-                } else {
-                    self?.setFullScreenVideoAd(ad)
+                    result(data)
                 }
-                self?.taskList.removeAll(where: { $0 === task })
-                                        })
-            self.taskList.append(task)
+            })
         } else {
             let task = FLTFullscreenVideoAdTask(args)
-            task.execute(loadingType)({ [weak self] task, object, ad in
+            self.execTask(task, loadingType)({ data in
                 if loadingType == .normal {
-                    result(object)
-                } else {
-                    self?.setFullScreenVideoAd(ad)
+                    result(data)
                 }
-                self?.taskList.removeAll(where: { $0 === task })
-                              })
-            self.taskList.append(task)
+            })
         }
     }
 }
@@ -264,6 +248,7 @@ extension PangleAdManager {
                         result(["code": 0, "verify": verify])
                     }
                     ad.didReceiveFail = { error in
+                        self.rewardedVideoAdCollection.removeFirst()
                         let e = error as NSError?
                         result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""])
                     }
@@ -276,6 +261,7 @@ extension PangleAdManager {
                         result(["code": 0, "verify": verify])
                     }
                     ad.didReceiveFail = { error in
+                        self.rewardedVideoAdCollection.removeFirst()
                         let e = error as NSError?
                         result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""])
                     }
@@ -307,6 +293,7 @@ extension PangleAdManager {
                         result(["code": 0])
                     }
                     ad.didReceiveFail = { error in
+                        self.fullscreenVideoAdCollection.removeFirst()
                         let e = error as NSError?
                         result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""])
                     }
@@ -319,6 +306,7 @@ extension PangleAdManager {
                         result(["code": 0])
                     }
                     ad.didReceiveFail = { error in
+                        self.fullscreenVideoAdCollection.removeFirst()
                         let e = error as NSError?
                         result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""])
                     }
