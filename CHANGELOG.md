@@ -1,3 +1,9 @@
+## 0.3.5
+
+* Refactor Android & iOS implementation.
+* Fix the memory leak of loading rewarded video ads & fullscreen video ads.
+* Optimize callback messages for requesting various ads.
+
 ## 0.3.4
 
 * On flutter android sdk, support `registerWith` method  to load this plugin.
