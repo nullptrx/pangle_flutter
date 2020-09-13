@@ -32,6 +32,10 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         case "init":
             instance.initialize(args)
             result(nil)
+        case "requestPermissionIfNecessary":
+            // TODO: 待Xcode 12.0 正式版出来后适配App Tracking Transparency（ATT）
+            if #available(iOS 14.0, *) {}
+            result(nil)
         case "loadSplashAd":
             instance.loadSplashAd(args)
             result(nil)

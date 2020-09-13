@@ -31,10 +31,10 @@ class PanglePlugin {
   /// [Permission.location, Permission.phone, Permission.storage].request();
   /// ```
   ///
-  /// No effect on `iOS`, who does not allow this type of functionality.
+  /// Just works on iOS 14.0+.
   @deprecated
   Future<Null> requestPermissionIfNecessary() async {
-    if (Platform.isAndroid) {
+    if (Platform.isAndroid || Platform.isIOS) {
       await _methodChannel.invokeMethod('requestPermissionIfNecessary');
     }
   }

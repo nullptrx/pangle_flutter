@@ -53,6 +53,8 @@
     <key>NSLocationWhenInUseUsageDescription</key>
     <string>需要允许</string>
 
+    <!--  适配3.2.5.0+需要的配置  -->
+    <!--
     <key>SKAdNetworkItems</key>
     <array>
     <dict>
@@ -67,5 +69,6 @@
 
     <key>NSUserTrackingUsageDescription</key>
     <string>需要获取您设备的广告标识符，以为您提供更好的广告体验</string>
+    -->
 </dict>
 </plist>
