@@ -10,7 +10,8 @@ const kBannerId = '920801711';
 const kBannerExpressId = '945399224';
 
 const kFeedId = '920801899';
-const kFeedExpressId = '945399537';
+const kFeedVideoExpressId = '945399537';
+const kFeedTestExpressId = '945478448';
 
 const kInterstitialExpressId = '945388068';
 

@@ -38,13 +38,15 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
         itemBuilder: (context, index) {
           var item = items[index];
           if (item.isAd) {
-            return FeedView(
-              id: item.feedId,
-              onRemove: () {
-                setState(() {
-                  this.items.removeAt(index);
-                });
-              },
+            return Center(
+              child: FeedView(
+                id: item.feedId,
+                onRemove: () {
+                  setState(() {
+                    this.items.removeAt(index);
+                  });
+                },
+              ),
             );
           }
 
@@ -63,18 +65,34 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
 
   /// 加载广告
   _loadFeedAd() async {
+    // PangleFeedAd feedAd = await pangle.loadFeedAd(
+    // iOS: IOSFeedConfig(
+    //   slotId: kFeedVideoExpressId,
+    //   expressSize: PangleExpressSize.widthPercent(1.0, aspectRatio: 1.32),
+    //   // slotId: kFeedId,
+    // ),
+    //   android: AndroidFeedConfig(
+    //     slotId: kFeedVideoExpressId,
+    //     expressSize: PangleExpressSize.widthPercent(1.0, aspectRatio: 1.32),
+    //     // slotId: kFeedId,
+    //   ),
+    // );
     PangleFeedAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedConfig(
-        slotId: kFeedExpressId,
-        expressSize: PangleExpressSize.widthPercent(1.0, aspectRatio: 1.32),
+        slotId: kFeedTestExpressId,
+        expressSize: PangleExpressSize.widthPercent(
+          0.9,
+          aspectRatio: 240.0 / 265.0,
+        ),
         // slotId: kFeedId,
-        count: 3,
       ),
       android: AndroidFeedConfig(
-        slotId: kFeedExpressId,
-        expressSize: PangleExpressSize.widthPercent(1.0, aspectRatio: 1.32),
+        slotId: kFeedTestExpressId,
+        expressSize: PangleExpressSize.widthPercent(
+          0.9,
+          aspectRatio: 240.0 / 265.0,
+        ),
         // slotId: kFeedId,
-        count: 3,
       ),
     );
     final data = <Item>[];

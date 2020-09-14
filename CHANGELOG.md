@@ -1,3 +1,7 @@
+## 0.3.6
+
+* Fix feed express view for ios not works.
+
 ## 0.3.5
 
 * Refactor Android & iOS implementation.

@@ -8,6 +8,9 @@ import 'home/express_page.dart';
 import 'home/native_page.dart';
 
 const kEnv = '''
+Android Studio 4.0.1
+Xcode 11.7
+
 Flutter 1.20.3
 Dart 2.9.2
 Kotlin 1.4.10
