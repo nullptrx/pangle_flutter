@@ -37,6 +37,7 @@ dependencies:
 
   <img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/feed_tip1.png" alt="pangle_flutter"  width="500" height="auto"/>
 
+
   <img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/feed_tip2.png" alt="pangle_flutter" width="500" height="auto" />
 
 
@@ -44,7 +45,8 @@ dependencies:
 
   1. 创建一个Swift文件，名称随意
   2. 根据提示选择`Create Bridging Header`。如果没有提示，请自行搜索如何创建。
-
+	
+	
 	<img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/oc2swift.png" alt="OC导入Swift模块" width="500" height="auto" />
 
 
