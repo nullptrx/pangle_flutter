@@ -30,25 +30,21 @@ dependencies:
 
 ### 1. 信息流广告
 
-  1. 原生自渲染信息流广告： 指定图片大小或比例固定，由开发者根据imageMode自行渲染。
-     模板渲染广告：指定整个广告宽高，由SDK自动适配传入的宽高进行渲染。
-  2. 原生自渲染信息流广告本模块暂不能整个item自定义宽高，只能使用`PangleImgSize`中的值指定图片宽高比例，模版渲染广告可指定期望宽高，但必须跟广告后台说明的宽高对应。
-	3. 目前根据SDK Demo所知，模板类广告每次只能传入一种模板宽高，并且渲染广告时获取不到该广告所使用的模板类型。因此如果选择多种模板，可能导致渲染出来的效果不佳。
+1. 原生自渲染信息流广告： 指定图片大小或比例固定，由开发者根据imageMode自行渲染。
+模板渲染广告：指定整个广告宽高，由SDK自动适配传入的宽高进行渲染。
+2. 原生自渲染信息流广告本模块暂不能整个item自定义宽高，只能使用`PangleImgSize`中的值指定图片宽高比例，模版渲染广告可指定期望宽高，但必须跟广告后台说明的宽高对应。
+3. 目前根据SDK Demo所知，模板类广告每次只能传入一种模板宽高，并且渲染广告时获取不到该广告所使用的模板类型。因此如果选择多种模板，可能导致渲染出来的效果不佳。
 
-  <img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/feed_tip1.png" alt="pangle_flutter"  width="500" height="auto"/>
+<img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/feed_tip1.png" alt="pangle_flutter"  width="500" height="auto"/>
 
-
-  <img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/feed_tip2.png" alt="pangle_flutter" width="500" height="auto" />
-
+<img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/feed_tip2.png" alt="pangle_flutter" width="500" height="auto" />
 
 ###  2. iOS使用纯OC开发的项目导入该模块
 
-  1. 创建一个Swift文件，名称随意
-  2. 根据提示选择`Create Bridging Header`。如果没有提示，请自行搜索如何创建。
-	
-	
-	<img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/oc2swift.png" alt="OC导入Swift模块" width="500" height="auto" />
+1. 创建一个Swift文件，名称随意
+2. 根据提示选择`Create Bridging Header`。如果没有提示，请自行搜索如何创建。
 
+<img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/oc2swift.png" alt="OC导入Swift模块" width="500" height="auto" />
 
 
 ## 使用步骤
