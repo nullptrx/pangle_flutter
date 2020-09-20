@@ -50,7 +50,7 @@ internal final class FLTNativeExpressAdTask: FLTTaskProtocol {
         return { result in
             let delegate = FLTNativeExpressAdViewDelegate(success: { [weak self] data in
                 guard let self = self else { return }
-                result(self, ["code": 0, "count": data.count, "data": data.map { String($0.hash) }])
+                result(self, ["code": 0, "count": data.count, "data": data])
             }, fail: { [weak self] error in
                 guard let self = self else { return }
                 let e = error as NSError?

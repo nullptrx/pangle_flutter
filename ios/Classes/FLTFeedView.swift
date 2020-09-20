@@ -67,6 +67,8 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
                 }
             }
             result(nil)
+        case "remove":
+            self.onlyRemoveView()
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -80,16 +82,46 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
     }
 
     private func removeAllView() {
-        self.container.subviews.forEach { $0.removeFromSuperview() }
+        self.container.subviews.forEach {
+            
+            if $0 is BUNativeExpressAdView {
+                let v = $0 as! BUNativeExpressAdView
+                v.didReceiveDislike = nil
+                v.didReceiveRenderFail = nil
+                v.didReceiveRenderSuccess = nil
+                v.delegate = nil
+                v.manager?.delegate = nil
+                v.manager = nil
+                v.rootViewController = nil
+                v.subviews.forEach {
+                    if String(describing: $0.classForCoder) == "BUWKWebViewClient" {
+                        let webview = $0 as! WKWebView
+                        webview.navigationDelegate = nil
+                        if #available(iOS 14.0, *) {
+                            webview.configuration.userContentController.removeAllScriptMessageHandlers()
+                        } else {
+                            webview.configuration.userContentController.removeScriptMessageHandler(forName: "callMethodParams")
+                        }
+                    }
+                }
+            }
+            $0.subviews.forEach { $0.removeFromSuperview() }
+            $0.removeFromSuperview()
+//            print("Retain Count = " + String(CFGetRetainCount($0)))
+        }
     }
 
-    private func disposeView() {
+    private func onlyRemoveView() {
         self.removeAllView()
         if self.isExpress {
             PangleAdManager.shared.removeExpressAd(self.feedId)
         } else {
             PangleAdManager.shared.removeFeedAd(self.feedId)
         }
+    }
+    
+    private func disposeView() {
+        self.onlyRemoveView()
 
         self.methodChannel.invokeMethod("remove", arguments: nil)
         self.methodChannel.setMethodCallHandler(nil)
@@ -228,14 +260,14 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
         self.invoke(width: viewWidth, height: viewHeight)
 
         expressAd.rootViewController = AppUtil.getVC()
-        expressAd.didReceiveRenderSuccess = { _ in
+        expressAd.didReceiveRenderSuccess = {
         }
-        expressAd.didReceiveRenderFail = { _, _ in
-            PangleAdManager.shared.removeExpressAd(self.feedId)
-            self.removeAllView()
+        expressAd.didReceiveRenderFail = { [weak self] _ in
+            PangleAdManager.shared.removeExpressAd(self?.feedId)
+            self?.removeAllView()
         }
-        expressAd.didReceiveDislike = { _, _ in
-            self.disposeView()
+        expressAd.didReceiveDislike = { [weak self] _ in
+            self?.disposeView()
         }
         expressAd.render()
     }

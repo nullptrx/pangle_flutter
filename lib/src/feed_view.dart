@@ -60,7 +60,7 @@ class _FeedViewState extends State<FeedView>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    clear();
+    remove();
     super.dispose();
   }
 
@@ -71,6 +71,11 @@ class _FeedViewState extends State<FeedView>
       _lastSize = size;
       _controller?._update(_createParams());
     }
+  }
+
+  void remove() {
+    _controller?.remove();
+    _controller = null;
   }
 
   void clear() {
@@ -201,5 +206,10 @@ class FeedViewController {
 
   void clear() {
     _methodChannel = null;
+  }
+
+  void remove() {
+    _methodChannel.invokeMethod('remove');
+    clear();
   }
 }

@@ -8,7 +8,7 @@
 import BUAdSDK
 
 internal final class FLTNativeAd: NSObject, BUNativeAdsManagerDelegate {
-    typealias Success = ([BUNativeAd]?) -> Void
+    typealias Success = ([String]) -> Void
     typealias Fail = (Error?) -> Void
 
     let success: Success?
@@ -26,6 +26,7 @@ internal final class FLTNativeAd: NSObject, BUNativeAdsManagerDelegate {
     public func nativeAdsManagerSuccess(toLoad adsManager: BUNativeAdsManager, nativeAds nativeAdDataArray: [BUNativeAd]?) {
         /// 存入缓存
         PangleAdManager.shared.setFeedAd(nativeAdDataArray)
-        success?(nativeAdDataArray)
+        
+        success?(nativeAdDataArray?.map { String($0.hash) } ?? [])
     }
 }

@@ -61,7 +61,7 @@ class _BannerViewState extends State<BannerView>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    clear();
+    remove();
     super.dispose();
   }
 
@@ -72,6 +72,11 @@ class _BannerViewState extends State<BannerView>
       _lastSize = size;
       _controller?._update(_createParams());
     }
+  }
+
+  void remove() {
+    _controller?.remove();
+    _controller = null;
   }
 
   void clear() {
@@ -199,7 +204,12 @@ class BannerViewController {
   }
 
   void clear() {
-    this._methodChannel = null;
+    _methodChannel = null;
+  }
+
+  void remove() {
+    _methodChannel.invokeMethod('remove');
+    clear();
   }
 
   Future<dynamic> _handleMethod(MethodCall call) {

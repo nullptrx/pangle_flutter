@@ -40,7 +40,8 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
         case "update":
             self.loadAd(args)
             result(nil)
-
+        case "remove":
+            self.onlyRemoveView();
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -59,7 +60,7 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
 
         let viewWidth: Double
         let viewHeight: Double
-        self.removeAllView()
+        self.onlyRemoveView()
 
         let vc = AppUtil.getVC()
         if isExpress {
@@ -118,12 +119,32 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
         self.methodChannel.invokeMethod("update", arguments: params)
     }
 
-    private func removeAllView() {
-        self.container.subviews.forEach { $0.removeFromSuperview() }
+    private func onlyRemoveView() {
+        self.container.subviews.forEach {
+            
+            if $0 is BUNativeExpressBannerView {
+                let v = $0 as! BUNativeExpressBannerView
+                v.delegate = nil
+                v.subviews.forEach {
+                    if String(describing: $0.classForCoder) == "BUWKWebViewClient" {
+                        let webview = $0 as! WKWebView
+                        webview.navigationDelegate = nil
+                        if #available(iOS 14.0, *) {
+                            webview.configuration.userContentController.removeAllScriptMessageHandlers()
+                        } else {
+                            webview.configuration.userContentController.removeScriptMessageHandler(forName: "callMethodParams")
+                        }
+                    }
+                }
+            }
+            $0.subviews.forEach { $0.removeFromSuperview() }
+            
+            $0.removeFromSuperview()
+        }
     }
 
     private func disposeView() {
-        self.removeAllView()
+        self.onlyRemoveView()
         self.methodChannel.invokeMethod("remove", arguments: nil)
         self.methodChannel.setMethodCallHandler(nil)
     }
