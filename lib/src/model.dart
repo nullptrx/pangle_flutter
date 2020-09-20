@@ -28,6 +28,15 @@ class PangleFeedAd {
         message = map["message"],
         count = map["count"],
         data = map["data"] == null ? [] : List<String>.from(map["data"]);
+
+  Map<String, dynamic> toJson() {
+    return {
+      'code': code,
+      'message': message,
+      'count': count,
+      'data': data,
+    };
+  }
 }
 
 /// GPS location
@@ -42,7 +51,7 @@ class PangleLocation {
     this.longitude = 0.0,
   });
 
-  Map<String, double> toJSON() {
+  Map<String, double> toJson() {
     return {
       'latitude': latitude,
       'longitude': longitude,
@@ -101,7 +110,7 @@ class PangleExpressSize {
       : this.width = kPangleScreenHeight * heightPercent * aspectRatio,
         this.height = kPangleScreenHeight * heightPercent;
 
-  Map<String, dynamic> toJSON() {
+  Map<String, dynamic> toJson() {
     return {
       'width': width,
       'height': height,
@@ -110,8 +119,12 @@ class PangleExpressSize {
 }
 
 /// 插件返回的结果
+///
 class PangleResult {
+  /// 结果码
   final int code;
+
+  /// 一般是错误信息
   final String message;
 
   const PangleResult({this.code, this.message});
@@ -119,6 +132,8 @@ class PangleResult {
   /// 是否成功
   bool get ok => code == 0;
 
+  /// 解析插件返回的结果
+  ///
   factory PangleResult.fromJson(Map<String, dynamic> json) {
     if (json == null) {
       return PangleResult(code: -1, message: 'unknown');
@@ -127,5 +142,12 @@ class PangleResult {
       code: json['code'],
       message: json['message'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'code': code,
+      'message': message,
+    };
   }
 }

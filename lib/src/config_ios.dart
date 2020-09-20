@@ -64,7 +64,7 @@ class IOSSplashConfig {
       'tolerateTimeout': tolerateTimeout,
       'hideSkipButton': hideSkipButton,
       'isExpress': isExpress,
-      'expressSize': expressSize?.toJSON(),
+      'expressSize': expressSize?.toJson(),
     };
   }
 }
@@ -115,7 +115,7 @@ class IOSRewardedVideoConfig {
       'extra': extra,
       'loadingType': loadingType?.index,
       'isExpress': isExpress,
-      'expressSize': expressSize?.toJSON(),
+      'expressSize': expressSize?.toJson(),
     };
   }
 }
@@ -146,7 +146,7 @@ class IOSBannerConfig {
       'slotId': slotId,
       'imgSize': imgSize?.index,
       'isExpress': isExpress,
-      'expressSize': expressSize?.toJSON(),
+      'expressSize': expressSize?.toJson(),
     };
   }
 }
@@ -186,7 +186,7 @@ class IOSFeedConfig {
       'imgSize': imgSize?.index,
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
-      'expressSize': expressSize?.toJSON(),
+      'expressSize': expressSize?.toJson(),
     };
   }
 }
@@ -217,7 +217,7 @@ class IOSInterstitialConfig {
       'slotId': slotId,
       'imgSize': imgSize?.index,
       'isExpress': isExpress,
-      'expressSize': expressSize?.toJSON(),
+      'expressSize': expressSize?.toJson(),
     };
   }
 }
@@ -247,7 +247,7 @@ class IOSFullscreenVideoConfig {
       'slotId': slotId,
       'loadingType': loadingType?.index,
       'isExpress': isExpress,
-      'expressSize': expressSize?.toJSON(),
+      'expressSize': expressSize?.toJson(),
     };
   }
 }

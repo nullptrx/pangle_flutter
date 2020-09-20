@@ -74,7 +74,7 @@ class AndroidConfig {
       'useTextureView': useTextureView,
       'titleBarTheme': titleBarTheme?.index,
       'isCanUseLocation': isCanUseLocation,
-      'location': location?.toJSON(),
+      'location': location?.toJson(),
       'isCanUsePhoneState': isCanUsePhoneState,
       'devImei': devImei,
       'isCanUseWifiState': isCanUseWifiState,
@@ -122,7 +122,7 @@ class AndroidSplashConfig {
       'isSupportDeepLink': isSupportDeepLink,
       'loadAwait': loadAwait,
       'isExpress': isExpress,
-      'expressSize': expressSize?.toJSON(),
+      'expressSize': expressSize?.toJson(),
     };
   }
 }
@@ -186,7 +186,7 @@ class AndroidRewardedVideoConfig {
       'isSupportDeepLink': isSupportDeepLink,
       'loadingType': loadingType?.index,
       'isExpress': isExpress,
-      'expressSize': expressSize?.toJSON(),
+      'expressSize': expressSize?.toJson(),
     };
   }
 }
@@ -221,7 +221,7 @@ class AndroidBannerConfig {
       'imgSize': imgSize?.index,
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
-      'expressSize': expressSize?.toJSON(),
+      'expressSize': expressSize?.toJson(),
     };
   }
 }
@@ -260,7 +260,7 @@ class AndroidFeedConfig {
       'imgSize': imgSize?.index,
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
-      'expressSize': expressSize?.toJSON(),
+      'expressSize': expressSize?.toJson(),
     };
   }
 }
@@ -295,7 +295,7 @@ class AndroidInterstitialConfig {
       'imgSize': imgSize?.index,
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
-      'expressSize': expressSize?.toJSON(),
+      'expressSize': expressSize?.toJson(),
     };
   }
 }
@@ -337,7 +337,7 @@ class AndroidFullscreenVideoConfig {
       'isExpress': isExpress,
       'orientation': orientation?.index,
       'loadingType': loadingType?.index,
-      'expressSize': expressSize?.toJSON(),
+      'expressSize': expressSize?.toJson(),
     };
   }
 }
