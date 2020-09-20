@@ -69,3 +69,10 @@ enum PangleOrientation {
   veritical,
   horizontal,
 }
+
+enum PangleAuthorizationStatus {
+  notDetermined,
+  restricted,
+  denied,
+  authorized,
+}

@@ -1,6 +1,13 @@
 import Flutter
 import UIKit
 
+#if canImport(AppTrackingTransparency)
+import AppTrackingTransparency
+#endif
+#if canImport(AdSupport)
+import AdSupport
+#endif
+
 public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
     public static let kDefaultFeedAdCount = 3
     public static let kDefaultRewardAmount = 1
@@ -32,10 +39,21 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         case "init":
             instance.initialize(args)
             result(nil)
-        case "requestPermissionIfNecessary":
-            // TODO: 待Xcode 12.0 正式版出来后适配App Tracking Transparency（ATT）
-            if #available(iOS 14.0, *) {}
-            result(nil)
+        case "getTrackingAuthorizationStatus":
+            if #available(iOS 14.0, *) {
+                result(ATTrackingManager.trackingAuthorizationStatus.rawValue)
+            } else {
+                result(nil)
+            }
+        case "requestTrackingAuthorization":
+            /// 适配App Tracking Transparency（ATT）
+            if #available(iOS 14.0, *) {
+                ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in
+                    result(status.rawValue)
+                 })
+            } else {
+                result(nil)
+            }
         case "loadSplashAd":
             instance.loadSplashAd(args)
             result(nil)

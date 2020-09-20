@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:pangle_flutter/pangle_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../common/ext.dart';
@@ -79,9 +82,26 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _requestPermissions() async {
-//    pangle.requestPermissionIfNecessary();
+    if (Platform.isIOS) {
+      _requestPermissionsIOS();
+    } else {
+      _requestPermissionsAndroid();
+    }
+  }
 
+  void _requestPermissionsAndroid() async {
     await [Permission.location, Permission.phone, Permission.storage].request();
+
+    // pangle.requestPermissionIfNecessary();
+  }
+
+  void _requestPermissionsIOS() async {
+    var status = await pangle.getTrackingAuthorizationStatus();
+    print('trackingAuthorizationStatus: $status');
+    if (status == PangleAuthorizationStatus.notDetermined) {
+      status = await pangle.requestTrackingAuthorization();
+      print('requestTrackingAuthorization: $status');
+    }
   }
 
   void _loadNativeAd() {
