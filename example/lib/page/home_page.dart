@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
   void _requestPermissionsAndroid() async {
     await [Permission.location, Permission.phone, Permission.storage].request();
 
-    // pangle.requestPermissionIfNecessary();
+    // await pangle.requestPermissionIfNecessary();
   }
 
   void _requestPermissionsIOS() async {
