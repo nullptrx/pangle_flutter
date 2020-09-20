@@ -1,3 +1,9 @@
+## 0.4.1
+
+* Breaking changes.
+* Replaces method returning type ` Map` to `PangleResult` 
+* Supports iOS 14 for request tracking authorization
+
 ## 0.3.6
 
 * Fix feed express view for ios not works.
