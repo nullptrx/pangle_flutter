@@ -12,6 +12,9 @@ class PangleFeedAd {
   final int count;
   final List<String> data;
 
+  /// 是否成功
+  bool get ok => code == 0;
+
   /// response for loading feed ad
   PangleFeedAd.empty()
       : code = -1,
@@ -103,5 +106,26 @@ class PangleExpressSize {
       'width': width,
       'height': height,
     };
+  }
+}
+
+/// 插件返回的结果
+class PangleResult {
+  final int code;
+  final String message;
+
+  const PangleResult({this.code, this.message});
+
+  /// 是否成功
+  bool get ok => code == 0;
+
+  factory PangleResult.fromJson(Map<String, dynamic> json) {
+    if (json == null) {
+      return PangleResult(code: -1, message: 'unknown');
+    }
+    return PangleResult(
+      code: json['code'],
+      message: json['message'],
+    );
   }
 }

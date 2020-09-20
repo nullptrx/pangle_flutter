@@ -57,7 +57,7 @@ class _FullscreenVideoExpressPageState
     );
 
     setState(() {
-      _loaded = result['code'] == 0;
+      _loaded = result.ok;
     });
   }
 

@@ -12,7 +12,7 @@ import 'home/native_page.dart';
 
 const kEnv = '''
 Android Studio 4.0.1
-Xcode 11.7
+Xcode 12.0
 
 Flutter 1.20.3
 Dart 2.9.2
@@ -21,7 +21,7 @@ Swift 5.2.4
 ''';
 const kDependencies = '''
 Android SDK V3.2.5.1
-iOS SDK V3.2.5.2
+iOS SDK V3.2.6.2
 ''';
 
 class HomePage extends StatefulWidget {

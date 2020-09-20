@@ -56,7 +56,7 @@ class _RewardedVideoExpressPageState extends State<RewardedVideoExpressPage> {
     );
 
     setState(() {
-      _loaded = result['code'] == 0;
+      _loaded = result.ok;
     });
   }
 
