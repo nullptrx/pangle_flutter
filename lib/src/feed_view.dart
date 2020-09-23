@@ -18,14 +18,21 @@ class FeedView extends StatefulWidget {
   /// Execute default implementation, if null.
   final VoidCallback onRemove;
 
+  final bool isUserInteractionEnabled;
+
   /// constructor a feed view
   ///
   /// [key] 使用GlobalObjectKey，防止Widget被多次build，导致PlatformView频繁重建
   /// [id] feedId
   /// [isExpress] optional. 个性化模板广告
   /// [onRemove] when click dislike button
-  FeedView({Key key, this.id, this.isExpress = true, this.onRemove})
-      : assert(id.isNotBlank),
+  FeedView({
+    Key key,
+    this.id,
+    this.isExpress = true,
+    this.onRemove,
+    this.isUserInteractionEnabled,
+  })  : assert(id.isNotBlank),
         super(key: key ?? FeedViewKey(id));
 
   @override
@@ -163,6 +170,7 @@ class _FeedViewState extends State<FeedView>
     return {
       'feedId': widget.id,
       'isExpress': widget.isExpress,
+      'isUserInteractionEnabled': widget.isUserInteractionEnabled,
     };
   }
 }

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageInfo
 import com.bytedance.sdk.openadsdk.*
-import io.flutter.plugin.common.MethodChannel
 import io.github.nullptrx.pangleflutter.common.PangleLoadingType
 import io.github.nullptrx.pangleflutter.common.PangleTitleBarTheme
 import io.github.nullptrx.pangleflutter.delegate.*
@@ -94,12 +93,12 @@ class PangleAdManager {
     return it
   }
 
-  fun showRewardedVideoAd(result: MethodChannel.Result, activity: Activity?): Boolean {
+  fun showRewardedVideoAd(activity: Activity?, result: (Any) -> Unit = {}): Boolean {
     activity ?: return false
     if (rewardedVideoAdCollection.size > 0) {
       val ad = rewardedVideoAdCollection.removeAt(0)
       ad.setRewardAdInteractionListener(RewardAdInteractionImpl { obj ->
-        result.success(obj)
+        result.invoke(obj)
       })
       ad.showRewardVideoAd(activity)
       return true
@@ -113,12 +112,12 @@ class PangleAdManager {
     }
   }
 
-  fun showFullScreenVideoAd(result: MethodChannel.Result, activity: Activity?): Boolean {
+  fun showFullScreenVideoAd(activity: Activity?, result: (Any) -> Unit = {}): Boolean {
     activity ?: return false
     if (fullScreenVideoAdCollection.size > 0) {
       val ad = fullScreenVideoAdCollection.removeAt(0)
       ad.setFullScreenVideoAdInteractionListener(FullScreenVideoAdInteractionImpl { obj ->
-        result.success(obj)
+        result.invoke(obj)
       })
       ad.showFullScreenVideoAd(activity)
       return true
@@ -202,7 +201,7 @@ class PangleAdManager {
       supportMultiProcess?.also {
         supportMultiProcess(it)
       }
-      
+
       paid?.also {
         paid(it)
       }

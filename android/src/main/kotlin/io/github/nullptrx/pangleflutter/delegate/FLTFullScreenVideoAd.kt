@@ -88,11 +88,6 @@ class FullScreenVideoAdInteractionImpl(var result: (Any) -> Unit?) : TTFullScree
     invoke()
   }
 
-//  override fun onVideoError() {
-//    invoke(-1, "error")
-//  }
-
-
   private fun invoke(code: Int = 0, message: String? = null) {
     if (result == kBlock) {
       return

@@ -59,6 +59,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
             return Center(
               child: FeedView(
                 id: item.feedId,
+                isUserInteractionEnabled: false,
                 onRemove: () {
                   setState(() {
                     this.items.removeAt(index);

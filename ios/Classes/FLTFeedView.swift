@@ -14,6 +14,8 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
     private let container: UIView
     private var isExpress = false
     private var feedId: String?
+    private let uiGesture = FeedTouchGesture()
+    private var isUserInteractionEnabled = true
 
     init(_ frame: CGRect, id: Int64, params: [String: Any], messenger: FlutterBinaryMessenger) {
         self.container = UIView(frame: frame)
@@ -22,7 +24,12 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
 
         self.feedId = params["feedId"] as? String
         self.isExpress = params["isExpress"] as? Bool ?? false
+        self.isUserInteractionEnabled = params["isUserInteractionEnabled"] as? Bool ?? true
         super.init()
+
+        let gesture = UITapGestureRecognizer()
+        gesture.delegate = self.uiGesture
+        self.container.addGestureRecognizer(gesture)
 
         self.methodChannel.setMethodCallHandler(self.handle(_:result:))
         if self.feedId != nil {
@@ -83,7 +90,6 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
 
     private func removeAllView() {
         self.container.subviews.forEach {
-            
             if $0 is BUNativeExpressAdView {
                 let v = $0 as! BUNativeExpressAdView
                 v.didReceiveDislike = nil
@@ -119,7 +125,7 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
             PangleAdManager.shared.removeFeedAd(self.feedId)
         }
     }
-    
+
     private func disposeView() {
         self.onlyRemoveView()
 
@@ -228,6 +234,7 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
 //        let expressHeight = expressWidth * height / width
 
         self.removeAllView()
+        expressAd.isUserInteractionEnabled = self.isUserInteractionEnabled
         expressAd.subviews.forEach {
 //            print($0.description) // FlutterOverlayView
 //            let classname = String(describing: $0.superclass)
@@ -239,10 +246,8 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
                         webview.scrollView.automaticallyAdjustsScrollIndicatorInsets = false
                     }
                 }
-
-                expressAd.sendSubviewToBack(webview)
-//                print($0.superclass)
-//                print(String(describing: $0.classForCoder))
+                
+                $0.isUserInteractionEnabled = self.isUserInteractionEnabled
             } else {
                 $0.isUserInteractionEnabled = true
             }
@@ -261,6 +266,7 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
 
         expressAd.rootViewController = AppUtil.getVC()
         expressAd.didReceiveRenderSuccess = {
+            
         }
         expressAd.didReceiveRenderFail = { [weak self] _ in
             PangleAdManager.shared.removeExpressAd(self?.feedId)
@@ -283,7 +289,7 @@ extension FLTFeedView: BUNativeAdDelegate {
     }
 }
 
-// class FeedView: UIView {
+class FeedView: UIView {
 //    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
 //        let windowPoint = self.convert(point, to: UIApplication.shared.delegate?.window!!)
 //        if windowPoint.y < UIScreen.main.bounds.size.height - 49 {
@@ -291,4 +297,14 @@ extension FLTFeedView: BUNativeAdDelegate {
 //        }
 //       return super.hitTest(point, with: event)
 //    }
-// }
+}
+
+fileprivate class FeedTouchGesture: NSObject, UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+//        if touch.view is UIView {
+        return true
+//        }
+
+//        return false
+    }
+}

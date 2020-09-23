@@ -13,13 +13,19 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
     private let methodChannel: FlutterMethodChannel
     private let container: UIView
     private var methodResult: FlutterResult?
-
+    private let uiGesture = BannerTouchGesture()
+    private var isUserInteractionEnabled = true
+    
     init(_ frame: CGRect, id: Int64, params: [String: Any?], messenger: FlutterBinaryMessenger) {
         let channelName = String(format: "nullptrx.github.io/pangle_bannerview_%lld", id)
         self.methodChannel = FlutterMethodChannel(name: channelName, binaryMessenger: messenger)
         self.container = UIView(frame: frame)
 
         super.init()
+        
+        let gesture = UITapGestureRecognizer()
+        gesture.delegate = self.uiGesture
+        self.container.addGestureRecognizer(gesture)
 
         self.methodChannel.setMethodCallHandler(self.handle(_:result:))
 
@@ -57,7 +63,9 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
 
         let isExpress = params["isExpress"] as? Bool ?? false
         let isSupportDeepLink = params["isSupportDeepLink"] as? Bool ?? true
-
+        let isUserInteractionEnabled = params["isUserInteractionEnabled"] as? Bool ?? true
+        
+        self.isUserInteractionEnabled = isUserInteractionEnabled
         let viewWidth: Double
         let viewHeight: Double
         self.onlyRemoveView()
@@ -84,22 +92,6 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
             viewHeight = viewWidth * Double(imgSize.height) / Double(imgSize.width)
 
             let bannerAdView = BUBannerAdView(slotID: slotId!, size: imgSize, rootViewController: vc)
-
-            bannerAdView.subviews.forEach {
-                if String(describing: $0.classForCoder) == "BUWKWebViewClient" {
-                    let webview = $0 as! WKWebView
-                    if #available(iOS 11.0, *) {
-                        webview.scrollView.contentInsetAdjustmentBehavior = .never
-                        if #available(iOS 13.0, *) {
-                            webview.scrollView.automaticallyAdjustsScrollIndicatorInsets = false
-                        }
-                    }
-
-                    bannerAdView.sendSubviewToBack(webview)
-                } else {
-                    $0.isUserInteractionEnabled = true
-                }
-            }
 
             bannerAdView.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
             bannerAdView.center = CGPoint(x: viewWidth / 2, y: viewHeight / 2)
@@ -182,5 +174,36 @@ extension FLTBannerView: BUNativeExpressBannerViewDelegate {
 
     public func nativeExpressBannerAdView(_ bannerAdView: BUNativeExpressBannerView, dislikeWithReason filterwords: [BUDislikeWords]?) {
         self.disposeView()
+    }
+    
+    public func nativeExpressBannerAdViewRenderSuccess(_ bannerAdView: BUNativeExpressBannerView) {
+        bannerAdView.isUserInteractionEnabled = self.isUserInteractionEnabled
+        bannerAdView.subviews.forEach {
+//            print($0.description) // FlutterOverlayView
+//            let classname = String(describing: $0.superclass)
+            if String(describing: $0.classForCoder) == "BUWKWebViewClient" {
+                let webview = $0 as! WKWebView
+                if #available(iOS 11.0, *) {
+                    webview.scrollView.contentInsetAdjustmentBehavior = .never
+                    if #available(iOS 13.0, *) {
+                        webview.scrollView.automaticallyAdjustsScrollIndicatorInsets = false
+                    }
+                }
+                $0.isUserInteractionEnabled = self.isUserInteractionEnabled
+            } else {
+                $0.isUserInteractionEnabled = true
+            }
+        }
+    }
+}
+
+
+fileprivate class BannerTouchGesture: NSObject, UIGestureRecognizerDelegate {
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+//        if touch.view is UIView {
+        return true
+//        }
+
+//        return false
     }
 }

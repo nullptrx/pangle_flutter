@@ -28,6 +28,7 @@ class BannerExpressPage extends StatelessWidget {
               iOS: IOSBannerConfig(
                 slotId: kBannerExpressId,
                 expressSize: PangleExpressSize.aspectRatio(1.667),
+                isUserInteractionEnabled: false,
               ),
               android: AndroidBannerConfig(
                 slotId: kBannerExpressId,

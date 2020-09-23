@@ -152,7 +152,9 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
 
         if (PangleLoadingType.preload == loadingType || PangleLoadingType.normal == loadingType) {
 
-          val loadResult = pangle.showRewardedVideoAd(result, activity)
+          val loadResult = pangle.showRewardedVideoAd(activity) {
+            result.success(it)
+          }
           if (loadResult) {
             if (loadingType == PangleLoadingType.normal) {
               return
@@ -181,7 +183,9 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(slotId, isExpress, expressSize, userId, rewardName, rewardAmount, isVertical, isSupportDeepLink, extra)
 
         pangle.loadRewardVideoAd(adSlot, activity, loadingType) {
-          result.success(it)
+          if (PangleLoadingType.preload_only == loadingType || PangleLoadingType.normal == loadingType) {
+            result.success(it)
+          }
         }
       }
 
@@ -246,7 +250,9 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
 
         if (PangleLoadingType.preload == loadingType || PangleLoadingType.normal == loadingType) {
 
-          val loadResult = pangle.showFullScreenVideoAd(result, activity)
+          val loadResult = pangle.showFullScreenVideoAd(activity) {
+            result.success(it)
+          }
           if (loadResult) {
             if (loadingType == PangleLoadingType.normal) {
               return
@@ -274,7 +280,9 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val adSlot = PangleAdSlotManager.getFullScreenVideoAdSlot(slotId, isExpress, expressSize, orientation, isSupportDeepLink)
 
         pangle.loadFullscreenVideoAd(adSlot, activity, loadingType) {
-          result.success(it)
+          if (PangleLoadingType.preload_only == loadingType || PangleLoadingType.normal == loadingType) {
+            result.success(it)
+          }
         }
       }
       else -> result.notImplemented()

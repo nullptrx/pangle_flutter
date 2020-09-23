@@ -1,3 +1,16 @@
+## 0.4.2
+
+* Adds `isUserInteractionEnabled` attribute for iOS config
+* Fix rewarded video & fullscreen video callback crashed on Android.
+
+```dart
+FeedView(
+  id: item.feedId,
+  /// disable touch
+  isUserInteractionEnabled: false,
+)
+```
+
 ## 0.4.1
 
 * Breaking changes.

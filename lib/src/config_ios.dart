@@ -125,6 +125,7 @@ class IOSBannerConfig {
   final PangleImgSize imgSize;
   final bool isExpress;
   final PangleExpressSize expressSize;
+  final bool isUserInteractionEnabled;
 
   /// The feed ad config for iOS
   ///
@@ -137,6 +138,7 @@ class IOSBannerConfig {
     this.imgSize = PangleImgSize.banner600_150,
     this.isExpress = true,
     this.expressSize,
+    this.isUserInteractionEnabled = true,
   })  : assert(slotId.isNotBlank),
         assert(!isExpress || (isExpress && expressSize != null));
 
@@ -147,6 +149,7 @@ class IOSBannerConfig {
       'imgSize': imgSize?.index,
       'isExpress': isExpress,
       'expressSize': expressSize?.toJson(),
+      'isUserInteractionEnabled': isUserInteractionEnabled,
     };
   }
 }
