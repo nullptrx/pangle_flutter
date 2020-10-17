@@ -27,6 +27,7 @@ class _ItemKey extends GlobalObjectKey<FeedViewState> {
 
 class _FeedExpressPageState extends State<FeedExpressPage> {
   final items = <Item>[];
+  final feedIds = <String>[];
 
   final _controller = ScrollController();
 
@@ -93,10 +94,11 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
     if (item.isAd) {
       return Center(
         child: FeedView(
-          key: _ItemKey(index),
+          key: _ItemKey(item.feedId),
           id: item.feedId,
           isUserInteractionEnabled: false,
           onRemove: () {
+            this.feedIds.remove(item.feedId);
             setState(() {
               this.items.removeAt(index);
             });
@@ -153,6 +155,8 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
       int index = itemPositions.removeAt(0);
       final item = Item(isAd: true, feedId: feedAd.data[i]);
       data.insert(index, item);
+
+      feedIds.add(item.feedId);
     }
     setState(() {
       this.items
@@ -177,14 +181,21 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
 
     final maxAvailableHeight = naviOffset.dy;
 
-    /// 检测第10个item的宽高、偏移量是否满足点击需求
-    var itemKey = _ItemKey(10);
+    /// 检测各个item的宽高、偏移量是否满足点击需求
+    for (var value in feedIds) {
+      _switchUserInteraction(maxAvailableHeight, minAvailableHeigt, value);
+    }
+  }
+
+  void _switchUserInteraction(
+    double maxAvailableHeight,
+    double minAvailableHeigt,
+    String id,
+  ) {
+    var itemKey = _ItemKey(id);
     RenderBox renderBox = itemKey.currentContext.findRenderObject();
     var size = renderBox.size;
-    print("RenderBox: size of position 10:$size");
-
     var offset = renderBox.localToGlobal(Offset.zero);
-    print("RenderBox: offset of position 10:$offset");
 
     /// 最底部坐标不低于NavigationBar, 最顶部不高于AppBar
     var available = offset.dy + size.height < maxAvailableHeight &&
