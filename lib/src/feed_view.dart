@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -36,20 +37,20 @@ class FeedView extends StatefulWidget {
         super(key: key ?? FeedViewKey(id));
 
   @override
-  State<StatefulWidget> createState() => _FeedViewState();
+  State<StatefulWidget> createState() => FeedViewState();
 }
 
 class FeedViewKey extends GlobalObjectKey {
   const FeedViewKey(Object value) : super(value);
 }
 
-class _FeedViewState extends State<FeedView>
+class FeedViewState extends State<FeedView>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   FeedViewController _controller;
-  bool offstage = true;
-  bool removed = false;
-  double adWidth = kPangleSize;
-  double adHeight = kPangleSize;
+  bool _offstage = true;
+  bool _removed = false;
+  double _adWidth = kPangleSize;
+  double _adHeight = kPangleSize;
 
   Size _lastSize;
 
@@ -67,7 +68,7 @@ class _FeedViewState extends State<FeedView>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    remove();
+    _remove();
     super.dispose();
   }
 
@@ -80,21 +81,10 @@ class _FeedViewState extends State<FeedView>
     }
   }
 
-  void remove() {
-    _controller?.remove();
-    _controller = null;
-  }
-
-  void clear() {
-    // 从缓存里清空该键对应的广告数据
-    _controller?.clear();
-    _controller = null;
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    if (removed) {
+    if (_removed) {
       return SizedBox.shrink();
     }
     Widget body;
@@ -125,10 +115,10 @@ class _FeedViewState extends State<FeedView>
       }
       if (platformView != null) {
         body = Offstage(
-          offstage: offstage,
+          offstage: _offstage,
           child: SizedBox(
-            width: adWidth,
-            height: adHeight,
+            width: _adWidth,
+            height: _adHeight,
             child: platformView,
           ),
         );
@@ -141,28 +131,46 @@ class _FeedViewState extends State<FeedView>
     return body;
   }
 
+  void setUserInteractionEnabled(bool enable) {
+    _controller?.setUserInteractionEnabled(enable);
+  }
+
+  void _remove() {
+    _controller?.remove();
+    _controller = null;
+  }
+
+  void _clear() {
+    // 从缓存里清空该键对应的广告数据
+    _controller?.clear();
+    _controller = null;
+  }
+
   void _onPlatformViewCreated(BuildContext context, int id) {
     final removed = () {
       if (widget.onRemove != null) {
         widget.onRemove();
       } else {
         setState(() {
-          this.removed = true;
+          this._removed = true;
         });
-        clear();
+        _clear();
       }
     };
     final updated = (args) {
       double width = args['width'];
       double height = args['height'];
       setState(() {
-        this.offstage = false;
-        this.adWidth = width;
-        this.adHeight = height;
+        this._offstage = false;
+        this._adWidth = width;
+        this._adHeight = height;
       });
     };
-    final controller =
-        FeedViewController._(id, onRemove: removed, onUpdate: updated);
+    final controller = FeedViewController._(
+      id,
+      onRemove: removed,
+      onUpdate: updated,
+    );
     _controller = controller;
   }
 
@@ -219,5 +227,11 @@ class FeedViewController {
   void remove() {
     _methodChannel.invokeMethod('remove');
     clear();
+  }
+
+  void setUserInteractionEnabled(bool enable) {
+    if (Platform.isIOS) {
+      _methodChannel.invokeMethod("setUserInteractionEnabled", enable ?? false);
+    }
   }
 }
