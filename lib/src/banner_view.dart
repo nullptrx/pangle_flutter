@@ -30,20 +30,16 @@ class BannerView extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _BannerViewState();
+  State<StatefulWidget> createState() => BannerViewState();
 }
 
-class BannerViewKey extends GlobalObjectKey {
-  const BannerViewKey(Object value) : super(value);
-}
-
-class _BannerViewState extends State<BannerView>
+class BannerViewState extends State<BannerView>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   BannerViewController _controller;
-  bool offstage = true;
-  bool removed = false;
-  double adWidth = kPangleSize;
-  double adHeight = kPangleSize;
+  bool _offstage = true;
+  bool _removed = false;
+  double _adWidth = kPangleSize;
+  double _adHeight = kPangleSize;
 
   Size _lastSize;
 
@@ -61,7 +57,7 @@ class _BannerViewState extends State<BannerView>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    remove();
+    _remove();
     super.dispose();
   }
 
@@ -74,20 +70,10 @@ class _BannerViewState extends State<BannerView>
     }
   }
 
-  void remove() {
-    _controller?.remove();
-    _controller = null;
-  }
-
-  void clear() {
-    _controller?.clear();
-    _controller = null;
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    if (removed) {
+    if (_removed) {
       return SizedBox.shrink();
     }
     Widget body;
@@ -120,10 +106,10 @@ class _BannerViewState extends State<BannerView>
       }
       if (platformView != null) {
         body = Offstage(
-          offstage: offstage,
+          offstage: _offstage,
           child: SizedBox(
-            width: adWidth,
-            height: adHeight,
+            width: _adWidth,
+            height: _adHeight,
             child: platformView,
           ),
         );
@@ -136,24 +122,38 @@ class _BannerViewState extends State<BannerView>
     return body;
   }
 
+  void setUserInteractionEnabled(bool enable) {
+    _controller?.setUserInteractionEnabled(enable);
+  }
+
+  void _remove() {
+    _controller?.remove();
+    _controller = null;
+  }
+
+  void _clear() {
+    _controller?.clear();
+    _controller = null;
+  }
+
   void _onPlatformViewCreated(BuildContext context, int id) {
     final removed = () {
       if (widget.onRemove != null) {
         widget.onRemove();
       } else {
         setState(() {
-          this.removed = true;
+          this._removed = true;
         });
-        clear();
+        _clear();
       }
     };
     final updated = (args) {
       double width = args['width'];
       double height = args['height'];
       setState(() {
-        this.offstage = false;
-        this.adWidth = width;
-        this.adHeight = height;
+        this._offstage = false;
+        this._adWidth = width;
+        this._adHeight = height;
       });
     };
 
@@ -169,7 +169,7 @@ class _BannerViewState extends State<BannerView>
   void updateWidget(BuildContext context, bool success) {
     if (mounted) {
       setState(() {
-        offstage = !success;
+        _offstage = !success;
       });
     }
   }
@@ -233,5 +233,11 @@ class BannerViewController {
 
   Future<Null> _update(Map<String, dynamic> params) async {
     await _methodChannel?.invokeMethod('update', params);
+  }
+
+  void setUserInteractionEnabled(bool enable) {
+    if (Platform.isIOS) {
+      _methodChannel.invokeMethod("setUserInteractionEnabled", enable ?? false);
+    }
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
@@ -19,22 +21,40 @@ class Item {
   Item({this.isAd = false, this.feedId, this.id});
 }
 
+class _ItemKey extends GlobalObjectKey<FeedViewState> {
+  _ItemKey(Object value) : super(value);
+}
+
 class _FeedExpressPageState extends State<FeedExpressPage> {
   final items = <Item>[];
+
+  final _controller = ScrollController();
+
+  final _titleKey = GlobalKey();
+  final _naviKey = GlobalKey();
 
   @override
   void initState() {
     super.initState();
     _loadFeedAd();
+    _controller.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _controller.removeListener(_onScroll);
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        key: _titleKey,
         title: Text('Feed Express AD'),
       ),
       bottomNavigationBar: BottomNavigationBar(
+          key: _naviKey,
           onTap: (value) {
             Navigator.of(context).push(CupertinoPageRoute(
               builder: (context) => EmptyPage(),
@@ -43,33 +63,19 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.favorite),
-              title: Text('Like'),
+              label: 'Like',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.favorite_border),
-              title: Text('Dislike'),
+              label: 'Dislike',
             ),
           ]),
       body: Container(
           child: ListView.builder(
         itemCount: items.length,
+        controller: _controller,
         itemBuilder: (context, index) {
-          var item = items[index];
-          if (item.isAd) {
-            return Center(
-              child: FeedView(
-                id: item.feedId,
-                isUserInteractionEnabled: false,
-                onRemove: () {
-                  setState(() {
-                    this.items.removeAt(index);
-                  });
-                },
-              ),
-            );
-          }
-
-          return Loading();
+          return _buildItem(index);
         },
       )),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -80,6 +86,26 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
         child: Icon(Icons.refresh),
       ),
     );
+  }
+
+  Widget _buildItem(int index) {
+    var item = items[index];
+    if (item.isAd) {
+      return Center(
+        child: FeedView(
+          key: _ItemKey(index),
+          id: item.feedId,
+          isUserInteractionEnabled: false,
+          onRemove: () {
+            setState(() {
+              this.items.removeAt(index);
+            });
+          },
+        ),
+      );
+    }
+
+    return Loading();
   }
 
   /// 加载广告
@@ -133,5 +159,36 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
         ..clear()
         ..addAll(data);
     });
+  }
+
+  _onScroll() {
+    if (!Platform.isIOS) {
+      return;
+    }
+
+    RenderBox titleBox = _titleKey.currentContext.findRenderObject();
+    var titleSize = titleBox.size;
+    var titleOffset = titleBox.localToGlobal(Offset.zero);
+
+    final minAvailableHeigt = titleOffset.dy + titleSize.height;
+
+    RenderBox naviBox = _naviKey.currentContext.findRenderObject();
+    var naviOffset = naviBox.localToGlobal(Offset.zero);
+
+    final maxAvailableHeight = naviOffset.dy;
+
+    /// 检测第10个item的宽高、偏移量是否满足点击需求
+    var itemKey = _ItemKey(10);
+    RenderBox renderBox = itemKey.currentContext.findRenderObject();
+    var size = renderBox.size;
+    print("RenderBox: size of position 10:$size");
+
+    var offset = renderBox.localToGlobal(Offset.zero);
+    print("RenderBox: offset of position 10:$offset");
+
+    /// 最底部坐标不低于NavigationBar, 最顶部不高于AppBar
+    var available = offset.dy + size.height < maxAvailableHeight &&
+        offset.dy > minAvailableHeigt;
+    itemKey.currentState.setUserInteractionEnabled(available);
   }
 }
