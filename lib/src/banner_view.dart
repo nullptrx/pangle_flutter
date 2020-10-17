@@ -122,6 +122,8 @@ class BannerViewState extends State<BannerView>
     return body;
   }
 
+  /// 设置广告位是否可以点击，默认true
+  /// [enable]
   void setUserInteractionEnabled(bool enable) {
     _controller?.setUserInteractionEnabled(enable);
   }

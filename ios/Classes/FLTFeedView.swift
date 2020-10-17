@@ -18,7 +18,7 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
     private var isUserInteractionEnabled = true
 
     init(_ frame: CGRect, id: Int64, params: [String: Any], messenger: FlutterBinaryMessenger) {
-        self.container = UIView(frame: frame)
+        self.container = FeedView(frame: frame)
         let channelName = String(format: "nullptrx.github.io/pangle_feedview_%ld", id)
         self.methodChannel = FlutterMethodChannel(name: channelName, binaryMessenger: messenger)
 
@@ -76,6 +76,15 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
             result(nil)
         case "remove":
             self.onlyRemoveView()
+        case "setUserInteractionEnabled":
+            let enable: Bool = call.arguments as? Bool ?? false
+            
+            if self.feedId != nil {
+                if self.isExpress {
+                    let nad = PangleAdManager.shared.getExpressAd(self.feedId!)
+                    nad?.isUserInteractionEnabled = enable
+                }
+            }
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -235,23 +244,23 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
 
         self.removeAllView()
         expressAd.isUserInteractionEnabled = self.isUserInteractionEnabled
-        expressAd.subviews.forEach {
-//            print($0.description) // FlutterOverlayView
-//            let classname = String(describing: $0.superclass)
-            if String(describing: $0.classForCoder) == "BUWKWebViewClient" {
-                let webview = $0 as! WKWebView
-                if #available(iOS 11.0, *) {
-                    webview.scrollView.contentInsetAdjustmentBehavior = .never
-                    if #available(iOS 13.0, *) {
-                        webview.scrollView.automaticallyAdjustsScrollIndicatorInsets = false
-                    }
-                }
-                
-                $0.isUserInteractionEnabled = self.isUserInteractionEnabled
-            } else {
-                $0.isUserInteractionEnabled = true
-            }
-        }
+//        expressAd.subviews.forEach {
+////            print($0.description) // FlutterOverlayView
+////            let classname = String(describing: $0.superclass)
+//            if String(describing: $0.classForCoder) == "BUWKWebViewClient" {
+//                let webview = $0 as! WKWebView
+//                if #available(iOS 11.0, *) {
+//                    webview.scrollView.contentInsetAdjustmentBehavior = .never
+//                    if #available(iOS 13.0, *) {
+//                        webview.scrollView.automaticallyAdjustsScrollIndicatorInsets = false
+//                    }
+//                }
+//                self.wkWebView = webview
+////                $0.isUserInteractionEnabled = self.isUserInteractionEnabled
+//            } else {
+//                $0.isUserInteractionEnabled = true
+//            }
+//        }
 
         let frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
         expressAd.frame = frame
@@ -265,9 +274,7 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
         self.invoke(width: viewWidth, height: viewHeight)
 
         expressAd.rootViewController = AppUtil.getVC()
-        expressAd.didReceiveRenderSuccess = {
-            
-        }
+        expressAd.didReceiveRenderSuccess = {}
         expressAd.didReceiveRenderFail = { [weak self] _ in
             PangleAdManager.shared.removeExpressAd(self?.feedId)
             self?.removeAllView()
@@ -299,12 +306,13 @@ class FeedView: UIView {
 //    }
 }
 
-fileprivate class FeedTouchGesture: NSObject, UIGestureRecognizerDelegate {
+private class FeedTouchGesture: NSObject, UIGestureRecognizerDelegate {
+    /// 解决滑动PlatformView变成点击的问题
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-//        if touch.view is UIView {
-        return true
-//        }
+        if touch.view is FeedView {
+            return true
+        }
 
-//        return false
+        return false
     }
 }

@@ -15,14 +15,15 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
     private var methodResult: FlutterResult?
     private let uiGesture = BannerTouchGesture()
     private var isUserInteractionEnabled = true
-    
+    private weak var bannerView: BUNativeExpressBannerView?
+
     init(_ frame: CGRect, id: Int64, params: [String: Any?], messenger: FlutterBinaryMessenger) {
         let channelName = String(format: "nullptrx.github.io/pangle_bannerview_%lld", id)
         self.methodChannel = FlutterMethodChannel(name: channelName, binaryMessenger: messenger)
-        self.container = UIView(frame: frame)
+        self.container = BannerView(frame: frame)
 
         super.init()
-        
+
         let gesture = UITapGestureRecognizer()
         gesture.delegate = self.uiGesture
         self.container.addGestureRecognizer(gesture)
@@ -47,7 +48,10 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
             self.loadAd(args)
             result(nil)
         case "remove":
-            self.onlyRemoveView();
+            self.onlyRemoveView()
+        case "setUserInteractionEnabled":
+            let enable: Bool = call.arguments as? Bool ?? false
+            self.bannerView?.isUserInteractionEnabled = enable
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -64,7 +68,7 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
         let isExpress = params["isExpress"] as? Bool ?? false
         let isSupportDeepLink = params["isSupportDeepLink"] as? Bool ?? true
         let isUserInteractionEnabled = params["isUserInteractionEnabled"] as? Bool ?? true
-        
+
         self.isUserInteractionEnabled = isUserInteractionEnabled
         let viewWidth: Double
         let viewHeight: Double
@@ -86,6 +90,7 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
             self.container.addSubview(bannerAdView)
             bannerAdView.delegate = self
             bannerAdView.loadAdData()
+            self.bannerView = bannerAdView
 
         } else {
             viewWidth = Double(UIScreen.main.bounds.width)
@@ -113,7 +118,6 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
 
     private func onlyRemoveView() {
         self.container.subviews.forEach {
-            
             if $0 is BUNativeExpressBannerView {
                 let v = $0 as! BUNativeExpressBannerView
                 v.delegate = nil
@@ -130,7 +134,7 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
                 }
             }
             $0.subviews.forEach { $0.removeFromSuperview() }
-            
+
             $0.removeFromSuperview()
         }
     }
@@ -175,35 +179,20 @@ extension FLTBannerView: BUNativeExpressBannerViewDelegate {
     public func nativeExpressBannerAdView(_ bannerAdView: BUNativeExpressBannerView, dislikeWithReason filterwords: [BUDislikeWords]?) {
         self.disposeView()
     }
-    
+
     public func nativeExpressBannerAdViewRenderSuccess(_ bannerAdView: BUNativeExpressBannerView) {
         bannerAdView.isUserInteractionEnabled = self.isUserInteractionEnabled
-        bannerAdView.subviews.forEach {
-//            print($0.description) // FlutterOverlayView
-//            let classname = String(describing: $0.superclass)
-            if String(describing: $0.classForCoder) == "BUWKWebViewClient" {
-                let webview = $0 as! WKWebView
-                if #available(iOS 11.0, *) {
-                    webview.scrollView.contentInsetAdjustmentBehavior = .never
-                    if #available(iOS 13.0, *) {
-                        webview.scrollView.automaticallyAdjustsScrollIndicatorInsets = false
-                    }
-                }
-                $0.isUserInteractionEnabled = self.isUserInteractionEnabled
-            } else {
-                $0.isUserInteractionEnabled = true
-            }
-        }
     }
 }
 
+class BannerView: UIView {
+}
 
-fileprivate class BannerTouchGesture: NSObject, UIGestureRecognizerDelegate {
+private class BannerTouchGesture: NSObject, UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-//        if touch.view is UIView {
-        return true
-//        }
-
-//        return false
+        if touch.view is BannerView {
+            return true
+        }
+        return false
     }
 }
