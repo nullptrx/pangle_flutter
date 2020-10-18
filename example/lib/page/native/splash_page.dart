@@ -40,8 +40,6 @@ class _SplashPageState extends State<SplashPage> {
       android: AndroidSplashConfig(
         slotId: kSplashId,
         isExpress: false,
-        // 不等待到广告结束
-        loadAwait: false,
       ),
     );
   }

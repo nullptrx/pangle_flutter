@@ -10,7 +10,7 @@ import 'page/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initPangle();
+  initPangle();
   runApp(PangleApp());
 }
 
@@ -47,8 +47,6 @@ Future<Null> initPangle() async {
     android: AndroidSplashConfig(
       slotId: kSplashId,
       isExpress: false,
-      // 不等待到广告结束
-      loadAwait: false,
     ),
   );
 }

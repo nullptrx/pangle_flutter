@@ -90,7 +90,6 @@ class AndroidSplashConfig {
   final bool hideSkipButton;
   final bool isExpress;
   final bool isSupportDeepLink;
-  final bool loadAwait;
   final PangleExpressSize expressSize;
 
   /// The splash ad config for Android
@@ -99,7 +98,6 @@ class AndroidSplashConfig {
   /// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
   /// [hideSkipButton] optional. Whether hide skip button, default NO. If you hide the skip button, you need to customize the countdown.
   /// [isSupportDeepLink] optional. Whether to support deeplink. Default true.
-  /// [loadAwait] optional. Callback will return immediately, if false. Default true.
   /// [isExpress] optional. experimental. 个性化模板广告.
   /// [expressSize] optional. 模板宽高
   AndroidSplashConfig({
@@ -107,7 +105,6 @@ class AndroidSplashConfig {
     this.tolerateTimeout,
     this.hideSkipButton,
     this.isSupportDeepLink = true,
-    this.loadAwait = false,
     this.isExpress = true,
     this.expressSize,
   })  : assert(slotId.isNotBlank),
@@ -120,7 +117,6 @@ class AndroidSplashConfig {
       'tolerateTimeout': tolerateTimeout,
       'hideSkipButton': hideSkipButton,
       'isSupportDeepLink': isSupportDeepLink,
-      'loadAwait': loadAwait,
       'isExpress': isExpress,
       'expressSize': expressSize?.toJson(),
     };
