@@ -1,3 +1,9 @@
+## 0.5.1
+
+* 移除`loadAwait`
+* 适配`open_ad_sdk 3.3.0.0`
+* podspec 使用`'Bytedance-UnionAD', '~>3.2'` 
+
 ## 0.4.3
 
 * iOS 增加 `isUserInteractionEnabled` 广告位点击冲突解决方案

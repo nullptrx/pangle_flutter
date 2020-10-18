@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'pangle_flutter'
-  s.version          = '0.4.3'
+  s.version          = '0.5.1'
   s.summary          = 'Flutter plugin for Pangle Ad SDK.'
   s.description      = <<-DESC
 Flutter plugin for Pangle Ad SDK.
@@ -18,8 +18,6 @@ Flutter plugin for Pangle Ad SDK.
   s.platform = :ios, '9.0'
 
   s.static_framework = true
-  # s.ios.dependency 'Bytedance-UnionAD', '~> 3.2.6.2'
-
   s.ios.dependency 'Bytedance-UnionAD', '~> 3.2'
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
