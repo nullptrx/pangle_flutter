@@ -1,3 +1,9 @@
+## 0.4.3
+
+* Adds click action conflict solution for iOS
+* Adds callback for splash ads
+* Fix bugs
+
 ## 0.4.2
 
 * Adds `isUserInteractionEnabled` attribute for iOS config

@@ -102,6 +102,15 @@ BannerView(
 ),
 ```
 
+- 切换可点击状态
+
+```dart
+// 因iOS的EXPRESS类型的广告内部使用WebView渲染，而WebView与FlutterView存在部分点击事件冲突，故提供该解决方案
+final _bannerKey = GlobalKey<BannerViewState>();
+// 外部控制该广告位是否可点击
+_bannerKey.currentState.setUserInteractionEnabled(enable);
+```
+
 
 
 ### 5. 信息流广告
@@ -139,6 +148,7 @@ final items = Item(feedId: feedAdDatas[0]);
 items.insert(Random().nextInt(items.length), item);
 /// Widget使用
 FeedView(
+  
   id: item.feedId,
   onRemove: () {
     setState(() {
@@ -147,6 +157,83 @@ FeedView(
   },
 )
 ```
+
+- 切换是否可点击状态
+
+```dart
+// 因iOS的EXPRESS类型的广告内部使用WebView渲染，而WebView与FlutterView存在部分点击事件冲突，故提供该解决方案
+// 1. 继承GlobalObjectKey实现自己的key
+class _ItemKey extends GlobalObjectKey<FeedViewState> {
+  _ItemKey(Object value) : super(value);
+}
+// 2. 为FeedView提供自己的key
+FeedView(
+  key: _ItemKey(item.feedId),
+  ...
+)
+// 3. 为需要计算位置的Widget提供key, 如
+final _titleKey = GlobalKey();
+AppBar(key: _titleKey)
+final _naviKey = GlobalKey();
+BottomNavigationBar(key: _naviKey)
+// 4. 为FeedView容器提供ScrollController, 如
+final _controller = ScrollController();
+ListView(controller: _controller)
+// 5. 监听controller滚动事件，并动态切换可点击状态
+@override
+void initState() {
+  super.initState();
+  _loadFeedAd();
+  _controller.addListener(_onScroll);
+}
+
+@override
+void dispose() {
+  _controller.removeListener(_onScroll);
+  super.dispose();
+}
+_onScroll() {
+  if (!Platform.isIOS) {
+    return;
+  }
+
+  RenderBox titleBox = _titleKey.currentContext.findRenderObject();
+  var titleSize = titleBox.size;
+  var titleOffset = titleBox.localToGlobal(Offset.zero);
+
+  final minAvailableHeigt = titleOffset.dy + titleSize.height;
+
+  RenderBox naviBox = _naviKey.currentContext.findRenderObject();
+  var naviOffset = naviBox.localToGlobal(Offset.zero);
+
+  final maxAvailableHeight = naviOffset.dy;
+
+  /// 检测各个item的宽高、偏移量是否满足点击需求
+  for (var value in feedIds) {
+    _switchUserInteraction(maxAvailableHeight, minAvailableHeigt, value);
+  }
+}
+
+void _switchUserInteraction(
+  double maxAvailableHeight,
+  double minAvailableHeigt,
+  String id,
+) {
+  var itemKey = _ItemKey(id);
+  RenderBox renderBox = itemKey.currentContext.findRenderObject();
+  var size = renderBox.size;
+  var offset = renderBox.localToGlobal(Offset.zero);
+
+  /// 最底部坐标不低于NavigationBar, 最顶部不高于AppBar
+  var available = offset.dy + size.height < maxAvailableHeight &&
+    offset.dy > minAvailableHeigt;
+  itemKey.currentState.setUserInteractionEnabled(available);
+}
+  
+
+```
+
+
 
 ### 6. 插屏广告
 

@@ -1,3 +1,9 @@
+## 0.4.3
+
+* iOS 增加 `isUserInteractionEnabled` 广告位点击冲突解决方案
+* 开屏广告状态回调
+* 修复开屏广告展示错误
+
 ## 0.4.2
 
 * iOS 配置增加 `isUserInteractionEnabled` 属性
