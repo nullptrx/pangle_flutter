@@ -12,7 +12,8 @@ final pangle = PanglePlugin._();
 
 /// Pangle Ad Plugin
 class PanglePlugin {
-  static const MethodChannel _methodChannel = const MethodChannel('nullptrx.github.io/pangle');
+  static const MethodChannel _methodChannel =
+      const MethodChannel('nullptrx.github.io/pangle');
 
   PanglePlugin._() {
     _methodChannel.setMethodCallHandler((call) => _handleMethod(call));
@@ -103,9 +104,11 @@ class PanglePlugin {
   }) async {
     Map<String, dynamic> result;
     if (Platform.isIOS && iOS != null) {
-      result = await _methodChannel.invokeMapMethod('loadSplashAd', iOS.toJSON());
+      result =
+          await _methodChannel.invokeMapMethod('loadSplashAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      result = await _methodChannel.invokeMapMethod('loadSplashAd', android.toJSON());
+      result = await _methodChannel.invokeMapMethod(
+          'loadSplashAd', android.toJSON());
     }
     return PangleResult.fromJson(result);
   }
@@ -121,9 +124,11 @@ class PanglePlugin {
   }) async {
     Map<String, dynamic> result;
     if (Platform.isIOS && iOS != null) {
-      result = await _methodChannel.invokeMapMethod('loadRewardedVideoAd', iOS.toJSON());
+      result = await _methodChannel.invokeMapMethod(
+          'loadRewardedVideoAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      result = await _methodChannel.invokeMapMethod('loadRewardedVideoAd', android.toJSON());
+      result = await _methodChannel.invokeMapMethod(
+          'loadRewardedVideoAd', android.toJSON());
     }
     return PangleResult.fromJson(result);
   }
@@ -141,7 +146,8 @@ class PanglePlugin {
     if (Platform.isIOS && iOS != null) {
       result = await _methodChannel.invokeMapMethod('loadFeedAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      result = await _methodChannel.invokeMapMethod('loadFeedAd', android.toJSON());
+      result =
+          await _methodChannel.invokeMapMethod('loadFeedAd', android.toJSON());
     }
     if (result == null) {
       return PangleFeedAd.empty();
@@ -160,9 +166,11 @@ class PanglePlugin {
   }) async {
     Map<String, dynamic> result;
     if (Platform.isIOS && iOS != null) {
-      result = await _methodChannel.invokeMapMethod('loadInterstitialAd', iOS.toJSON());
+      result = await _methodChannel.invokeMapMethod(
+          'loadInterstitialAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      result = await _methodChannel.invokeMapMethod('loadInterstitialAd', android.toJSON());
+      result = await _methodChannel.invokeMapMethod(
+          'loadInterstitialAd', android.toJSON());
     }
     return PangleResult.fromJson(result);
   }
@@ -178,9 +186,11 @@ class PanglePlugin {
   }) async {
     Map<String, dynamic> result;
     if (Platform.isIOS && iOS != null) {
-      result = await _methodChannel.invokeMapMethod('loadFullscreenVideoAd', iOS.toJSON());
+      result = await _methodChannel.invokeMapMethod(
+          'loadFullscreenVideoAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      result = await _methodChannel.invokeMapMethod('loadFullscreenVideoAd', android.toJSON());
+      result = await _methodChannel.invokeMapMethod(
+          'loadFullscreenVideoAd', android.toJSON());
     }
     return PangleResult.fromJson(result);
   }
