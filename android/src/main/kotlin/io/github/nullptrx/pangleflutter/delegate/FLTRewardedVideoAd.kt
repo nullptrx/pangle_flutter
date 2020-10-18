@@ -57,7 +57,7 @@ internal class RewardAdInteractionImpl(var result: (Any) -> Unit?) : TTRewardVid
   private var verify = false
 
   // 视频广告播完验证奖励有效性回调，参数分别为是否有效，奖励数量，奖励名称
-  override fun onRewardVerify(verify: Boolean, amount: Int, rewardName: String?) {
+  override fun onRewardVerify(verify: Boolean, amount: Int, rewardName: String, a: Int, b: String) {
     this.verify = verify
   }
 

@@ -38,9 +38,9 @@ internal final class FLTSplashExpressAdTask: FLTTaskProtocol {
 
     func execute() -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
         return { result in
-            let delegate = FLTSplashExpressAd(success: { [weak self] in
+            let delegate = FLTSplashExpressAd(success: { [weak self] msg in
                 guard let self = self else { return }
-                result(self, ["code": 0])
+                result(self, ["code": 0, "message": msg])
             }, fail: { [weak self] error in
                 guard let self = self else { return }
                 let e = error as NSError?

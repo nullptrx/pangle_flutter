@@ -9,7 +9,7 @@ import BUAdSDK
 import Foundation
 
 internal final class FLTSplashAd: NSObject, BUSplashAdDelegate {
-    typealias Success = () -> Void
+    typealias Success = (String) -> Void
     typealias Fail = (Error?) -> Void
     
     let success: Success?
@@ -21,21 +21,22 @@ internal final class FLTSplashAd: NSObject, BUSplashAdDelegate {
     }
     
     public func splashAdDidClick(_ splashAd: BUSplashAdView) {
-//        isClicked = true
+        self.success?("click")
+        splashAd.removeFromSuperview()
     }
     
     func splashAdDidClickSkip(_ splashAd: BUSplashAdView) {
+        self.success?("skip")
         splashAd.removeFromSuperview()
-        self.success?()
     }
     
     public func splashAdDidClose(_ splashAd: BUSplashAdView) {
+        self.success?("timeover")
         splashAd.removeFromSuperview()
-        self.success?()
     }
     
     public func splashAd(_ splashAd: BUSplashAdView, didFailWithError error: Error?) {
-        splashAd.removeFromSuperview()
         self.fail?(error)
+        splashAd.removeFromSuperview()
     }
 }

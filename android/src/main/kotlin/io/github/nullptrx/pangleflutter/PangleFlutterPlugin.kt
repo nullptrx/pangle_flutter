@@ -106,6 +106,10 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
     activity ?: return
     val pangle = PangleAdManager.shared
     when (call.method) {
+      "getSdkVersion" -> {
+        val version = pangle.getSdkVersion()
+        result.success(version)
+      }
       "init" -> {
         try {
 
@@ -126,7 +130,6 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         val tolerateTimeout = call.argument<Float>("tolerateTimeout")
         val hideSkipButton = call.argument<Boolean>("hideSkipButton")
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
-        val loadAwait = call.argument<Boolean>("loadAwait") ?: false
         var expressSize: TTSizeF? = null
         if (isExpress) {
           val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
@@ -136,13 +139,8 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         }
         val adSlot = PangleAdSlotManager.getSplashAdSlot(slotId, isExpress, expressSize, activity, isSupportDeepLink)
         pangle.loadSplashAd(adSlot, FLTSplashAd(hideSkipButton, activity) {
-          if (loadAwait) {
-            result.success(null)
-          }
+            result.success(it)
         }, tolerateTimeout)
-        if (!loadAwait) {
-          result.success(null)
-        }
       }
       "loadRewardedVideoAd" -> {
 

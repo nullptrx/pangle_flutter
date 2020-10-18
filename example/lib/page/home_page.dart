@@ -4,24 +4,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:sprintf/sprintf.dart';
 
 import '../common/ext.dart';
 import 'home/express_page.dart';
 import 'home/native_page.dart';
 
 const kEnv = '''
-Android Studio 4.0.1
-Xcode 12.0
+Android Studio 4.1
+Xcode 12.0.1
 
-Flutter 1.20.3
-Dart 2.9.2
+Flutter 1.22.1
+Dart 2.10.1
 Kotlin 1.4.10
 Swift 5.2.4 
 ''';
 const kDependencies = '''
-Android SDK V3.2.5.1
-iOS SDK V3.2.6.2
+Pangle SDK V%s
 ''';
 
 class HomePage extends StatefulWidget {
@@ -30,9 +29,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String _denpendencies;
+
   @override
   void initState() {
     super.initState();
+    _initDependencies();
   }
 
   @override
@@ -58,7 +60,7 @@ class _HomePageState extends State<HomePage> {
               title: Text('Dependencies:'),
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 8.0),
-                child: Text(kDependencies),
+                child: Text(_denpendencies ?? ''),
               ),
             ),
             RaisedButton(
@@ -81,6 +83,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _initDependencies() async {
+    final sdkVersion = await pangle.getSdkVersion();
+    final text = sprintf(kDependencies, [sdkVersion]).toString();
+    setState(() {
+      _denpendencies = text;
+    });
+  }
+
   void _requestPermissions() async {
     if (Platform.isIOS) {
       _requestPermissionsIOS();
@@ -90,9 +100,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _requestPermissionsAndroid() async {
-    await [Permission.location, Permission.phone, Permission.storage].request();
+    // await [Permission.location, Permission.phone, Permission.storage].request();
 
-    // await pangle.requestPermissionIfNecessary();
+    await pangle.requestPermissionIfNecessary();
   }
 
   void _requestPermissionsIOS() async {

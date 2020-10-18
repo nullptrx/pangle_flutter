@@ -16,11 +16,13 @@ internal class FLTSplashAd(val hideSkipButton: Boolean?, var activity: Activity?
 
   override fun onError(code: Int, message: String) {
     handleSplashEnd()
+    invoke(code, message)
 
   }
 
   override fun onTimeout() {
     handleSplashEnd()
+    invoke(-1, "timeout")
   }
 
   override fun onSplashAdLoad(ad: TTSplashAd) {
@@ -37,10 +39,12 @@ internal class FLTSplashAd(val hideSkipButton: Boolean?, var activity: Activity?
     ad.setSplashInteractionListener(object : TTSplashAd.AdInteractionListener {
       override fun onAdClicked(view: View, type: Int) {
         handleSplashEnd()
+        invoke(0, "click")
       }
 
       override fun onAdSkip() {
         handleSplashEnd()
+        invoke(0, "skip")
       }
 
       override fun onAdShow(view: View?, type: Int) {
@@ -48,29 +52,26 @@ internal class FLTSplashAd(val hideSkipButton: Boolean?, var activity: Activity?
 
       override fun onAdTimeOver() {
         handleSplashEnd()
+        invoke(0, "timeover")
       }
 
     })
     activity?.also {
       if (it is FragmentActivity) {
-        val tag = SupportSplashDialog::class.java.name
-        val supportSplashDialog = SupportSplashDialog(splashView)
+        val supportSplashDialog = SupportSplashDialog()
         supportDialog = supportSplashDialog
-        supportSplashDialog.show(it.supportFragmentManager, tag)
+        supportSplashDialog.show(it.supportFragmentManager, splashView)
       } else {
-        val tag = NativeSplashDialog::class.java.name
-        val nativeSplashDialog = NativeSplashDialog(splashView)
+        val nativeSplashDialog = NativeSplashDialog()
         nativeDialog = nativeSplashDialog
-        nativeSplashDialog.show(it.fragmentManager, tag)
+        nativeSplashDialog.show(it.fragmentManager, splashView)
       }
     }
   }
 
   private fun handleSplashEnd() {
-    supportDialog?.dismiss()
-    nativeDialog?.dismiss()
-    // TODO 暂不处理返回消息
-    invoke()
+    supportDialog?.dismissAllowingStateLoss()
+    nativeDialog?.dismissAllowingStateLoss()
   }
 
 

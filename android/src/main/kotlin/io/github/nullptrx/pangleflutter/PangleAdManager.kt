@@ -29,6 +29,10 @@ class PangleAdManager {
     get() = field
 
 
+  fun getSdkVersion(): String {
+    return ttAdManager!!.sdkVersion
+  }
+
   /**
    * Feed
    */

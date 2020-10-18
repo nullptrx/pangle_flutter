@@ -8,7 +8,7 @@
 import BUAdSDK
 
 internal final class FLTSplashExpressAd: NSObject, BUNativeExpressSplashViewDelegate {
-    typealias Success = () -> Void
+    typealias Success = (String) -> Void
     typealias Fail = (Error?) -> Void
     
     let success: Success?
@@ -19,24 +19,29 @@ internal final class FLTSplashExpressAd: NSObject, BUNativeExpressSplashViewDele
         self.fail = fail
     }
     
-    func nativeExpressSplashViewDidClickSkip(_ splashAdView: BUNativeExpressSplashView) {
+    func nativeExpressSplashViewDidClick(_ splashAdView: BUNativeExpressSplashView) {
+        self.success?("click")
         splashAdView.removeFromSuperview()
-        self.success?()
     }
     
-    func nativeExpressSplashView(_ splashAdView: BUNativeExpressSplashView, didFailWithError error: Error?) {
+    func nativeExpressSplashViewDidClickSkip(_ splashAdView: BUNativeExpressSplashView) {
+        self.success?("skip")
         splashAdView.removeFromSuperview()
-        self.fail?(error)
     }
     
     func nativeExpressSplashViewDidClose(_ splashAdView: BUNativeExpressSplashView) {
+        self.success?("timeover")
         splashAdView.removeFromSuperview()
-        self.success?()
+    }
+    
+    func nativeExpressSplashView(_ splashAdView: BUNativeExpressSplashView, didFailWithError error: Error?) {
+        self.fail?(error)
+        splashAdView.removeFromSuperview()
     }
     
     func nativeExpressSplashViewRenderFail(_ splashAdView: BUNativeExpressSplashView, error: Error?) {
-        splashAdView.removeFromSuperview()
         self.fail?(error)
+        splashAdView.removeFromSuperview()
     }
     
     func nativeExpressSplashViewDidLoad(_ splashAdView: BUNativeExpressSplashView) {}
@@ -44,8 +49,6 @@ internal final class FLTSplashExpressAd: NSObject, BUNativeExpressSplashViewDele
     func nativeExpressSplashViewRenderSuccess(_ splashAdView: BUNativeExpressSplashView) {}
     
     func nativeExpressSplashViewWillVisible(_ splashAdView: BUNativeExpressSplashView) {}
-    
-    func nativeExpressSplashViewDidClick(_ splashAdView: BUNativeExpressSplashView) {}
     
     func nativeExpressSplashViewCountdown(toZero splashAdView: BUNativeExpressSplashView) {}
     

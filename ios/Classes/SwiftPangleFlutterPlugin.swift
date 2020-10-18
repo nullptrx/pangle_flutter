@@ -36,6 +36,8 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
         
         switch call.method {
+        case "getSdkVersion":
+            result(BUAdSDKManager.sdkVersion)
         case "init":
             instance.initialize(args)
             result(nil)
@@ -55,8 +57,7 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
                 result(nil)
             }
         case "loadSplashAd":
-            instance.loadSplashAd(args)
-            result(nil)
+            instance.loadSplashAd(args, result: result)
         case "loadRewardedVideoAd":
             instance.loadRewardVideoAd(args, result: result)
         case "loadFeedAd":

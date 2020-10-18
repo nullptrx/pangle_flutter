@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 
 import '../../common/constant.dart';
-import '../../common/logger.dart';
 
 class InterstitialExpressPage extends StatefulWidget {
   @override
@@ -51,6 +50,6 @@ class _InterstitialExpressPageState extends State<InterstitialExpressPage> {
         expressSize: PangleExpressSize.widthPercent(0.8, aspectRatio: 1.667),
       ),
     );
-    logger.d(jsonEncode(result));
+    print(jsonEncode(result));
   }
 }

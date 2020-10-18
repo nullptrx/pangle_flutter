@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 
 import '../../common/constant.dart';
-import '../../common/logger.dart';
 
 class RewardedVideoPage extends StatefulWidget {
   @override
@@ -74,7 +73,7 @@ class _RewardedVideoPageState extends State<RewardedVideoPage> {
         loadingType: PangleLoadingType.normal,
       ),
     );
-    logger.d(jsonEncode(result));
+    print(jsonEncode(result));
     setState(() {
       _loaded = false;
     });

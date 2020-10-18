@@ -7,10 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import io.github.nullptrx.pangleflutter.util.DialogUtil
+import java.lang.reflect.Field
 
-class SupportSplashDialog(private val layoutView: View) : DialogFragment() {
+class SupportSplashDialog : DialogFragment() {
 
+  private lateinit var layoutView: View
   private lateinit var ctx: Context
 
   override fun onAttach(context: Context) {
@@ -26,4 +30,22 @@ class SupportSplashDialog(private val layoutView: View) : DialogFragment() {
     return layoutView
   }
 
+  override fun onSaveInstanceState(outState: Bundle) {
+  }
+
+  fun show(manager: FragmentManager, view: View) {
+    layoutView = view
+    try {
+      val mDismissed: Field = android.app.DialogFragment::class.java.getDeclaredField("mDismissed")
+      mDismissed.isAccessible = true
+      mDismissed.set(this, false)
+      val mShownByMe: Field = android.app.DialogFragment::class.java.getDeclaredField("mShownByMe")
+      mShownByMe.isAccessible = true
+      mShownByMe.set(this, true)
+    } catch (_: Exception) {
+    }
+    val ft: FragmentTransaction = manager.beginTransaction()
+    ft.add(this, javaClass.simpleName)
+    ft.commitAllowingStateLoss()
+  }
 }

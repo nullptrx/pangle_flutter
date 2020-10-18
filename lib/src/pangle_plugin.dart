@@ -12,14 +12,17 @@ final pangle = PanglePlugin._();
 
 /// Pangle Ad Plugin
 class PanglePlugin {
-  static const MethodChannel _methodChannel =
-      const MethodChannel('nullptrx.github.io/pangle');
+  static const MethodChannel _methodChannel = const MethodChannel('nullptrx.github.io/pangle');
 
   PanglePlugin._() {
     _methodChannel.setMethodCallHandler((call) => _handleMethod(call));
   }
 
   _handleMethod(MethodCall call) {}
+
+  Future<String> getSdkVersion() async {
+    return await _methodChannel.invokeMethod('getSdkVersion');
+  }
 
   /// Request permissions
   /// 穿山甲SDK不强制获取权限，即使没有获取可选权限SDK也能正常运行；
@@ -94,15 +97,17 @@ class PanglePlugin {
   ///
   /// [iOS] config for iOS
   /// [android] config for Android
-  Future<Null> loadSplashAd({
+  Future<PangleResult> loadSplashAd({
     IOSSplashConfig iOS,
     AndroidSplashConfig android,
   }) async {
+    Map<String, dynamic> result;
     if (Platform.isIOS && iOS != null) {
-      await _methodChannel.invokeMethod('loadSplashAd', iOS.toJSON());
+      result = await _methodChannel.invokeMapMethod('loadSplashAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      await _methodChannel.invokeMethod('loadSplashAd', android.toJSON());
+      result = await _methodChannel.invokeMapMethod('loadSplashAd', android.toJSON());
     }
+    return PangleResult.fromJson(result);
   }
 
   /// Display video ad.
@@ -116,11 +121,9 @@ class PanglePlugin {
   }) async {
     Map<String, dynamic> result;
     if (Platform.isIOS && iOS != null) {
-      result = await _methodChannel.invokeMapMethod(
-          'loadRewardedVideoAd', iOS.toJSON());
+      result = await _methodChannel.invokeMapMethod('loadRewardedVideoAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      result = await _methodChannel.invokeMapMethod(
-          'loadRewardedVideoAd', android.toJSON());
+      result = await _methodChannel.invokeMapMethod('loadRewardedVideoAd', android.toJSON());
     }
     return PangleResult.fromJson(result);
   }
@@ -138,8 +141,7 @@ class PanglePlugin {
     if (Platform.isIOS && iOS != null) {
       result = await _methodChannel.invokeMapMethod('loadFeedAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      result =
-          await _methodChannel.invokeMapMethod('loadFeedAd', android.toJSON());
+      result = await _methodChannel.invokeMapMethod('loadFeedAd', android.toJSON());
     }
     if (result == null) {
       return PangleFeedAd.empty();
@@ -158,11 +160,9 @@ class PanglePlugin {
   }) async {
     Map<String, dynamic> result;
     if (Platform.isIOS && iOS != null) {
-      result = await _methodChannel.invokeMapMethod(
-          'loadInterstitialAd', iOS.toJSON());
+      result = await _methodChannel.invokeMapMethod('loadInterstitialAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      result = await _methodChannel.invokeMapMethod(
-          'loadInterstitialAd', android.toJSON());
+      result = await _methodChannel.invokeMapMethod('loadInterstitialAd', android.toJSON());
     }
     return PangleResult.fromJson(result);
   }
@@ -178,11 +178,9 @@ class PanglePlugin {
   }) async {
     Map<String, dynamic> result;
     if (Platform.isIOS && iOS != null) {
-      result = await _methodChannel.invokeMapMethod(
-          'loadFullscreenVideoAd', iOS.toJSON());
+      result = await _methodChannel.invokeMapMethod('loadFullscreenVideoAd', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      result = await _methodChannel.invokeMapMethod(
-          'loadFullscreenVideoAd', android.toJSON());
+      result = await _methodChannel.invokeMapMethod('loadFullscreenVideoAd', android.toJSON());
     }
     return PangleResult.fromJson(result);
   }

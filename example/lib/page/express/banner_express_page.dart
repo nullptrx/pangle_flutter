@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 
@@ -22,17 +24,21 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
         title: Text('Banner Express AD'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _enableClickAction = !_enableClickAction;
-          });
-          _banner1Key.currentState
-              .setUserInteractionEnabled(_enableClickAction);
-          _banner2Key.currentState
-              .setUserInteractionEnabled(_enableClickAction);
-        },
-        child: Icon(_enableClickAction ? Icons.lock_open : Icons.lock_outline),
+      floatingActionButton: Offstage(
+        offstage: !Platform.isIOS,
+        child: FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              _enableClickAction = !_enableClickAction;
+            });
+            _banner1Key.currentState
+                .setUserInteractionEnabled(_enableClickAction);
+            _banner2Key.currentState
+                .setUserInteractionEnabled(_enableClickAction);
+          },
+          child:
+              Icon(_enableClickAction ? Icons.lock_open : Icons.lock_outline),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
