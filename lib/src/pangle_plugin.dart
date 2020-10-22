@@ -12,8 +12,9 @@ final pangle = PanglePlugin._();
 
 /// Pangle Ad Plugin
 class PanglePlugin {
-  static const MethodChannel _methodChannel =
-      const MethodChannel('nullptrx.github.io/pangle');
+  static const MethodChannel _methodChannel = const MethodChannel(
+    'nullptrx.github.io/pangle',
+  );
 
   PanglePlugin._() {
     _methodChannel.setMethodCallHandler((call) => _handleMethod(call));
@@ -79,7 +80,8 @@ class PanglePlugin {
     return null;
   }
 
-  /// Register the App key that’s already been applied before requesting an ad from TikTok Audience Network.
+  /// Register the App key that’s already been applied before requesting an
+  /// ad from TikTok Audience Network.
   ///
   /// [iOS] config for iOS
   /// [android] config for Android
@@ -104,11 +106,15 @@ class PanglePlugin {
   }) async {
     Map<String, dynamic> result;
     if (Platform.isIOS && iOS != null) {
-      result =
-          await _methodChannel.invokeMapMethod('loadSplashAd', iOS.toJSON());
+      result = await _methodChannel.invokeMapMethod(
+        'loadSplashAd',
+        iOS.toJSON(),
+      );
     } else if (Platform.isAndroid && android != null) {
       result = await _methodChannel.invokeMapMethod(
-          'loadSplashAd', android.toJSON());
+        'loadSplashAd',
+        android.toJSON(),
+      );
     }
     return PangleResult.fromJson(result);
   }
@@ -125,10 +131,14 @@ class PanglePlugin {
     Map<String, dynamic> result;
     if (Platform.isIOS && iOS != null) {
       result = await _methodChannel.invokeMapMethod(
-          'loadRewardedVideoAd', iOS.toJSON());
+        'loadRewardedVideoAd',
+        iOS.toJSON(),
+      );
     } else if (Platform.isAndroid && android != null) {
       result = await _methodChannel.invokeMapMethod(
-          'loadRewardedVideoAd', android.toJSON());
+        'loadRewardedVideoAd',
+        android.toJSON(),
+      );
     }
     return PangleResult.fromJson(result);
   }
@@ -138,21 +148,26 @@ class PanglePlugin {
   /// [iOS] config for iOS
   /// [android] config for Android
   /// return loaded ad count.
-  Future<PangleFeedAd> loadFeedAd({
+  Future<PangleAd> loadFeedAd({
     IOSFeedConfig iOS,
     AndroidFeedConfig android,
   }) async {
     Map<dynamic, dynamic> result;
     if (Platform.isIOS && iOS != null) {
-      result = await _methodChannel.invokeMapMethod('loadFeedAd', iOS.toJSON());
+      result = await _methodChannel.invokeMapMethod(
+        'loadFeedAd',
+        iOS.toJSON(),
+      );
     } else if (Platform.isAndroid && android != null) {
-      result =
-          await _methodChannel.invokeMapMethod('loadFeedAd', android.toJSON());
+      result = await _methodChannel.invokeMapMethod(
+        'loadFeedAd',
+        android.toJSON(),
+      );
     }
     if (result == null) {
-      return PangleFeedAd.empty();
+      return PangleAd.empty();
     }
-    return PangleFeedAd.fromJsonMap(result);
+    return PangleAd.fromJsonMap(result);
   }
 
   /// Request interstitial ad data.
@@ -167,10 +182,14 @@ class PanglePlugin {
     Map<String, dynamic> result;
     if (Platform.isIOS && iOS != null) {
       result = await _methodChannel.invokeMapMethod(
-          'loadInterstitialAd', iOS.toJSON());
+        'loadInterstitialAd',
+        iOS.toJSON(),
+      );
     } else if (Platform.isAndroid && android != null) {
       result = await _methodChannel.invokeMapMethod(
-          'loadInterstitialAd', android.toJSON());
+        'loadInterstitialAd',
+        android.toJSON(),
+      );
     }
     return PangleResult.fromJson(result);
   }
@@ -187,10 +206,14 @@ class PanglePlugin {
     Map<String, dynamic> result;
     if (Platform.isIOS && iOS != null) {
       result = await _methodChannel.invokeMapMethod(
-          'loadFullscreenVideoAd', iOS.toJSON());
+        'loadFullscreenVideoAd',
+        iOS.toJSON(),
+      );
     } else if (Platform.isAndroid && android != null) {
       result = await _methodChannel.invokeMapMethod(
-          'loadFullscreenVideoAd', android.toJSON());
+        'loadFullscreenVideoAd',
+        android.toJSON(),
+      );
     }
     return PangleResult.fromJson(result);
   }

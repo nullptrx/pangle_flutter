@@ -14,14 +14,14 @@ import android.webkit.WebView
 import android.widget.FrameLayout
 import com.bytedance.sdk.openadsdk.TTAdConstant
 import com.bytedance.sdk.openadsdk.TTAdDislike.DislikeInteractionCallback
-import com.bytedance.sdk.openadsdk.TTFeedAd
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd
-import com.bytedance.sdk.openadsdk.core.nativeexpress.NativeExpressView
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 import io.github.nullptrx.pangleflutter.PangleAdManager
+import io.github.nullptrx.pangleflutter.common.PangleExpressAd
+import io.github.nullptrx.pangleflutter.common.PangleFeedAd
 import io.github.nullptrx.pangleflutter.common.TTSizeF
 import io.github.nullptrx.pangleflutter.util.ScreenUtil
 import io.github.nullptrx.pangleflutter.util.dp
@@ -92,13 +92,17 @@ class FlutterFeedView(
   }
 
   private fun loadAd() {
-    this.feedId?.also {
-      if (this.isExpress) {
-        val ttExpressAd: TTNativeExpressAd? = PangleAdManager.shared.getExpressAd(it)
-        loadExpressAd(ttExpressAd)
+    this.feedId?.apply {
+      if (isExpress) {
+        val ad = PangleAdManager.shared.getExpressAd(this)
+        ad?.also {
+          loadExpressAd(it)
+        }
       } else {
-        val ttFeedAd: TTFeedAd? = PangleAdManager.shared.getFeedAd(it)
-        loadAd(ttFeedAd)
+        val ad = PangleAdManager.shared.getFeedAd(this)
+        ad?.also {
+          loadAd(it)
+        }
       }
     }
   }
@@ -107,7 +111,7 @@ class FlutterFeedView(
     this.feedId?.also {
       if (this.isExpress) {
         val ad = PangleAdManager.shared.removeExpressAd(it)
-        ad?.destroy()
+        ad?.ad?.destroy()
       } else {
         PangleAdManager.shared.removeFeedAd(it)
       }
@@ -142,8 +146,8 @@ class FlutterFeedView(
     methodChannel.invokeMethod(Method.update.name, params)
   }
 
-  fun loadAd(ad: TTFeedAd?) {
-    ad ?: return
+  fun loadAd(pangleAd: PangleFeedAd) {
+    val ad = pangleAd.ad
     container.removeAllViews()
 //    val adView = ad.adView
     val view = ItemBinding(activity) {
@@ -173,8 +177,8 @@ class FlutterFeedView(
     params.gravity = Gravity.CENTER
     container.addView(view, params)
 
-    val size = invalidateView(screenWidth, feedHeight)
-    invoke(size.width, size.height)
+    val result = invalidateView(screenWidth, feedHeight)
+    invoke(result.width, result.height)
   }
 
   private fun invalidateView(viewWidth: Float, viewHeight: Float): TTSizeF {
@@ -200,22 +204,21 @@ class FlutterFeedView(
     invoke(viewWidth, viewHeight)
   }
 
-  fun loadExpressAd(ad: TTNativeExpressAd?) {
-    ad ?: return
+  fun loadExpressAd(pangleAd: PangleExpressAd) {
+    val ad = pangleAd.ad
+    val size = pangleAd.size
     val expressAdView = ad.expressAdView
     container.removeAllViews()
-    if (expressAdView is NativeExpressView) {
-      val expectExpressWidth = expressAdView.expectExpressWidth
-      val expectExpressHeight = expressAdView.expectExpressHeight
+    val expectExpressWidth = size.width
+    val expectExpressHeight = size.height
 //      val screenWidth = ScreenUtil.getScreenWidthDp()
 //      val feedHeight = screenWidth * expectExpressHeight / expectExpressWidth
 //      val params = FrameLayout.LayoutParams(screenWidth.dp, feedHeight.dp)
-      val params = FrameLayout.LayoutParams(expectExpressWidth.dp, expectExpressHeight.dp)
+    val params = FrameLayout.LayoutParams(expectExpressWidth.dp, expectExpressHeight.dp)
 //      disableWebViewAutoPlay(expressAdView.webView)
-      params.gravity = Gravity.CENTER
+    params.gravity = Gravity.CENTER
 
-      container.addView(expressAdView, params)
-    }
+    container.addView(expressAdView, params)
 
     ad.setCanInterruptVideoPlay(true)
     ad.setExpressInteractionListener(object : TTNativeExpressAd.ExpressAdInteractionListener {

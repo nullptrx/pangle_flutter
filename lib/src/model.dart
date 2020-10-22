@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 /// [message] 错误时，调试信息
 /// [count] 获得信息流数量，一般同上面传入的count，最终结果以此count为主
 /// [data] (string list) 用于展示信息流广告的键id
-class PangleFeedAd {
+class PangleAd {
   final int code;
   final String message;
   final int count;
@@ -16,14 +16,14 @@ class PangleFeedAd {
   bool get ok => code == 0;
 
   /// response for loading feed ad
-  PangleFeedAd.empty()
+  PangleAd.empty()
       : code = -1,
         message = "",
         count = 0,
         data = [];
 
   /// response for loading feed ad
-  PangleFeedAd.fromJsonMap(Map<dynamic, dynamic> map)
+  PangleAd.fromJsonMap(Map<dynamic, dynamic> map)
       : code = map["code"],
         message = map["message"],
         count = map["count"],

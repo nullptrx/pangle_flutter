@@ -22,6 +22,7 @@ import io.github.nullptrx.pangleflutter.view.FeedViewFactory
 /** PangleFlutterPlugin */
 public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
   companion object {
+    val kDefaultBannerAdCount = 3
     val kDefaultFeedAdCount = 3
     val kChannelName = "nullptrx.github.io/pangle"
 
@@ -139,7 +140,7 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         }
         val adSlot = PangleAdSlotManager.getSplashAdSlot(slotId, isExpress, expressSize, activity, isSupportDeepLink)
         pangle.loadSplashAd(adSlot, FLTSplashAd(hideSkipButton, activity) {
-            result.success(it)
+          result.success(it)
         }, tolerateTimeout)
       }
       "loadRewardedVideoAd" -> {
@@ -185,6 +186,33 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
             result.success(it)
           }
         }
+      }
+
+      "loadBannerAd" -> {
+        val slotId = call.argument<String>("slotId")!!
+        val count = call.argument<Int>("count") ?: kDefaultBannerAdCount
+        val imgSizeIndex = call.argument<Int>("imgSize")!!
+        val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+        val isExpress = call.argument<Boolean>("isExpress") ?: false
+
+        var expressSize: TTSizeF? = null
+        if (isExpress) {
+          val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
+          val w: Float = expressArgs.getValue("width").toFloat()
+          val h: Float = expressArgs.getValue("height").toFloat()
+          expressSize = TTSizeF(w, h)
+        }
+        val adSlot = PangleAdSlotManager.getBannerAdSlot(slotId, isExpress, expressSize, count, imgSizeIndex, isSupportDeepLink)
+        if (isExpress) {
+          pangle.loadBanner2ExpressAd(adSlot) {
+            result.success(it)
+          }
+        } else {
+          pangle.loadBanner2Ad(adSlot) {
+            result.success(it)
+          }
+        }
+
       }
 
       "loadFeedAd" -> {

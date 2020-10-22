@@ -63,6 +63,7 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
             return
         }
         let imgSizeIndex = params["imgSize"] as! Int
+        let interval: Int? = params["interval"] as? Int
         let imgSize = BUSize(by: BUProposalSize(rawValue: imgSizeIndex)!)!
 
         let isExpress = params["isExpress"] as? Bool ?? false
@@ -84,10 +85,11 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
             viewWidth = width
             viewHeight = height
 
-            let bannerAdView = BUNativeExpressBannerView(slotID: slotId!, rootViewController: vc, adSize: adSize, isSupportDeepLink: isSupportDeepLink)
+            let bannerAdView = interval == nil ? BUNativeExpressBannerView(slotID: slotId!, rootViewController: vc, adSize: adSize, isSupportDeepLink: isSupportDeepLink) : BUNativeExpressBannerView(slotID: slotId!, rootViewController: vc, adSize: adSize, isSupportDeepLink: isSupportDeepLink, interval: interval!)
             bannerAdView.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
             bannerAdView.center = CGPoint(x: viewWidth / 2, y: viewHeight / 2)
             self.container.addSubview(bannerAdView)
+
             bannerAdView.delegate = self
             bannerAdView.loadAdData()
             self.bannerView = bannerAdView
@@ -96,12 +98,11 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
             viewWidth = Double(UIScreen.main.bounds.width)
             viewHeight = viewWidth * Double(imgSize.height) / Double(imgSize.width)
 
-            let bannerAdView = BUBannerAdView(slotID: slotId!, size: imgSize, rootViewController: vc)
+            let bannerAdView = interval == nil ? BUBannerAdView(slotID: slotId!, size: imgSize, rootViewController: vc) : BUBannerAdView(slotID: slotId!, size: imgSize, rootViewController: vc, interval: interval!)
 
             bannerAdView.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
             bannerAdView.center = CGPoint(x: viewWidth / 2, y: viewHeight / 2)
             self.container.addSubview(bannerAdView)
-
             bannerAdView.delegate = self
             bannerAdView.loadAdData()
         }
@@ -185,8 +186,7 @@ extension FLTBannerView: BUNativeExpressBannerViewDelegate {
     }
 }
 
-class BannerView: UIView {
-}
+class BannerView: UIView {}
 
 private class BannerTouchGesture: NSObject, UIGestureRecognizerDelegate {
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {

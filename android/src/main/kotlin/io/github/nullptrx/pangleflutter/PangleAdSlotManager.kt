@@ -65,7 +65,7 @@ object PangleAdSlotManager {
   }
 
 
-  fun getBannerAdSlot(slotId: String, isExpress: Boolean, expressSize: TTSizeF?, imgSizeIndex: Int, isSupportDeepLink: Boolean): AdSlot {
+  fun getBannerAdSlot(slotId: String, isExpress: Boolean, expressSize: TTSizeF?, count: Int, imgSizeIndex: Int, isSupportDeepLink: Boolean): AdSlot {
 
     val adSlot = AdSlot.Builder().apply {
       setCodeId(slotId)
@@ -75,6 +75,7 @@ object PangleAdSlotManager {
         val imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
         setImageAcceptedSize(imgSize.width, imgSize.height)
       }
+      setAdCount(count)
       setSupportDeepLink(isSupportDeepLink)
     }
         .build()

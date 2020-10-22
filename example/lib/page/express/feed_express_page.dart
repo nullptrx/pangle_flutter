@@ -112,7 +112,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
 
   /// 加载广告
   _loadFeedAd() async {
-    PangleFeedAd feedAd = await pangle.loadFeedAd(
+    PangleAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedConfig(
         slotId: kFeedVideoExpressId,
         expressSize: PangleExpressSize.widthPercent(1.0, aspectRatio: 1.32),

@@ -4,9 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import com.bytedance.sdk.openadsdk.TTAdDislike
 import com.bytedance.sdk.openadsdk.TTAdNative
@@ -38,14 +36,16 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
   private lateinit var expressSize: TTSizeF
   private lateinit var imgSize: TTSize
   private var isExpress: Boolean = false
+  private var interval: Int? = null
 
   init {
     methodChannel = MethodChannel(messenger, "nullptrx.github.io/pangle_bannerview_$id")
     methodChannel.setMethodCallHandler(this)
     context = activity
     container = FrameLayout(context)
-    container.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
+//    container.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, WRAP_CONTENT)
 
+//    println("BannerView: init ${Date().toGMTString()}")
 
     val slotId = params["slotId"] as? String
     this.height = (params["height"] as? Double)?.toFloat()
@@ -55,6 +55,8 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
       val isSupportDeepLink = params["isSupportDeepLink"] as? Boolean ?: true
       isExpress = params["isExpress"] as? Boolean ?: false
       imgSize = PangleImgSize.values()[imgSizeIndex].toDeviceSize()
+      interval = params["interval"] as Int?
+
 
       if (isExpress) {
         val expressArgs: Map<String, Double> = params["expressSize"]?.asMap() ?: mapOf()
@@ -64,12 +66,17 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
       } else {
         expressSize = TTSizeF()
       }
-      val adSlot = PangleAdSlotManager.getBannerAdSlot(slotId, isExpress, expressSize, imgSizeIndex, isSupportDeepLink)
+      val adSlot = PangleAdSlotManager.getBannerAdSlot(slotId, isExpress, expressSize, 1, imgSizeIndex, isSupportDeepLink)
       if (isExpress) {
         PangleAdManager.shared.loadBannerExpressAd(adSlot, FLTBannerExpressAd())
       } else {
         PangleAdManager.shared.loadBannerAd(adSlot, FLTBannerAd())
       }
+    }
+    if (isExpress) {
+      invalidateView(expressSize.width, expressSize.height)
+    } else {
+      invalidateView(imgSize.width, imgSize.height)
     }
   }
 
@@ -142,7 +149,7 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
   }
 
 
-  internal inner class FLTBannerAd() : TTAdNative.BannerAdListener,
+  internal inner class FLTBannerAd : TTAdNative.BannerAdListener,
       TTBannerAd.AdInteractionListener, TTAdDislike.DislikeInteractionCallback {
 
     override fun onError(code: Int, message: String?) {
@@ -157,13 +164,15 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
 
       //在banner中显示网盟提供的dislike icon，有助于广告投放精准度提升
       ad.setShowDislikeIcon(this)
+      //设置轮播的时间间隔  间隔在30s到120秒之间的值，不设置默认不轮播
+      interval?.also {
+        ad.setSlideIntervalTime(it)
+      }
 
       container.removeAllViews()
       val params = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
       container.addView(view, params)
 //      view.invalidate()
-      //设置轮播的时间间隔  间隔在30s到120秒之间的值，不设置默认不轮播
-//      ad.setSlideIntervalTime(30_000)
       invalidateView(imgSize.width, imgSize.height)
 
     }
@@ -189,7 +198,7 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
     }
   }
 
-  internal inner class FLTBannerExpressAd() : TTAdNative.NativeExpressAdListener,
+  internal inner class FLTBannerExpressAd : TTAdNative.NativeExpressAdListener,
       TTNativeExpressAd.AdInteractionListener, TTAdDislike.DislikeInteractionCallback {
 
     override fun onError(code: Int, message: String?) {
@@ -202,27 +211,28 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
       if (ttNativeExpressAds == null || ttNativeExpressAds.isEmpty()) {
         return
       }
+//      println("BannerView: load ${Date().toGMTString()}")
       val ad = ttNativeExpressAds[0]
+
       //设置广告互动监听回调
       ad.setExpressInteractionListener(this)
 
       //在banner中显示网盟提供的dislike icon，有助于广告投放精准度提升
       ad.setDislikeCallback(activity, this)
-
-
       // 设置轮播的时间间隔  间隔在30s到120秒之间的值，不设置默认不轮播
-//      ad.setSlideIntervalTime(30_000)
+      interval?.also {
+        ad.setSlideIntervalTime(it)
+      }
+      ad.render()
+
       container.removeAllViews()
       val params = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
       val expressAdView = ad.expressAdView
       container.addView(expressAdView, params)
 
-      val expectExpressWidth = expressSize.width
-      val expectExpressHeight = expressSize.height
-      invalidateView(expectExpressWidth, expectExpressHeight)
-
-
-      ad.render()
+//      val expectExpressWidth = expressSize.width
+//      val expectExpressHeight = expressSize.height
+//      invalidateView(expectExpressWidth, expectExpressHeight)
 
     }
 
@@ -237,7 +247,8 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
     }
 
     override fun onRenderSuccess(view: View, width: Float, height: Float) {
-      view.invalidate()
+//      view.invalidate()
+//      println("BannerView: succ ${Date().toGMTString()}")
     }
 
     override fun onRenderFail(view: View, msg: String?, code: Int) {

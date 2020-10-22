@@ -13,6 +13,8 @@ class BannerExpressPage extends StatefulWidget {
 class _BannerExpressPageState extends State<BannerExpressPage> {
   bool _enableClickAction = true;
 
+  final _bannerIds = <String>[];
+
   final _banner1Key = GlobalKey<BannerViewState>();
 
   final _banner2Key = GlobalKey<BannerViewState>();
@@ -31,13 +33,16 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
             setState(() {
               _enableClickAction = !_enableClickAction;
             });
-            _banner1Key.currentState
-                .setUserInteractionEnabled(_enableClickAction);
-            _banner2Key.currentState
-                .setUserInteractionEnabled(_enableClickAction);
+            _banner1Key.currentState.setUserInteractionEnabled(
+              _enableClickAction,
+            );
+            _banner2Key.currentState.setUserInteractionEnabled(
+              _enableClickAction,
+            );
           },
-          child:
-              Icon(_enableClickAction ? Icons.lock_open : Icons.lock_outline),
+          child: Icon(
+            _enableClickAction ? Icons.lock_open : Icons.lock_outline,
+          ),
         ),
       ),
       body: SingleChildScrollView(

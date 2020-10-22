@@ -193,6 +193,7 @@ class AndroidBannerConfig {
   final bool isSupportDeepLink;
   final bool isExpress;
   final PangleExpressSize expressSize;
+  final int interval;
 
   /// The feed ad config for Android
   ///
@@ -201,12 +202,16 @@ class AndroidBannerConfig {
   /// [isExpress] optional. 个性化模板广告
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
   /// [expressSize] optional. 模板宽高
+  /// [interval] The carousel interval, in seconds, is set in the range of 30~120s,
+  ///   and is passed during initialization. If it does not meet the requirements,
+  ///   it will not be in carousel ad.
   AndroidBannerConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.banner600_150,
     this.isSupportDeepLink = true,
     this.isExpress = true,
     this.expressSize,
+    this.interval,
   })  : assert(slotId.isNotBlank),
         assert(!isExpress || (isExpress && expressSize != null));
 
@@ -218,6 +223,7 @@ class AndroidBannerConfig {
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
       'expressSize': expressSize?.toJson(),
+      'interval': interval,
     };
   }
 }

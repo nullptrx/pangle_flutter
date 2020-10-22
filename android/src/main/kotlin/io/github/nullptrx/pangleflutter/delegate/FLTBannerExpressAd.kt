@@ -5,11 +5,10 @@ import com.bytedance.sdk.openadsdk.TTNativeExpressAd
 import io.github.nullptrx.pangleflutter.PangleAdManager
 import io.github.nullptrx.pangleflutter.common.TTSizeF
 import io.github.nullptrx.pangleflutter.common.kBlock
-import kotlin.collections.set
 
-class FLTFeedExpressAd(val size: TTSizeF, var result: (Any) -> Unit = {}) : TTAdNative.NativeExpressAdListener {
+class FLTBannerExpressAd(val size: TTSizeF, var result: (Any) -> Unit) : TTAdNative.NativeExpressAdListener {
 
-  override fun onError(code: Int, message: String) {
+  override fun onError(code: Int, message: String?) {
     invoke(code, message)
   }
 
@@ -19,28 +18,28 @@ class FLTFeedExpressAd(val size: TTSizeF, var result: (Any) -> Unit = {}) : TTAd
       return
     }
     val data = PangleAdManager.shared.setExpressAd(size, ttNativeExpressAds)
-    invoke(0, count = ttNativeExpressAds.size, data = data)
+    invoke(count = ttNativeExpressAds.size, data = data)
   }
+
 
   private fun invoke(code: Int = 0, message: String? = null, count: Int = 0, data: List<String>? = null) {
     if (result == kBlock) {
       return
     }
     result.apply {
-      val params = mutableMapOf<String, Any>()
-      params["code"] = code
+      val args = mutableMapOf<String, Any>()
+      args["code"] = code
       message?.also {
-        params["message"] = it
+        args["message"] = it
       }
-      params["count"] = count
+      args["count"] = count
       data?.also {
-        params["data"] = it
+        args["data"] = it
       }
-      invoke(params)
+      invoke(args)
       result = kBlock
     }
 
 
   }
-
 }

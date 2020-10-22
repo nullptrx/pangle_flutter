@@ -64,7 +64,7 @@ class _FeedPageState extends State<FeedPage> {
 
   /// 加载广告
   _loadFeedAd() async {
-    PangleFeedAd feedAd = await pangle.loadFeedAd(
+    PangleAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedConfig(
         slotId: kFeedId,
         isExpress: false,

@@ -126,6 +126,7 @@ class IOSBannerConfig {
   final bool isExpress;
   final PangleExpressSize expressSize;
   final bool isUserInteractionEnabled;
+  final int interval;
 
   /// The feed ad config for iOS
   ///
@@ -133,12 +134,16 @@ class IOSBannerConfig {
   /// [imgSize] required. Image size.
   /// [isExpress] optional. 个性化模板广告.
   /// [expressSize] optional. 模板宽高
+  /// [interval] The carousel interval, in seconds, is set in the range of 30~120s,
+  ///   and is passed during initialization. If it does not meet the requirements,
+  ///   it will not be in carousel ad.
   IOSBannerConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.banner600_150,
     this.isExpress = true,
     this.expressSize,
     this.isUserInteractionEnabled = true,
+    this.interval,
   })  : assert(slotId.isNotBlank),
         assert(!isExpress || (isExpress && expressSize != null));
 
@@ -150,6 +155,7 @@ class IOSBannerConfig {
       'isExpress': isExpress,
       'expressSize': expressSize?.toJson(),
       'isUserInteractionEnabled': isUserInteractionEnabled,
+      'interval': interval,
     };
   }
 }
