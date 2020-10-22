@@ -1,3 +1,9 @@
+## 0.6.1
+
+* 修复Banner渲染超过5秒的问题
+* 重命名`PangleFeedAd`为`PangleAd`
+* `BannerView`新增`interval`属性
+
 ## 0.5.1
 
 * 移除`loadAwait`

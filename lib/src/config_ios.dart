@@ -134,6 +134,7 @@ class IOSBannerConfig {
   /// [imgSize] required. Image size.
   /// [isExpress] optional. 个性化模板广告.
   /// [expressSize] optional. 模板宽高
+  /// [isUserInteractionEnabled] 广告位是否可点击，true可以，false不可以
   /// [interval] The carousel interval, in seconds, is set in the range of 30~120s,
   ///   and is passed during initialization. If it does not meet the requirements,
   ///   it will not be in carousel ad.

@@ -148,7 +148,6 @@ final items = Item(feedId: feedAdDatas[0]);
 items.insert(Random().nextInt(items.length), item);
 /// Widget使用
 FeedView(
-  
   id: item.feedId,
   onRemove: () {
     setState(() {
@@ -405,12 +404,16 @@ AndroidRewardedVideoConfig({
 /// [imgSize] required. Image size.
 /// [isExpress] optional. 个性化模板广告.
 /// [expressSize] optional. 模板宽高
+/// [isUserInteractionEnabled] 广告位是否可点击，true可以，false不可以
+/// [interval] The carousel interval, in seconds, is set in the range of 30~120s
 IOSBannerAdConfig({
   @required this.slotId,
   this.imgSize = PangleImgSize.banner600_150,
   this.count,
   this.isExpress,
   this.expressSize,
+  this.isUserInteractionEnabled = true,
+  this.interval,
 });
 
 /// The feed ad config for Android
@@ -420,12 +423,14 @@ IOSBannerAdConfig({
 /// [isSupportDeepLink] optional. Whether to support deeplink.
 /// [isExpress] optional. 个性化模板广告.
 /// [expressSize] optional. 模板宽高
+/// [interval] The carousel interval, in seconds, is set in the range of 30~120s
 AndroidBannerAdConfig({
   @required this.slotId,
   this.imgSize = PangleImgSize.banner600_150,
   this.isSupportDeepLink,
   this.isExpress,
   this.expressSize,
+  this.interval,
 });
 ```
 

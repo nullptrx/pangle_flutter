@@ -27,7 +27,8 @@ class FeedView extends StatefulWidget {
   /// [id] feedId
   /// [isExpress] optional. 个性化模板广告
   /// [onRemove] when click dislike button
-  /// [isUserInteractionEnabled] only works for iOS
+  /// [isUserInteractionEnabled] 广告位是否可点击，true可以，false不可以
+  ///   only works for iOS
   FeedView({
     Key key,
     this.id,
