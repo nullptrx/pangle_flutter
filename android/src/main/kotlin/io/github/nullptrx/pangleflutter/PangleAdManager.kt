@@ -189,10 +189,11 @@ class PangleAdManager {
         useTextureView(it)
       }
 
-      titleBarTheme?.also {
-        titleBarTheme(it)
+      if (titleBarTheme == null) {
+        titleBarTheme(TTAdConstant.TITLE_BAR_THEME_LIGHT)
+      } else {
+        titleBarTheme(titleBarTheme)
       }
-      titleBarTheme(TTAdConstant.TITLE_BAR_THEME_LIGHT)
 
       allowShowNotify?.also {
         allowShowNotify(it)
