@@ -138,7 +138,7 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
           val h: Float = expressArgs.getValue("height").toFloat()
           expressSize = TTSizeF(w, h)
         }
-        val adSlot = PangleAdSlotManager.getSplashAdSlot(slotId, isExpress, expressSize, activity, isSupportDeepLink)
+        val adSlot = PangleAdSlotManager.getSplashAdSlot(slotId, isExpress, expressSize, isSupportDeepLink)
         pangle.loadSplashAd(adSlot, FLTSplashAd(hideSkipButton, activity) {
           result.success(it)
         }, tolerateTimeout)

@@ -1,6 +1,5 @@
 package io.github.nullptrx.pangleflutter
 
-import android.app.Activity
 import com.bytedance.sdk.openadsdk.AdSlot
 import com.bytedance.sdk.openadsdk.TTAdConstant
 import io.github.nullptrx.pangleflutter.common.PangleImgSize
@@ -9,16 +8,14 @@ import io.github.nullptrx.pangleflutter.common.TTSizeF
 
 object PangleAdSlotManager {
 
-  fun getSplashAdSlot(slotId: String, isExpress: Boolean, expressSize: TTSizeF?, activity: Activity?, isSupportDeepLink: Boolean): AdSlot {
+  fun getSplashAdSlot(slotId: String, isExpress: Boolean, expressSize: TTSizeF?, isSupportDeepLink: Boolean): AdSlot {
     val adSlot = AdSlot.Builder().apply {
       setCodeId(slotId)
       setSupportDeepLink(isSupportDeepLink)
       if (isExpress) {
-        activity?.also {
-          //个性化模板广告需要传入期望广告view的宽、高，单位dp，请传入实际需要的大小，
-          //比如：广告下方拼接logo、适配刘海屏等，需要考虑实际广告大小
-          setExpressViewAcceptedSize(expressSize!!.width, expressSize.height)
-        }
+        //个性化模板广告需要传入期望广告view的宽、高，单位dp，请传入实际需要的大小，
+        //比如：广告下方拼接logo、适配刘海屏等，需要考虑实际广告大小
+        setExpressViewAcceptedSize(expressSize!!.width, expressSize.height)
       } else {
         setImageAcceptedSize(1080, 1920)
       }
