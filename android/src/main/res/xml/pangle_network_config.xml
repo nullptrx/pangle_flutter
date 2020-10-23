@@ -10,8 +10,9 @@
         <domain includeSubdomains="true">bds.snssdk.com</domain>
         <domain includeSubdomains="true">dig.bdurl.net</domain>
         <trust-anchors>
-            <certificates src="user"/>//信任用户自己安装的证书
-            <certificates src="system"/>
+            <!--信任用户自己安装的证书-->
+            <certificates src="user" />
+            <certificates src="system" />
         </trust-anchors>
     </domain-config>
 </network-security-config>
