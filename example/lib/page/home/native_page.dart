@@ -16,7 +16,7 @@ class NativePage extends StatefulWidget {
 
 class _NativePageState extends State<NativePage> {
   final pages = {
-    'Custom Splash AD': CustomSplashPage(),
+    'Custom Splash AD': CustomSplashPage(isRoot: false),
     'Splash AD': SplashPage(),
     'Rewarded Video AD': RewardedVideoPage(),
     'Banner AD': BannerPage(),

@@ -2,13 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 import 'package:pangle_flutter_example/common/constant.dart';
+import 'package:pangle_flutter_example/common/ext.dart';
+import 'package:pangle_flutter_example/page/home_page.dart';
 
 class CustomSplashPage extends StatefulWidget {
+  final bool isRoot;
+
+  const CustomSplashPage({Key key, this.isRoot = true}) : super(key: key);
+
   @override
   _CustomSplashPageState createState() => _CustomSplashPageState();
 }
 
 class _CustomSplashPageState extends State<CustomSplashPage> {
+  bool _showAd = false;
+
   @override
   void initState() {
     super.initState();
@@ -27,47 +35,71 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: SplashView(
-                iOS: IOSSplashConfig(
-                  slotId: kSplashId,
-                  isExpress: false,
+      body: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: SplashView(
+                    iOS: IOSSplashConfig(
+                      slotId: kSplashId,
+                      isExpress: false,
+                    ),
+                    android: AndroidSplashConfig(
+                      slotId: kSplashId,
+                      isExpress: false,
+                    ),
+                    backgroundColor: Colors.white,
+                    onTimeOver: _handleAdEnd,
+                    onTimeout: _handleAdEnd,
+                    onSkip: _handleAdEnd,
+                    onClick: _handleAdEnd,
+                    onError: (code, message) => _handleAdEnd(),
+                    onShow: _handleAdStart,
+                  ),
                 ),
-                android: AndroidSplashConfig(
-                  slotId: kSplashId,
-                  isExpress: false,
-                ),
-                backgroundColor: Colors.white,
-                onTimeOver: _handleAd,
-                onTimeout: _handleAd,
-                onSkip: _handleAd,
-                onClick: _handleAd,
-                onError: (code, message) => _handleAd(),
-              ),
+                Container(
+                  alignment: Alignment.center,
+                  color: Colors.white,
+                  height: 100,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      FlutterLogo(size: 40),
+                      SizedBox(height: 10),
+                      Text('Pangle Flutter'),
+                    ],
+                  ),
+                )
+              ],
             ),
-            Container(
-              alignment: Alignment.center,
+          ),
+          Offstage(
+            offstage: _showAd,
+            child: Container(
               color: Colors.white,
-              height: 100,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  FlutterLogo(size: 40),
-                  SizedBox(height: 10),
-                  Text('Pangle Flutter'),
-                ],
-              ),
-            )
-          ],
-        ),
+              alignment: Alignment.center,
+              child: FlutterLogo(size: 100),
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  _handleAd() {
+  _handleAdStart() {
+    setState(() {
+      _showAd = true;
+    });
+  }
+
+  _handleAdEnd() {
     Navigator.of(context).pop();
+
+    if (widget.isRoot) {
+      context.navigateTo(HomePage());
+    }
   }
 }

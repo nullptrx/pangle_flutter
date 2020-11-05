@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
+import 'package:pangle_flutter_example/page/native/custom_splash_page.dart';
 
 import 'common/common.dart';
 import 'common/constant.dart';
@@ -20,7 +21,7 @@ class PangleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      home: CustomSplashPage(),
       theme: kThemeData,
     );
   }
