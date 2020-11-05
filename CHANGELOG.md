@@ -1,3 +1,7 @@
+## 0.6.3
+
+* Optimize static analysis
+
 ## 0.6.2
 
 * Support custom splash ads [#10]

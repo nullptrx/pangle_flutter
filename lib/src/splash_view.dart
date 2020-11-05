@@ -56,18 +56,6 @@ class SplashView extends StatefulWidget {
 }
 
 class SplashViewState extends State<SplashView> with WidgetsBindingObserver {
-  SplashViewController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -94,7 +82,6 @@ class SplashViewState extends State<SplashView> with WidgetsBindingObserver {
       widget.onTimeOver,
       widget.onShow,
     );
-    _controller = controller;
     if (widget.onSplashViewCreated == null) {
       return;
     }
