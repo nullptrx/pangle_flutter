@@ -23,8 +23,6 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
     SystemChrome.setEnabledSystemUIOverlays([]);
   }
 
-
-
   @override
   void dispose() {
     super.dispose();

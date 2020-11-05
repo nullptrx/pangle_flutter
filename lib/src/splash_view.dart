@@ -18,12 +18,24 @@ typedef void SplashViewCreatedCallback(SplashViewController controller);
 class SplashView extends StatefulWidget {
   final IOSSplashConfig iOS;
   final AndroidSplashConfig android;
+
+  /// PlatformView 创建成功
   final SplashViewCreatedCallback onSplashViewCreated;
   final Color backgroundColor;
+
+  /// 获取广告失败
   final void Function(int code, String message) onError;
+
+  /// 广告被点击
   final VoidCallback onClick;
+
+  /// 跳过广告
   final VoidCallback onSkip;
+
+  /// 倒计时结束
   final VoidCallback onTimeOver;
+
+  /// 广告展示
   final VoidCallback onShow;
 
   const SplashView({

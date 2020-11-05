@@ -1,3 +1,8 @@
+## 0.6.2
+
+* Support custom splash ads [#10]
+* Upgrade pangle sdk
+
 ## 0.6.1
 
 * Fix rendering banner more than 5 seconds
