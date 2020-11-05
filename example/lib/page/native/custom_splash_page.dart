@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 import 'package:pangle_flutter_example/common/constant.dart';
 
@@ -9,11 +10,23 @@ class CustomSplashPage extends StatefulWidget {
 
 class _CustomSplashPageState extends State<CustomSplashPage> {
   @override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIOverlays([]);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIOverlays([
+      SystemUiOverlay.top,
+      SystemUiOverlay.bottom,
+    ]);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Custom Splash AD'),
-      ),
       body: Container(
         child: Column(
           children: <Widget>[
@@ -27,7 +40,12 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                   slotId: kSplashId,
                   isExpress: false,
                 ),
-                backgroundColor: Colors.black,
+                backgroundColor: Colors.white,
+                onTimeOver: _handleAd,
+                onTimeout: _handleAd,
+                onSkip: _handleAd,
+                onClick: _handleAd,
+                onError: (code, message) => _handleAd(),
               ),
             ),
             Container(
@@ -47,5 +65,9 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
         ),
       ),
     );
+  }
+
+  _handleAd() {
+    Navigator.of(context).pop();
   }
 }

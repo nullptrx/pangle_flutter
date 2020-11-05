@@ -110,18 +110,14 @@ class FlutterSplashView(val context: Context, messenger: BinaryMessenger, val id
   }
 
   override fun onError(code: Int, message: String?) {
-    invokeMessage(code, message ?: "")
+    invokeAction(code, message ?: "")
   }
 
   override fun onTimeout() {
-    invokeMessage(-1, "timeout")
+    invokeAction(-1, "timeout")
   }
 
-  override fun onSplashAdLoad(splashAd: TTSplashAd?) {
-    if (splashAd == null) {
-      invokeMessage(-1, "none")
-      return
-    }
+  override fun onSplashAdLoad(splashAd: TTSplashAd) {
     splashAd.apply {
 
       if (hideSkipButton) {
@@ -132,19 +128,19 @@ class FlutterSplashView(val context: Context, messenger: BinaryMessenger, val id
 
       setSplashInteractionListener(object : TTSplashAd.AdInteractionListener {
         override fun onAdClicked(view: View, type: Int) {
-          invokeMessage(0, "click")
+          invokeAction(0, "click")
         }
 
         override fun onAdSkip() {
-          invokeMessage(0, "skip")
+          invokeAction(0, "skip")
         }
 
         override fun onAdShow(view: View?, type: Int) {
-          invokeMessage(0, "show")
+          invokeAction(0, "show")
         }
 
         override fun onAdTimeOver() {
-          invokeMessage(0, "timeover")
+          invokeAction(0, "timeover")
         }
 
       })
@@ -154,11 +150,11 @@ class FlutterSplashView(val context: Context, messenger: BinaryMessenger, val id
   }
 
 
-  fun invokeMessage(code: Int = 0, message: String = "") {
+  fun invokeAction(code: Int = 0, message: String = "") {
     val params = mutableMapOf<String, Any>()
     params["code"] = code
     params["message"] = message
-    methodChannel.invokeMethod("message", params)
+    methodChannel.invokeMethod("action", params)
   }
 
 }

@@ -20,6 +20,12 @@ class SplashView extends StatefulWidget {
   final AndroidSplashConfig android;
   final SplashViewCreatedCallback onSplashViewCreated;
   final Color backgroundColor;
+  final VoidCallback onTimeout;
+  final void Function(int code, String message) onError;
+  final VoidCallback onClick;
+  final VoidCallback onSkip;
+  final VoidCallback onTimeOver;
+  final VoidCallback onShow;
 
   const SplashView({
     Key key,
@@ -27,6 +33,12 @@ class SplashView extends StatefulWidget {
     this.android,
     this.onSplashViewCreated,
     this.backgroundColor,
+    this.onTimeout,
+    this.onError,
+    this.onClick,
+    this.onSkip,
+    this.onTimeOver,
+    this.onShow,
   }) : super(key: key);
 
   @override
@@ -64,7 +76,15 @@ class SplashViewState extends State<SplashView> with WidgetsBindingObserver {
   }
 
   void _onPlatformViewCreated(BuildContext context, int id) {
-    var controller = SplashViewController._(id);
+    var controller = SplashViewController._(
+      id,
+      widget.onTimeout,
+      widget.onError,
+      widget.onClick,
+      widget.onSkip,
+      widget.onTimeOver,
+      widget.onShow,
+    );
     _controller = controller;
     if (widget.onSplashViewCreated == null) {
       return;
@@ -134,17 +154,50 @@ class SplashViewState extends State<SplashView> with WidgetsBindingObserver {
 class SplashViewController {
   MethodChannel _methodChannel;
 
+  final VoidCallback onTimeout;
+  final void Function(int code, String message) onError;
+  final VoidCallback onClick;
+  final VoidCallback onSkip;
+  final VoidCallback onTimeOver;
+  final VoidCallback onShow;
+
   SplashViewController._(
     int id,
+    this.onTimeout,
+    this.onError,
+    this.onClick,
+    this.onSkip,
+    this.onTimeOver,
+    this.onShow,
   ) {
     _methodChannel = new MethodChannel('${kSplashViewType}_$id');
     _methodChannel.setMethodCallHandler(_handleMethod);
   }
 
   Future<dynamic> _handleMethod(MethodCall call) {
-    switch (call.method) {
-      default:
-        break;
+    if (call.method == 'action') {
+      var code = call.arguments['code'];
+      var message = call.arguments['message'];
+      switch (message) {
+        case 'timeout':
+          onTimeout?.call();
+          break;
+        case 'click':
+          onClick?.call();
+          break;
+        case 'skip':
+          onSkip?.call();
+          break;
+        case 'timeover':
+          onTimeOver?.call();
+          break;
+        case 'show':
+          onShow?.call();
+          break;
+        default:
+          onError?.call(code, message);
+          break;
+      }
     }
     return null;
   }
