@@ -29,7 +29,6 @@ class FlutterSplashView(val context: Context, messenger: BinaryMessenger, val id
   private var expressSize = TTSizeF()
   private var imgSize = TTSize()
   private var isExpress: Boolean = false
-  private var interval: Int? = null
   private var hideSkipButton = false
 
   init {
@@ -46,7 +45,6 @@ class FlutterSplashView(val context: Context, messenger: BinaryMessenger, val id
 
       val isSupportDeepLink = params["isSupportDeepLink"] as? Boolean ?: true
       isExpress = params["isExpress"] as? Boolean ?: false
-      interval = params["interval"] as Int?
       val tolerateTimeout = params["tolerateTimeout"] as Float?
       hideSkipButton = params["hideSkipButton"] as? Boolean ?: false
 

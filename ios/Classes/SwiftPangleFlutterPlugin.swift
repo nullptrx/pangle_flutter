@@ -23,6 +23,9 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         
         let feedViewFactory = FeedViewFactory(messenger: registrar.messenger())
         registrar.register(feedViewFactory, withId: "nullptrx.github.io/pangle_feedview")
+        
+        let splashViewFactory = SplashViewFactory(messenger: registrar.messenger())
+        registrar.register(splashViewFactory, withId: "nullptrx.github.io/pangle_splashview")
     }
     
     private let methodChannel: FlutterMethodChannel

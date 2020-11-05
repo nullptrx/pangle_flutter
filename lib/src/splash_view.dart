@@ -20,7 +20,6 @@ class SplashView extends StatefulWidget {
   final AndroidSplashConfig android;
   final SplashViewCreatedCallback onSplashViewCreated;
   final Color backgroundColor;
-  final VoidCallback onTimeout;
   final void Function(int code, String message) onError;
   final VoidCallback onClick;
   final VoidCallback onSkip;
@@ -33,7 +32,6 @@ class SplashView extends StatefulWidget {
     this.android,
     this.onSplashViewCreated,
     this.backgroundColor,
-    this.onTimeout,
     this.onError,
     this.onClick,
     this.onSkip,
@@ -78,7 +76,6 @@ class SplashViewState extends State<SplashView> with WidgetsBindingObserver {
   void _onPlatformViewCreated(BuildContext context, int id) {
     var controller = SplashViewController._(
       id,
-      widget.onTimeout,
       widget.onError,
       widget.onClick,
       widget.onSkip,
@@ -154,7 +151,6 @@ class SplashViewState extends State<SplashView> with WidgetsBindingObserver {
 class SplashViewController {
   MethodChannel _methodChannel;
 
-  final VoidCallback onTimeout;
   final void Function(int code, String message) onError;
   final VoidCallback onClick;
   final VoidCallback onSkip;
@@ -163,7 +159,6 @@ class SplashViewController {
 
   SplashViewController._(
     int id,
-    this.onTimeout,
     this.onError,
     this.onClick,
     this.onSkip,
@@ -179,9 +174,6 @@ class SplashViewController {
       var code = call.arguments['code'];
       var message = call.arguments['message'];
       switch (message) {
-        case 'timeout':
-          onTimeout?.call();
-          break;
         case 'click':
           onClick?.call();
           break;

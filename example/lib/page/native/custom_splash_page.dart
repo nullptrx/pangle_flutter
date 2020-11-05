@@ -23,13 +23,15 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
     SystemChrome.setEnabledSystemUIOverlays([]);
   }
 
+
+
   @override
   void dispose() {
+    super.dispose();
     SystemChrome.setEnabledSystemUIOverlays([
       SystemUiOverlay.top,
       SystemUiOverlay.bottom,
     ]);
-    super.dispose();
   }
 
   @override
@@ -53,7 +55,6 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                     ),
                     backgroundColor: Colors.white,
                     onTimeOver: _handleAdEnd,
-                    onTimeout: _handleAdEnd,
                     onSkip: _handleAdEnd,
                     onClick: _handleAdEnd,
                     onError: (code, message) => _handleAdEnd(),
@@ -96,6 +97,10 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
   }
 
   _handleAdEnd() {
+    SystemChrome.setEnabledSystemUIOverlays([
+      SystemUiOverlay.top,
+      SystemUiOverlay.bottom,
+    ]);
     Navigator.of(context).pop();
 
     if (widget.isRoot) {

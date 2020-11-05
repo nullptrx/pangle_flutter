@@ -1,18 +1,23 @@
 # 穿山甲 Flutter SDK
 
-[![pub package](https://img.shields.io/pub/v/pangle_flutter.svg)](https://pub.dartlang.org/packages/pangle_flutter) [![Licence](https://img.shields.io/github/license/nullptrX/pangle_flutter)](https://github.com/nullptrX/pangle_flutter/blob/master/LICENSE)
+[![pub package](https://img.shields.io/pub/v/pangle_flutter.svg)](https://pub.dartlang.org/packages/pangle_flutter) [![Licence](https://img.shields.io/github/license/nullptrX/pangle_flutter)](https://github.com/nullptrX/pangle_flutter/blob/master/LICENSE)[![flutter](https://img.shields.io/badge/flutter-1.22.2-green)](https://flutter.dev/docs/get-started/install)
+
+
 
 ## 简介
 
-pangle_flutter是一款集成了穿山甲`Android`和`iOS`SDK的Flutter插件。其中部分代码由官方demo修改而来。
+`pangle_flutter`是一款集成了穿山甲 Android 和 iOS SDK的Flutter插件。部分代码由官方范例修改而来。
 
 - [Android Demo](https://github.com/bytedance/pangle-sdk-demo)
 - [iOS Demo](https://github.com/bytedance/Bytedance-UnionAD)
 
-## 官方文档（需要登陆）
-- [穿山甲 Android SDK（Only support China traffic）](https://ad.oceanengine.com/union/media/union/download/detail?id=4&osType=android)
 
-- [穿山甲 iOS SDK](https://ad.oceanengine.com/union/media/union/download/detail?id=16&osType=ios)
+
+## 官方文档（需要登陆）
+- [Pangle Android SDK（Only support China traffic）](https://www.pangle.cn/union/media/union/download/detail?id=4&osType=android)
+- [Pangle iOS SDK](https://www.pangle.cn/union/media/union/download/detail?id=16&osType=ios)
+
+
 
 ## 集成步骤
 
@@ -24,7 +29,9 @@ dependencies:
 ```
 ### 2. Android和iOS额外配置
 
-#### [README](SETUP.md)
+#### [去配置](SETUP.md)
+
+
 
 ## 使用说明
 
@@ -49,6 +56,8 @@ dependencies:
 <img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/oc2swift.png" alt="OC导入Swift模块" width="500" height="auto" />
 
 
+
+
 ## 使用步骤
 
 ### 1. 初始化
@@ -70,10 +79,30 @@ await pangle.init(
 ### 2. 开屏广告
 
 ```dart
+/// 全屏类型
 /// [kSplashId] 开屏广告ID, 对应Android的CodeId，对应iOS的slotID
 await pangle.loadSplashAd(
-  iOS: IOSSplashConfig(slotId: kSplashId),
-  android: AndroidSplashConfig(slotId: kSplashId),
+  iOS: IOSSplashConfig(slotId: kSplashId, isExpress: false),
+  android: AndroidSplashConfig(slotId: kSplashId, isExpress: false),
+);
+
+
+/// 自定义类型
+/// 同Widget类用法
+SplashView(
+  iOS: IOSSplashConfig(slotId: kSplashId, isExpress: false),
+  android: AndroidSplashConfig(slotId: kSplashId, isExpress: false),
+  backgroundColor: Colors.white,
+  /// 广告展示
+  onShow: (){},
+  /// 广告获取失败
+  onError: (){},
+  /// 广告被点击
+  onClick: (){},
+  /// 广告被点击跳过
+  onSkip: (){},
+  /// 广告倒计时结束
+  onTimeOver: (){},
 );
 ```
 
