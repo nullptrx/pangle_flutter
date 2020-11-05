@@ -21,7 +21,7 @@ class BannerView extends StatefulWidget {
   final VoidCallback onRemove;
   final BannerViewCreatedCallback onBannerViewCreated;
 
-  BannerView({
+  const BannerView({
     Key key,
     this.iOS,
     this.android,

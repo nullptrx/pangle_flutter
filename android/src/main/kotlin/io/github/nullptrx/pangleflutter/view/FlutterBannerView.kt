@@ -32,7 +32,6 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
   private val methodChannel: MethodChannel
   private val container: FrameLayout
   private val context: Context
-  private val height: Float?
   private lateinit var expressSize: TTSizeF
   private lateinit var imgSize: TTSize
   private var isExpress: Boolean = false
@@ -48,7 +47,6 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
 //    println("BannerView: init ${Date().toGMTString()}")
 
     val slotId = params["slotId"] as? String
-    this.height = (params["height"] as? Double)?.toFloat()
     if (slotId != null) {
 
       val imgSizeIndex = params["imgSize"] as Int

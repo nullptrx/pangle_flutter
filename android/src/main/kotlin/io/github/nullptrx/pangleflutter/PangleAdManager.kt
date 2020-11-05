@@ -270,7 +270,6 @@ class PangleAdManager {
     } else {
       ttAdNative?.loadSplashAd(adSlot, listener, (timeout * 1000).toInt())
     }
-
   }
 
   fun loadRewardVideoAd(adSlot: AdSlot, activity: Activity?, loadingType: PangleLoadingType, result: (Any) -> Unit = {}) {

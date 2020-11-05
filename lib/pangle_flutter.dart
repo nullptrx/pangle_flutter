@@ -8,3 +8,4 @@ export 'src/feed_view.dart';
 export 'src/model.dart';
 export 'src/pangle_plugin.dart';
 export 'src/size.dart';
+export 'src/splash_view.dart';

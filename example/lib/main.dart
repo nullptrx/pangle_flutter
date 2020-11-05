@@ -39,14 +39,16 @@ Future<Null> initPangle() async {
       allowShowPageWhenScreenLock: false,
     ),
   );
-  await pangle.loadSplashAd(
-    iOS: IOSSplashConfig(
-      slotId: kSplashId,
-      isExpress: false,
-    ),
-    android: AndroidSplashConfig(
-      slotId: kSplashId,
-      isExpress: false,
-    ),
-  );
+
+  /// 原生加载开屏
+  // await pangle.loadSplashAd(
+  //   iOS: IOSSplashConfig(
+  //     slotId: kSplashId,
+  //     isExpress: false,
+  //   ),
+  //   android: AndroidSplashConfig(
+  //     slotId: kSplashId,
+  //     isExpress: false,
+  //   ),
+  // );
 }
