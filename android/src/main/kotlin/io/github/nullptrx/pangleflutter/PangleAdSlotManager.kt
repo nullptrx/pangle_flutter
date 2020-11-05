@@ -4,11 +4,13 @@ import com.bytedance.sdk.openadsdk.AdSlot
 import com.bytedance.sdk.openadsdk.TTAdConstant
 import io.github.nullptrx.pangleflutter.common.PangleImgSize
 import io.github.nullptrx.pangleflutter.common.PangleOrientation
+import io.github.nullptrx.pangleflutter.common.TTSize
 import io.github.nullptrx.pangleflutter.common.TTSizeF
+import io.github.nullptrx.pangleflutter.util.dp
 
 object PangleAdSlotManager {
 
-  fun getSplashAdSlot(slotId: String, isExpress: Boolean, expressSize: TTSizeF?, isSupportDeepLink: Boolean): AdSlot {
+  fun getSplashAdSlot(slotId: String, isExpress: Boolean, imgSize: TTSize?, expressSize: TTSizeF?, isSupportDeepLink: Boolean): AdSlot {
     val adSlot = AdSlot.Builder().apply {
       setCodeId(slotId)
       setSupportDeepLink(isSupportDeepLink)
@@ -17,7 +19,13 @@ object PangleAdSlotManager {
         //比如：广告下方拼接logo、适配刘海屏等，需要考虑实际广告大小
         setExpressViewAcceptedSize(expressSize!!.width, expressSize.height)
       } else {
-        setImageAcceptedSize(1080, 1920)
+        if (imgSize == null) {
+          setImageAcceptedSize(1080, 1920)
+        } else {
+          imgSize.apply {
+            setImageAcceptedSize(width.dp, height.dp)
+          }
+        }
       }
     }.build()
 

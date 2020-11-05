@@ -18,9 +18,10 @@ import io.github.nullptrx.pangleflutter.delegate.FLTSplashAd
 import io.github.nullptrx.pangleflutter.util.asMap
 import io.github.nullptrx.pangleflutter.view.BannerViewFactory
 import io.github.nullptrx.pangleflutter.view.FeedViewFactory
+import io.github.nullptrx.pangleflutter.view.SplashViewFactory
 
 /** PangleFlutterPlugin */
-public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
+class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
   companion object {
     val kDefaultBannerAdCount = 3
     val kDefaultFeedAdCount = 3
@@ -46,6 +47,11 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
         registrar.platformViewRegistry().registerViewFactory("nullptrx.github.io/pangle_feedview",
             feedViewFactory)
 
+        splashViewFactory = SplashViewFactory(messenger)
+        registrar.platformViewRegistry().registerViewFactory("nullptrx.github.io/pangle_splashview",
+            splashViewFactory)
+
+
         feedViewFactory?.attachActivity(activity)
         bannerViewFactory?.attachActivity(activity)
 
@@ -58,6 +64,7 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
   private var context: Context? = null
   private var bannerViewFactory: BannerViewFactory? = null
   private var feedViewFactory: FeedViewFactory? = null
+  private var splashViewFactory: SplashViewFactory? = null
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activity = binding.activity
@@ -96,6 +103,11 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
     feedViewFactory = FeedViewFactory(binding.binaryMessenger)
     binding.platformViewRegistry.registerViewFactory("nullptrx.github.io/pangle_feedview",
         feedViewFactory)
+
+    splashViewFactory = SplashViewFactory(binding.binaryMessenger)
+    binding.platformViewRegistry.registerViewFactory("nullptrx.github.io/pangle_splashview",
+        splashViewFactory)
+
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -138,7 +150,7 @@ public class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAwa
           val h: Float = expressArgs.getValue("height").toFloat()
           expressSize = TTSizeF(w, h)
         }
-        val adSlot = PangleAdSlotManager.getSplashAdSlot(slotId, isExpress, expressSize, isSupportDeepLink)
+        val adSlot = PangleAdSlotManager.getSplashAdSlot(slotId, isExpress, null, expressSize, isSupportDeepLink)
         pangle.loadSplashAd(adSlot, FLTSplashAd(hideSkipButton, activity) {
           result.success(it)
         }, tolerateTimeout)

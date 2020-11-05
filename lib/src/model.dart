@@ -118,6 +118,57 @@ class PangleExpressSize {
   }
 }
 
+/// image size
+class PangleImageSize {
+  final double width;
+  final double height;
+
+  /// 模板渲染时必填
+  ///
+  /// [width] 宽度，必选, 如果width超过屏幕，默认使用屏幕宽
+  /// [height] 高度，必选
+  PangleImageSize({double width, double height})
+      : assert(width != null && width > 0),
+        assert(height != null && height > 0),
+        this.width = width > kPangleScreenWidth ? kPangleScreenWidth : width,
+        this.height = height > kPangleScreenWidth / width * height
+            ? kPangleScreenWidth / width * height
+            : height;
+
+  /// [aspectRatio] item宽高比例
+  PangleImageSize.aspectRatio(double aspectRatio)
+      : assert(aspectRatio != null && aspectRatio > 0),
+        this.width = kPangleScreenWidth,
+        this.height = kPangleScreenWidth / aspectRatio;
+
+  PangleImageSize.aspectRatio9_16()
+      : this.width = kPangleScreenWidth,
+        this.height = kPangleScreenWidth / 0.5625;
+
+  PangleImageSize.aspectRatio16_9()
+      : this.width = kPangleScreenWidth,
+        this.height = kPangleScreenWidth * 0.5625;
+
+  PangleImageSize.percent(double widthPercent, double heightPercent)
+      : this.width = kPangleScreenWidth * widthPercent,
+        this.height = kPangleScreenHeight * heightPercent;
+
+  PangleImageSize.widthPercent(double widthPercent, {double aspectRatio})
+      : this.width = kPangleScreenWidth * widthPercent,
+        this.height = kPangleScreenWidth * widthPercent / aspectRatio;
+
+  PangleImageSize.heightPercent(double heightPercent, {double aspectRatio})
+      : this.width = kPangleScreenHeight * heightPercent * aspectRatio,
+        this.height = kPangleScreenHeight * heightPercent;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'width': width,
+      'height': height,
+    };
+  }
+}
+
 /// 插件返回的结果
 ///
 class PangleResult {
