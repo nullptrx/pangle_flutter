@@ -122,4 +122,4 @@ dependencies {
 
 [Xcode配置](https://ad.oceanengine.com/union/media/union/download/detail?id=16&docId=5de8d570b1afac00129330c5&osType=ios)
 
-文档中提到的`添加依赖库`的相关说明，我猜测大概是说导入后如果有报错则添加，因为Demo未导入，仍然可以运行。
+文档中提到的`添加依赖库`的相关说明，如果你是用Pod管理依赖库，则不需手动导入；反之，则需手动导入。
