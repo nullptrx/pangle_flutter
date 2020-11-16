@@ -196,6 +196,7 @@ private class SplashTouchGesture: NSObject, UIGestureRecognizerDelegate {
         if touch.view is SplashView {
             return true
         }
+        
         return false
     }
 }

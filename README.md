@@ -1,6 +1,6 @@
 # 穿山甲 Flutter SDK
 
-[![pub package](https://img.shields.io/pub/v/pangle_flutter.svg)](https://pub.dartlang.org/packages/pangle_flutter) [![Licence](https://img.shields.io/github/license/nullptrX/pangle_flutter)](https://github.com/nullptrX/pangle_flutter/blob/master/LICENSE)[![flutter](https://img.shields.io/badge/flutter-1.22.2-green)](https://flutter.dev/docs/get-started/install)
+[![pub package](https://img.shields.io/pub/v/pangle_flutter.svg)](https://pub.dartlang.org/packages/pangle_flutter) [![Licence](https://img.shields.io/github/license/nullptrX/pangle_flutter)](https://github.com/nullptrX/pangle_flutter/blob/master/LICENSE) [![flutter](https://img.shields.io/badge/flutter-1.22.2-green)](https://flutter.dev/docs/get-started/install)
 
 
 
