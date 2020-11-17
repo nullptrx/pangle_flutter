@@ -102,6 +102,9 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
         }
         result.success(null)
       }
+      "remove" -> {
+
+      }
       else -> result.notImplemented()
     }
   }

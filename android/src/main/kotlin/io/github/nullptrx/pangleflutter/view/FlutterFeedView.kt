@@ -76,6 +76,9 @@ class FlutterFeedView(
         loadAd()
         result.success(null)
       }
+      "remove" -> {
+        removeView()
+      }
       else -> result.notImplemented()
     }
   }
