@@ -139,7 +139,6 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
         self.onlyRemoveView()
 
         self.methodChannel.invokeMethod("remove", arguments: nil)
-        self.methodChannel.setMethodCallHandler(nil)
     }
 
     func loadAd(_ ad: BUNativeAd?) {

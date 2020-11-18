@@ -83,7 +83,6 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
   }
 
   override fun dispose() {
-    methodChannel.setMethodCallHandler(null)
     container.removeAllViews()
   }
 
@@ -103,7 +102,7 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
         result.success(null)
       }
       "remove" -> {
-
+        result.success(null)
       }
       else -> result.notImplemented()
     }

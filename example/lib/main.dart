@@ -31,11 +31,11 @@ Future<Null> initPangle() async {
   await pangle.init(
     iOS: IOSConfig(
       appId: kAppId,
-      logLevel: PangleLogLevel.debug,
+      logLevel: PangleLogLevel.error,
     ),
     android: AndroidConfig(
       appId: kAppId,
-      debug: true,
+      debug: false,
       allowShowNotify: true,
       allowShowPageWhenScreenLock: false,
     ),

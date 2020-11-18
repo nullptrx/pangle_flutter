@@ -130,12 +130,6 @@ class BannerViewState extends State<BannerView>
 
   void _remove() {
     _controller?.remove();
-    _controller = null;
-  }
-
-  void _clear() {
-    _controller?.clear();
-    _controller = null;
   }
 
   void _onPlatformViewCreated(BuildContext context, int id) {
@@ -143,20 +137,23 @@ class BannerViewState extends State<BannerView>
       if (widget.onRemove != null) {
         widget.onRemove();
       } else {
-        setState(() {
-          this._removed = true;
-        });
-        _clear();
+        if (mounted) {
+          setState(() {
+            this._removed = true;
+          });
+        }
       }
     };
     final updated = (args) {
       double width = args['width'];
       double height = args['height'];
-      setState(() {
-        this._offstage = false;
-        this._adWidth = width;
-        this._adHeight = height;
-      });
+      if (mounted) {
+        setState(() {
+          this._offstage = false;
+          this._adWidth = width;
+          this._adHeight = height;
+        });
+      }
     };
 
     var controller =
@@ -205,13 +202,8 @@ class BannerViewController {
     _methodChannel.setMethodCallHandler(_handleMethod);
   }
 
-  void clear() {
-    _methodChannel = null;
-  }
-
   void remove() {
     _methodChannel.invokeMethod('remove');
-    clear();
   }
 
   Future<dynamic> _handleMethod(MethodCall call) {

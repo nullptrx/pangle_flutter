@@ -78,6 +78,7 @@ class FlutterFeedView(
       }
       "remove" -> {
         removeView()
+        result.success(null)
       }
       else -> result.notImplemented()
     }
@@ -120,7 +121,6 @@ class FlutterFeedView(
       }
     }
     methodChannel.invokeMethod(Method.remove.name, null)
-    methodChannel.setMethodCallHandler(null)
     container.removeAllViews()
   }
 

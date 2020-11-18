@@ -143,7 +143,6 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
     private func disposeView() {
         self.onlyRemoveView()
         self.methodChannel.invokeMethod("remove", arguments: nil)
-        self.methodChannel.setMethodCallHandler(nil)
     }
 }
 

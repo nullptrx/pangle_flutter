@@ -144,31 +144,28 @@ class FeedViewState extends State<FeedView>
     _controller = null;
   }
 
-  void _clear() {
-    // 从缓存里清空该键对应的广告数据
-    _controller?.clear();
-    _controller = null;
-  }
-
   void _onPlatformViewCreated(BuildContext context, int id) {
     final removed = () {
       if (widget.onRemove != null) {
         widget.onRemove();
       } else {
-        setState(() {
-          this._removed = true;
-        });
-        _clear();
+        if(mounted) {
+          setState(() {
+            this._removed = true;
+          });
+        }
       }
     };
     final updated = (args) {
       double width = args['width'];
       double height = args['height'];
-      setState(() {
-        this._offstage = false;
-        this._adWidth = width;
-        this._adHeight = height;
-      });
+      if(mounted) {
+        setState(() {
+          this._offstage = false;
+          this._adWidth = width;
+          this._adHeight = height;
+        });
+      }
     };
     final controller = FeedViewController._(
       id,
@@ -224,13 +221,8 @@ class FeedViewController {
     await _methodChannel?.invokeMethod("update", params);
   }
 
-  void clear() {
-    _methodChannel = null;
-  }
-
   void remove() {
     _methodChannel.invokeMethod('remove');
-    clear();
   }
 
   void setUserInteractionEnabled(bool enable) {

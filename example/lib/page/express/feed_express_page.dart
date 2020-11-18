@@ -193,13 +193,15 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
     String id,
   ) {
     var itemKey = _ItemKey(id);
-    RenderBox renderBox = itemKey.currentContext.findRenderObject();
-    var size = renderBox.size;
-    var offset = renderBox.localToGlobal(Offset.zero);
+    RenderBox renderBox = itemKey.currentContext?.findRenderObject();
+    if (renderBox != null) {
+      var size = renderBox.size;
+      var offset = renderBox.localToGlobal(Offset.zero);
 
-    /// 最底部坐标不低于NavigationBar, 最顶部不高于AppBar
-    var available = offset.dy + size.height < maxAvailableHeight &&
-        offset.dy > minAvailableHeigt;
-    itemKey.currentState.setUserInteractionEnabled(available);
+      /// 最底部坐标不低于NavigationBar, 最顶部不高于AppBar
+      var available = offset.dy + size.height < maxAvailableHeight &&
+          offset.dy > minAvailableHeigt;
+      itemKey.currentState.setUserInteractionEnabled(available);
+    }
   }
 }
