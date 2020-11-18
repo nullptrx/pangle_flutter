@@ -149,7 +149,7 @@ class FeedViewState extends State<FeedView>
       if (widget.onRemove != null) {
         widget.onRemove();
       } else {
-        if(mounted) {
+        if (mounted) {
           setState(() {
             this._removed = true;
           });
@@ -159,7 +159,7 @@ class FeedViewState extends State<FeedView>
     final updated = (args) {
       double width = args['width'];
       double height = args['height'];
-      if(mounted) {
+      if (mounted) {
         setState(() {
           this._offstage = false;
           this._adWidth = width;

@@ -1,3 +1,7 @@
+## 0.6.4
+
+* Fix exception when BannerView & FeedView `dispose`
+
 ## 0.6.3
 
 * Optimize static analysis

@@ -1,3 +1,7 @@
+## 0.6.4
+
+* 修复FeedView,BannerView处理 `dispose`的异常
+
 ## 0.6.3
 
 * 优化静态分析
