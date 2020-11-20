@@ -18,10 +18,6 @@ import io.github.nullptrx.pangleflutter.util.ScreenUtil
 import io.github.nullptrx.pangleflutter.util.asMap
 import io.github.nullptrx.pangleflutter.util.dp
 
-
-/**
- * 暂时没有用到的
- */
 class FlutterSplashView(val context: Context, messenger: BinaryMessenger, val id: Int, params: Map<String, Any?>) : PlatformView, MethodChannel.MethodCallHandler, TTAdNative.SplashAdListener {
 
   private val methodChannel: MethodChannel

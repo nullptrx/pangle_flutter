@@ -23,10 +23,6 @@ import io.github.nullptrx.pangleflutter.util.ScreenUtil
 import io.github.nullptrx.pangleflutter.util.asMap
 import io.github.nullptrx.pangleflutter.util.dp
 
-
-/**
- * 暂时没有用到的
- */
 class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val id: Int, params: Map<String, Any?>) : PlatformView, MethodChannel.MethodCallHandler {
 
   private val methodChannel: MethodChannel
