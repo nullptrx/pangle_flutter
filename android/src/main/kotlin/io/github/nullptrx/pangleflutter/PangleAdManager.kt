@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo
 import com.bytedance.sdk.openadsdk.*
 import io.github.nullptrx.pangleflutter.common.*
 import io.github.nullptrx.pangleflutter.delegate.*
+import io.github.nullptrx.pangleflutter.util.asList
 import io.github.nullptrx.pangleflutter.util.asMap
 import java.util.*
 
@@ -147,7 +148,7 @@ class PangleAdManager {
     val allowShowPageWhenScreenLock: Boolean? = args["allowShowPageWhenScreenLock"] as Boolean?
     val supportMultiProcess: Boolean? = args["supportMultiProcess"] as Boolean?
     val useTextureView: Boolean? = args["useTextureView"] as Boolean?
-    val directDownloadNetworkType = args["directDownloadNetworkType"] as Int?
+    val directDownloadNetworkType = (args["directDownloadNetworkType"] as List<*>?)?.asList<Int>()?.toIntArray()
     val paid: Boolean? = args["paid"] as Boolean?
     val titleBarThemeIndex: Int? = args["titleBarTheme"] as Int?
     val isCanUseLocation: Boolean? = args["isCanUseLocation"] as Boolean?
@@ -202,7 +203,7 @@ class PangleAdManager {
         allowShowPageWhenScreenLock(it)
       }
       directDownloadNetworkType?.also {
-        directDownloadNetworkType(it)
+        directDownloadNetworkType(*it)
       }
       supportMultiProcess?.also {
         supportMultiProcess(it)

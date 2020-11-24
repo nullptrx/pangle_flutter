@@ -11,7 +11,7 @@ class AndroidConfig {
   final AndroidTitleBarTheme titleBarTheme;
   final bool allowShowNotify;
   final bool allowShowPageWhenScreenLock;
-  final int directDownloadNetworkType;
+  final List<int> directDownloadNetworkType;
   final bool supportMultiProcess;
   final bool isPaidApp;
   final bool isCanUseLocation;
@@ -48,7 +48,7 @@ class AndroidConfig {
     this.allowShowNotify,
     this.allowShowPageWhenScreenLock,
     this.supportMultiProcess = false,
-    this.directDownloadNetworkType = AndroidDirectDownloadNetworkType.kNone,
+    this.directDownloadNetworkType = const [],
     this.isPaidApp,
     this.useTextureView,
     this.titleBarTheme = AndroidTitleBarTheme.light,

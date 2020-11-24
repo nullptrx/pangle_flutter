@@ -38,6 +38,9 @@ Future<Null> initPangle() async {
       debug: false,
       allowShowNotify: true,
       allowShowPageWhenScreenLock: false,
+      directDownloadNetworkType: [
+        AndroidDirectDownloadNetworkType.k2G,
+      ]
     ),
   );
 

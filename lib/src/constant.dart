@@ -34,7 +34,8 @@ enum AndroidTitleBarTheme {
 
 /// available network type for downloading type ad.
 class AndroidDirectDownloadNetworkType {
-  static const int kNone = 0;
+  AndroidDirectDownloadNetworkType._();
+
   static const int kMobile = 1;
   static const int k2G = 2;
   static const int k3G = 3;
