@@ -34,15 +34,8 @@ dependencies {
 
 ##### 方法二 （推荐）
 
-1. 创建一个新module，`File->New->New Module...->Import .JAR/AAR Package`，选择`open_ad_sdk.aar`完成导入。
-2. 在module `app`的`build.gradle`中对应位置加人如下配置
+创建一个新module，`File->New->New Module...->Import .JAR/AAR Package`，选择`open_ad_sdk.aar`完成导入。
 
-```groovy
-dependencies {
-    // 导入open_ad_sdk
-    implementation(name: 'open_ad_sdk', ext: 'aar')
-}
-```
 
 
 
