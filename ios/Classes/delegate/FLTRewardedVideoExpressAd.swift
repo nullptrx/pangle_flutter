@@ -13,7 +13,7 @@ internal final class FLTRewardedVideoExpressAd: NSObject, BUNativeExpressRewarde
     typealias Fail = (Error?) -> Void
     
     private var verify = false
-    private var isSkipped = false
+//    private var isSkipped = false
     private var loadingType: LoadingType
     
     let success: Success?
@@ -40,9 +40,9 @@ internal final class FLTRewardedVideoExpressAd: NSObject, BUNativeExpressRewarde
     }
     
     func nativeExpressRewardedVideoAdDidClose(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd) {
-        if self.isSkipped {
-            return
-        }
+//        if self.isSkipped {
+//            return
+//        }
         if rewardedVideoAd.didReceiveSuccess != nil {
             rewardedVideoAd.didReceiveSuccess?(self.verify)
         } else {
@@ -59,13 +59,13 @@ internal final class FLTRewardedVideoExpressAd: NSObject, BUNativeExpressRewarde
     }
     
     func nativeExpressRewardedVideoAdDidClickSkip(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd) {
-        self.isSkipped = true
-        let error = NSError(domain: "skip", code: -1, userInfo: nil)
-        if rewardedVideoAd.didReceiveFail != nil {
-            rewardedVideoAd.didReceiveFail?(error)
-        } else {
-            self.fail?(error)
-        }
+//        self.isSkipped = true
+//        let error = NSError(domain: "skip", code: -1, userInfo: nil)
+//        if rewardedVideoAd.didReceiveFail != nil {
+//            rewardedVideoAd.didReceiveFail?(error)
+//        } else {
+//            self.fail?(error)
+//        }
     }
     
     func nativeExpressRewardedVideoAdServerRewardDidFail(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd) {

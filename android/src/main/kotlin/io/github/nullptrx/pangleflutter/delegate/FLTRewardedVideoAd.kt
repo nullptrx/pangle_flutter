@@ -62,7 +62,7 @@ internal class RewardAdInteractionImpl(var result: (Any) -> Unit?) : TTRewardVid
   }
 
   override fun onSkippedVideo() {
-    invoke(-1, "skip")
+//    invoke(-1, "skip")
   }
 
   override fun onAdShow() {

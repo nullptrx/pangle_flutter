@@ -13,7 +13,7 @@ internal final class FLTRewardedVideoAd: NSObject, BURewardedVideoAdDelegate {
     typealias Fail = (Error?) -> Void
     
     private var verify = false
-    private var isSkipped = false
+//    private var isSkipped = false
     
     let success: Success?
     let fail: Fail?
@@ -40,9 +40,9 @@ internal final class FLTRewardedVideoAd: NSObject, BURewardedVideoAdDelegate {
     }
     
     public func rewardedVideoAdDidClose(_ rewardedVideoAd: BURewardedVideoAd) {
-        if self.isSkipped {
-            return
-        }
+//        if self.isSkipped {
+//            return
+//        }
         if rewardedVideoAd.didReceiveSuccess != nil {
             rewardedVideoAd.didReceiveSuccess?(self.verify)
         } else {
@@ -59,13 +59,13 @@ internal final class FLTRewardedVideoAd: NSObject, BURewardedVideoAdDelegate {
     }
     
     public func rewardedVideoAdDidClickSkip(_ rewardedVideoAd: BURewardedVideoAd) {
-        self.isSkipped = true
-        let error = NSError(domain: "skip", code: -1, userInfo: nil)
-        if rewardedVideoAd.didReceiveFail != nil {
-            rewardedVideoAd.didReceiveFail?(error)
-        } else {
-            self.fail?(error)
-        }
+//        self.isSkipped = true
+//        let error = NSError(domain: "skip", code: -1, userInfo: nil)
+//        if rewardedVideoAd.didReceiveFail != nil {
+//            rewardedVideoAd.didReceiveFail?(error)
+//        } else {
+//            self.fail?(error)
+//        }
     }
     
     public func rewardedVideoAdServerRewardDidFail(_ rewardedVideoAd: BURewardedVideoAd) {
@@ -83,6 +83,7 @@ internal final class FLTRewardedVideoAd: NSObject, BURewardedVideoAdDelegate {
     }
     
     public func rewardedVideoAdDidPlayFinish(_ rewardedVideoAd: BURewardedVideoAd, didFailWithError error: Error?) {}
+    
 }
 
 private var delegateKey = "nullptrx.github.io/delegate"
