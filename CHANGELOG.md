@@ -1,3 +1,7 @@
+## 0.7.1
+
+* Upgrade min dependency version of `Bytedance-UnionAD`  to 3.3
+
 ## 0.6.5
 
 * Adapt onRewardVerify/nativeExpressRewardedVideoAdServerRewardDidSucceed callback parameters for reward video

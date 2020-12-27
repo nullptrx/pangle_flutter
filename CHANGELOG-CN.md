@@ -1,3 +1,7 @@
+## 0.7.1
+
+* 升级`Bytedance-UnionAD`最小依赖版本为3.3
+
 ## 0.6.5
 
 * 适配激励视频onRewardVerify/nativeExpressRewardedVideoAdServerRewardDidSucceed奖励回调
