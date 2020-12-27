@@ -1,8 +1,8 @@
 group 'io.github.nullptrx.pangleflutter'
-version '0.6.4'
+version '0.6.5'
 
 buildscript {
-    ext.kotlin_version = '1.4.10'
+    ext.kotlin_version = '1.4.21'
     repositories {
         google()
         jcenter()

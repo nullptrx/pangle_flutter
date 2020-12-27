@@ -1,3 +1,7 @@
+## 0.6.5
+
+* 适配激励视频onRewardVerify/nativeExpressRewardedVideoAdServerRewardDidSucceed奖励回调
+
 ## 0.6.4
 
 * 修复FeedView,BannerView处理 `dispose`的异常

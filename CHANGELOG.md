@@ -1,3 +1,7 @@
+## 0.6.5
+
+* Adapt onRewardVerify/nativeExpressRewardedVideoAdServerRewardDidSucceed callback parameters for reward video
+
 ## 0.6.4
 
 * Fix exception when BannerView & FeedView `dispose`
