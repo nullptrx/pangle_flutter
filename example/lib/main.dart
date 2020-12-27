@@ -34,14 +34,13 @@ Future<Null> initPangle() async {
       logLevel: PangleLogLevel.error,
     ),
     android: AndroidConfig(
-      appId: kAppId,
-      debug: false,
-      allowShowNotify: true,
-      allowShowPageWhenScreenLock: false,
-      directDownloadNetworkType: [
-        AndroidDirectDownloadNetworkType.k2G,
-      ]
-    ),
+        appId: kAppId,
+        debug: false,
+        allowShowNotify: true,
+        allowShowPageWhenScreenLock: false,
+        directDownloadNetworkType: [
+          AndroidDirectDownloadNetworkType.k2G,
+        ]),
   );
 
   /// 原生加载开屏

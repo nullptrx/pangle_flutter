@@ -18,7 +18,7 @@ Flutter plugin for Pangle Ad SDK.
   s.platform = :ios, '9.0'
 
   s.static_framework = true
-  s.ios.dependency 'Bytedance-UnionAD', '~> 3.2'
+  s.ios.dependency 'Bytedance-UnionAD', '~> 3.3'
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }
