@@ -1,3 +1,8 @@
+## 0.8.1
+
+* Adapt pangle sdk 3.4+ (part class is removed, part of the property is out of date)
+* PangleResult add property `verify`
+
 ## 0.7.1
 
 * Upgrade min dependency version of `Bytedance-UnionAD`  to 3.3

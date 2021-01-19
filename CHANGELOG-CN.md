@@ -1,3 +1,8 @@
+## 0.8.1
+
+* 适配穿山甲SDK 3.4+（iOS SDK部分类移除，iOS部分字段过时）
+* PangleResult 新增属性 `verify`
+
 ## 0.7.1
 
 * 升级`Bytedance-UnionAD`最小依赖版本为3.3

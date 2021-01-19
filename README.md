@@ -42,7 +42,7 @@ dependencies:
 
   本项目默认集成`Ads-CN`， 如果你是国内APP，无需额外配置；如果你是海外APP，请参照如下配置：
 
-  打开你flutter应用ios项目下的`Podfile`，在`target 'Runner do`上面添加如下代码即可（如果不熟悉Podfile，也可以参考本项目example/ios/Podfile里面的配置）。
+  打开你flutter应用ios项目下的`Podfile`，在`target 'Runner do`上面添加如下代码即可（如果不熟悉Podfile，也可以参考本项目[example/ios/Podfile](example/ios/Podfile)里面的配置）。
 
   ```ruby
   def flutter_install_ios_plugin_pods(ios_application_path = nil)
