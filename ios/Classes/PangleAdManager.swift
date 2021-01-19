@@ -127,20 +127,11 @@ public final class PangleAdManager: NSObject {
     }
     
     public func loadInterstitialAd(_ args: [String: Any?], result: @escaping FlutterResult) {
-        let isExpress: Bool = args["isExpress"] as? Bool ?? false
         
-        if isExpress {
-            let task = FLTInterstitialExpressAdTask(args)
-            self.execTask(task)({ data in
-                result(data)
-            })
-            
-        } else {
-            let task = FLTInterstitialAdTask(args)
-            self.execTask(task)({ data in
-                result(data)
-            })
-        }
+        let task = FLTInterstitialExpressAdTask(args)
+        self.execTask(task)({ data in
+            result(data)
+        })
     }
     
     public func loadFullscreenVideoAd(_ args: [String: Any?], result: @escaping FlutterResult) {

@@ -123,6 +123,7 @@ class IOSRewardedVideoConfig {
 class IOSBannerConfig {
   final String slotId;
   final PangleImgSize imgSize;
+  @Deprecated("always express")
   final bool isExpress;
   final PangleExpressSize expressSize;
   final bool isUserInteractionEnabled;
@@ -166,6 +167,7 @@ class IOSFeedConfig {
   final PangleImgSize imgSize;
 
   final int count;
+  @Deprecated("always support")
   final bool isSupportDeepLink;
   final bool isExpress;
   final PangleExpressSize expressSize;
@@ -204,6 +206,7 @@ class IOSFeedConfig {
 class IOSInterstitialConfig {
   final String slotId;
   final PangleImgSize imgSize;
+  @Deprecated("always express")
   final bool isExpress;
   final PangleExpressSize expressSize;
 

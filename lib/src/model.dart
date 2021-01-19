@@ -178,7 +178,10 @@ class PangleResult {
   /// 一般是错误信息
   final String message;
 
-  const PangleResult({this.code, this.message});
+  /// 适用于需要验证结果的广告，如激励视频
+  final bool verify;
+
+  const PangleResult({this.code, this.message, this.verify = false});
 
   /// 是否成功
   bool get ok => code == 0;
@@ -192,6 +195,7 @@ class PangleResult {
     return PangleResult(
       code: json['code'],
       message: json['message'],
+      verify: json['verify'],
     );
   }
 
@@ -199,6 +203,7 @@ class PangleResult {
     return {
       'code': code,
       'message': message,
+      'verify': verify,
     };
   }
 }

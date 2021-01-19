@@ -11,13 +11,13 @@ import 'home/express_page.dart';
 import 'home/native_page.dart';
 
 const kEnv = '''
-Android Studio 4.1
-Xcode 12.0.1
+Android Studio 4.1.1
+Xcode 12.3
 
-Flutter 1.22.1
-Dart 2.10.1
-Kotlin 1.4.10
-Swift 5.2.4 
+Flutter 1.22.5
+Dart 2.10.4
+Kotlin 1.4.21
+Swift 5.3.0
 ''';
 const kDependencies = '''
 Pangle SDK V%s

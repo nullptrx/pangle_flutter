@@ -21,14 +21,12 @@ internal final class FLTNativeAdTask: FLTTaskProtocol {
         let slotId: String = args["slotId"] as! String
         let imgSize: Int = args["imgSize"] as! Int
         let count = args["count"] as? Int ?? Constant.kDefaultFeedAdCount
-        let isSupportDeepLink: Bool = args["isSupportDeepLink"] as? Bool ?? true
         
         let manager = BUNativeAdsManager()
         let slot = BUAdSlot()
         slot.id = slotId
         slot.adType = .feed
         slot.position = .feed
-        slot.isSupportDeepLink = isSupportDeepLink
         slot.imgSize = BUSize(by: BUProposalSize(rawValue: imgSize)!)
         manager.adslot = slot
         

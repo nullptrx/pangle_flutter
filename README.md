@@ -1,6 +1,6 @@
 # 穿山甲 Flutter SDK
 
-[![pub package](https://img.shields.io/pub/v/pangle_flutter.svg)](https://pub.dartlang.org/packages/pangle_flutter) [![Licence](https://img.shields.io/github/license/nullptrX/pangle_flutter)](https://github.com/nullptrX/pangle_flutter/blob/master/LICENSE) [![flutter](https://img.shields.io/badge/flutter-1.22.2-green)](https://flutter.dev/docs/get-started/install)
+[![pub package](https://img.shields.io/pub/v/pangle_flutter.svg)](https://pub.dartlang.org/packages/pangle_flutter) [![Licence](https://img.shields.io/github/license/nullptrX/pangle_flutter)](https://github.com/nullptrX/pangle_flutter/blob/master/LICENSE) [![flutter](https://img.shields.io/badge/flutter-1.22.5-green)](https://flutter.dev/docs/get-started/install) 
 
 
 
@@ -18,6 +18,10 @@
 - [Pangle iOS SDK](https://www.pangle.cn/union/media/union/download/detail?id=16&osType=ios)
 
 
+## 使用文档
+
+- [参数文档](DOC_PROPERTY.md)
+
 
 ## 集成步骤
 
@@ -29,7 +33,51 @@ dependencies:
 ```
 ### 2. Android和iOS额外配置
 
-#### [去配置](SETUP.md)
+- [基本配置入口](SETUP.md)
+
+
+- iOS从版本3.4.1.9开始pod方式变更
+
+  原话：【变更】pod方式变更，国内使用pod 'Ads-CN',海外使用pod 'Ads-Global'
+
+  本项目默认集成`Ads-CN`， 如果你是国内APP，无需额外配置；如果你是海外APP，请参照如下配置：
+
+  打开你flutter应用ios项目下的`Podfile`，在`target 'Runner do`上面添加如下代码即可（如果不熟悉Podfile，也可以参考本项目example/ios/Podfile里面的配置）。
+
+  ```ruby
+  def flutter_install_ios_plugin_pods(ios_application_path = nil)
+    # defined_in_file is set by CocoaPods and is a Pathname to the Podfile.
+    ios_application_path ||= File.dirname(defined_in_file.realpath) if self.respond_to?(:defined_in_file)
+    raise 'Could not find iOS application path' unless ios_application_path
+  
+    # Prepare symlinks folder. We use symlinks to avoid having Podfile.lock
+    # referring to absolute paths on developers' machines.
+  
+    symlink_dir = File.expand_path('.symlinks', ios_application_path)
+    system('rm', '-rf', symlink_dir) # Avoid the complication of dependencies like FileUtils.
+  
+    symlink_plugins_dir = File.expand_path('plugins', symlink_dir)
+    system('mkdir', '-p', symlink_plugins_dir)
+  
+    plugins_file = File.join(ios_application_path, '..', '.flutter-plugins-dependencies')
+    plugin_pods = flutter_parse_plugins_file(plugins_file)
+    plugin_pods.each do |plugin_hash|
+      plugin_name = plugin_hash['name']
+      plugin_path = plugin_hash['path']
+      if (plugin_name && plugin_path)
+        symlink = File.join(symlink_plugins_dir, plugin_name)
+        File.symlink(plugin_path, symlink)
+  
+        if plugin_name == 'pangle_flutter'
+            # cn代表国内，global代表海外
+            pod 'pangle_flutter/global', :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
+        else
+            pod plugin_name, :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
+        end
+      end
+    end
+  end
+  ```
 
 
 
@@ -66,7 +114,7 @@ dependencies:
 import 'package:pangle_flutter/pangle_flutter.dart';
 /// 如果在runApp方法调用之前初始化，加入下面这句代码
 WidgetsFlutterBinding.ensureInitialized();
-/// 初始化，未列出所有参数，后面会有详细说明
+/// 初始化，未列出所有参数
 /// [kAppId] 申请穿山甲广告位后得到的appID
 await pangle.init(
   iOS: IOSConfig(appId: kAppId),
@@ -283,342 +331,12 @@ print(jsonEncode(result));
 
 
 
-
-
-## 参数说明
-
-### 初始化配置
-
-```dart
-/// Register the ad config for iOS
-///
-/// [appId] the unique identifier of the App
-/// [logLevel] optional. default none
-/// [coppa] optional. Coppa 0 adult, 1 child
-/// [isPaidApp] optional. Set whether the app is a paid app, the default is a non-paid app.
-IOSConfig({
-  @required this.appId,
-  this.logLevel,
-  this.coppa,
-  this.isPaidApp,
-});
-
-/// Register the ad config for Android
-///
-/// [appId] 必选参数，设置应用的AppId
-/// [debug] 测试阶段打开，可以通过日志排查问题，上线时去除该调用，默认false
-/// [allowShowNotify] 是否允许sdk展示通知栏提示
-/// [allowShowPageWhenScreenLock] 是否在锁屏场景支持展示广告落地页
-/// [supportMultiProcess] 可选参数，设置是否支持多进程：true支持、false不支持。默认为false不支持
-/// [directDownloadNetworkType] 可选参数，允许直接下载的网络状态集合，默认仅WiFi
-/// [isPaidApp] 可选参数，设置是否为计费用户：true计费用户、false非计费用户。默认为false非计费用户。须征得用户同意才可传入该参数
-/// [useTextureView] 可选参数，设置是否使用texture播放视频：true使用、false不使用。默认为false不使用（使用的是surface）
-/// [titleBarTheme] 可选参数，设置落地页主题，默认为light
-AndroidConfig({
-  @required this.appId,
-  this.debug,
-  this.allowShowNotify,
-  this.allowShowPageWhenScreenLock,
-  this.supportMultiProcess,
-  this.directDownloadNetworkType = AndroidDirectDownloadNetworkType.kWiFi /// 多个值，用 & 连接
-  this.isPaidApp,
-  this.useTextureView,
-  this.titleBarTheme = AndroidTitleBarTheme.light,
-});
-
-```
-
-
-
-### 开屏配置
-
-```dart
-/// The splash ad config for iOS
-///
-/// [slotId] The unique identifier of splash ad.
-/// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
-/// [hideSkipButton] optional. Whether hide skip button, default NO. If you hide the skip button, you need to customize the countdown.
-/// [isExpress] optional. experimental. 个性化模板广告.
-/// [expressSize] optional. 模板宽高
-IOSSplashConfig({
-  @required this.slotId,
-  this.tolerateTimeout,
-  this.hideSkipButton,
-  this.isExpress,
-  this.expressSize,
-});
-
-/// The splash ad config for Android
-///
-/// [slotId] The unique identifier of splash ad.
-/// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
-/// [hideSkipButton] optional. Whether hide skip button, default NO. If you hide the skip button, you need to customize the countdown.
-/// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-/// [isExpress] optional. experimental. 个性化模板广告.
-/// [expressSize] optional. 模板宽高
-AndroidSplashConfig({
-  @required this.slotId,
-  this.tolerateTimeout,
-  this.hideSkipButton,
-  this.isSupportDeepLink,
-  this.isExpress,
-  this.expressSize,
-});
-```
-
-
-
-### 激励视频配置
-
-```dart
-/// The rewarded video ad config for Android
-///
-/// [slotId] The unique identifier of rewarded video ad.
-/// [userId] required.
-//   Third-party game user_id identity.
-//   Mainly used in the reward issuance, it is the callback pass-through parameter from server-to-server.
-//   It is the unique identifier of each user.
-//   In the non-server callback mode, it will also be pass-through when the video is finished playing.
-//   Only the string can be passed in this case, not nil.
-/// [rewardName] optional. reward name.
-/// [rewardAmount] optional. number of rewards.
-/// [extra] optional. serialized string.
-/// [isExpress] optional. 个性化模板广告.
-/// [loadingType] optional. 加载广告的类型，默认[LoadingType.normal]
-IOSRewardedVideoConfig({
-  @required this.slotId,
-  this.userId,
-  this.rewardName,
-  this.rewardAmount,
-  this.extra,
-  this.isExpress,
-  this.loadingType,
-});
-
-/// The rewarded video ad config for Android
-///
-/// [slotId] The unique identifier of rewarded video ad.
-/// [userId] required.
-//   Third-party game user_id identity.
-//   Mainly used in the reward issuance, it is the callback pass-through parameter from server-to-server.
-//   It is the unique identifier of each user.
-//   In the non-server callback mode, it will also be pass-through when the video is finished playing.
-//   Only the string can be passed in this case, not nil.
-/// [rewardName] optional. reward name.
-/// [rewardAmount] optional. number of rewards.
-/// [extra] optional. serialized string.
-/// [isVertical] optional. Whether video is vertical orientation. Vertical, if true. Otherwise, horizontal.
-/// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-/// [isExpress] optional. 个性化模板广告.
-AndroidRewardedVideoConfig({
-  @required this.slotId,
-  this.userId,
-  this.rewardName,
-  this.rewardAmount,
-  this.extra,
-  this.isVertical,
-  this.isSupportDeepLink,
-  this.isExpress,
-});
-```
-
-
-
-### Banner配置
-
-```dart
-/// The feed ad config for iOS
-///
-/// [slotId] required. The unique identifier of a feed ad.
-/// [imgSize] required. Image size.
-/// [isExpress] optional. 个性化模板广告.
-/// [expressSize] optional. 模板宽高
-/// [isUserInteractionEnabled] 广告位是否可点击，true可以，false不可以
-/// [interval] The carousel interval, in seconds, is set in the range of 30~120s
-IOSBannerAdConfig({
-  @required this.slotId,
-  this.imgSize = PangleImgSize.banner600_150,
-  this.count,
-  this.isExpress,
-  this.expressSize,
-  this.isUserInteractionEnabled = true,
-  this.interval,
-});
-
-/// The feed ad config for Android
-///
-/// [slotId] required. The unique identifier of a feed ad.
-/// [imgSize] required. Image size.
-/// [isSupportDeepLink] optional. Whether to support deeplink.
-/// [isExpress] optional. 个性化模板广告.
-/// [expressSize] optional. 模板宽高
-/// [interval] The carousel interval, in seconds, is set in the range of 30~120s
-AndroidBannerAdConfig({
-  @required this.slotId,
-  this.imgSize = PangleImgSize.banner600_150,
-  this.isSupportDeepLink,
-  this.isExpress,
-  this.expressSize,
-  this.interval,
-});
-```
-
-
-
-### 信息流配置
-
-```dart
-/// The feed ad config for iOS
-///
-/// [slotId] required. The unique identifier of a feed ad.
-/// [imgSize] required. Image size.
-/// [tag] optional. experimental. Mark it.
-/// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
-/// [isSupportDeepLink] optional. Whether to support deeplink.
-/// [isExpress] optional. 个性化模板广告.
-/// [expressSize] optional. 模板宽高
-IOSFeedAdConfig({
-  @required this.slotId,
-  this.imgSize = PangleImgSize.feed690_388,
-  this.tag,
-  this.count,
-  this.isSupportDeepLink,
-  this.isExpress,
-  this.expressSize,
-});
-
-/// The feed ad config for iOS
-///
-/// [slotId] required. The unique identifier of a feed ad.
-/// [imgSize] required. Image size.
-/// [tag] optional. experimental. Mark it.
-/// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
-/// [isSupportDeepLink] optional. Whether to support deeplink.
-/// [isExpress] optional. 个性化模板广告.
-/// [expressSize] optional. 模板宽高
-AndroidFeedAdConfig({
-  @required this.slotId,
-  this.imgSize = PangleImgSize.feed690_388,
-  this.tag,
-  this.count,
-  this.isSupportDeepLink,
-  this.isExpress,
-  this.expressSize,
-});
-```
-
-### 插屏广告
-
-```dart
-/// The interstitial ad config for iOS
-///
-/// [slotId] required. The unique identifier of a interstitial ad.
-/// [imgSize] required. Image size.
-/// [isExpress] optional. 个性化模板广告.
-/// [expressSize] optional. 模板宽高
-IOSInterstitialAdConfig({
-  @required this.slotId,
-  this.imgSize = PangleImgSize.interstitial600_400,
-  this.isExpress,
-  this.expressSize,
-})
-
-
-/// The interstitial ad config for Android
-///
-/// [slotId] required. The unique identifier of a interstitial ad.
-/// [imgSize] required. Image size.
-/// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-/// [isExpress] optional. experimental. 个性化模板广告
-/// [expressSize] optional. 模板宽高
-AndroidInterstitialAdConfig({
-  @required this.slotId,
-  this.imgSize = PangleImgSize.interstitial600_400,
-  this.isSupportDeepLink,
-  this.isExpress,
-  this.expressSize,
-})
-```
-
-
-
-### 全屏视频广告
-
-```dart
-/// The full screen video ad config for iOS
-///
-/// [slotId] required. The unique identifier of a full screen video ad.
-/// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
-/// [isExpress] optional. 个性化模板广告
-IOSFullscreenVideoConfig({
-  @required this.slotId,
-  this.loadingType = PangleLoadingType.normal,
-  this.isExpress = true,
-})
-
-
-/// The full screen video ad config for Android
-///
-/// [slotId] required. The unique identifier of a full screen video ad.
-/// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-/// [orientation] 设置期望视频播放的方向，默认[PangleOrientation.veritical]
-/// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
-/// [isExpress] optional. 个性化模板广告
-/// [expressSize] optional. 模板宽高
-AndroidFullscreenVideoConfig({
-  @required this.slotId,
-  this.isSupportDeepLink = true,
-  this.orientation = PangleOrientation.veritical,
-  this.loadingType = PangleLoadingType.normal,
-  this.isExpress = true,
-})
-```
-
-
-
 ## 开发说明
 
 1. 开屏广告放在runApp之前调用体验最佳
-2. 信息流广告之前在PlatformView创建成功后再load的方式，改为创建时load。然后使用获取的FeedAd对象的hashCode作为key全局缓存，通过Flutter中FeedView传入的id，寻找对应广告对象。
-
-   从而解决了移除item（`setState((){});`）时，出现广告对象消失的问题。
-
 3. iOS信息流广告的点击事件需要传入`rootViewController`，使用的是`(UIApplication.shared.delegate?.window??.rootViewController)!`，暂未发现问题。
 
-4. 插屏广告不显示问题
-
-```java
-// open_ad_sdk:
-// com.bytedance.sdk.openadsdk.utils.a:28处有生命周期的监控, 
-// FlutterActivity跳转界面时一定情况下不会回调onStart(),onStop()
-// 如使用ttAdManager.requestPermissionIfNecessary(context)时，就不会调用。
-// 上述情况，导致onActivityStarted少走了一次，因此下面的show方法走不通。
-public void onActivityStarted(Activity var1) {
-  if (this.a.incrementAndGet() > 0) {
-    this.b.set(false);
-  }
-
-  this.b();
-}
-...
-
-public void onActivityStopped(Activity var1) {
-  if (this.a.decrementAndGet() == 0) {
-    this.b.set(true);
-  }
-
-}
-
-// com.bytedance.sdk.openadsdk.core.c.b:306处有生命周期的判断，无法执行show()
-if (!this.k.isShowing() && !com.bytedance.sdk.openadsdk.core.i.c().a()) {
-  this.k.show();
-}
-
-```
-
-5. `BannerView`、`FeedView`通过`PlatformView`实现。在安卓上，`PlatformView`最低支持API 20。
-
-
+4. `BannerView`、`FeedView`通过`PlatformView`实现。在安卓上，`PlatformView`最低支持API 20。
 
 
 
@@ -631,5 +349,9 @@ if (!this.k.isShowing() && !com.bytedance.sdk.openadsdk.core.i.c().a()) {
 
 ## 交流
 
-<img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/group.jpeg" alt="Flutter开发交流" width="300" height="100%" />
+因微信群7日有效期，就不放微信群二维码了。备注项目名加我好友，加入微信交流群。
+
+备注：`pangle_flutter`
+
+<img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/qrcode.png" alt="Flutter开发交流" width="300" height="100%" />
 

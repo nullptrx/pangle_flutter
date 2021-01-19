@@ -21,7 +21,6 @@ internal final class FLTNativeExpressAdTask: FLTTaskProtocol {
     convenience init(_ args: [String: Any?]) {
         let slotId: String = args["slotId"] as! String
         let count = args["count"] as? Int ?? Constant.kDefaultFeedAdCount
-        let isSupportDeepLink: Bool = args["isSupportDeepLink"] as? Bool ?? true
         
         let expressArgs = args["expressSize"] as! [String: Double]
         let width = expressArgs["width"]!
@@ -37,7 +36,6 @@ internal final class FLTNativeExpressAdTask: FLTTaskProtocol {
         slot.id = slotId
         slot.adType = .feed
         slot.position = .feed
-        slot.isSupportDeepLink = isSupportDeepLink
         slot.imgSize = imgSize
         
         let nad = BUNativeExpressAdManager(slot: slot, adSize: adSize)

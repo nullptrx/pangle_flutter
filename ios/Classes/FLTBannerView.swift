@@ -66,7 +66,6 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
         let interval: Int? = params["interval"] as? Int
         let imgSize = BUSize(by: BUProposalSize(rawValue: imgSizeIndex)!)!
 
-        let isExpress = params["isExpress"] as? Bool ?? false
         let isSupportDeepLink = params["isSupportDeepLink"] as? Bool ?? true
         let isUserInteractionEnabled = params["isUserInteractionEnabled"] as? Bool ?? true
 
@@ -76,36 +75,23 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
         self.onlyRemoveView()
 
         let vc = AppUtil.getVC()
-        if isExpress {
-            let expressArgs: [String: Double] = params["expressSize"] as! [String: Double]
-            let width = expressArgs["width"]!
-            let height = expressArgs["height"]!
-            let adSize = CGSize(width: width, height: height)
+        let expressArgs: [String: Double] = params["expressSize"] as! [String: Double]
+        let width = expressArgs["width"]!
+        let height = expressArgs["height"]!
+        let adSize = CGSize(width: width, height: height)
 
-            viewWidth = width
-            viewHeight = height
+        viewWidth = width
+        viewHeight = height
 
-            let bannerAdView = interval == nil ? BUNativeExpressBannerView(slotID: slotId!, rootViewController: vc, adSize: adSize, isSupportDeepLink: isSupportDeepLink) : BUNativeExpressBannerView(slotID: slotId!, rootViewController: vc, adSize: adSize, isSupportDeepLink: isSupportDeepLink, interval: interval!)
-            bannerAdView.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
-            bannerAdView.center = CGPoint(x: viewWidth / 2, y: viewHeight / 2)
-            self.container.addSubview(bannerAdView)
+        let bannerAdView = interval == nil ? BUNativeExpressBannerView(slotID: slotId!, rootViewController: vc, adSize: adSize, isSupportDeepLink: isSupportDeepLink) : BUNativeExpressBannerView(slotID: slotId!, rootViewController: vc, adSize: adSize, isSupportDeepLink: isSupportDeepLink, interval: interval!)
+        bannerAdView.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
+        bannerAdView.center = CGPoint(x: viewWidth / 2, y: viewHeight / 2)
+        self.container.addSubview(bannerAdView)
 
-            bannerAdView.delegate = self
-            bannerAdView.loadAdData()
-            self.bannerView = bannerAdView
+        bannerAdView.delegate = self
+        bannerAdView.loadAdData()
+        self.bannerView = bannerAdView
 
-        } else {
-            viewWidth = Double(UIScreen.main.bounds.width)
-            viewHeight = viewWidth * Double(imgSize.height) / Double(imgSize.width)
-
-            let bannerAdView = interval == nil ? BUBannerAdView(slotID: slotId!, size: imgSize, rootViewController: vc) : BUBannerAdView(slotID: slotId!, size: imgSize, rootViewController: vc, interval: interval!)
-
-            bannerAdView.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
-            bannerAdView.center = CGPoint(x: viewWidth / 2, y: viewHeight / 2)
-            self.container.addSubview(bannerAdView)
-            bannerAdView.delegate = self
-            bannerAdView.loadAdData()
-        }
         self.container.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
         self.container.updateConstraints()
     }
@@ -143,21 +129,6 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
     private func disposeView() {
         self.onlyRemoveView()
         self.methodChannel.invokeMethod("remove", arguments: nil)
-    }
-}
-
-extension FLTBannerView: BUBannerAdViewDelegate {
-    public func bannerAdView(_ bannerAdView: BUBannerAdView, didLoadFailWithError error: Error?) {
-        self.disposeView()
-    }
-
-    public func bannerAdViewDidLoad(_ bannerAdView: BUBannerAdView, withAdmodel nativeAd: BUNativeAd?) {
-        let frame = bannerAdView.frame
-        self.refreshUI(width: frame.width, height: frame.height)
-    }
-
-    public func bannerAdView(_ bannerAdView: BUBannerAdView, dislikeWithReason filterwords: [BUDislikeWords]?) {
-        self.disposeView()
     }
 }
 
