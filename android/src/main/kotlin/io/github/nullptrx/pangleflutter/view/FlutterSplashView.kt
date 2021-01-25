@@ -41,7 +41,7 @@ class FlutterSplashView(val context: Context, messenger: BinaryMessenger, val id
 
       val isSupportDeepLink = params["isSupportDeepLink"] as? Boolean ?: true
       isExpress = params["isExpress"] as? Boolean ?: false
-      val tolerateTimeout = params["tolerateTimeout"] as Float?
+      val tolerateTimeout = params["tolerateTimeout"] as Double?
       hideSkipButton = params["hideSkipButton"] as? Boolean ?: false
 
       if (isExpress) {
@@ -57,9 +57,9 @@ class FlutterSplashView(val context: Context, messenger: BinaryMessenger, val id
       }
       val adSlot = PangleAdSlotManager.getSplashAdSlot(slotId, isExpress, imgSize, expressSize, isSupportDeepLink)
       if (isExpress) {
-        PangleAdManager.shared.loadSplashAd(adSlot, this, timeout = tolerateTimeout)
+        PangleAdManager.shared.loadSplashAd(adSlot, this, timeout = tolerateTimeout?.toFloat())
       } else {
-        PangleAdManager.shared.loadSplashAd(adSlot, this, timeout = tolerateTimeout)
+        PangleAdManager.shared.loadSplashAd(adSlot, this, timeout = tolerateTimeout?.toFloat())
       }
     }
     if (isExpress) {

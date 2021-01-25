@@ -46,10 +46,12 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                     iOS: IOSSplashConfig(
                       slotId: kSplashId,
                       isExpress: false,
+                      tolerateTimeout: 3,
                     ),
                     android: AndroidSplashConfig(
                       slotId: kSplashId,
                       isExpress: false,
+                      tolerateTimeout: 3,
                     ),
                     backgroundColor: Colors.white,
                     onTimeOver: _handleAdEnd,

@@ -51,12 +51,12 @@ def flutter_install_ios_plugin_pods(ios_application_path = nil)
       symlink = File.join(symlink_plugins_dir, plugin_name)
       File.symlink(plugin_path, symlink)
 
+      pod plugin_name, :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
       if plugin_name == 'pangle_flutter'
-          # cn代表国内，global代表海外
-          pod 'pangle_flutter/cn', :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
-      else
-          pod plugin_name, :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
+        # cn代表国内，global代表海外
+        pod 'pangle_flutter/cn', :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
       end
+
     end
   end
 end

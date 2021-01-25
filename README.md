@@ -45,6 +45,7 @@ dependencies:
   打开你flutter应用ios项目下的`Podfile`，在`target 'Runner do`上面添加如下代码即可（如果不熟悉Podfile，也可以参考本项目[example/ios/Podfile](example/ios/Podfile)里面的配置）。
 
   ```ruby
+  # add code begin
   def flutter_install_ios_plugin_pods(ios_application_path = nil)
     # defined_in_file is set by CocoaPods and is a Pathname to the Podfile.
     ios_application_path ||= File.dirname(defined_in_file.realpath) if self.respond_to?(:defined_in_file)
@@ -68,15 +69,16 @@ dependencies:
         symlink = File.join(symlink_plugins_dir, plugin_name)
         File.symlink(plugin_path, symlink)
   
+        pod plugin_name, :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
         if plugin_name == 'pangle_flutter'
-            # cn代表国内，global代表海外
-            pod 'pangle_flutter/global', :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
-        else
-            pod plugin_name, :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
+          # cn代表国内，global代表海外
+          pod 'pangle_flutter/global', :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
         end
+  
       end
     end
   end
+  # add code end
   ```
 
 
