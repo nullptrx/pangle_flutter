@@ -13,8 +13,6 @@ class BannerExpressPage extends StatefulWidget {
 class _BannerExpressPageState extends State<BannerExpressPage> {
   bool _enableClickAction = true;
 
-  final _bannerIds = <String>[];
-
   final _banner1Key = GlobalKey<BannerViewState>();
 
   final _banner2Key = GlobalKey<BannerViewState>();

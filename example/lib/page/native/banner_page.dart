@@ -17,7 +17,6 @@ class BannerPage extends StatelessWidget {
             BannerView(
               iOS: IOSBannerConfig(
                 slotId: kBannerId,
-                isExpress: false,
                 imgSize: PangleImgSize.banner600_150,
               ),
               android: AndroidBannerConfig(
@@ -29,7 +28,6 @@ class BannerPage extends StatelessWidget {
             BannerView(
               iOS: IOSBannerConfig(
                 slotId: kBannerId,
-                isExpress: false,
                 imgSize: PangleImgSize.banner600_300,
               ),
               android: AndroidBannerConfig(

@@ -1,3 +1,8 @@
+## 0.8.2
+
+* 修复属性`tolerateTimeout`类型转换错误
+* 修复范例Podfile中没有引入插件`pangle_flutter`
+
 ## 0.8.1
 
 * 适配穿山甲SDK 3.4+（iOS SDK部分类移除，iOS部分字段过时）

@@ -1,3 +1,8 @@
+## 0.8.2
+
+* Fix property `tolerateTimeout` type cast error
+* Fix example's Podfile has not  joined plugin `pangle_flutter`
+
 ## 0.8.1
 
 * Adapt pangle sdk 3.4+ (part class is removed, part of the property is out of date)

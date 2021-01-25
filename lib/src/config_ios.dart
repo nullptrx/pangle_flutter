@@ -123,8 +123,6 @@ class IOSRewardedVideoConfig {
 class IOSBannerConfig {
   final String slotId;
   final PangleImgSize imgSize;
-  @Deprecated("always express")
-  final bool isExpress;
   final PangleExpressSize expressSize;
   final bool isUserInteractionEnabled;
   final int interval;
@@ -133,7 +131,6 @@ class IOSBannerConfig {
   ///
   /// [slotId] required. The unique identifier of a banner ad.
   /// [imgSize] required. Image size.
-  /// [isExpress] optional. 个性化模板广告.
   /// [expressSize] optional. 模板宽高
   /// [isUserInteractionEnabled] 广告位是否可点击，true可以，false不可以
   /// [interval] The carousel interval, in seconds, is set in the range of 30~120s,
@@ -142,19 +139,17 @@ class IOSBannerConfig {
   IOSBannerConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.banner600_150,
-    this.isExpress = true,
     this.expressSize,
     this.isUserInteractionEnabled = true,
     this.interval,
   })  : assert(slotId.isNotBlank),
-        assert(!isExpress || (isExpress && expressSize != null));
+        assert(expressSize != null);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
       'imgSize': imgSize?.index,
-      'isExpress': isExpress,
       'expressSize': expressSize?.toJson(),
       'isUserInteractionEnabled': isUserInteractionEnabled,
       'interval': interval,
@@ -167,8 +162,6 @@ class IOSFeedConfig {
   final PangleImgSize imgSize;
 
   final int count;
-  @Deprecated("always support")
-  final bool isSupportDeepLink;
   final bool isExpress;
   final PangleExpressSize expressSize;
 
@@ -177,14 +170,12 @@ class IOSFeedConfig {
   /// [slotId] required. The unique identifier of a feed ad.
   /// [imgSize] required. Image size.
   /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
-  /// [isSupportDeepLink] optional. Whether to support deeplink.
   /// [isExpress] optional. 个性化模板广告.
   /// [expressSize] optional. 模板宽高.
   IOSFeedConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.feed690_388,
     this.count,
-    this.isSupportDeepLink = true,
     this.isExpress = true,
     this.expressSize,
   })  : assert(slotId.isNotBlank),
@@ -196,7 +187,6 @@ class IOSFeedConfig {
       'slotId': slotId,
       'count': count,
       'imgSize': imgSize?.index,
-      'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
       'expressSize': expressSize?.toJson(),
     };
@@ -206,30 +196,25 @@ class IOSFeedConfig {
 class IOSInterstitialConfig {
   final String slotId;
   final PangleImgSize imgSize;
-  @Deprecated("always express")
-  final bool isExpress;
   final PangleExpressSize expressSize;
 
   /// The interstitial ad config for iOS
   ///
   /// [slotId] required. The unique identifier of a interstitial ad.
   /// [imgSize] required. Image size. 该宽高为你申请的广告位宽高，请根据实际情况赋值
-  /// [isExpress] optional. 个性化模板广告.
   /// [expressSize] optional. 模板宽高.
   IOSInterstitialConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.interstitial600_400,
-    this.isExpress = true,
     this.expressSize,
   })  : assert(slotId.isNotBlank),
-        assert(!isExpress || (isExpress && expressSize != null));
+        assert(expressSize != null);
 
   /// Convert config to json
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
       'imgSize': imgSize?.index,
-      'isExpress': isExpress,
       'expressSize': expressSize?.toJson(),
     };
   }

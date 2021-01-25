@@ -7,7 +7,6 @@ import 'package:pangle_flutter_example/page/native/custom_splash_page.dart';
 
 import 'common/common.dart';
 import 'common/constant.dart';
-import 'page/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
