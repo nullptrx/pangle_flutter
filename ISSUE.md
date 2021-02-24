@@ -34,5 +34,20 @@ rm -Rf ios/Flutter/Flutter.framework
 rm -Rf ios/Flutter/Flutter.podspec
 ```
 
+## 2. build报错
+Command PhaseScriptExecution failed with a nonzero exit code
+
+`/bin/sh "$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh"`
+
+如果是flutter构建脚本报错，大概率是Xcode项目与flutter版本不兼容。
+
+解决方案：项目根目录下执行如下命令，重新构建即可
+
+```shell
+rm -rf ios/Runner.xcodeproj
+flutter create .
+```
+
+Solution: Your Xcode project is incompatible with this version of Flutter. Run `rm -rf ios/Runner.xcodeproj` and `flutter create .` to regenerate.
 
 
