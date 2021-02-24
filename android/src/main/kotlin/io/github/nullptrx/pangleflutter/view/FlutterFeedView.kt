@@ -242,6 +242,9 @@ class FlutterFeedView(
     })
 
     ad.setDislikeCallback(activity, object : DislikeInteractionCallback {
+      override fun onShow() {
+      }
+
       override fun onSelected(index: Int, selection: String) {
         removeView()
       }

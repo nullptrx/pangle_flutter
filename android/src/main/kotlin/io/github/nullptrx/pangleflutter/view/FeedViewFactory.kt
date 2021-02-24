@@ -6,6 +6,7 @@ import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.StandardMessageCodec
 import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
+import io.github.nullptrx.pangleflutter.util.asMap
 import java.lang.ref.WeakReference
 
 class FeedViewFactory(val messenger: BinaryMessenger) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
@@ -13,13 +14,9 @@ class FeedViewFactory(val messenger: BinaryMessenger) : PlatformViewFactory(Stan
   private var activity: WeakReference<Activity>? = null
 
   override fun create(context: Context, id: Int, args: Any?): PlatformView? {
-    val params = args as? Map<String, Any?>
-    val act = activity?.get()
-    if (act == null) {
-      return null
-    }
-    return FlutterFeedView(act, messenger, id, params
-        ?: mutableMapOf())
+    val params = args?.asMap<String, Any?>() ?: mutableMapOf()
+    val act = activity?.get() ?: return null
+    return FlutterFeedView(act, messenger, id, params)
   }
 
   fun attachActivity(activity: Activity) {

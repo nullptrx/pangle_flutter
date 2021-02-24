@@ -28,6 +28,9 @@ class FLTInterstitialExpressAd(var target: Activity?, var result: (Any) -> Unit)
     invoke(code, message)
   }
 
+  override fun onShow() {
+  }
+
   override fun onSelected(index: Int, selection: String) {
 
   }

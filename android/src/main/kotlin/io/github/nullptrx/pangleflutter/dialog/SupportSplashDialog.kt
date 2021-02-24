@@ -36,10 +36,10 @@ class SupportSplashDialog : DialogFragment() {
   fun show(manager: FragmentManager, view: View) {
     layoutView = view
     try {
-      val mDismissed: Field = android.app.DialogFragment::class.java.getDeclaredField("mDismissed")
+      val mDismissed: Field = DialogFragment::class.java.getDeclaredField("mDismissed")
       mDismissed.isAccessible = true
       mDismissed.set(this, false)
-      val mShownByMe: Field = android.app.DialogFragment::class.java.getDeclaredField("mShownByMe")
+      val mShownByMe: Field = DialogFragment::class.java.getDeclaredField("mShownByMe")
       mShownByMe.isAccessible = true
       mShownByMe.set(this, true)
     } catch (_: Exception) {

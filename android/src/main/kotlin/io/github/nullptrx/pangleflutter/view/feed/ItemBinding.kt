@@ -259,6 +259,9 @@ open class ItemBinding(val activity: Activity?, val onRemove: () -> Unit = {}) {
     dislike.setOnClickListener {
       ad.getDislikeDialog(activity)?.apply {
         setDislikeInteractionCallback(object : TTAdDislike.DislikeInteractionCallback {
+          override fun onShow() {
+          }
+
           override fun onSelected(position: Int, value: String) {
             onRemove.invoke()
           }

@@ -180,6 +180,9 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
     override fun onAdShow(view: View, type: Int) {
     }
 
+    override fun onShow() {
+    }
+
     override fun onSelected(position: Int, value: String) {
       //用户选择不喜欢原因后，移除广告展示
       methodChannel.invokeMethod(Method.remove.name, null)
@@ -250,6 +253,9 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
     override fun onRenderFail(view: View, msg: String?, code: Int) {
       container.removeAllViews()
       methodChannel.invokeMethod(Method.remove.name, null)
+    }
+
+    override fun onShow() {
     }
 
     override fun onSelected(position: Int, value: String) {

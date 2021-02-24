@@ -23,7 +23,7 @@ class FLTInterstitialAd(var target: Activity?, var result: (Any) -> Unit) : TTAd
 
 
   private fun invoke(code: Int = 0, message: String? = null) {
-    result?.apply {
+    result.apply {
       val args = mutableMapOf<String, Any?>()
       args["code"] = code
       message?.also {
@@ -42,6 +42,9 @@ class FLTInterstitialAd(var target: Activity?, var result: (Any) -> Unit) : TTAd
   }
 
   override fun onAdShow() {
+  }
+
+  override fun onShow() {
   }
 
   override fun onSelected(position: Int, value: String) {

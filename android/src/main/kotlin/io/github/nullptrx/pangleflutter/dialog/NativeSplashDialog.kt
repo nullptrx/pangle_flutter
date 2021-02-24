@@ -1,6 +1,5 @@
 package io.github.nullptrx.pangleflutter.dialog
 
-import android.R.attr
 import android.app.Dialog
 import android.app.DialogFragment
 import android.app.FragmentManager
