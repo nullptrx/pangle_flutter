@@ -70,7 +70,6 @@
 
 #### 2. 工程plist文件设置
 
-- 因信息流、Banner广告使用了PlatformView，所以需要在app的`Info.plist` 中加入键 `io.flutter.embedded_views_preview` ，值`YES`。
 - 另官方文档提示：SDK API 已经全部支持HTTPS，但是广告主素材存在非HTTPS情况。所以需要支持http协议正常使用。
 
 ```xml
@@ -80,8 +79,6 @@
         <key>NSAllowsArbitraryLoads</key>
         <true/>
     </dict>
-    <key>io.flutter.embedded_views_preview</key>
-    <true/>
 </dict>
 ```
 

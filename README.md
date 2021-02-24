@@ -95,8 +95,6 @@ dependencies:
 
 ## 使用说明
 
-目前iOS类信息流广告和横幅广告还处于预览版，部分功能存在不能正常使用的情况（如点击事件传递问题，渲染慢），不建议用于正式环境
-
 ### 1. 信息流广告
 
 1. 原生自渲染信息流广告： 指定图片大小或比例固定，由开发者根据imageMode自行渲染。
@@ -354,16 +352,12 @@ print(jsonEncode(result));
 
 ## 贡献
 
-- 有任何更好的实现方式或增加额外的功能，欢迎提交PR。
-- 有任何使用上的问题，欢迎提交issue。
+- 有任何更好的实现方式或增加额外的功能，提交PR。
+- 有任何使用上的问题，提交issue。
 
 
 
 ## 交流
 
-因微信群7日有效期，就不放微信群二维码了。备注项目名加我好友，加入微信交流群。
-
-备注：`pangle_flutter`
-
-<img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/qrcode.png" alt="Flutter开发交流" width="300" height="100%" />
+提交issue即可。
 
