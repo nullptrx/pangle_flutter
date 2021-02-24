@@ -1,3 +1,7 @@
+## 0.9.1
+
+* Adapt to open_ad_sdk 3.5.0.0 for Android. iOS are not affected
+
 ## 0.8.2
 
 * Fix property `tolerateTimeout` type cast error
@@ -5,7 +9,7 @@
 
 ## 0.8.1
 
-* Adapt pangle sdk 3.4+ (part class is removed, part of the property is out of date)
+* Adapt to pangle sdk 3.4+ (part class is removed, part of the property is out of date)
 * PangleResult add property `verify`
 
 ## 0.7.1
@@ -14,7 +18,7 @@
 
 ## 0.6.5
 
-* Adapt onRewardVerify/nativeExpressRewardedVideoAdServerRewardDidSucceed callback parameters for reward video
+* Adapt to onRewardVerify/nativeExpressRewardedVideoAdServerRewardDidSucceed callback parameters for reward video
 
 ## 0.6.4
 

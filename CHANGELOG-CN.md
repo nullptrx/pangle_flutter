@@ -1,3 +1,7 @@
+## 0.9.1
+
+* 适配open_ad_sdk 3.5.0.0, iOS不受影响
+
 ## 0.8.2
 
 * 修复属性`tolerateTimeout`类型转换错误

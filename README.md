@@ -13,6 +13,16 @@
 
 
 
+## SDK对应版本
+[[Android] 3.5.0.0](https://sf1-be-tos.pglstatp-toutiao.com/obj/union-platform/d8bcf772441c03541ab14c808536a802.zip)（理论上3.5+都支持）
+
+[[iOS] 3.4.2.8](https://sf1-be-tos.pglstatp-toutiao.com/obj/union-platform/d93cdd1e574e09338f628a78fc808107.zip) （理论上3.4+都支持）
+
+注：如果出现高版本不兼容问题，可联系我升级适配，或者使用上面指定版本。
+
+
+
+
 ## 官方文档（需要登陆）
 - [Pangle Android SDK（Only support China traffic）](https://www.pangle.cn/union/media/union/download/detail?id=4&osType=android)
 - [Pangle iOS SDK](https://www.pangle.cn/union/media/union/download/detail?id=16&osType=ios)
