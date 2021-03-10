@@ -24,13 +24,13 @@ class _RewardedVideoPageState extends State<RewardedVideoPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Center(
-              child: RaisedButton(
+              child: ElevatedButton(
                 onPressed: _onTapLoad,
                 child: Text('Load'),
               ),
             ),
             Center(
-              child: RaisedButton(
+              child: ElevatedButton(
                 onPressed: _loaded ? _onTapShow : null,
                 child: Text('Show Ad'),
               ),

@@ -23,7 +23,7 @@ class _InterstitialExpressPageState extends State<InterstitialExpressPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Center(
-              child: RaisedButton(
+              child: ElevatedButton(
                 onPressed: _onTapShow,
                 child: Text('Show Ad'),
               ),

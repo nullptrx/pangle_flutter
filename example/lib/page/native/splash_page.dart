@@ -20,7 +20,7 @@ class _SplashPageState extends State<SplashPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Center(
-              child: RaisedButton(
+              child: ElevatedButton(
                 onPressed: _onTapShow,
                 child: Text('Show Ad'),
               ),
