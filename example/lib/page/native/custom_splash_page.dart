@@ -54,11 +54,20 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                       tolerateTimeout: 3,
                     ),
                     backgroundColor: Colors.white,
-                    onTimeOver: _handleAdEnd,
-                    onSkip: _handleAdEnd,
-                    onClick: _handleAdEnd,
+                    onStateChanged: (state) {
+                      switch (state) {
+                        case SplashState.show:
+                          _handleAdStart();
+                          break;
+
+                        case SplashState.timeOver:
+                        case SplashState.click:
+                        case SplashState.skip:
+                          _handleAdEnd();
+                          break;
+                      }
+                    },
                     onError: (code, message) => _handleAdEnd(),
-                    onShow: _handleAdStart,
                   ),
                 ),
                 Container(

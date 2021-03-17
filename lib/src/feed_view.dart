@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 import 'extension.dart';
@@ -48,11 +50,13 @@ class FeedViewKey extends GlobalObjectKey {
 
 class FeedViewState extends State<FeedView>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
+  final platformViewKey = GlobalKey();
+
   FeedViewController _controller;
   bool _offstage = true;
   bool _removed = false;
-  double _adWidth = kPangleSize;
-  double _adHeight = kPangleSize;
+  double _itemWidth = kPangleSize;
+  double _itemHeight = kPangleSize;
 
   Size _lastSize;
 
@@ -90,23 +94,40 @@ class FeedViewState extends State<FeedView>
       return SizedBox.shrink();
     }
     Widget body;
+    Widget platformView;
     try {
-      Widget platformView;
+      final Map<String, dynamic> creationParams = _createParams();
       if (defaultTargetPlatform == TargetPlatform.android) {
-        platformView = AndroidView(
-          viewType: kFeedViewType,
-          creationParams: _createParams(),
-          creationParamsCodec: const StandardMessageCodec(),
-          onPlatformViewCreated: (id) => _onPlatformViewCreated(context, id),
-          // FeedView content is not affected by the Android view's layout direction,
-          // we explicitly set it here so that the widget doesn't require an ambient
-          // directionality.
-          layoutDirection: TextDirection.ltr,
-        );
+        platformView = PlatformViewLink(
+            key: platformViewKey,
+            surfaceFactory:
+                (BuildContext context, PlatformViewController controller) {
+              return AndroidViewSurface(
+                controller: controller,
+                gestureRecognizers: const <
+                    Factory<OneSequenceGestureRecognizer>>{},
+                hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+              );
+            },
+            viewType: kFeedViewType,
+            onCreatePlatformView: (PlatformViewCreationParams params) {
+              return PlatformViewsService.initSurfaceAndroidView(
+                id: params.id,
+                viewType: kFeedViewType,
+                layoutDirection: TextDirection.ltr,
+                creationParams: creationParams,
+                creationParamsCodec: StandardMessageCodec(),
+              )
+                ..addOnPlatformViewCreatedListener((id) async {
+                  params.onPlatformViewCreated(id);
+                  _onPlatformViewCreated(context, id);
+                })
+                ..create();
+            });
       } else if (defaultTargetPlatform == TargetPlatform.iOS) {
         platformView = UiKitView(
           viewType: kFeedViewType,
-          creationParams: _createParams(),
+          creationParams: creationParams,
           creationParamsCodec: const StandardMessageCodec(),
           onPlatformViewCreated: (id) => _onPlatformViewCreated(context, id),
           // FeedView content is not affected by the Android view's layout direction,
@@ -114,18 +135,23 @@ class FeedViewState extends State<FeedView>
           // directionality.
           layoutDirection: TextDirection.ltr,
         );
-      }
-      if (platformView != null) {
-        body = Offstage(
-          offstage: _offstage,
-          child: SizedBox(
-            width: _adWidth,
-            height: _adHeight,
-            child: platformView,
-          ),
+      } else {
+        platformView = Container(
+          alignment: Alignment.center,
+          child: Text('Not supported platform!'),
         );
       }
     } on PlatformException {}
+    if (platformView != null) {
+      body = Offstage(
+        offstage: _offstage,
+        child: SizedBox(
+          width: _itemWidth,
+          height: _itemHeight,
+          child: platformView,
+        ),
+      );
+    }
 
     if (body == null) {
       body = SizedBox.shrink();
@@ -162,8 +188,8 @@ class FeedViewState extends State<FeedView>
       if (mounted) {
         setState(() {
           this._offstage = false;
-          this._adWidth = width;
-          this._adHeight = height;
+          this._itemWidth = width;
+          this._itemHeight = height;
         });
       }
     };

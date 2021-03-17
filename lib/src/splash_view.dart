@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 
 import 'config_android.dart';
 import 'config_ios.dart';
+import 'extension.dart';
 
 final kSplashViewType = 'nullptrx.github.io/pangle_splashview';
 
@@ -26,17 +29,9 @@ class SplashView extends StatefulWidget {
   /// 获取广告失败
   final void Function(int code, String message) onError;
 
-  /// 广告被点击
-  final VoidCallback onClick;
-
-  /// 跳过广告
-  final VoidCallback onSkip;
-
-  /// 倒计时结束
-  final VoidCallback onTimeOver;
-
-  /// 广告展示
-  final VoidCallback onShow;
+  /// 广告状态改变
+  /// 见 [SplashState]
+  final StateCallback onStateChanged;
 
   const SplashView({
     Key key,
@@ -45,10 +40,7 @@ class SplashView extends StatefulWidget {
     this.onSplashViewCreated,
     this.backgroundColor,
     this.onError,
-    this.onClick,
-    this.onSkip,
-    this.onTimeOver,
-    this.onShow,
+    this.onStateChanged,
   }) : super(key: key);
 
   @override
@@ -77,10 +69,7 @@ class SplashViewState extends State<SplashView> with WidgetsBindingObserver {
     var controller = SplashViewController._(
       id,
       widget.onError,
-      widget.onClick,
-      widget.onSkip,
-      widget.onTimeOver,
-      widget.onShow,
+      widget.onStateChanged,
     );
     if (widget.onSplashViewCreated == null) {
       return;
@@ -108,61 +97,88 @@ class SplashViewState extends State<SplashView> with WidgetsBindingObserver {
   }
 
   Widget _buildPlatformView(double width, double height) {
-    Widget body;
+    Widget platformView;
     try {
-      Widget platformView;
+      var creationParams = _createParams(width, height);
       if (defaultTargetPlatform == TargetPlatform.android) {
-        platformView = AndroidView(
-          viewType: kSplashViewType,
-          onPlatformViewCreated: (index) =>
-              _onPlatformViewCreated(context, index),
-          creationParams: _createParams(width, height),
-          creationParamsCodec: const StandardMessageCodec(),
-          // BannerView content is not affected by the Android view's layout direction,
-          // we explicitly set it here so that the widget doesn't require an ambient
-          // directionality.
-          layoutDirection: TextDirection.ltr,
-        );
+        platformView = PlatformViewLink(
+            surfaceFactory: (context, controller) {
+              return AndroidViewSurface(
+                controller: controller,
+                gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{},
+                hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+              );
+            },
+            viewType: kSplashViewType,
+            onCreatePlatformView: (PlatformViewCreationParams params) {
+              return PlatformViewsService.initSurfaceAndroidView(
+                id: params.id,
+                viewType: kSplashViewType,
+                layoutDirection: TextDirection.ltr,
+                creationParams: creationParams,
+                creationParamsCodec: StandardMessageCodec(),
+              )
+                ..addOnPlatformViewCreatedListener((id) async {
+                  params.onPlatformViewCreated(id);
+                  _onPlatformViewCreated(context, id);
+                })
+                ..create();
+            });
       } else if (defaultTargetPlatform == TargetPlatform.iOS) {
         platformView = UiKitView(
           viewType: kSplashViewType,
-          onPlatformViewCreated: (index) =>
-              _onPlatformViewCreated(context, index),
-          creationParams: _createParams(width, height),
+          onPlatformViewCreated: (index) => _onPlatformViewCreated(
+            context,
+            index,
+          ),
+          creationParams: creationParams,
           creationParamsCodec: const StandardMessageCodec(),
           // BannerView content is not affected by the Android view's layout direction,
           // we explicitly set it here so that the widget doesn't require an ambient
           // directionality.
           layoutDirection: TextDirection.ltr,
         );
-      }
-      if (platformView != null) {
-        body = platformView;
+      } else {
+        platformView = Container(
+          alignment: Alignment.center,
+          child: Text('Not supported platform!'),
+        );
       }
     } on PlatformException {}
-    if (body == null) {
-      body = SizedBox.expand();
-    }
-    return body;
+    return platformView;
   }
+}
+
+/// Signature for [SplashViewController.onStateChanged].
+typedef FrameCallback = void Function(Duration duration);
+
+/// Signature for [SplashViewController.onStateChanged].
+typedef StateCallback = void Function(SplashState state);
+
+enum SplashState {
+  /// 倒计时结束
+  timeOver,
+
+  /// 广告展示
+  show,
+
+  /// 广告被点击
+  click,
+
+  /// 跳过广告
+  skip,
 }
 
 class SplashViewController {
   MethodChannel _methodChannel;
 
   final void Function(int code, String message) onError;
-  final VoidCallback onClick;
-  final VoidCallback onSkip;
-  final VoidCallback onTimeOver;
-  final VoidCallback onShow;
+  final StateCallback onStateChanged;
 
   SplashViewController._(
     int id,
     this.onError,
-    this.onClick,
-    this.onSkip,
-    this.onTimeOver,
-    this.onShow,
+    this.onStateChanged,
   ) {
     _methodChannel = new MethodChannel('${kSplashViewType}_$id');
     _methodChannel.setMethodCallHandler(_handleMethod);
@@ -170,24 +186,17 @@ class SplashViewController {
 
   Future<dynamic> _handleMethod(MethodCall call) {
     if (call.method == 'action') {
-      var code = call.arguments['code'];
-      var message = call.arguments['message'];
-      switch (message) {
-        case 'click':
-          onClick?.call();
-          break;
-        case 'skip':
-          onSkip?.call();
-          break;
-        case 'timeover':
-          onTimeOver?.call();
-          break;
-        case 'show':
-          onShow?.call();
-          break;
-        default:
-          onError?.call(code, message);
-          break;
+      int code = call.arguments['code'];
+      String message = call.arguments['message'];
+      SplashState state = Enum.enumFromString(SplashState.values, message);
+      if (code != 0) {
+        if (onError != null) {
+          onError(code, message);
+        }
+      } else {
+        if (onStateChanged != null) {
+          onStateChanged(state);
+        }
       }
     }
     return null;

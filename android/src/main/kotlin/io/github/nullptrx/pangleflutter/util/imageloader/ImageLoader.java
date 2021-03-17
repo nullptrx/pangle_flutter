@@ -96,12 +96,15 @@ public class ImageLoader {
   public ImageLoader(Context context) {
     mContext = context.getApplicationContext();
     // 分配内存缓存为当前进程的1/8,磁盘缓存容量为50M
-    ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+    ActivityManager am = (ActivityManager) mContext.getSystemService(Context.ACTIVITY_SERVICE);
     ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
     am.getMemoryInfo(mi);
-//        int maxMemory = (int) (Runtime.getRuntime().maxMemory() * 1024);
+//    int maxMemory = (int) (Runtime.getRuntime().maxMemory() * 1024);
     int maxMemory = (int) (mi.availMem);
     int cacheSize = maxMemory / 8;
+    if (cacheSize == 0) {
+      cacheSize = 1;
+    }
     mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
 
       @Override

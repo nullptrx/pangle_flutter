@@ -134,7 +134,7 @@ class FlutterSplashView(val context: Context, messenger: BinaryMessenger, val id
         }
 
         override fun onAdTimeOver() {
-          invokeAction(0, "timeover")
+          invokeAction(0, "timeOver")
         }
 
       })

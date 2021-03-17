@@ -15,10 +15,6 @@ class BannerPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             BannerView(
-              iOS: IOSBannerConfig(
-                slotId: kBannerId,
-                imgSize: PangleImgSize.banner600_150,
-              ),
               android: AndroidBannerConfig(
                 slotId: kBannerId,
                 isExpress: false,
@@ -26,10 +22,6 @@ class BannerPage extends StatelessWidget {
               ),
             ),
             BannerView(
-              iOS: IOSBannerConfig(
-                slotId: kBannerId,
-                imgSize: PangleImgSize.banner600_300,
-              ),
               android: AndroidBannerConfig(
                 slotId: kBannerId,
                 isExpress: false,

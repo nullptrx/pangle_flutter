@@ -12,8 +12,6 @@ class RewardedVideoExpressPage extends StatefulWidget {
 }
 
 class _RewardedVideoExpressPageState extends State<RewardedVideoExpressPage> {
-  bool _loaded = false;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,10 +57,7 @@ class _RewardedVideoExpressPageState extends State<RewardedVideoExpressPage> {
         loadingType: PangleLoadingType.preload_only,
       ),
     );
-
-    setState(() {
-      _loaded = result.ok;
-    });
+    print(jsonEncode(result));
   }
 
   _onTapShow() async {
@@ -77,9 +72,6 @@ class _RewardedVideoExpressPageState extends State<RewardedVideoExpressPage> {
       ),
     );
     print(jsonEncode(result));
-    setState(() {
-      _loaded = false;
-    });
   }
 
   _onTapShowAndLoad() async {

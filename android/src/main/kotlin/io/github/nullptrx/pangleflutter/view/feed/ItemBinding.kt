@@ -2,6 +2,7 @@ package io.github.nullptrx.pangleflutter.view.feed
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,16 +13,15 @@ import android.widget.TextView
 import androidx.annotation.NonNull
 import com.bytedance.sdk.openadsdk.*
 import io.github.nullptrx.pangleflutter.R
+import io.github.nullptrx.pangleflutter.util.ImageEngine
 import io.github.nullptrx.pangleflutter.util.get
-import io.github.nullptrx.pangleflutter.util.imageloader.ImageLoader
 import java.util.*
 
 open class ItemBinding(val activity: Activity?, val onRemove: () -> Unit = {}) {
-  var imageLoader: ImageLoader? = null
 
-  init {
-    imageLoader = ImageLoader.build(activity)
-  }
+  private val context: Context? = activity
+
+  private val imageLoader = ImageEngine.getInstance(context)
 
   private val ttAppDownloadListenerMap = WeakHashMap<AdViewHolder, TTAppDownloadListener>()
 

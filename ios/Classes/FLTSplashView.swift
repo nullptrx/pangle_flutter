@@ -152,7 +152,7 @@ extension FLTSplashView: BUNativeExpressSplashViewDelegate {
     }
     
     public func nativeExpressSplashViewCountdown(toZero splashAdView: BUNativeExpressSplashView) {
-        self.invokeAction(0, message: "timeover")
+        self.invokeAction(0, message: "timeOver")
     }
     
     public func nativeExpressSplashViewDidClose(_ splashAdView: BUNativeExpressSplashView) {}
@@ -164,7 +164,7 @@ extension FLTSplashView: BUNativeExpressSplashViewDelegate {
 
 extension FLTSplashView: BUSplashAdDelegate {
     public func splashAdCountdown(toZero splashAd: BUSplashAdView) {
-        self.invokeAction(0, message: "timeover")
+        self.invokeAction(0, message: "timeOver")
     }
     
     public func splashAdDidClick(_ splashAd: BUSplashAdView) {

@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 import 'config_android.dart';
@@ -77,47 +79,63 @@ class BannerViewState extends State<BannerView>
       return SizedBox.shrink();
     }
     Widget body;
+    Widget platformView;
     try {
-      Widget platformView;
+      var creationParams = _createParams();
       if (defaultTargetPlatform == TargetPlatform.android) {
-        platformView = AndroidView(
-          viewType: kBannerViewType,
-          onPlatformViewCreated: (index) =>
-              _onPlatformViewCreated(context, index),
-          creationParams: _createParams(),
-          creationParamsCodec: const StandardMessageCodec(),
-          // BannerView content is not affected by the Android view's layout direction,
-          // we explicitly set it here so that the widget doesn't require an ambient
-          // directionality.
-          layoutDirection: TextDirection.ltr,
-        );
+        platformView = PlatformViewLink(
+            surfaceFactory:
+                (BuildContext context, PlatformViewController controller) {
+              return AndroidViewSurface(
+                controller: controller,
+                gestureRecognizers: const <
+                    Factory<OneSequenceGestureRecognizer>>{},
+                hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+              );
+            },
+            viewType: kBannerViewType,
+            onCreatePlatformView: (PlatformViewCreationParams params) {
+              return PlatformViewsService.initSurfaceAndroidView(
+                id: params.id,
+                viewType: kBannerViewType,
+                layoutDirection: TextDirection.ltr,
+                creationParams: creationParams,
+                creationParamsCodec: const StandardMessageCodec(),
+              )
+                ..addOnPlatformViewCreatedListener((id) async {
+                  params.onPlatformViewCreated(id);
+                  _onPlatformViewCreated(context, id);
+                })
+                ..create();
+            });
       } else if (defaultTargetPlatform == TargetPlatform.iOS) {
         platformView = UiKitView(
           viewType: kBannerViewType,
           onPlatformViewCreated: (index) =>
               _onPlatformViewCreated(context, index),
-          creationParams: _createParams(),
+          creationParams: creationParams,
           creationParamsCodec: const StandardMessageCodec(),
           // BannerView content is not affected by the Android view's layout direction,
           // we explicitly set it here so that the widget doesn't require an ambient
           // directionality.
           layoutDirection: TextDirection.ltr,
         );
-      }
-      if (platformView != null) {
-        body = Offstage(
-          offstage: _offstage,
-          child: SizedBox(
-            width: _adWidth,
-            height: _adHeight,
-            child: platformView,
-          ),
+      } else {
+        platformView = Container(
+          alignment: Alignment.center,
+          child: Text('Not supported platform!'),
         );
       }
+      if (platformView != null) {}
     } on PlatformException {}
-    if (body == null) {
-      body = SizedBox.shrink();
-    }
+    body = Offstage(
+      offstage: _offstage,
+      child: SizedBox(
+        width: _adWidth,
+        height: _adHeight,
+        child: platformView,
+      ),
+    );
 
     return body;
   }
@@ -156,8 +174,11 @@ class BannerViewState extends State<BannerView>
       }
     };
 
-    var controller =
-        BannerViewController._(id, onRemove: removed, onUpdate: updated);
+    var controller = BannerViewController._(
+      id,
+      onRemove: removed,
+      onUpdate: updated,
+    );
     _controller = controller;
     if (widget.onBannerViewCreated == null) {
       return;
