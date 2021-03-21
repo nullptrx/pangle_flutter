@@ -75,25 +75,29 @@ public final class PangleAdManager: NSObject {
 
     public func loadRewardVideoAd(_ args: [String: Any?], result: @escaping FlutterResult) {
         let loadingTypeIndex: Int = args["loadingType"] as! Int
-        var loadingType = LoadingType(rawValue: loadingTypeIndex)!
+        let loadingType = LoadingType(rawValue: loadingTypeIndex)!
 
         if loadingType == .preload || loadingType == .normal {
-            let success = self.showRewardedVideoAd()({ object in
+            let success = showRewardedVideoAd(args)({ [unowned self] object in
+                if loadingType == .preload {
+                    loadRewardVideoAdOnly(args, loadingType: .preload_only)
+                }
                 result(object)
             })
-            if success {
-                if loadingType == .normal {
-                    return
-                }
-            } else {
-                loadingType = .normal
+            if !success {
+                loadRewardVideoAdOnly(args, loadingType: .normal, result: result)
             }
+        } else {
+            loadRewardVideoAdOnly(args, loadingType: .preload_only, result: result)
         }
 
+    }
+
+    private func loadRewardVideoAdOnly(_ args: [String: Any?], loadingType: LoadingType, result: FlutterResult? = nil) {
         let task = FLTRewardedVideoExpressAdTask(args)
-        self.execTask(task, loadingType)({ data in
+        execTask(task, loadingType)({ data in
             if loadingType == .normal || loadingType == .preload_only {
-                result(data)
+                result?(data)
             }
         })
     }
@@ -115,26 +119,30 @@ public final class PangleAdManager: NSObject {
 
     public func loadFullscreenVideoAd(_ args: [String: Any?], result: @escaping FlutterResult) {
         let loadingTypeIndex: Int = args["loadingType"] as! Int
-        var loadingType = LoadingType(rawValue: loadingTypeIndex)!
+        let loadingType = LoadingType(rawValue: loadingTypeIndex)!
 
         if loadingType == .preload || loadingType == .normal {
-            let success = showFullScreenVideoAd()({ object in
+            let success = showFullScreenVideoAd()({ [unowned self] object in
+                if loadingType == .preload {
+                    loadFullscreenVideoAdOnly(args, loadingType: .preload_only)
+                }
                 result(object)
             })
-            if success {
-                if loadingType == .normal {
-                    return
-                }
-                return
-            } else {
-                loadingType = .normal
+            if !success {
+                loadFullscreenVideoAdOnly(args, loadingType: .normal, result: result)
             }
+        } else {
+            loadFullscreenVideoAdOnly(args, loadingType: .preload_only, result: result)
         }
 
+
+    }
+
+    private func loadFullscreenVideoAdOnly(_ args: [String: Any?], loadingType: LoadingType, result: FlutterResult? = nil) {
         let task = FLTFullscreenVideoExpressAdTask(args)
         execTask(task, loadingType)({ data in
             if loadingType == .normal || loadingType == .preload_only {
-                result(data)
+                result?(data)
             }
         })
     }
@@ -175,14 +183,14 @@ extension PangleAdManager {
         }
     }
 
-    public func showRewardedVideoAd() -> (@escaping (Any) -> Void) -> Bool {
+    public func showRewardedVideoAd(_ args: [String: Any?]) -> (@escaping (Any) -> Void) -> Bool {
         { result in
             if self.rewardedVideoAdCollection.count > 0 {
                 let obj = self.rewardedVideoAdCollection[0]
 
                 if obj is BURewardedVideoAd {
                     let ad = obj as! BURewardedVideoAd
-                    ad.didReceiveSuccess = { verify in
+                    ad.didReceiveSuccess = { [unowned self] verify in
                         self.rewardedVideoAdCollection.removeFirst()
                         result(["code": 0, "verify": verify])
                     }

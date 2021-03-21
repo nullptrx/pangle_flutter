@@ -26,7 +26,7 @@ internal final class FLTRewardedVideoExpressAd: NSObject, BUNativeExpressRewarde
     }
     
     func nativeExpressRewardedVideoAdDidLoad(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd) {
-        let preload = self.loadingType == .preload || self.loadingType == .preload_only
+        let preload = loadingType == .preload || loadingType == .preload_only
         if preload {
             rewardedVideoAd.extraDelegate = self
             /// 存入缓存
