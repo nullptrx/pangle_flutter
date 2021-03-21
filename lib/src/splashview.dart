@@ -192,10 +192,16 @@ class SplashViewController {
     this._platformCallbacksHandler,
   ) : assert(_splashViewPlatformController != null);
 
+  // todo unused_field
+  // ignore: unused_field
   final SplashViewPlatformController _splashViewPlatformController;
 
+  // todo unused_field
+  // ignore: unused_field
   final _PlatformCallbacksHandler _platformCallbacksHandler;
 
+  // todo unused_field
+  // ignore: unused_field
   SplashView _widget;
 
   Future<void> _updateWidget(SplashView widget) async {
@@ -204,7 +210,7 @@ class SplashViewController {
 }
 
 class _PlatformCallbacksHandler implements SplashViewPlatformCallbacksHandler {
-  _PlatformCallbacksHandler(this._widget) {}
+  _PlatformCallbacksHandler(this._widget);
 
   SplashView _widget;
 

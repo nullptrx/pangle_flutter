@@ -10,17 +10,15 @@ import Flutter
 
 public final class PangleAdManager: NSObject {
     public static let shared = PangleAdManager()
-    
-    private var feedAdCollection: [String: BUNativeAd] = [:]
-    
+
     private var expressAdCollection: [String: BUNativeExpressAdView] = [:]
-    
+
     private var rewardedVideoAdCollection: [Any] = []
-    
+
     private var fullscreenVideoAdCollection: [Any] = []
-    
+
     private var taskList: [FLTTaskProtocol] = []
-    
+
     fileprivate func execTask(_ task: FLTTaskProtocol, _ loadingType: LoadingType? = nil) -> (@escaping (Any) -> Void) -> Void {
         self.taskList.append(task)
         return { result in
@@ -37,31 +35,31 @@ public final class PangleAdManager: NSObject {
             }
         }
     }
-    
+
     public func initialize(_ args: [String: Any?]) {
         let appId: String = args["appId"] as! String
         let logLevel: Int? = args["logLevel"] as? Int
         let coppa: UInt? = args["coppa"] as? UInt
         let isPaidApp: Bool? = args["coppa"] as? Bool
-        
+
         BUAdSDKManager.setAppID(appId)
-        
+
         if isPaidApp != nil {
             BUAdSDKManager.setIsPaidApp(isPaidApp!)
         }
-        
+
         if logLevel != nil {
             BUAdSDKManager.setLoglevel(BUAdSDKLogLevel(rawValue: logLevel!)!)
         }
-        
+
         if coppa != nil {
             BUAdSDKManager.setCoppa(coppa!)
         }
     }
-    
+
     public func loadSplashAd(_ args: [String: Any?], result: @escaping FlutterResult) {
         let isExpress: Bool = args["isExpress"] as? Bool ?? false
-        
+
         if isExpress {
             let task = FLTSplashExpressAdTask(args)
             self.execTask(task)({ object in
@@ -74,14 +72,13 @@ public final class PangleAdManager: NSObject {
             })
         }
     }
-    
+
     public func loadRewardVideoAd(_ args: [String: Any?], result: @escaping FlutterResult) {
-        let isExpress: Bool = args["isExpress"] as? Bool ?? false
         let loadingTypeIndex: Int = args["loadingType"] as! Int
         var loadingType = LoadingType(rawValue: loadingTypeIndex)!
-        
+
         if loadingType == .preload || loadingType == .normal {
-            let success = self.showRewardedVideoAd(isExpress)({ object in
+            let success = self.showRewardedVideoAd()({ object in
                 result(object)
             })
             if success {
@@ -92,55 +89,36 @@ public final class PangleAdManager: NSObject {
                 loadingType = .normal
             }
         }
-        
-        if isExpress {
-            let task = FLTRewardedVideoExpressAdTask(args)
-            self.execTask(task, loadingType)({ data in
-                if loadingType == .normal || loadingType == .preload_only {
-                    result(data)
-                }
-            })
-        } else {
-            let task = FLTRewardedVideoAdTask(args)
-            self.execTask(task, loadingType)({ data in
-                if loadingType == .normal || loadingType == .preload_only {
-                    result(data)
-                }
-            })
-        }
+
+        let task = FLTRewardedVideoExpressAdTask(args)
+        self.execTask(task, loadingType)({ data in
+            if loadingType == .normal || loadingType == .preload_only {
+                result(data)
+            }
+        })
     }
-    
+
     public func loadFeedAd(_ args: [String: Any?], result: @escaping FlutterResult) {
-        let isExpress: Bool = args["isExpress"] as? Bool ?? false
-        
-        if isExpress {
-            let task = FLTNativeExpressAdTask(args)
-            self.execTask(task)({ data in
-                result(data)
-            })
-        } else {
-            let task = FLTNativeAdTask(args)
-            self.execTask(task)({ data in
-                result(data)
-            })
-        }
-    }
-    
-    public func loadInterstitialAd(_ args: [String: Any?], result: @escaping FlutterResult) {
-        
-        let task = FLTInterstitialExpressAdTask(args)
-        self.execTask(task)({ data in
+        let task = FLTNativeExpressAdTask(args)
+        execTask(task)({ data in
             result(data)
         })
     }
-    
+
+    public func loadInterstitialAd(_ args: [String: Any?], result: @escaping FlutterResult) {
+
+        let task = FLTInterstitialExpressAdTask(args)
+        execTask(task)({ data in
+            result(data)
+        })
+    }
+
     public func loadFullscreenVideoAd(_ args: [String: Any?], result: @escaping FlutterResult) {
-        let isExpress: Bool = args["isExpress"] as? Bool ?? false
         let loadingTypeIndex: Int = args["loadingType"] as! Int
         var loadingType = LoadingType(rawValue: loadingTypeIndex)!
-        
+
         if loadingType == .preload || loadingType == .normal {
-            let success = self.showFullScreenVideoAd(isExpress)({ object in
+            let success = showFullScreenVideoAd()({ object in
                 result(object)
             })
             if success {
@@ -152,22 +130,13 @@ public final class PangleAdManager: NSObject {
                 loadingType = .normal
             }
         }
-        
-        if isExpress {
-            let task = FLTFullscreenVideoExpressAdTask(args)
-            self.execTask(task, loadingType)({ data in
-                if loadingType == .normal || loadingType == .preload_only {
-                    result(data)
-                }
-            })
-        } else {
-            let task = FLTFullscreenVideoAdTask(args)
-            self.execTask(task, loadingType)({ data in
-                if loadingType == .normal || loadingType == .preload_only {
-                    result(data)
-                }
-            })
-        }
+
+        let task = FLTFullscreenVideoExpressAdTask(args)
+        execTask(task, loadingType)({ data in
+            if loadingType == .normal || loadingType == .preload_only {
+                result(data)
+            }
+        })
     }
 }
 
@@ -178,27 +147,7 @@ enum LoadingType: Int {
 }
 
 extension PangleAdManager {
-    public func setFeedAd(_ nativeAds: [BUNativeAd]?) {
-        guard let nativeAds = nativeAds else {
-            return
-        }
-        var feedAds: [String: BUNativeAd] = [:]
-        for nativeAd in nativeAds {
-            feedAds[String(nativeAd.hash)] = nativeAd
-        }
-        self.feedAdCollection.merge(feedAds, uniquingKeysWith: { _, last in last })
-    }
-    
-    public func getFeedAd(_ key: String) -> BUNativeAd? {
-        return self.feedAdCollection[key]
-    }
-    
-    public func removeFeedAd(_ key: String?) {
-        if key != nil {
-            self.feedAdCollection.removeValue(forKey: key!)
-        }
-    }
-    
+
     public func setExpressAd(_ nativeExpressAdViews: [BUNativeExpressAdView]?) {
         guard let nativeAds = nativeExpressAdViews else {
             return
@@ -209,33 +158,28 @@ extension PangleAdManager {
         }
         self.expressAdCollection.merge(expressAds, uniquingKeysWith: { _, last in last })
     }
-    
+
     public func getExpressAd(_ key: String) -> BUNativeExpressAdView? {
         return self.expressAdCollection[key]
     }
-    
+
     public func removeExpressAd(_ key: String?) {
         if key != nil {
             self.expressAdCollection.removeValue(forKey: key!)
         }
     }
-    
+
     public func setRewardedVideoAd(_ ad: NSObject?) {
-//        if ad is BUNativeExpressRewardedVideoAd {
-//            self.rewardedVideoExpressAdCollection.append(ad as! BUNativeExpressRewardedVideoAd)
-//        } else if ad is BURewardedVideoAd {
-//            self.rewardedVideoAdCollection.append(ad as! BURewardedVideoAd)
-//        }
         if ad != nil {
             self.rewardedVideoAdCollection.append(ad!)
         }
     }
-    
-    public func showRewardedVideoAd(_ isExpress: Bool) -> (@escaping (Any) -> Void) -> Bool {
-        return { result in
+
+    public func showRewardedVideoAd() -> (@escaping (Any) -> Void) -> Bool {
+        { result in
             if self.rewardedVideoAdCollection.count > 0 {
                 let obj = self.rewardedVideoAdCollection[0]
-                
+
                 if obj is BURewardedVideoAd {
                     let ad = obj as! BURewardedVideoAd
                     ad.didReceiveSuccess = { verify in
@@ -265,22 +209,22 @@ extension PangleAdManager {
                     return true
                 }
             }
-            
+
             return false
         }
     }
-    
+
     public func setFullScreenVideoAd(_ ad: NSObject?) {
         if ad != nil {
-            self.fullscreenVideoAdCollection.append(ad!)
+            fullscreenVideoAdCollection.append(ad!)
         }
     }
-    
-    public func showFullScreenVideoAd(_ isExpress: Bool) -> (@escaping (Any) -> Void) -> Bool {
-        return { result in
+
+    public func showFullScreenVideoAd() -> (@escaping (Any) -> Void) -> Bool {
+        { result in
             if self.fullscreenVideoAdCollection.count > 0 {
                 let obj = self.fullscreenVideoAdCollection[0]
-                
+
                 if obj is BUFullscreenVideoAd {
                     let ad = obj as! BUFullscreenVideoAd
                     ad.didReceiveSuccess = {
@@ -310,7 +254,7 @@ extension PangleAdManager {
                     return true
                 }
             }
-            
+
             return false
         }
     }

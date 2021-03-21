@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 
@@ -11,37 +9,11 @@ class BannerExpressPage extends StatefulWidget {
 }
 
 class _BannerExpressPageState extends State<BannerExpressPage> {
-  bool _enableClickAction = true;
-
-  // final _banner1Key = GlobalKey<BannerViewState>();
-
-  // final _banner2Key = GlobalKey<BannerViewState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Banner Express AD'),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: Offstage(
-        offstage: !Platform.isIOS,
-        child: FloatingActionButton(
-          onPressed: () {
-            setState(() {
-              _enableClickAction = !_enableClickAction;
-            });
-            // _banner1Key.currentState.setUserInteractionEnabled(
-            //   _enableClickAction,
-            // );
-            // _banner2Key.currentState.setUserInteractionEnabled(
-            //   _enableClickAction,
-            // );
-          },
-          child: Icon(
-            _enableClickAction ? Icons.lock_open : Icons.lock_outline,
-          ),
-        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -68,7 +40,6 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
                 iOS: IOSBannerConfig(
                   slotId: kBannerExpressId600x260,
                   expressSize: PangleExpressSize(width: 600, height: 260),
-                  isUserInteractionEnabled: false,
                 ),
                 android: AndroidBannerConfig(
                   slotId: kBannerExpressId600x260,
@@ -77,6 +48,9 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
                 onClick: () {},
               ),
             ),
+            SizedBox(height: 1080),
+            Center(child: Text('--- 这是底线 ---')),
+            SizedBox(height: 16),
           ],
         ),
       ),

@@ -180,8 +180,12 @@ class FeedViewController {
 
   final FeedViewPlatformController _feedViewPlatformController;
 
+  // todo unused_field
+  // ignore: unused_field
   final _PlatformCallbacksHandler _platformCallbacksHandler;
 
+  // todo unused_field
+  // ignore: unused_field
   FeedView _widget;
 
   Future<void> _updateWidget(FeedView widget) async {
@@ -207,7 +211,7 @@ class FeedViewController {
 }
 
 class _PlatformCallbacksHandler implements FeedViewPlatformCallbacksHandler {
-  _PlatformCallbacksHandler(this._widget) {}
+  _PlatformCallbacksHandler(this._widget);
 
   FeedView _widget;
 

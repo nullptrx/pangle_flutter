@@ -198,8 +198,12 @@ class BannerViewController {
 
   final BannerViewPlatformController _bannerViewPlatformController;
 
+  // todo unused_field
+  // ignore: unused_field
   final _PlatformCallbacksHandler _platformCallbacksHandler;
 
+  // todo unused_field
+  // ignore: unused_field
   BannerView _widget;
 
   Future<void> _updateWidget(BannerView widget) async {
@@ -225,7 +229,7 @@ class BannerViewController {
 }
 
 class _PlatformCallbacksHandler implements BannerViewPlatformCallbacksHandler {
-  _PlatformCallbacksHandler(this._widget) {}
+  _PlatformCallbacksHandler(this._widget);
 
   BannerView _widget;
 
