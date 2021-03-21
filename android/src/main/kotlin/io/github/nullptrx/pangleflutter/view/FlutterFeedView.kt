@@ -5,7 +5,7 @@ import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import com.bytedance.sdk.openadsdk.TTAdDislike.DislikeInteractionCallback
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd
@@ -41,7 +41,6 @@ class FlutterFeedView(
 
   override fun dispose() {
     methodChannel.setMethodCallHandler(null)
-    PangleAdManager.shared.removeExpressAd(ttadId)
     container.removeAllViews()
   }
 
@@ -53,7 +52,7 @@ class FlutterFeedView(
     }
     container.removeAllViews()
 
-    val params = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT).apply {
+    val params = FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT).apply {
       gravity = Gravity.CENTER
     }
     container.addView(expressAdView, params)

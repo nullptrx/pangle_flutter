@@ -170,6 +170,10 @@ class PanglePlugin {
     return PangleAd.fromJsonMap(result);
   }
 
+  Future<void> removeFeedAd(List<String> ids) async {
+    await _methodChannel.invokeMethod('removeFeedAd', ids);
+  }
+
   /// Request interstitial ad data.
   ///
   /// [iOS] config for iOS

@@ -43,6 +43,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
 
   @override
   void dispose() {
+    pangle.removeFeedAd(feedIds);
     super.dispose();
   }
 
@@ -90,18 +91,34 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
   Widget _buildItem(int index) {
     var item = items[index];
     if (item.isAd) {
-      return AspectRatio(
-        aspectRatio: 375 / 284.0,
-        child: FeedView(
-          id: item.feedId,
-          onFeedViewCreated: (controller) {
-            _initConstraintBounds(controller);
-          },
+      return Center(
+        child: AspectRatio(
+          aspectRatio: 375 / 284.0,
+          child: FeedView(
+            id: item.feedId,
+            onFeedViewCreated: (controller) {
+              _initConstraintBounds(controller);
+            },
+            onDislike: (option) {
+              pangle.removeFeedAd([item.feedId]);
+              setState(() {
+                items.removeAt(index);
+              });
+            },
+          ),
         ),
       );
     }
 
-    return Loading();
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        setState(() {
+          items.removeAt(index);
+        });
+      },
+      child: Loading(),
+    );
   }
 
   /// 加载广告
