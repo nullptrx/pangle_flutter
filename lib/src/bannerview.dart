@@ -153,6 +153,7 @@ class _BannerViewState extends State<BannerView>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BannerView.platform.build(
       context: context,
       creationParams: widget.config.toJSON(),

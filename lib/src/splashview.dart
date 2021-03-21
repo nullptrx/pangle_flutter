@@ -149,6 +149,7 @@ class _SplashViewState extends State<SplashView>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SplashView.platform.build(
       context: context,
       creationParams: widget.config.toJSON(),
