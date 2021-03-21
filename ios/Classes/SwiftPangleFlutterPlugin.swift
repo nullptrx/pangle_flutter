@@ -71,10 +71,14 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
             instance.loadFeedAd(args, result: result)
         case "removeFeedAd":
             let args: [String] = call.arguments as? [String] ?? []
+            var count = 0
             for arg in args {
-                instance.removeExpressAd(arg)
+                let success = instance.removeExpressAd(arg)
+                if success {
+                    count += 1
+                }
             }
-            result(nil)
+            result(count)
         case "loadInterstitialAd":
             let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
             instance.loadInterstitialAd(args, result: result)

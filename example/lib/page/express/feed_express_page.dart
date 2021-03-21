@@ -43,7 +43,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
 
   @override
   void dispose() {
-    pangle.removeFeedAd(feedIds);
+    _removeFeedAd();
     super.dispose();
   }
 
@@ -136,24 +136,6 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
         // slotId: kFeedId,
       ),
     );
-    // PangleFeedAd feedAd = await pangle.loadFeedAd(
-    //   iOS: IOSFeedConfig(
-    //     slotId: kFeedTestExpressId,
-    //     expressSize: PangleExpressSize.widthPercent(
-    //       0.9,
-    //       aspectRatio: 240.0 / 265.0,
-    //     ),
-    //     // slotId: kFeedId,
-    //   ),
-    //   android: AndroidFeedConfig(
-    //     slotId: kFeedTestExpressId,
-    //     expressSize: PangleExpressSize.widthPercent(
-    //       0.9,
-    //       aspectRatio: 240.0 / 265.0,
-    //     ),
-    //     // slotId: kFeedId,
-    //   ),
-    // );
     final data = <Item>[];
     int totalCount = 20;
 
@@ -173,6 +155,12 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
     setState(() {
       this.items..addAll(data);
     });
+  }
+
+  /// 移除广告
+  _removeFeedAd() async {
+    int count = await pangle.removeFeedAd(feedIds);
+    print('Feed Ad Removed: $count');
   }
 
   _initConstraintBounds(FeedViewController controller) {

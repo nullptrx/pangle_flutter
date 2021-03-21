@@ -171,10 +171,12 @@ extension PangleAdManager {
         expressAdCollection[key]
     }
 
-    public func removeExpressAd(_ key: String?) {
+    public func removeExpressAd(_ key: String?) -> Bool {
         if key != nil {
-            expressAdCollection.removeValue(forKey: key!)
+            let value = expressAdCollection.removeValue(forKey: key!)
+            return value != nil
         }
+        return false
     }
 
     public func setRewardedVideoAd(_ ad: NSObject?) {

@@ -205,10 +205,14 @@ class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
       }
       "removeFeedAd" -> {
         val feedIds = call.arguments<List<String>>()
+        var count = 0
         for (feedId in feedIds) {
-          PangleAdManager.shared.removeExpressAd(feedId)
+          val success = PangleAdManager.shared.removeExpressAd(feedId)
+          if (success) {
+            count++
+          }
         }
-        result.success(null)
+        result.success(count)
       }
 
       "loadInterstitialAd" -> {

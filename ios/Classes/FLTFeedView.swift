@@ -22,7 +22,6 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
 
     deinit {
         removeAllView()
-        PangleAdManager.shared.removeExpressAd(widget.id)
     }
 
     public func view() -> UIView {
