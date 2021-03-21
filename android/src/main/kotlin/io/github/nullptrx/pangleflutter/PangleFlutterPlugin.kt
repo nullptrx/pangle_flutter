@@ -152,42 +152,25 @@ class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
       "loadRewardedVideoAd" -> {
 
         val loadingTypeIndex = call.argument<Int>("loadingType") ?: 0
-        var loadingType = PangleLoadingType.values()[loadingTypeIndex]
+        val loadingType = PangleLoadingType.values()[loadingTypeIndex]
 
 
         if (PangleLoadingType.preload == loadingType || PangleLoadingType.normal == loadingType) {
 
           val loadResult = pangle.showRewardedVideoAd(activity) {
-            result.success(it)
-          }
-          if (loadResult) {
-            if (loadingType == PangleLoadingType.normal) {
-              return
+            if (PangleLoadingType.preload == loadingType) {
+              loadRewardedVideoAdOnly(call, PangleLoadingType.preload_only)
             }
-          } else {
-            loadingType = PangleLoadingType.normal
-          }
-
-        }
-
-        val slotId = call.argument<String>("slotId")!!
-        val userId = call.argument<String>("userId")
-        val rewardName = call.argument<String>("rewardName")
-        val rewardAmount = call.argument<Int>("rewardAmount")
-        val extra = call.argument<String>("extra")
-        val isVertical = call.argument<Boolean>("isVertical") ?: true
-        val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
-        val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
-        val w: Float = expressArgs.getValue("width").toFloat()
-        val h: Float = expressArgs.getValue("height").toFloat()
-        val expressSize = TTSizeF(w, h)
-        val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(slotId, expressSize, userId, rewardName, rewardAmount, isVertical, isSupportDeepLink, extra)
-
-        pangle.loadRewardVideoAd(adSlot, activity, loadingType) {
-          if (PangleLoadingType.preload_only == loadingType || PangleLoadingType.normal == loadingType) {
             result.success(it)
           }
+          if (!loadResult) {
+            loadRewardedVideoAdOnly(call, PangleLoadingType.normal, result)
+          }
+
+        } else {
+          loadRewardedVideoAdOnly(call, PangleLoadingType.preload_only, result)
         }
+
       }
 
       "loadBannerAd" -> {
@@ -239,43 +222,69 @@ class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
       "loadFullscreenVideoAd" -> {
 
         val loadingTypeIndex = call.argument<Int>("loadingType") ?: 0
-        var loadingType = PangleLoadingType.values()[loadingTypeIndex]
-
+        val loadingType = PangleLoadingType.values()[loadingTypeIndex]
 
         if (PangleLoadingType.preload == loadingType || PangleLoadingType.normal == loadingType) {
 
           val loadResult = pangle.showFullScreenVideoAd(activity) {
-            result.success(it)
-          }
-          if (loadResult) {
-            if (loadingType == PangleLoadingType.normal) {
-              return
+            if (PangleLoadingType.preload == loadingType) {
+              loadFullscreenVideoAdOnly(call, PangleLoadingType.preload_only)
             }
-          } else {
-            loadingType = PangleLoadingType.normal
-          }
-
-        }
-
-        val slotId = call.argument<String>("slotId")!!
-        val orientationIndex = call.argument<Int>("orientation")
-            ?: PangleOrientation.veritical.ordinal
-        val orientation = PangleOrientation.values()[orientationIndex]
-        val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
-        val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
-        val w: Float = expressArgs.getValue("width").toFloat()
-        val h: Float = expressArgs.getValue("height").toFloat()
-        val expressSize = TTSizeF(w, h)
-        val adSlot = PangleAdSlotManager.getFullScreenVideoAdSlot(slotId, expressSize, orientation, isSupportDeepLink)
-
-        pangle.loadFullscreenVideoAd(adSlot, activity, loadingType) {
-          if (PangleLoadingType.preload_only == loadingType || PangleLoadingType.normal == loadingType) {
             result.success(it)
           }
+          if (!loadResult) {
+            loadFullscreenVideoAdOnly(call, PangleLoadingType.normal, result)
+          }
+
+        } else {
+          loadFullscreenVideoAdOnly(call, PangleLoadingType.preload_only, result)
         }
+
+
       }
       else -> result.notImplemented()
     }
 
+  }
+
+  private fun loadRewardedVideoAdOnly(call: MethodCall, loadingType: PangleLoadingType, result: MethodChannel.Result? = null) {
+
+    val slotId = call.argument<String>("slotId")!!
+    val userId = call.argument<String>("userId")
+    val rewardName = call.argument<String>("rewardName")
+    val rewardAmount = call.argument<Int>("rewardAmount")
+    val extra = call.argument<String>("extra")
+    val isVertical = call.argument<Boolean>("isVertical") ?: true
+    val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+    val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
+    val w: Float = expressArgs.getValue("width").toFloat()
+    val h: Float = expressArgs.getValue("height").toFloat()
+    val expressSize = TTSizeF(w, h)
+    val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(slotId, expressSize, userId, rewardName, rewardAmount, isVertical, isSupportDeepLink, extra)
+
+    PangleAdManager.shared.loadRewardVideoAd(adSlot, activity, loadingType) {
+      if (PangleLoadingType.preload_only == loadingType || PangleLoadingType.normal == loadingType) {
+        result?.success(it)
+      }
+    }
+  }
+
+  private fun loadFullscreenVideoAdOnly(call: MethodCall, loadingType: PangleLoadingType, result: MethodChannel.Result? = null) {
+    val slotId = call.argument<String>("slotId")!!
+    val orientationIndex = call.argument<Int>("orientation")
+        ?: PangleOrientation.veritical.ordinal
+    val orientation = PangleOrientation.values()[orientationIndex]
+    val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+    val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
+    val w: Float = expressArgs.getValue("width").toFloat()
+    val h: Float = expressArgs.getValue("height").toFloat()
+    val expressSize = TTSizeF(w, h)
+    val adSlot = PangleAdSlotManager.getFullScreenVideoAdSlot(slotId, expressSize, orientation, isSupportDeepLink)
+
+    PangleAdManager.shared.loadFullscreenVideoAd(adSlot, activity, loadingType) {
+      if (PangleLoadingType.preload_only == loadingType || PangleLoadingType.normal == loadingType) {
+        result?.success(it)
+      }
+    }
   }
 }
