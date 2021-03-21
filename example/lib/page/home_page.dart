@@ -11,11 +11,11 @@ import 'home/express_page.dart';
 import 'home/native_page.dart';
 
 const kEnv = '''
-Android Studio 4.1.1
-Xcode 12.3
+Android Studio 4.1.2
+Xcode 12.4
 
-Flutter 1.22.5
-Dart 2.10.4
+Flutter 2.0.1
+Dart 2.12.0
 Kotlin 1.4.21
 Swift 5.3.0
 ''';
