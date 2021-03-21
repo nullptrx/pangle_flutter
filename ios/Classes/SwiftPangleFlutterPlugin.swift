@@ -1,5 +1,6 @@
 import Flutter
 import UIKit
+import BUAdSDK
 
 #if canImport(AppTrackingTransparency)
 import AppTrackingTransparency

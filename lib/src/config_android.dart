@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
 
+import 'config.dart';
 import 'constant.dart';
 import 'extension.dart';
 import 'model.dart';
 
-class AndroidConfig {
+class AndroidConfig implements Config {
   final String appId;
   final bool debug;
   final bool useTextureView;
@@ -62,6 +63,7 @@ class AndroidConfig {
   }) : assert(appId.isNotBlank);
 
   /// Convert config to json
+  @override
   Map<String, dynamic> toJSON() {
     return {
       'appId': appId,
@@ -84,7 +86,7 @@ class AndroidConfig {
   }
 }
 
-class AndroidSplashConfig {
+class AndroidSplashConfig implements Config {
   final String slotId;
   final double tolerateTimeout;
   final bool hideSkipButton;
@@ -111,6 +113,7 @@ class AndroidSplashConfig {
         assert(!isExpress || (isExpress && expressSize != null));
 
   /// Convert config to json
+  @override
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
@@ -123,7 +126,7 @@ class AndroidSplashConfig {
   }
 }
 
-class AndroidRewardedVideoConfig {
+class AndroidRewardedVideoConfig implements Config {
   final String slotId;
   final String userId;
   final String rewardName;
@@ -166,6 +169,7 @@ class AndroidRewardedVideoConfig {
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
+  @override
   Map<String, dynamic> toJSON() {
     var expressSize = this.expressSize;
     if (isExpress && expressSize == null) {
@@ -187,7 +191,7 @@ class AndroidRewardedVideoConfig {
   }
 }
 
-class AndroidBannerConfig {
+class AndroidBannerConfig implements Config {
   final String slotId;
   final PangleImgSize imgSize;
   final bool isSupportDeepLink;
@@ -216,6 +220,7 @@ class AndroidBannerConfig {
         assert(!isExpress || (isExpress && expressSize != null));
 
   /// Convert config to json
+  @override
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
@@ -228,7 +233,7 @@ class AndroidBannerConfig {
   }
 }
 
-class AndroidFeedConfig {
+class AndroidFeedConfig implements Config {
   final String slotId;
   final PangleImgSize imgSize;
   final int count;
@@ -255,6 +260,7 @@ class AndroidFeedConfig {
         assert(!isExpress || (isExpress && expressSize != null));
 
   /// Convert config to json
+  @override
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
@@ -267,7 +273,7 @@ class AndroidFeedConfig {
   }
 }
 
-class AndroidInterstitialConfig {
+class AndroidInterstitialConfig implements Config {
   final String slotId;
   final PangleImgSize imgSize;
   final bool isSupportDeepLink;
@@ -291,6 +297,7 @@ class AndroidInterstitialConfig {
         assert(!isExpress || (isExpress && expressSize != null));
 
   /// Convert config to json
+  @override
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
@@ -302,7 +309,7 @@ class AndroidInterstitialConfig {
   }
 }
 
-class AndroidFullscreenVideoConfig {
+class AndroidFullscreenVideoConfig implements Config {
   final String slotId;
   final bool isSupportDeepLink;
   final PangleOrientation orientation;
@@ -328,6 +335,7 @@ class AndroidFullscreenVideoConfig {
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
+  @override
   Map<String, dynamic> toJSON() {
     var expressSize = this.expressSize;
     if (isExpress && expressSize == null) {

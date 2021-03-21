@@ -20,10 +20,10 @@ public class FeedViewFactory: NSObject, FlutterPlatformViewFactory {
     }
 
     public func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol {
-        return FlutterStandardMessageCodec.sharedInstance()
+        FlutterStandardMessageCodec.sharedInstance()
     }
 
     public func create(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?) -> FlutterPlatformView {
-        return FLTFeedView(frame, id: viewId, params: (args as? [String: Any]) ?? [:] as [String : Any], messenger: messenger)
+        FLTFeedView(frame, id: viewId, params: (args as? [String: Any?]) ?? [:] as [String: Any?], messenger: messenger)
     }
 }

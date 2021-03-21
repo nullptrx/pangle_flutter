@@ -20,6 +20,6 @@ public class SplashViewFactory: NSObject, FlutterPlatformViewFactory {
     }
 
     public func create(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?) -> FlutterPlatformView {
-        return FLTSplashView(frame, id: viewId, params: (args as? [String: Any?]) ?? [:], messenger: self.messenger)
+        return FLTSplashView(frame, id: viewId, params: (args as? [String: Any?]) ?? [:], messenger: messenger)
     }
 }

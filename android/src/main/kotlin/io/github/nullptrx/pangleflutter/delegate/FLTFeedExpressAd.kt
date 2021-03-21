@@ -18,7 +18,7 @@ class FLTFeedExpressAd(val size: TTSizeF, var result: (Any) -> Unit = {}) : TTAd
       invoke(-1)
       return
     }
-    val data = PangleAdManager.shared.setExpressAd(size, ttNativeExpressAds)
+    val data = PangleAdManager.shared.setExpressAd(ttNativeExpressAds)
     invoke(0, count = ttNativeExpressAds.size, data = data)
   }
 

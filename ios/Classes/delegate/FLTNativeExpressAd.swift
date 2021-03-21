@@ -22,76 +22,75 @@ internal final class FLTNativeExpressAdViewDelegate: NSObject, BUNativeExpressAd
     public func nativeExpressAdSuccess(toLoad nativeExpressAd: BUNativeExpressAdManager, views: [BUNativeExpressAdView]) {
         /// 设置view的关联对象，让delegate随着view的销毁一起销毁
         views.forEach {
-            $0.delegate = self
-            $0.manager = nativeExpressAd
+            $0.extraDelegate = self
+            $0.extraManager = nativeExpressAd
         }
         /// 存入缓存
         PangleAdManager.shared.setExpressAd(views)
-        self.success?(views.map { String($0.hash) })
+        success?(views.map {
+            String($0.hash)
+        })
     }
 
     public func nativeExpressAdFail(toLoad nativeExpressAd: BUNativeExpressAdManager, error: Error?) {
-        self.fail?(error)
+        fail?(error)
     }
 
     public func nativeExpressAdViewRenderFail(_ nativeExpressAdView: BUNativeExpressAdView, error: Error?) {
-        nativeExpressAdView.didReceiveRenderFail?(error)
+        postMessage(nativeExpressAdView, "onRenderFail")
     }
 
     func nativeExpressAdViewRenderSuccess(_ nativeExpressAdView: BUNativeExpressAdView) {
-        nativeExpressAdView.didReceiveRenderSuccess?()
+        postMessage(nativeExpressAdView, "onRenderSuccess")
     }
 
     public func nativeExpressAdView(_ nativeExpressAdView: BUNativeExpressAdView, dislikeWithReason filterWords: [BUDislikeWords]) {
-        nativeExpressAdView.didReceiveDislike?(filterWords)
+        postMessage(nativeExpressAdView, "onDislike", arguments: ["option": filterWords.first?.name ?? ""])
+    }
+
+    func nativeExpressAdViewDidClick(_ nativeExpressAdView: BUNativeExpressAdView) {
+        postMessage(nativeExpressAdView, "onClick")
+    }
+
+    func nativeExpressAdViewWillShow(_ nativeExpressAdView: BUNativeExpressAdView) {
+        postMessage(nativeExpressAdView, "onShow")
+    }
+
+    private func postMessage(_ nativeExpressAdView: BUNativeExpressAdView, _ method: String, arguments: [String: Any?] = [:]) {
+        let channel = nativeExpressAdView.extraChannel
+        channel?.invokeMethod(method, arguments: arguments)
     }
 }
 
 private var managerKey = "nullptrx.github.io/manager"
 private var delegateKey = "nullptrx.github.io/delegate"
-private var dislikeDelegateKey = "nullptrx.github.io/delegate_dislike"
-private var renderSuccessDelegateKey = "nullptrx.github.io/delegate_render_success"
-private var renderFailDelegateKey = "nullptrx.github.io/delegate_render_fail"
+private var channelKey = "nullptrx.github.io/channel"
 
 extension BUNativeExpressAdView {
-    var manager: BUNativeExpressAdManager? {
+    var extraManager: BUNativeExpressAdManager? {
         get {
-            return objc_getAssociatedObject(self, &managerKey) as? BUNativeExpressAdManager
-        } set {
+            objc_getAssociatedObject(self, &managerKey) as? BUNativeExpressAdManager
+        }
+        set {
             objc_setAssociatedObject(self, &managerKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 
-    var delegate: BUNativeExpressAdViewDelegate? {
+    var extraDelegate: BUNativeExpressAdViewDelegate? {
         get {
-            return objc_getAssociatedObject(self, &delegateKey) as? BUNativeExpressAdViewDelegate
-        } set {
+            objc_getAssociatedObject(self, &delegateKey) as? BUNativeExpressAdViewDelegate
+        }
+        set {
             objc_setAssociatedObject(self, &delegateKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 
-    /// 设置dislike的点击事件
-    var didReceiveDislike: (([BUDislikeWords]) -> Void)? {
+    weak var extraChannel: FlutterMethodChannel? {
         get {
-            objc_getAssociatedObject(self, &dislikeDelegateKey) as? (([BUDislikeWords]) -> Void)
-        } set {
-            objc_setAssociatedObject(self, &dislikeDelegateKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_getAssociatedObject(self, &channelKey) as? FlutterMethodChannel
         }
-    }
-
-    public var didReceiveRenderFail: ((Error?) -> Void)? {
-        get {
-            objc_getAssociatedObject(self, &renderFailDelegateKey) as? ((Error?) -> Void)
-        } set {
-            objc_setAssociatedObject(self, &renderFailDelegateKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-    }
-
-    var didReceiveRenderSuccess: (() -> Void)? {
-        get {
-            objc_getAssociatedObject(self, &renderSuccessDelegateKey) as? (() -> Void)
-        } set {
-            objc_setAssociatedObject(self, &renderSuccessDelegateKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        set {
+            objc_setAssociatedObject(self, &channelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 }

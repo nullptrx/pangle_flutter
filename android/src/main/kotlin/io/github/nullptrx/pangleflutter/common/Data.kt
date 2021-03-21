@@ -11,7 +11,4 @@ data class TTSizeF(
 
 )
 
-const val kPadding = 8
-const val kDoublePadding = 16
-
 val kBlock: (Any) -> Unit = {}

@@ -154,7 +154,7 @@ SplashView(
   /// 广告展示
   onShow: (){},
   /// 广告获取失败
-  onError: (){},
+  onError: (int code, String message){},
   /// 广告被点击
   onClick: (){},
   /// 广告被点击跳过

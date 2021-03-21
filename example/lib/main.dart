@@ -20,7 +20,7 @@ class PangleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: CustomSplashPage(),
+      home: CustomSplashPage(isRoot: true),
       theme: kThemeData,
     );
   }

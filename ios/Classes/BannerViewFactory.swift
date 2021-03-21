@@ -16,10 +16,10 @@ public class BannerViewFactory: NSObject, FlutterPlatformViewFactory {
     }
 
     public func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol {
-        return FlutterStandardMessageCodec.sharedInstance()
+        FlutterStandardMessageCodec.sharedInstance()
     }
 
     public func create(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?) -> FlutterPlatformView {
-        return FLTBannerView(frame, id: viewId, params: (args as? [String: Any?]) ?? [:], messenger: self.messenger)
+        FLTBannerView(frame, id: viewId, params: (args as? [String: Any?]) ?? [:], messenger: messenger)
     }
 }

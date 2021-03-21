@@ -90,7 +90,7 @@ private var delegateKey = "nullptrx.github.io/delegate"
 private var successKey = "nullptrx.github.io/delegate_success"
 private var failKey = "nullptrx.github.io/delegate_fail"
 extension BURewardedVideoAd {
-    var extraDelegate: BURewardedVideoAdDelegate? {
+    unowned var extraDelegate: BURewardedVideoAdDelegate? {
         get {
             return objc_getAssociatedObject(self, &delegateKey) as? BURewardedVideoAdDelegate
         } set {

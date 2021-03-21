@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'package:pangle_flutter/pangle_flutter.dart';
 
+import 'config.dart';
 import 'constant.dart';
 import 'extension.dart';
+import 'model.dart';
 
-class IOSConfig {
+class IOSConfig implements Config {
   final String appId;
   final PangleLogLevel logLevel;
   final int coppa;
@@ -16,14 +17,15 @@ class IOSConfig {
   /// [logLevel] optional. default none
   /// [coppa] optional. Coppa 0 adult, 1 child
   /// [isPaidApp] optional. Set whether the app is a paid app, the default is a non-paid app.
-  IOSConfig({
+  const IOSConfig({
     @required this.appId,
     this.logLevel,
     this.coppa,
     this.isPaidApp,
-  }) : assert(appId.isNotBlank);
+  });
 
   /// Convert config to json
+  @override
   Map<String, dynamic> toJSON() {
     return {
       'appId': appId,
@@ -34,7 +36,7 @@ class IOSConfig {
   }
 }
 
-class IOSSplashConfig {
+class IOSSplashConfig implements Config {
   final String slotId;
   final double tolerateTimeout;
   final bool hideSkipButton;
@@ -58,6 +60,7 @@ class IOSSplashConfig {
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
+  @override
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
@@ -69,7 +72,7 @@ class IOSSplashConfig {
   }
 }
 
-class IOSRewardedVideoConfig {
+class IOSRewardedVideoConfig implements Config {
   final String slotId;
   final String userId;
   final String rewardName;
@@ -106,6 +109,7 @@ class IOSRewardedVideoConfig {
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
+  @override
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
@@ -120,7 +124,7 @@ class IOSRewardedVideoConfig {
   }
 }
 
-class IOSBannerConfig {
+class IOSBannerConfig implements Config {
   final String slotId;
   final PangleImgSize imgSize;
   final PangleExpressSize expressSize;
@@ -136,16 +140,16 @@ class IOSBannerConfig {
   /// [interval] The carousel interval, in seconds, is set in the range of 30~120s,
   ///   and is passed during initialization. If it does not meet the requirements,
   ///   it will not be in carousel ad.
-  IOSBannerConfig({
+  const IOSBannerConfig({
     @required this.slotId,
     this.imgSize = PangleImgSize.banner600_150,
     this.expressSize,
     this.isUserInteractionEnabled = true,
     this.interval,
-  })  : assert(slotId.isNotBlank),
-        assert(expressSize != null);
+  }) : assert(expressSize != null);
 
   /// Convert config to json
+  @override
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
@@ -157,7 +161,7 @@ class IOSBannerConfig {
   }
 }
 
-class IOSFeedConfig {
+class IOSFeedConfig implements Config {
   final String slotId;
   final PangleImgSize imgSize;
 
@@ -182,6 +186,7 @@ class IOSFeedConfig {
         assert(!isExpress || (isExpress && expressSize != null));
 
   /// Convert config to json
+  @override
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
@@ -193,7 +198,7 @@ class IOSFeedConfig {
   }
 }
 
-class IOSInterstitialConfig {
+class IOSInterstitialConfig implements Config {
   final String slotId;
   final PangleImgSize imgSize;
   final PangleExpressSize expressSize;
@@ -211,6 +216,7 @@ class IOSInterstitialConfig {
         assert(expressSize != null);
 
   /// Convert config to json
+  @override
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
@@ -220,7 +226,7 @@ class IOSInterstitialConfig {
   }
 }
 
-class IOSFullscreenVideoConfig {
+class IOSFullscreenVideoConfig implements Config {
   final String slotId;
   final PangleLoadingType loadingType;
   final bool isExpress;
@@ -240,6 +246,7 @@ class IOSFullscreenVideoConfig {
   }) : assert(slotId.isNotBlank);
 
   /// Convert config to json
+  @override
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
@@ -15,8 +16,6 @@ class CustomSplashPage extends StatefulWidget {
 }
 
 class _CustomSplashPageState extends State<CustomSplashPage> {
-  bool _showAd = false;
-
   @override
   void initState() {
     super.initState();
@@ -35,75 +34,46 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: [
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: SplashView(
+              iOS: IOSSplashConfig(
+                slotId: kSplashId,
+                isExpress: false,
+                tolerateTimeout: 3,
+              ),
+              android: AndroidSplashConfig(
+                slotId: kSplashId,
+                isExpress: false,
+                tolerateTimeout: 3,
+              ),
+              onShow: _handleAdStart,
+              onTimeOver: _handleAdEnd,
+              onClick: _handleAdEnd,
+              onSkip: _handleAdEnd,
+              onError: (code, message) => _handleAdEnd(),
+            ),
+          ),
           Container(
+            alignment: Alignment.center,
+            color: Colors.white,
+            height: 100,
             child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: SplashView(
-                    iOS: IOSSplashConfig(
-                      slotId: kSplashId,
-                      isExpress: false,
-                      tolerateTimeout: 3,
-                    ),
-                    android: AndroidSplashConfig(
-                      slotId: kSplashId,
-                      isExpress: false,
-                      tolerateTimeout: 3,
-                    ),
-                    backgroundColor: Colors.white,
-                    onStateChanged: (state) {
-                      switch (state) {
-                        case SplashState.show:
-                          _handleAdStart();
-                          break;
-
-                        case SplashState.timeOver:
-                        case SplashState.click:
-                        case SplashState.skip:
-                          _handleAdEnd();
-                          break;
-                      }
-                    },
-                    onError: (code, message) => _handleAdEnd(),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  color: Colors.white,
-                  height: 100,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      FlutterLogo(size: 40),
-                      SizedBox(height: 10),
-                      Text('Pangle Flutter'),
-                    ],
-                  ),
-                )
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FlutterLogo(size: 40),
+                SizedBox(height: 10),
+                Text('Pangle Flutter'),
               ],
             ),
-          ),
-          Offstage(
-            offstage: _showAd,
-            child: Container(
-              color: Colors.white,
-              alignment: Alignment.center,
-              child: FlutterLogo(size: 100),
-            ),
-          ),
+          )
         ],
       ),
     );
   }
 
-  _handleAdStart() {
-    setState(() {
-      _showAd = true;
-    });
-  }
+  _handleAdStart() {}
 
   _handleAdEnd() {
     SystemChrome.setEnabledSystemUIOverlays([
@@ -111,7 +81,6 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
       SystemUiOverlay.bottom,
     ]);
     Navigator.of(context).pop();
-
     if (widget.isRoot) {
       context.navigateTo(HomePage());
     }

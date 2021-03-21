@@ -18,6 +18,9 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
+        // maven { url 'http://localhost:8081/repository/m2/' }
+        // maven { url 'https://raw.githubusercontent.com/nullptrX/repo/master/m2' }
+        maven { url 'https://cdn.jsdelivr.net/gh/nullptrX/repo/m2/' }
     }
 }
 
@@ -46,10 +49,9 @@ android {
 }
 
 dependencies {
-    // implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
-    // implementation 'com.squareup.okhttp3:okhttp:4.8.0'
-    implementation project(':open_ad_sdk')
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+//    implementation project(':open_ad_sdk')
+
+    implementation 'io.github.nullptrx:pangle:3.5.0.3@aar'
 }

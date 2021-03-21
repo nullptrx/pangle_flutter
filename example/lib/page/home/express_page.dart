@@ -16,7 +16,6 @@ class ExpressPage extends StatefulWidget {
 
 class _ExpressPageState extends State<ExpressPage> {
   final pages = {
-    'Splash Express AD': EmptyPage(),
     'Rewarded Video Express AD': RewardedVideoExpressPage(),
     'Banner Express AD': BannerExpressPage(),
     'Feed Express AD': FeedExpressPage(),

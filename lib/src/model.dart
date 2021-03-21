@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:ui';
 
 /// 信息流响应信息
 ///
@@ -59,8 +59,8 @@ class PangleLocation {
   }
 }
 
-final _kDevicePixelRatio = WidgetsBinding.instance.window.devicePixelRatio;
-final _kPhysicalSize = WidgetsBinding.instance.window.physicalSize;
+final _kDevicePixelRatio = window.devicePixelRatio;
+final _kPhysicalSize = window.physicalSize;
 
 final kPangleScreenWidth = _kPhysicalSize.width / _kDevicePixelRatio;
 final kPangleScreenHeight = _kPhysicalSize.height / _kDevicePixelRatio;

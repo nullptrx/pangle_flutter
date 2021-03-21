@@ -5,6 +5,7 @@
 //  Created by nullptrX on 2020/8/25.
 //
 
+import BUAdSDK
 import Foundation
 
 internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFullscreenVideoAdDelegate {

@@ -1,12 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pangle_flutter_example/page/common/empty_page.dart';
 import 'package:pangle_flutter_example/page/native/custom_splash_page.dart';
 
 import '../../common/ext.dart';
-import '../../page/native/banner_page.dart';
-import '../../page/native/feed_page.dart';
-import '../../page/native/rewarded_video_page.dart';
 import '../../page/native/splash_page.dart';
 
 class NativePage extends StatefulWidget {
@@ -18,10 +14,6 @@ class _NativePageState extends State<NativePage> {
   final pages = {
     'Custom Splash AD': CustomSplashPage(isRoot: false),
     'Splash AD': SplashPage(),
-    'Rewarded Video AD': RewardedVideoPage(),
-    'Banner AD': BannerPage(),
-    'Feed AD': FeedPage(),
-    'Interstitial AD': EmptyPage(),
   };
 
   @override

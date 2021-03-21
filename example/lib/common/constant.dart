@@ -1,21 +1,14 @@
-const kAppId = '5020801';
+const kAppId = '5153502';
 
-const kSplashId = '820801504';
-// const kSplashExpressId = '887366172';
+const kSplashId = '887451293';
 
-const kRewardedVideoId = '920801724';
-const kRewardedVideoExpressId = '945404052';
+const kRewardedVideoExpressId = '945940983';
 
-const kBannerId = '920801711';
-const kBannerExpressId = '945399224';
+const kBannerExpressId600x260 = '945940906';
 
-const kFeedId = '920801899';
-const kFeedVideoExpressId = '945399537';
-const kFeedTestExpressId = '945478448';
+const kFeedExpressId375x284 = '945940981';
 
-const kInterstitialExpressId = '945388068';
+const kInterstitialExpressId3x2 = '945940989';
+const kInterstitialExpressId1x1 = '945940988';
 
-const kFullscreenVideoExpressId = '945428786';
-
-const kNativeBannerId = '920801177';
-const kNativeInterstitialId = '920801184';
+const kFullscreenVideoExpressId = '945940986';

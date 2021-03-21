@@ -3,10 +3,9 @@ package io.github.nullptrx.pangleflutter.delegate
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd
 import io.github.nullptrx.pangleflutter.PangleAdManager
-import io.github.nullptrx.pangleflutter.common.TTSizeF
 import io.github.nullptrx.pangleflutter.common.kBlock
 
-class FLTBannerExpressAd(val size: TTSizeF, var result: (Any) -> Unit) : TTAdNative.NativeExpressAdListener {
+class FLTBannerExpressAd(var result: (Any) -> Unit) : TTAdNative.NativeExpressAdListener {
 
   override fun onError(code: Int, message: String?) {
     invoke(code, message)
@@ -17,7 +16,7 @@ class FLTBannerExpressAd(val size: TTSizeF, var result: (Any) -> Unit) : TTAdNat
       invoke(-1)
       return
     }
-    val data = PangleAdManager.shared.setExpressAd(size, ttNativeExpressAds)
+    val data = PangleAdManager.shared.setExpressAd(ttNativeExpressAds)
     invoke(count = ttNativeExpressAds.size, data = data)
   }
 

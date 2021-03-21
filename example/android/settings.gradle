@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 include ':app'
-include ':open_ad_sdk'
 
 def localPropertiesFile = new File(rootProject.projectDir, "local.properties")
 def properties = new Properties()

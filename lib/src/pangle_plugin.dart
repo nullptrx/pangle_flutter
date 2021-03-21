@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:pangle_flutter/pangle_flutter.dart';
-import 'package:pangle_flutter/src/model.dart';
 
 import 'config_android.dart';
 import 'config_ios.dart';
+import 'constant.dart';
+import 'model.dart';
 
 final pangle = PanglePlugin._();
 
