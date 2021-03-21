@@ -93,18 +93,10 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
       return AspectRatio(
         aspectRatio: 375 / 284.0,
         child: FeedView(
-          // key: _ItemKey(item.feedId),
           id: item.feedId,
           onFeedViewCreated: (controller) {
             _initConstraintBounds(controller);
           },
-          // isUserInteractionEnabled: false,
-          // onRemove: () {
-          //   this.feedIds.remove(item.feedId);
-          //   setState(() {
-          //     this.items.removeAt(index);
-          //   });
-          // },
         ),
       );
     }

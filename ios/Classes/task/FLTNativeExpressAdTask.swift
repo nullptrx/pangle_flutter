@@ -25,19 +25,14 @@ internal final class FLTNativeExpressAdTask: FLTTaskProtocol {
         let expressArgs = args["expressSize"] as! [String: Double]
         let width = expressArgs["width"]!
         let height = expressArgs["height"]!
-        let imgSizeIndex = args["imgSize"] as! Int
-        let imgSize = BUSize(by: BUProposalSize(rawValue: imgSizeIndex)!)!
-        
-//        let width = Double(UIScreen.main.bounds.width)
-//        let height = width / Double(size.width) * Double(size.height)
+
         let adSize = CGSize(width: width, height: height)
         
         let slot = BUAdSlot()
         slot.id = slotId
         slot.adType = .feed
         slot.position = .feed
-        slot.imgSize = imgSize
-        
+
         let nad = BUNativeExpressAdManager(slot: slot, adSize: adSize)
         nad.adSize = adSize
         

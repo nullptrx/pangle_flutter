@@ -51,7 +51,7 @@ class BannerView extends StatefulWidget {
     this.onError,
     this.onRenderSuccess,
     this.onRenderFail,
-  });
+  }) : super(key: key);
 
   final IOSBannerConfig iOS;
   final AndroidBannerConfig android;
@@ -141,11 +141,15 @@ class BannerView extends StatefulWidget {
   final PangleMessageCallback onRenderFail;
 }
 
-class _BannerViewState extends State<BannerView> {
+class _BannerViewState extends State<BannerView>
+    with AutomaticKeepAliveClientMixin {
   final Completer<BannerViewController> _controller =
       Completer<BannerViewController>();
 
   _PlatformCallbacksHandler _platformCallbacksHandler;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {

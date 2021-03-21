@@ -10,26 +10,27 @@ import Flutter
 import WebKit
 
 public class FLTFeedView: NSObject, FlutterPlatformView {
-    private let container: UIView
-    private var feedId: String?
+    private let widget: FeedView
+    private var id: String?
 
     init(_ frame: CGRect, id: Int64, params: [String: Any?], messenger: FlutterBinaryMessenger) {
         let channelName = String(format: "nullptrx.github.io/pangle_feedview_%ld", id)
         let methodChannel = FlutterMethodChannel(name: channelName, binaryMessenger: messenger)
-        container = FeedView(frame: frame, params: params, methodChannel: methodChannel)
+        widget = FeedView(frame: frame, params: params, methodChannel: methodChannel)
         super.init()
     }
 
     deinit {
         removeAllView()
+        PangleAdManager.shared.removeExpressAd(widget.id)
     }
 
     public func view() -> UIView {
-        container
+        widget
     }
 
     private func removeAllView() {
-        container.subviews.forEach {
+        widget.subviews.forEach {
             if $0 is BUNativeExpressAdView {
                 let v = $0 as! BUNativeExpressAdView
                 v.extraDelegate = nil
@@ -52,7 +53,7 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
             }
             $0.removeFromSuperview()
         }
-        container.removeFromSuperview()
+        widget.removeFromSuperview()
     }
 
 
@@ -62,11 +63,13 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
 class FeedView: UIView {
 
     private var methodChannel: FlutterMethodChannel? = nil
-    private var params: [String: Any] = [:]
+    private var params: [String: Any?] = [:]
     private var touchableBounds: [CGRect] = []
     private var restrictedBounds: [CGRect] = []
 
-    init(frame: CGRect, params: [String: Any], methodChannel: FlutterMethodChannel) {
+    var id: String = ""
+
+    init(frame: CGRect, params: [String: Any?], methodChannel: FlutterMethodChannel) {
         self.params = params
         self.methodChannel = methodChannel
         super.init(frame: frame)
@@ -162,7 +165,7 @@ class FeedView: UIView {
         guard let id = params["id"] as? String else {
             return
         }
-
+        self.id = id
         let ad = PangleAdManager.shared.getExpressAd(id)
         guard let expressAd: BUNativeExpressAdView = ad else {
             return

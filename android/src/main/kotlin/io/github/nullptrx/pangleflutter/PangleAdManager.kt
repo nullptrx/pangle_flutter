@@ -66,8 +66,10 @@ class PangleAdManager {
   }
 
   fun removeExpressAd(key: String) {
-    val it = expressAdCollection.remove(key)
-    it?.destroy()
+    if (expressAdCollection.containsKey(key)) {
+      val it = expressAdCollection.remove(key)
+      it?.destroy()
+    }
   }
 
   fun showRewardedVideoAd(activity: Activity?, result: (Any) -> Unit = {}): Boolean {

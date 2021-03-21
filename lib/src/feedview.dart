@@ -46,7 +46,7 @@ class FeedView extends StatefulWidget {
     this.onDislike,
     this.onRenderSuccess,
     this.onRenderFail,
-  });
+  }) : super(key: key);
 
   final String id;
 
@@ -123,14 +123,19 @@ class FeedView extends StatefulWidget {
   final PangleMessageCallback onRenderFail;
 }
 
-class _FeedViewState extends State<FeedView> {
+class _FeedViewState extends State<FeedView>
+    with AutomaticKeepAliveClientMixin {
   final Completer<FeedViewController> _controller =
       Completer<FeedViewController>();
 
   _PlatformCallbacksHandler _platformCallbacksHandler;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return FeedView.platform.build(
       context: context,
       creationParams: widget.config,

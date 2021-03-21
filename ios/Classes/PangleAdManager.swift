@@ -156,22 +156,22 @@ extension PangleAdManager {
         for nativeAd in nativeAds {
             expressAds[String(nativeAd.hash)] = nativeAd
         }
-        self.expressAdCollection.merge(expressAds, uniquingKeysWith: { _, last in last })
+        expressAdCollection.merge(expressAds, uniquingKeysWith: { _, last in last })
     }
 
     public func getExpressAd(_ key: String) -> BUNativeExpressAdView? {
-        return self.expressAdCollection[key]
+        expressAdCollection[key]
     }
 
     public func removeExpressAd(_ key: String?) {
         if key != nil {
-            self.expressAdCollection.removeValue(forKey: key!)
+            expressAdCollection.removeValue(forKey: key!)
         }
     }
 
     public func setRewardedVideoAd(_ ad: NSObject?) {
         if ad != nil {
-            self.rewardedVideoAdCollection.append(ad!)
+            rewardedVideoAdCollection.append(ad!)
         }
     }
 

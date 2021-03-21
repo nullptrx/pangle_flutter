@@ -25,13 +25,14 @@ class FlutterFeedView(
 
   private val methodChannel: MethodChannel = MethodChannel(messenger, "nullptrx.github.io/pangle_feedview_$id")
   private val container: FrameLayout
+  private var ttadId: String = ""
 
   init {
     methodChannel.setMethodCallHandler(this)
     val context: Context = activity
     container = FrameLayout(context)
-    val id = params["id"] as String
-    loadAd(id)
+    ttadId = params["id"] as String
+    loadAd(ttadId)
   }
 
   override fun getView(): View {
@@ -40,6 +41,7 @@ class FlutterFeedView(
 
   override fun dispose() {
     methodChannel.setMethodCallHandler(null)
+    PangleAdManager.shared.removeExpressAd(ttadId)
     container.removeAllViews()
   }
 

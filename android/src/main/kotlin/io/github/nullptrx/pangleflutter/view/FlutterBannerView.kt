@@ -24,6 +24,8 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
   private val container: FrameLayout
   private val context: Context
   private var interval: Int? = null
+  private var ttAdNative: TTNativeExpressAd? = null
+
 
   init {
     methodChannel.setMethodCallHandler(this)
@@ -52,6 +54,7 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
 
   override fun dispose() {
     methodChannel.setMethodCallHandler(null)
+    ttAdNative?.destroy()
     container.removeAllViews()
   }
 
@@ -63,8 +66,9 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
     if (ttNativeExpressAds == null || ttNativeExpressAds.isEmpty()) {
       return
     }
-    val ad = ttNativeExpressAds[0]
 
+    val ad = ttNativeExpressAds[0]
+    ttAdNative = ad
     //设置广告互动监听回调
     ad.setExpressInteractionListener(this)
 

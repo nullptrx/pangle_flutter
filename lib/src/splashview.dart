@@ -50,7 +50,7 @@ class SplashView extends StatefulWidget {
     this.onShow,
     this.onTimeOver,
     this.onError,
-  });
+  }) : super(key: key);
 
   final IOSSplashConfig iOS;
   final AndroidSplashConfig android;
@@ -137,11 +137,15 @@ class SplashView extends StatefulWidget {
   final PangleMessageCallback onError;
 }
 
-class _SplashViewState extends State<SplashView> {
+class _SplashViewState extends State<SplashView>
+    with AutomaticKeepAliveClientMixin {
   final Completer<SplashViewController> _controller =
       Completer<SplashViewController>();
 
   _PlatformCallbacksHandler _platformCallbacksHandler;
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
