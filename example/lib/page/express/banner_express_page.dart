@@ -44,7 +44,7 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
                   slotId: kBannerExpressId600x260,
                   expressSize: PangleExpressSize(width: 600, height: 260),
                 ),
-                onBannerViewCreated: (BannerViewController controller){
+                onBannerViewCreated: (BannerViewController controller) {
                   controller.updateTouchableBounds([Rect.zero]);
                   controller.updateRestrictedBounds([Rect.zero]);
                 },
