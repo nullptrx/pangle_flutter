@@ -31,11 +31,12 @@ import 'platform_interface.dart';
 class CupertinoBannerView implements BannerViewPlatform {
   @override
   Widget build({
-    BuildContext context,
-    Map<String, dynamic> creationParams,
-    BannerViewPlatformCallbacksHandler bannerViewPlatformCallbacksHandler,
-    BannerViewPlatformCreatedCallback onBannerViewPlatformCreated,
-    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+    BuildContext? context,
+    Map<String, dynamic>? creationParams,
+    required BannerViewPlatformCallbacksHandler
+        bannerViewPlatformCallbacksHandler,
+    BannerViewPlatformCreatedCallback? onBannerViewPlatformCreated,
+    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   }) {
     return UiKitView(
       viewType: kBannerViewType,

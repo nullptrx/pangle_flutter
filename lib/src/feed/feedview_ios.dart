@@ -31,11 +31,11 @@ import 'platform_interface.dart';
 class CupertinoFeedView implements FeedViewPlatform {
   @override
   Widget build({
-    BuildContext context,
-    Map<String, dynamic> creationParams,
-    FeedViewPlatformCallbacksHandler feedViewPlatformCallbacksHandler,
-    FeedViewPlatformCreatedCallback onFeedViewPlatformCreated,
-    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+    BuildContext? context,
+    Map<String, dynamic>? creationParams,
+    FeedViewPlatformCallbacksHandler? feedViewPlatformCallbacksHandler,
+    FeedViewPlatformCreatedCallback? onFeedViewPlatformCreated,
+    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   }) {
     return UiKitView(
       viewType: kFeedViewType,
@@ -44,7 +44,7 @@ class CupertinoFeedView implements FeedViewPlatform {
           return;
         }
         onFeedViewPlatformCreated(MethodChannelFeedViewPlatform(
-            id, feedViewPlatformCallbacksHandler));
+            id, feedViewPlatformCallbacksHandler!));
       },
       creationParams: creationParams,
       gestureRecognizers: gestureRecognizers,

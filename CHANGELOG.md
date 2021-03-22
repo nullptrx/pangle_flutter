@@ -1,3 +1,7 @@
+## 1.0.0
+
+- null-safety
+
 ## 0.10.1
 
 - Remove Self-rendering ads support（Remove parameter `isExpress`）

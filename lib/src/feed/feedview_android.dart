@@ -32,11 +32,11 @@ import 'platform_interface.dart';
 class AndroidFeedView implements FeedViewPlatform {
   @override
   Widget build({
-    @required BuildContext context,
-    @required Map<String, dynamic> creationParams,
-    @required FeedViewPlatformCallbacksHandler feedViewPlatformCallbacksHandler,
-    FeedViewPlatformCreatedCallback onFeedViewPlatformCreated,
-    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+    required BuildContext context,
+    required Map<String, dynamic> creationParams,
+    required FeedViewPlatformCallbacksHandler feedViewPlatformCallbacksHandler,
+    FeedViewPlatformCreatedCallback? onFeedViewPlatformCreated,
+    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   }) {
     return PlatformViewLink(
         viewType: kFeedViewType,

@@ -24,7 +24,7 @@
 > 1. 不再需要传入isExpress参数
 > 2. BannerView, FeedView, SplashView均需要包一层限制大小的Widget, 可选Container, SizeBox, AspectRatio, Expanded等
 > 3. BannerView, FeedView, SplashView的控制点击实现变动，可参考example进行更改。
-> 4. v0.10.1不再提供自渲染广告位加载，后续会在新的分支实现，敬请期待。
+> 4. 从v0.10.1开始不再提供自渲染广告位加载，后续会在新的分支实现，敬请期待。
 > 5. Android依赖方式变更，查看[如何配置](SETUP.md)
 
 
@@ -48,6 +48,13 @@
 ## 使用文档
 
 - [参数文档](DOC_PROPERTY.md)
+
+
+
+## 范例截图
+
+<img src="https://cdn.jsdelivr.net/gh/nullptrX/assets/images/20210322143743.gif"/>
+
 
 
 ## 集成步骤

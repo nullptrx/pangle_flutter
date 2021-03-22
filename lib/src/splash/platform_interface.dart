@@ -28,12 +28,12 @@ final kSplashViewType = 'nullptrx.github.io/pangle_splashview';
 
 abstract class SplashViewPlatform {
   Widget build({
-    @required BuildContext context,
-    @required Map<String, dynamic> creationParams,
-    @required
-        SplashViewPlatformCallbacksHandler splashViewPlatformCallbacksHandler,
-    SplashViewPlatformCreatedCallback onSplashViewPlatformCreated,
-    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+    required BuildContext context,
+    required Map<String, dynamic> creationParams,
+    required SplashViewPlatformCallbacksHandler
+        splashViewPlatformCallbacksHandler,
+    SplashViewPlatformCreatedCallback? onSplashViewPlatformCreated,
+    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   });
 }
 

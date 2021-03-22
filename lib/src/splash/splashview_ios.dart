@@ -31,11 +31,11 @@ import 'splashview_method_channel.dart';
 class CupertinoSplashView implements SplashViewPlatform {
   @override
   Widget build({
-    BuildContext context,
-    Map<String, dynamic> creationParams,
-    SplashViewPlatformCallbacksHandler splashViewPlatformCallbacksHandler,
-    SplashViewPlatformCreatedCallback onSplashViewPlatformCreated,
-    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+    BuildContext? context,
+    Map<String, dynamic>? creationParams,
+    SplashViewPlatformCallbacksHandler? splashViewPlatformCallbacksHandler,
+    SplashViewPlatformCreatedCallback? onSplashViewPlatformCreated,
+    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   }) {
     return UiKitView(
       viewType: kSplashViewType,
@@ -44,7 +44,7 @@ class CupertinoSplashView implements SplashViewPlatform {
           return;
         }
         onSplashViewPlatformCreated(MethodChannelSplashViewPlatform(
-            id, splashViewPlatformCallbacksHandler));
+            id, splashViewPlatformCallbacksHandler!));
       },
       creationParams: creationParams,
       gestureRecognizers: gestureRecognizers,

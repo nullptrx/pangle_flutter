@@ -32,8 +32,7 @@ class MethodChannelFeedViewPlatform implements FeedViewPlatformController {
   /// Constructs an instance that will listen for webviews broadcasting to the
   /// given [id], using the given [WebViewPlatformCallbacksHandler].
   MethodChannelFeedViewPlatform(int id, this._platformCallbacksHandler)
-      : assert(_platformCallbacksHandler != null),
-        _channel = MethodChannel('${kFeedViewType}_$id') {
+      : _channel = MethodChannel('${kFeedViewType}_$id') {
     _channel.setMethodCallHandler(_onMethodCall);
   }
 

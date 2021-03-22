@@ -40,7 +40,7 @@ typedef void BannerViewCreatedCallback(BannerViewController controller);
 
 class BannerView extends StatefulWidget {
   const BannerView({
-    Key key,
+    Key? key,
     this.iOS,
     this.android,
     this.onBannerViewCreated,
@@ -53,11 +53,11 @@ class BannerView extends StatefulWidget {
     this.onRenderFail,
   }) : super(key: key);
 
-  final IOSBannerConfig iOS;
-  final AndroidBannerConfig android;
+  final IOSBannerConfig? iOS;
+  final AndroidBannerConfig? android;
 
   /// If not null invoked once the banner view is created.
-  final BannerViewCreatedCallback onBannerViewCreated;
+  final BannerViewCreatedCallback? onBannerViewCreated;
 
   /// Which gestures should be consumed by the banner view.
   ///
@@ -68,9 +68,9 @@ class BannerView extends StatefulWidget {
   ///
   /// When this set is empty or null, the banner view will only handle pointer events for gestures that
   /// were not claimed by any other gesture recognizer.
-  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
+  final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
-  static BannerViewPlatform _platform;
+  static BannerViewPlatform? _platform;
 
   /// Sets a custom [BannerViewPlatform].
   ///
@@ -79,7 +79,7 @@ class BannerView extends StatefulWidget {
   /// Setting `platform` doesn't affect [BannerView]s that were already created.
   ///
   /// The default value is [AndroidBannerView] on Android and [CupertinoBannerView] on iOS.
-  static set platform(BannerViewPlatform platform) {
+  static set platform(BannerViewPlatform? platform) {
     _platform = platform;
   }
 
@@ -100,11 +100,11 @@ class BannerView extends StatefulWidget {
               "Trying to use the default bannerview implementation for $defaultTargetPlatform but there isn't a default one");
       }
     }
-    return _platform;
+    return _platform!;
   }
 
-  Config get config {
-    Config config;
+  Config? get config {
+    Config? config;
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         config = android;
@@ -123,22 +123,22 @@ class BannerView extends StatefulWidget {
   _BannerViewState createState() => _BannerViewState();
 
   /// 广告被点击
-  final VoidCallback onClick;
+  final VoidCallback? onClick;
 
   /// 广告展示
-  final VoidCallback onShow;
+  final VoidCallback? onShow;
 
   /// 点击了关闭按钮（不喜欢）
-  final PangleOptionCallback onDislike;
+  final PangleOptionCallback? onDislike;
 
   /// 获取广告失败
-  final PangleMessageCallback onError;
+  final PangleMessageCallback? onError;
 
   /// 渲染广告成功
-  final VoidCallback onRenderSuccess;
+  final VoidCallback? onRenderSuccess;
 
   /// 渲染广告失败
-  final PangleMessageCallback onRenderFail;
+  final PangleMessageCallback? onRenderFail;
 }
 
 class _BannerViewState extends State<BannerView>
@@ -146,7 +146,7 @@ class _BannerViewState extends State<BannerView>
   final Completer<BannerViewController> _controller =
       Completer<BannerViewController>();
 
-  _PlatformCallbacksHandler _platformCallbacksHandler;
+  _PlatformCallbacksHandler? _platformCallbacksHandler;
 
   @override
   bool get wantKeepAlive => true;
@@ -156,8 +156,8 @@ class _BannerViewState extends State<BannerView>
     super.build(context);
     return BannerView.platform.build(
       context: context,
-      creationParams: widget.config.toJSON(),
-      bannerViewPlatformCallbacksHandler: _platformCallbacksHandler,
+      creationParams: widget.config!.toJSON(),
+      bannerViewPlatformCallbacksHandler: _platformCallbacksHandler!,
       onBannerViewPlatformCreated: _onWebViewPlatformCreated,
       gestureRecognizers: widget.gestureRecognizers,
     );
@@ -173,7 +173,7 @@ class _BannerViewState extends State<BannerView>
   void didUpdateWidget(BannerView oldWidget) {
     super.didUpdateWidget(oldWidget);
     _controller.future.then((BannerViewController controller) {
-      _platformCallbacksHandler._widget = widget;
+      _platformCallbacksHandler!._widget = widget;
       controller._updateWidget(widget);
     });
   }
@@ -185,7 +185,7 @@ class _BannerViewState extends State<BannerView>
         widget, bannerViewPlatform, _platformCallbacksHandler);
     _controller.complete(controller);
     if (widget.onBannerViewCreated != null) {
-      widget.onBannerViewCreated(controller);
+      widget.onBannerViewCreated!(controller);
     }
   }
 }
@@ -199,13 +199,13 @@ class BannerViewController {
     this._widget,
     this._bannerViewPlatformController,
     this._platformCallbacksHandler,
-  ) : assert(_bannerViewPlatformController != null);
+  );
 
   final BannerViewPlatformController _bannerViewPlatformController;
 
   // todo unused_field
   // ignore: unused_field
-  final _PlatformCallbacksHandler _platformCallbacksHandler;
+  final _PlatformCallbacksHandler? _platformCallbacksHandler;
 
   // todo unused_field
   // ignore: unused_field
@@ -222,14 +222,14 @@ class BannerViewController {
   /// 但是受[updateRestrictedBounds]影响，即当Touchable区域中如果包含Restricted区域，
   /// Restricted区域内的点击事件会屏蔽掉。
   Future<void> updateTouchableBounds(List<Rect> bounds) async {
-    await _bannerViewPlatformController?.updateTouchableBounds(bounds);
+    await _bannerViewPlatformController.updateTouchableBounds(bounds);
   }
 
   /// 更新不可点击区域
   ///
   /// 一般用于处理NativeView与PlatformView重叠时点击事件冲突的问题。
   Future<void> updateRestrictedBounds(List<Rect> bounds) async {
-    await _bannerViewPlatformController?.updateRestrictedBounds(bounds);
+    await _bannerViewPlatformController.updateRestrictedBounds(bounds);
   }
 }
 

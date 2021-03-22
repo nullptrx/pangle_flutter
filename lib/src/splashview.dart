@@ -40,7 +40,7 @@ typedef void SplashViewCreatedCallback(SplashViewController controller);
 
 class SplashView extends StatefulWidget {
   const SplashView({
-    Key key,
+    Key? key,
     this.iOS,
     this.android,
     this.onSplashViewCreated,
@@ -52,11 +52,11 @@ class SplashView extends StatefulWidget {
     this.onError,
   }) : super(key: key);
 
-  final IOSSplashConfig iOS;
-  final AndroidSplashConfig android;
+  final IOSSplashConfig? iOS;
+  final AndroidSplashConfig? android;
 
   /// If not null invoked once the splash view is created.
-  final SplashViewCreatedCallback onSplashViewCreated;
+  final SplashViewCreatedCallback? onSplashViewCreated;
 
   /// Which gestures should be consumed by the splash view.
   ///
@@ -67,9 +67,9 @@ class SplashView extends StatefulWidget {
   ///
   /// When this set is empty or null, the splash view will only handle pointer events for gestures that
   /// were not claimed by any other gesture recognizer.
-  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
+  final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
-  static SplashViewPlatform _platform;
+  static SplashViewPlatform? _platform;
 
   /// Sets a custom [SplashViewPlatform].
   ///
@@ -99,17 +99,17 @@ class SplashView extends StatefulWidget {
               "Trying to use the default splashview implementation for $defaultTargetPlatform but there isn't a default one");
       }
     }
-    return _platform;
+    return _platform!;
   }
 
   Config get config {
     Config config;
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        config = android;
+        config = android!;
         break;
       case TargetPlatform.iOS:
-        config = iOS;
+        config = iOS!;
         break;
       default:
         throw UnsupportedError(
@@ -122,19 +122,19 @@ class SplashView extends StatefulWidget {
   _SplashViewState createState() => _SplashViewState();
 
   /// 广告被点击
-  final VoidCallback onClick;
+  final VoidCallback? onClick;
 
   /// 跳过广告
-  final VoidCallback onSkip;
+  final VoidCallback? onSkip;
 
   /// 广告展示
-  final VoidCallback onShow;
+  final VoidCallback? onShow;
 
   /// 倒计时结束
-  final VoidCallback onTimeOver;
+  final VoidCallback? onTimeOver;
 
   /// 获取广告失败
-  final PangleMessageCallback onError;
+  final PangleMessageCallback? onError;
 }
 
 class _SplashViewState extends State<SplashView>
@@ -142,7 +142,7 @@ class _SplashViewState extends State<SplashView>
   final Completer<SplashViewController> _controller =
       Completer<SplashViewController>();
 
-  _PlatformCallbacksHandler _platformCallbacksHandler;
+  _PlatformCallbacksHandler? _platformCallbacksHandler;
 
   @override
   bool get wantKeepAlive => true;
@@ -153,7 +153,7 @@ class _SplashViewState extends State<SplashView>
     return SplashView.platform.build(
       context: context,
       creationParams: widget.config.toJSON(),
-      splashViewPlatformCallbacksHandler: _platformCallbacksHandler,
+      splashViewPlatformCallbacksHandler: _platformCallbacksHandler!,
       onSplashViewPlatformCreated: _onWebViewPlatformCreated,
       gestureRecognizers: widget.gestureRecognizers,
     );
@@ -169,7 +169,7 @@ class _SplashViewState extends State<SplashView>
   void didUpdateWidget(SplashView oldWidget) {
     super.didUpdateWidget(oldWidget);
     _controller.future.then((SplashViewController controller) {
-      _platformCallbacksHandler._widget = widget;
+      _platformCallbacksHandler!._widget = widget;
       controller._updateWidget(widget);
     });
   }
@@ -181,7 +181,7 @@ class _SplashViewState extends State<SplashView>
         widget, splashViewPlatform, _platformCallbacksHandler);
     _controller.complete(controller);
     if (widget.onSplashViewCreated != null) {
-      widget.onSplashViewCreated(controller);
+      widget.onSplashViewCreated!(controller);
     }
   }
 }
@@ -195,7 +195,7 @@ class SplashViewController {
     this._widget,
     this._splashViewPlatformController,
     this._platformCallbacksHandler,
-  ) : assert(_splashViewPlatformController != null);
+  );
 
   // todo unused_field
   // ignore: unused_field
@@ -203,7 +203,7 @@ class SplashViewController {
 
   // todo unused_field
   // ignore: unused_field
-  final _PlatformCallbacksHandler _platformCallbacksHandler;
+  final _PlatformCallbacksHandler? _platformCallbacksHandler;
 
   // todo unused_field
   // ignore: unused_field

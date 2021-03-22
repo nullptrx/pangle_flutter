@@ -30,7 +30,7 @@ import 'dart:ui';
 /// [data] (string list) 用于展示信息流广告的键id
 class PangleAd {
   final int code;
-  final String message;
+  final String? message;
   final int count;
   final List<String> data;
 
@@ -96,9 +96,9 @@ class PangleExpressSize {
   ///
   /// [width] 宽度，必选, 如果width超过屏幕，默认使用屏幕宽
   /// [height] 高度，必选
-  PangleExpressSize({double width, double height})
-      : assert(width != null && width > 0),
-        assert(height != null && height > 0),
+  PangleExpressSize({required double width, required double height})
+      : assert(width > 0),
+        assert(height > 0),
         this.width = width > kPangleScreenWidth ? kPangleScreenWidth : width,
         this.height = height > kPangleScreenWidth / width * height
             ? kPangleScreenWidth / width * height
@@ -108,7 +108,7 @@ class PangleExpressSize {
   ///
   /// [aspectRatio] item宽高比例
   PangleExpressSize.aspectRatio(double aspectRatio)
-      : assert(aspectRatio != null && aspectRatio > 0),
+      : assert(aspectRatio > 0),
         this.width = kPangleScreenWidth,
         this.height = kPangleScreenWidth / aspectRatio;
 
@@ -124,11 +124,13 @@ class PangleExpressSize {
       : this.width = kPangleScreenWidth * widthPercent,
         this.height = kPangleScreenHeight * heightPercent;
 
-  PangleExpressSize.widthPercent(double widthPercent, {double aspectRatio})
+  PangleExpressSize.widthPercent(double widthPercent,
+      {required double aspectRatio})
       : this.width = kPangleScreenWidth * widthPercent,
         this.height = kPangleScreenWidth * widthPercent / aspectRatio;
 
-  PangleExpressSize.heightPercent(double heightPercent, {double aspectRatio})
+  PangleExpressSize.heightPercent(double heightPercent,
+      {required double aspectRatio})
       : this.width = kPangleScreenHeight * heightPercent * aspectRatio,
         this.height = kPangleScreenHeight * heightPercent;
 
@@ -149,9 +151,9 @@ class PangleImageSize {
   ///
   /// [width] 宽度，必选, 如果width超过屏幕，默认使用屏幕宽
   /// [height] 高度，必选
-  PangleImageSize({double width, double height})
-      : assert(width != null && width > 0),
-        assert(height != null && height > 0),
+  PangleImageSize({required double width, required double height})
+      : assert(width > 0),
+        assert(height > 0),
         this.width = width > kPangleScreenWidth ? kPangleScreenWidth : width,
         this.height = height > kPangleScreenWidth / width * height
             ? kPangleScreenWidth / width * height
@@ -159,7 +161,7 @@ class PangleImageSize {
 
   /// [aspectRatio] item宽高比例
   PangleImageSize.aspectRatio(double aspectRatio)
-      : assert(aspectRatio != null && aspectRatio > 0),
+      : assert(aspectRatio > 0),
         this.width = kPangleScreenWidth,
         this.height = kPangleScreenWidth / aspectRatio;
 
@@ -175,11 +177,13 @@ class PangleImageSize {
       : this.width = kPangleScreenWidth * widthPercent,
         this.height = kPangleScreenHeight * heightPercent;
 
-  PangleImageSize.widthPercent(double widthPercent, {double aspectRatio})
+  PangleImageSize.widthPercent(double widthPercent,
+      {required double aspectRatio})
       : this.width = kPangleScreenWidth * widthPercent,
         this.height = kPangleScreenWidth * widthPercent / aspectRatio;
 
-  PangleImageSize.heightPercent(double heightPercent, {double aspectRatio})
+  PangleImageSize.heightPercent(double heightPercent,
+      {required double aspectRatio})
       : this.width = kPangleScreenHeight * heightPercent * aspectRatio,
         this.height = kPangleScreenHeight * heightPercent;
 
@@ -195,13 +199,13 @@ class PangleImageSize {
 ///
 class PangleResult {
   /// 结果码
-  final int code;
+  final int? code;
 
   /// 一般是错误信息
-  final String message;
+  final String? message;
 
   /// 适用于需要验证结果的广告，如激励视频
-  final bool verify;
+  final bool? verify;
 
   const PangleResult({this.code, this.message, this.verify = false});
 
@@ -210,7 +214,7 @@ class PangleResult {
 
   /// 解析插件返回的结果
   ///
-  factory PangleResult.fromJson(Map<String, dynamic> json) {
+  factory PangleResult.fromJson(Map<String, dynamic>? json) {
     if (json == null) {
       return PangleResult(code: -1, message: 'unknown');
     }

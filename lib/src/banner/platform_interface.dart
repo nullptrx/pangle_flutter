@@ -28,12 +28,12 @@ final kBannerViewType = 'nullptrx.github.io/pangle_bannerview';
 
 abstract class BannerViewPlatform {
   Widget build({
-    @required BuildContext context,
-    @required Map<String, dynamic> creationParams,
-    @required
-        BannerViewPlatformCallbacksHandler bannerViewPlatformCallbacksHandler,
-    BannerViewPlatformCreatedCallback onBannerViewPlatformCreated,
-    Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
+    required BuildContext context,
+    required Map<String, dynamic> creationParams,
+    required BannerViewPlatformCallbacksHandler
+        bannerViewPlatformCallbacksHandler,
+    BannerViewPlatformCreatedCallback? onBannerViewPlatformCreated,
+    Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   });
 }
 

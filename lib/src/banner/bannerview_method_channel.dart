@@ -31,8 +31,7 @@ class MethodChannelBannerViewPlatform implements BannerViewPlatformController {
   /// Constructs an instance that will listen for webviews broadcasting to the
   /// given [id], using the given [WebViewPlatformCallbacksHandler].
   MethodChannelBannerViewPlatform(int id, this._platformCallbacksHandler)
-      : assert(_platformCallbacksHandler != null),
-        _channel = MethodChannel('${kBannerViewType}_$id') {
+      : _channel = MethodChannel('${kBannerViewType}_$id') {
     _channel.setMethodCallHandler(_onMethodCall);
   }
 

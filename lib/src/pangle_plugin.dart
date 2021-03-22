@@ -44,7 +44,7 @@ class PanglePlugin {
 
   _handleMethod(MethodCall call) {}
 
-  Future<String> getSdkVersion() async {
+  Future<String?> getSdkVersion() async {
     return await _methodChannel.invokeMethod('getSdkVersion');
   }
 
@@ -75,9 +75,9 @@ class PanglePlugin {
   /// deny access.
   ///
   /// Just works on iOS 14.0+.
-  Future<PangleAuthorizationStatus> requestTrackingAuthorization() async {
+  Future<PangleAuthorizationStatus?> requestTrackingAuthorization() async {
     if (Platform.isIOS) {
-      int rawValue = await _methodChannel.invokeMethod(
+      int? rawValue = await _methodChannel.invokeMethod(
         'requestTrackingAuthorization',
       );
       if (rawValue != null) {
@@ -90,9 +90,9 @@ class PanglePlugin {
   /// Returns information about your application’s tracking authorization status.
   ///
   /// Just works on iOS 14.0+.
-  Future<PangleAuthorizationStatus> getTrackingAuthorizationStatus() async {
+  Future<PangleAuthorizationStatus?> getTrackingAuthorizationStatus() async {
     if (Platform.isIOS) {
-      int rawValue = await _methodChannel.invokeMethod(
+      int? rawValue = await _methodChannel.invokeMethod(
         'getTrackingAuthorizationStatus',
       );
       if (rawValue != null) {
@@ -108,8 +108,8 @@ class PanglePlugin {
   /// [iOS] config for iOS
   /// [android] config for Android
   Future<Null> init({
-    IOSConfig iOS,
-    AndroidConfig android,
+    IOSConfig? iOS,
+    AndroidConfig? android,
   }) async {
     if (Platform.isIOS && iOS != null) {
       await _methodChannel.invokeMethod('init', iOS.toJSON());
@@ -123,10 +123,10 @@ class PanglePlugin {
   /// [iOS] config for iOS
   /// [android] config for Android
   Future<PangleResult> loadSplashAd({
-    IOSSplashConfig iOS,
-    AndroidSplashConfig android,
+    IOSSplashConfig? iOS,
+    AndroidSplashConfig? android,
   }) async {
-    Map<String, dynamic> result;
+    Map<String, dynamic>? result;
     if (Platform.isIOS && iOS != null) {
       result = await _methodChannel.invokeMapMethod(
         'loadSplashAd',
@@ -147,10 +147,10 @@ class PanglePlugin {
   /// [android] config for Android
   /// return code & message
   Future<PangleResult> loadRewardedVideoAd({
-    IOSRewardedVideoConfig iOS,
-    AndroidRewardedVideoConfig android,
+    IOSRewardedVideoConfig? iOS,
+    AndroidRewardedVideoConfig? android,
   }) async {
-    Map<String, dynamic> result;
+    Map<String, dynamic>? result;
     if (Platform.isIOS && iOS != null) {
       result = await _methodChannel.invokeMapMethod(
         'loadRewardedVideoAd',
@@ -171,10 +171,10 @@ class PanglePlugin {
   /// [android] config for Android
   /// return loaded ad count.
   Future<PangleAd> loadFeedAd({
-    IOSFeedConfig iOS,
-    AndroidFeedConfig android,
+    IOSFeedConfig? iOS,
+    AndroidFeedConfig? android,
   }) async {
-    Map<dynamic, dynamic> result;
+    Map<dynamic, dynamic>? result;
     if (Platform.isIOS && iOS != null) {
       result = await _methodChannel.invokeMapMethod(
         'loadFeedAd',
@@ -195,7 +195,7 @@ class PanglePlugin {
   /// Remove feed ad references
   /// [ids] feed id, see [loadFeedAd]
   /// return count of removed
-  Future<int> removeFeedAd(List<String> ids) async {
+  Future<int?> removeFeedAd(List<String> ids) async {
     return await _methodChannel.invokeMethod('removeFeedAd', ids);
   }
 
@@ -205,10 +205,10 @@ class PanglePlugin {
   /// [android] config for Android
   /// return loaded ad count.
   Future<PangleResult> loadInterstitialAd({
-    IOSInterstitialConfig iOS,
-    AndroidInterstitialConfig android,
+    IOSInterstitialConfig? iOS,
+    AndroidInterstitialConfig? android,
   }) async {
-    Map<String, dynamic> result;
+    Map<String, dynamic>? result;
     if (Platform.isIOS && iOS != null) {
       result = await _methodChannel.invokeMapMethod(
         'loadInterstitialAd',
@@ -229,10 +229,10 @@ class PanglePlugin {
   /// [android] config for Android
   /// return code & message.
   Future<PangleResult> loadFullscreenVideoAd({
-    IOSFullscreenVideoConfig iOS,
-    AndroidFullscreenVideoConfig android,
+    IOSFullscreenVideoConfig? iOS,
+    AndroidFullscreenVideoConfig? android,
   }) async {
-    Map<String, dynamic> result;
+    Map<String, dynamic>? result;
     if (Platform.isIOS && iOS != null) {
       result = await _methodChannel.invokeMapMethod(
         'loadFullscreenVideoAd',

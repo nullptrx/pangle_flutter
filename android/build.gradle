@@ -1,5 +1,5 @@
 group 'io.github.nullptrx.pangleflutter'
-version '0.10.1'
+version '1.0.0'
 
 buildscript {
     ext.kotlin_version = '1.4.21'

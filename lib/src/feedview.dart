@@ -37,7 +37,7 @@ typedef void FeedViewCreatedCallback(FeedViewController controller);
 
 class FeedView extends StatefulWidget {
   const FeedView({
-    Key key,
+    Key? key,
     this.id,
     this.onFeedViewCreated,
     this.gestureRecognizers,
@@ -48,10 +48,10 @@ class FeedView extends StatefulWidget {
     this.onRenderFail,
   }) : super(key: key);
 
-  final String id;
+  final String? id;
 
   /// If not null invoked once the feed view is created.
-  final FeedViewCreatedCallback onFeedViewCreated;
+  final FeedViewCreatedCallback? onFeedViewCreated;
 
   /// Which gestures should be consumed by the feed view.
   ///
@@ -62,9 +62,9 @@ class FeedView extends StatefulWidget {
   ///
   /// When this set is empty or null, the feed view will only handle pointer events for gestures that
   /// were not claimed by any other gesture recognizer.
-  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers;
+  final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
-  static FeedViewPlatform _platform;
+  static FeedViewPlatform? _platform;
 
   /// Sets a custom [FeedViewPlatform].
   ///
@@ -94,7 +94,7 @@ class FeedView extends StatefulWidget {
               "Trying to use the default feedview implementation for $defaultTargetPlatform but there isn't a default one");
       }
     }
-    return _platform;
+    return _platform!;
   }
 
   Map<String, dynamic> get config {
@@ -108,19 +108,19 @@ class FeedView extends StatefulWidget {
   _FeedViewState createState() => _FeedViewState();
 
   /// 广告被点击
-  final VoidCallback onClick;
+  final VoidCallback? onClick;
 
   /// 广告展示
-  final VoidCallback onShow;
+  final VoidCallback? onShow;
 
   /// 点击了关闭按钮（不喜欢）
-  final PangleOptionCallback onDislike;
+  final PangleOptionCallback? onDislike;
 
   /// 渲染广告成功
-  final VoidCallback onRenderSuccess;
+  final VoidCallback? onRenderSuccess;
 
   /// 渲染广告失败
-  final PangleMessageCallback onRenderFail;
+  final PangleMessageCallback? onRenderFail;
 }
 
 class _FeedViewState extends State<FeedView>
@@ -128,7 +128,7 @@ class _FeedViewState extends State<FeedView>
   final Completer<FeedViewController> _controller =
       Completer<FeedViewController>();
 
-  _PlatformCallbacksHandler _platformCallbacksHandler;
+  _PlatformCallbacksHandler? _platformCallbacksHandler;
 
   @override
   bool get wantKeepAlive => true;
@@ -139,7 +139,7 @@ class _FeedViewState extends State<FeedView>
     return FeedView.platform.build(
       context: context,
       creationParams: widget.config,
-      feedViewPlatformCallbacksHandler: _platformCallbacksHandler,
+      feedViewPlatformCallbacksHandler: _platformCallbacksHandler!,
       onFeedViewPlatformCreated: _onWebViewPlatformCreated,
       gestureRecognizers: widget.gestureRecognizers,
     );
@@ -155,7 +155,7 @@ class _FeedViewState extends State<FeedView>
   void didUpdateWidget(FeedView oldWidget) {
     super.didUpdateWidget(oldWidget);
     _controller.future.then((FeedViewController controller) {
-      _platformCallbacksHandler._widget = widget;
+      _platformCallbacksHandler!._widget = widget;
       controller._updateWidget(widget);
     });
   }
@@ -167,7 +167,7 @@ class _FeedViewState extends State<FeedView>
         widget, feedViewPlatform, _platformCallbacksHandler);
     _controller.complete(controller);
     if (widget.onFeedViewCreated != null) {
-      widget.onFeedViewCreated(controller);
+      widget.onFeedViewCreated!(controller);
     }
   }
 }
@@ -181,13 +181,13 @@ class FeedViewController {
     this._widget,
     this._feedViewPlatformController,
     this._platformCallbacksHandler,
-  ) : assert(_feedViewPlatformController != null);
+  );
 
   final FeedViewPlatformController _feedViewPlatformController;
 
   // todo unused_field
   // ignore: unused_field
-  final _PlatformCallbacksHandler _platformCallbacksHandler;
+  final _PlatformCallbacksHandler? _platformCallbacksHandler;
 
   // todo unused_field
   // ignore: unused_field
@@ -204,14 +204,14 @@ class FeedViewController {
   /// 但是受[updateRestrictedBounds]影响，即当Touchable区域中如果包含Restricted区域，
   /// Restricted区域内的点击事件会屏蔽掉。
   Future<void> updateTouchableBounds(List<Rect> bounds) async {
-    await _feedViewPlatformController?.updateTouchableBounds(bounds);
+    await _feedViewPlatformController.updateTouchableBounds(bounds);
   }
 
   /// 更新不可点击区域
   ///
   /// 一般用于处理NativeView与PlatformView重叠时点击事件冲突的问题。
   Future<void> updateRestrictedBounds(List<Rect> bounds) async {
-    await _feedViewPlatformController?.updateRestrictedBounds(bounds);
+    await _feedViewPlatformController.updateRestrictedBounds(bounds);
   }
 }
 
