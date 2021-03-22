@@ -11,26 +11,28 @@ import Foundation
 internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFullscreenVideoAdDelegate {
     typealias Success = () -> Void
     typealias Fail = (Error?) -> Void
-    
+
     private var isSkipped = false
     private var loadingType: LoadingType
-    
+    private var slotId: String
+
     let success: Success?
     let fail: Fail?
-    
-    init(_ loadingType: LoadingType, success: Success?, fail: Fail?) {
+
+    init(_ slotId: String, loadingType: LoadingType, success: Success?, fail: Fail?) {
         self.loadingType = loadingType
+        self.slotId = slotId
         self.success = success
         self.fail = fail
     }
-    
+
     func nativeExpressFullscreenVideoAdDidLoad(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {
         let preload = self.loadingType == .preload || self.loadingType == .preload_only
         if preload {
             self.loadingType = .normal
             fullscreenVideoAd.extraDelegate = self
             /// 存入缓存
-            PangleAdManager.shared.setFullScreenVideoAd(fullscreenVideoAd)
+            PangleAdManager.shared.setFullScreenVideoAd(slotId, fullscreenVideoAd)
             /// 必须回调，否则task不能销毁，导致内存泄漏
             self.success?()
         } else {
@@ -38,7 +40,7 @@ internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFulls
             fullscreenVideoAd.show(fromRootViewController: vc)
         }
     }
-    
+
     func nativeExpressFullscreenVideoAdDidClose(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {
         if self.isSkipped {
             return
@@ -49,7 +51,7 @@ internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFulls
             self.success?()
         }
     }
-    
+
     func nativeExpressFullscreenVideoAdDidClickSkip(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {
         self.isSkipped = true
         let error = NSError(domain: "skip", code: -1, userInfo: nil)
@@ -59,11 +61,13 @@ internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFulls
             self.fail?(error)
         }
     }
-    
-    func nativeExpressFullscreenVideoAdViewRenderSuccess(_ rewardedVideoAd: BUNativeExpressFullscreenVideoAd) {}
-    
-    func nativeExpressFullscreenVideoAdDidDownLoadVideo(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {}
-    
+
+    func nativeExpressFullscreenVideoAdViewRenderSuccess(_ rewardedVideoAd: BUNativeExpressFullscreenVideoAd) {
+    }
+
+    func nativeExpressFullscreenVideoAdDidDownLoadVideo(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {
+    }
+
     func nativeExpressFullscreenVideoAdViewRenderFail(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd, error: Error?) {
         if fullscreenVideoAd.didReceiveFail != nil {
             fullscreenVideoAd.didReceiveFail?(error)
@@ -71,7 +75,7 @@ internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFulls
             self.fail?(error)
         }
     }
-    
+
     func nativeExpressFullscreenVideoAd(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd, didFailWithError error: Error?) {
         if fullscreenVideoAd.didReceiveFail != nil {
             fullscreenVideoAd.didReceiveFail?(error)
@@ -79,9 +83,10 @@ internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFulls
             self.fail?(error)
         }
     }
-    
-    func nativeExpressFullscreenVideoAdDidPlayFinish(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd, didFailWithError error: Error?) {}
-    
+
+    func nativeExpressFullscreenVideoAdDidPlayFinish(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd, didFailWithError error: Error?) {
+    }
+
 }
 
 private var delegateKey = "nullptrx.github.io/delegate"
@@ -92,23 +97,26 @@ extension BUNativeExpressFullscreenVideoAd {
     var extraDelegate: BUNativeExpressFullscreenVideoAdDelegate? {
         get {
             return objc_getAssociatedObject(self, &delegateKey) as? BUNativeExpressFullscreenVideoAdDelegate
-        } set {
+        }
+        set {
             objc_setAssociatedObject(self, &delegateKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
-    
+
     var didReceiveSuccess: (() -> Void)? {
         get {
             objc_getAssociatedObject(self, &successKey) as? (() -> Void)
-        } set {
+        }
+        set {
             objc_setAssociatedObject(self, &successKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
-    
+
     var didReceiveFail: ((Error?) -> Void)? {
         get {
             objc_getAssociatedObject(self, &failKey) as? ((Error?) -> Void)
-        } set {
+        }
+        set {
             objc_setAssociatedObject(self, &failKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }

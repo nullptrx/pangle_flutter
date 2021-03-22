@@ -13,9 +13,9 @@ public final class PangleAdManager: NSObject {
 
     private var expressAdCollection: [String: BUNativeExpressAdView] = [:]
 
-    private var rewardedVideoAdCollection: [Any] = []
+    private var rewardedVideoAdData: [String: [Any]] = [:]
 
-    private var fullscreenVideoAdCollection: [Any] = []
+    private var fullscreenVideoAdData: [String: [Any]] = [:]
 
     private var taskList: [FLTTaskProtocol] = []
 
@@ -122,7 +122,7 @@ public final class PangleAdManager: NSObject {
         let loadingType = LoadingType(rawValue: loadingTypeIndex)!
 
         if loadingType == .preload || loadingType == .normal {
-            let success = showFullScreenVideoAd()({ [unowned self] object in
+            let success = showFullScreenVideoAd(args)({ [unowned self] object in
                 if loadingType == .preload {
                     loadFullscreenVideoAdOnly(args, loadingType: .preload_only)
                 }
@@ -179,38 +179,30 @@ extension PangleAdManager {
         return false
     }
 
-    public func setRewardedVideoAd(_ ad: NSObject?) {
+    public func setRewardedVideoAd(_ slotId: String, _ ad: NSObject?) {
         if ad != nil {
-            rewardedVideoAdCollection.append(ad!)
+            var data = rewardedVideoAdData[slotId] ?? []
+            data.append(ad!)
+            rewardedVideoAdData[slotId] = data
         }
     }
 
     public func showRewardedVideoAd(_ args: [String: Any?]) -> (@escaping (Any) -> Void) -> Bool {
         { result in
-            if self.rewardedVideoAdCollection.count > 0 {
-                let obj = self.rewardedVideoAdCollection[0]
-
-                if obj is BURewardedVideoAd {
-                    let ad = obj as! BURewardedVideoAd
-                    ad.didReceiveSuccess = { [unowned self] verify in
-                        self.rewardedVideoAdCollection.removeFirst()
-                        result(["code": 0, "verify": verify])
-                    }
-                    ad.didReceiveFail = { error in
-                        self.rewardedVideoAdCollection.removeFirst()
-                        let e = error as NSError?
-                        result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""])
-                    }
-                    let vc = AppUtil.getVC()
-                    ad.show(fromRootViewController: vc)
-                } else if obj is BUNativeExpressRewardedVideoAd {
+            let slotId: String = args["slotId"] as! String
+            var data = self.rewardedVideoAdData[slotId] ?? []
+            if data.count > 0 {
+                let obj = data[0]
+                if obj is BUNativeExpressRewardedVideoAd {
                     let ad = obj as! BUNativeExpressRewardedVideoAd
                     ad.didReceiveSuccess = { verify in
-                        self.rewardedVideoAdCollection.removeFirst()
+                        data.removeFirst()
+                        self.rewardedVideoAdData[slotId] = data
                         result(["code": 0, "verify": verify])
                     }
                     ad.didReceiveFail = { error in
-                        self.rewardedVideoAdCollection.removeFirst()
+                        data.removeFirst()
+                        self.rewardedVideoAdData[slotId] = data
                         let e = error as NSError?
                         result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""])
                     }
@@ -224,38 +216,31 @@ extension PangleAdManager {
         }
     }
 
-    public func setFullScreenVideoAd(_ ad: NSObject?) {
+    public func setFullScreenVideoAd(_ slotId: String, _ ad: NSObject?) {
         if ad != nil {
-            fullscreenVideoAdCollection.append(ad!)
+            var data = fullscreenVideoAdData[slotId] ?? []
+            data.append(ad!)
+            fullscreenVideoAdData[slotId] = data
         }
     }
 
-    public func showFullScreenVideoAd() -> (@escaping (Any) -> Void) -> Bool {
+    public func showFullScreenVideoAd(_ args: [String: Any?]) -> (@escaping (Any) -> Void) -> Bool {
         { result in
-            if self.fullscreenVideoAdCollection.count > 0 {
-                let obj = self.fullscreenVideoAdCollection[0]
+            let slotId: String = args["slotId"] as! String
+            var data = self.fullscreenVideoAdData[slotId] ?? []
+            if data.count > 0 {
+                let obj = data[0]
 
-                if obj is BUFullscreenVideoAd {
-                    let ad = obj as! BUFullscreenVideoAd
-                    ad.didReceiveSuccess = {
-                        self.fullscreenVideoAdCollection.removeFirst()
-                        result(["code": 0])
-                    }
-                    ad.didReceiveFail = { error in
-                        self.fullscreenVideoAdCollection.removeFirst()
-                        let e = error as NSError?
-                        result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""])
-                    }
-                    let vc = AppUtil.getVC()
-                    ad.show(fromRootViewController: vc)
-                } else if obj is BUNativeExpressFullscreenVideoAd {
+                if obj is BUNativeExpressFullscreenVideoAd {
                     let ad = obj as! BUNativeExpressFullscreenVideoAd
                     ad.didReceiveSuccess = {
-                        self.fullscreenVideoAdCollection.removeFirst()
+                        data.removeFirst()
+                        self.fullscreenVideoAdData[slotId] = data
                         result(["code": 0])
                     }
                     ad.didReceiveFail = { error in
-                        self.fullscreenVideoAdCollection.removeFirst()
+                        data.removeFirst()
+                        self.fullscreenVideoAdData[slotId] = data
                         let e = error as NSError?
                         result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""])
                     }

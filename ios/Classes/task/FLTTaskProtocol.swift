@@ -15,10 +15,12 @@ protocol FLTTaskProtocol: class {
 
 extension FLTTaskProtocol {
     func execute() -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
-        return { _ in }
+        { _ in
+        }
     }
 
     func execute(_ loadingType: LoadingType) -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
-        return { _ in }
+        { _ in
+        }
     }
 }
