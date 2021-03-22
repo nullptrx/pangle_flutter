@@ -36,7 +36,6 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
             Container(
               height: 260,
               child: BannerView(
-                // key: _banner2Key,
                 iOS: IOSBannerConfig(
                   slotId: kBannerExpressId600x260,
                   expressSize: PangleExpressSize(width: 600, height: 260),
@@ -45,6 +44,10 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
                   slotId: kBannerExpressId600x260,
                   expressSize: PangleExpressSize(width: 600, height: 260),
                 ),
+                onBannerViewCreated: (BannerViewController controller){
+                  controller.updateTouchableBounds([Rect.zero]);
+                  controller.updateRestrictedBounds([Rect.zero]);
+                },
                 onClick: () {},
               ),
             ),

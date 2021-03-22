@@ -59,4 +59,11 @@ flutter {
 }
 
 dependencies {
+    implementation 'io.github.nullptrx:pangle:3.5.0.3@aar'
+}
+
+repositories {
+    google()
+    jcenter()
+    maven { url 'https://cdn.jsdelivr.net/gh/nullptrX/repo/m2/' }
 }

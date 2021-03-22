@@ -13,7 +13,23 @@
 
 
 
+> 从 [0.10.1](https://pub.flutter-io.cn/packages/pangle_flutter/versions/0.10.1) 开始，不再支持旧版自渲染方式加载广告。所有可请求广告为[穿山甲官网](https://pangle.cn)目前可创建广告位。
+>
+> 因自渲染广告位，官方不推荐使用，且API不会经常变动，后续会单独提交一个自渲染版本出来。如果你仍需要该功能，可使用[0.9.1](https://pub.flutter-io.cn/packages/pangle_flutter/versions/0.9.1)或在其基础上修改。
+
+
+
+## 版本迁移至0.10.1
+
+> 1. 不再需要传入isExpress参数
+> 2. BannerView, FeedView, SplashView均需要包一层限制大小的Widget, 可选Container, SizeBox, AspectRatio, Expanded等
+> 3. BannerView, FeedView, SplashView的控制点击实现变动，可参考example进行更改。
+> 4. v0.10.1不再提供自渲染广告位加载，后续会在新的分支实现，敬请期待。
+
+
+
 ## SDK对应版本
+
 [[Android] 3.5.0.0](https://sf1-be-tos.pglstatp-toutiao.com/obj/union-platform/d8bcf772441c03541ab14c808536a802.zip)（理论上3.5+都支持）
 
 [[iOS] 3.4.2.8](https://sf1-be-tos.pglstatp-toutiao.com/obj/union-platform/d93cdd1e574e09338f628a78fc808107.zip) （理论上3.4+都支持）
@@ -97,11 +113,6 @@ dependencies:
 
 ### 1. 信息流广告
 
-1. 原生自渲染信息流广告： 指定图片大小或比例固定，由开发者根据imageMode自行渲染。
-模板渲染广告：指定整个广告宽高，由SDK自动适配传入的宽高进行渲染。
-2. 原生自渲染信息流广告本模块暂不能整个item自定义宽高，只能使用`PangleImgSize`中的值指定图片宽高比例，模版渲染广告可指定期望宽高，但必须跟广告后台说明的宽高对应。
-3. 目前根据SDK Demo所知，模板类广告每次只能传入一种模板宽高，并且渲染广告时获取不到该广告所使用的模板类型。因此如果选择多种模板，可能导致渲染出来的效果不佳。
-
 <img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/feed_tip1.png" alt="pangle_flutter"  width="500" height="auto"/>
 
 <img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/feed_tip2.png" alt="pangle_flutter" width="500" height="auto" />
@@ -180,27 +191,60 @@ pangle.loadRewardVideoAd(
 
 ### 4. Banner广告
 
+基本覆盖了原生回调事件，现在点击右上角关闭[ x ]按钮，需要开发者手动移除，不再自动移除Item。
+
 ```dart
 /// Banner通过PlatformView实现，使用方法同Widget
 /// [kBannerId] Banner广告ID, 对应Android的CodeId，对应iOS的slotID
 BannerView(
   iOS: IOSBannerAdConfig(slotId: kBannerId),
   android: AndroidBannerAdConfig(slotId: kBannerId),
+  // 还有其他回调，具体可导入查看
+),
+
+
+// 必须限定范围大小，可用Expaned,Container,SizeBox,AspectRatio等
+Container(
+  height: 260,
+  child: BannerView(
+    iOS: IOSBannerConfig(
+      slotId: kBannerExpressId600x260,
+      expressSize: PangleExpressSize(width: 600, height: 260),
+    ),
+    android: AndroidBannerConfig(
+      slotId: kBannerExpressId600x260,
+      expressSize: PangleExpressSize(width: 600, height: 260),
+    ),
+    onBannerViewCreated: (BannerViewController controller){
+      controller.updateTouchableBounds([Rect.zero]);
+      controller.updateRestrictedBounds([Rect.zero]);
+    },
+    onClick: () {},
+  ),
 ),
 ```
 
-- 切换可点击状态
+- 控制可点击区域（默认可点击）
 
 ```dart
 // 因iOS的EXPRESS类型的广告内部使用WebView渲染，而WebView与FlutterView存在部分点击事件冲突，故提供该解决方案
-final _bannerKey = GlobalKey<BannerViewState>();
-// 外部控制该广告位是否可点击
-_bannerKey.currentState.setUserInteractionEnabled(enable);
+onBannerViewCreated: (BannerViewController controller){
+  // 禁止点击，传入一个Rect.zero即可
+  controller.updateTouchableBounds([Rect.zero]);
+  // 提供点击，传入空即可
+  controller.updateTouchableBounds([]);
+
+  // 额外不可点击区域（一般用于上面可点击范围上面，如可点击范围有一个悬浮按钮Widget）
+  controller.updateRestrictedBounds([Rect.zero]);
+
+},
 ```
 
 
 
 ### 5. 信息流广告
+
+基本覆盖了原生回调事件，现在点击右上角关闭[ x ]按钮，需要开发者手动移除，不再自动移除Item。
 
 - 获取信息流数据
 
@@ -244,78 +288,81 @@ FeedView(
 )
 ```
 
-- 切换是否可点击状态
+- 控制可点击区域（默认可点击）
 
 ```dart
 // 因iOS的EXPRESS类型的广告内部使用WebView渲染，而WebView与FlutterView存在部分点击事件冲突，故提供该解决方案
-// 1. 继承GlobalObjectKey实现自己的key
-class _ItemKey extends GlobalObjectKey<FeedViewState> {
-  _ItemKey(Object value) : super(value);
-}
-// 2. 为FeedView提供自己的key
-FeedView(
-  key: _ItemKey(item.feedId),
-  ...
-)
-// 3. 为需要计算位置的Widget提供key, 如
-final _titleKey = GlobalKey();
-AppBar(key: _titleKey)
-final _naviKey = GlobalKey();
-BottomNavigationBar(key: _naviKey)
-// 4. 为FeedView容器提供ScrollController, 如
-final _controller = ScrollController();
-ListView(controller: _controller)
-// 5. 监听controller滚动事件，并动态切换可点击状态
-@override
-void initState() {
-  super.initState();
-  _loadFeedAd();
-  _controller.addListener(_onScroll);
-}
+// 1. 可点击区域key
+final _bodyKey = GlobalKey();
+// 不可点击区域key
+final _otherKey = GlobalKey();
+// 2.FeedView移动区域
+Container(
+  key: _bodyKey,
+  child: ListView.builder(
+    itemCount: items.length,
+    itemBuilder: (context, index) {
+      return _buildItem(index);
+    },
+)),
+// 可能覆盖在FeedView上的button
+FloatingActionButton(
+  key: _otherKey,
+),
+// 3. 获取FeedViewController并限制点击范围
+ AspectRatio(
+   aspectRatio: 375 / 284.0,
+   child: FeedView(
+     id: item.feedId,
+     onFeedViewCreated: (controller) {
+       // 限制FeedView点击范围
+       _initConstraintBounds(controller);
+     },
+     onDislike: (option) {
+       // 移除FeedView两部曲
+       pangle.removeFeedAd([item.feedId]);
+       setState(() {
+         items.removeAt(index);
+       });
+     },
+   ),
+ )
 
-@override
-void dispose() {
-  _controller.removeListener(_onScroll);
-  super.dispose();
-}
-_onScroll() {
+_initConstraintBounds(FeedViewController controller) {
   if (!Platform.isIOS) {
     return;
   }
 
-  RenderBox titleBox = _titleKey.currentContext.findRenderObject();
-  var titleSize = titleBox.size;
-  var titleOffset = titleBox.localToGlobal(Offset.zero);
+  RenderBox bodyBox = _bodyKey.currentContext.findRenderObject();
+  final bodyBound = PangleHelper.fromRenderBox(bodyBox);
+  controller.updateTouchableBounds([bodyBound]);
 
-  final minAvailableHeigt = titleOffset.dy + titleSize.height;
+  RenderBox otherBox = _otherKey.currentContext.findRenderObject();
+  final otherBound = PangleHelper.fromRenderBox(otherBox);
 
-  RenderBox naviBox = _naviKey.currentContext.findRenderObject();
-  var naviOffset = naviBox.localToGlobal(Offset.zero);
-
-  final maxAvailableHeight = naviOffset.dy;
-
-  /// 检测各个item的宽高、偏移量是否满足点击需求
-  for (var value in feedIds) {
-    _switchUserInteraction(maxAvailableHeight, minAvailableHeigt, value);
-  }
+  controller.updateRestrictedBounds([otherBound]);
 }
 
-void _switchUserInteraction(
-  double maxAvailableHeight,
-  double minAvailableHeigt,
-  String id,
-) {
-  var itemKey = _ItemKey(id);
-  RenderBox renderBox = itemKey.currentContext.findRenderObject();
-  var size = renderBox.size;
-  var offset = renderBox.localToGlobal(Offset.zero);
 
-  /// 最底部坐标不低于NavigationBar, 最顶部不高于AppBar
-  var available = offset.dy + size.height < maxAvailableHeight &&
-    offset.dy > minAvailableHeigt;
-  itemKey.currentState.setUserInteractionEnabled(available);
+// 4.清除缓存
+// 可选，点击不喜欢即右上角叉时清除
+pangle.removeFeedAd([item.feedId]);
+// 必须
+@override
+void dispose() {
+  /// 不关心返回值
+  pangle.removeFeedAd(feedIds);
+  /// 关心返回值
+  /// _removeFeedAd();
+  super.dispose();
 }
-  
+
+/// 移除广告
+_removeFeedAd() async {
+  /// 返回移除个数
+  int count = await pangle.removeFeedAd(feedIds);
+  print('Feed Ad Removed: $count');
+}
 
 ```
 
@@ -326,11 +373,10 @@ void _switchUserInteraction(
 ```dart
  final result = await pangle.loadInterstitialAd(
    iOS: IOSInterstitialAdConfig(
-     slotId: kInterstitialId,
-     isExpress: true,
+     slotId: kInterstitialId
 
      /// 该宽高为你申请的广告位宽高，请根据实际情况赋值
-     imgSize: PangleImgSize.interstitial600_400,
+     expressSize: PangleExpressSize(width: width, height: height),
    ),
    android: AndroidInterstitialAdConfig(
      slotId: kInterstitialId,
@@ -343,12 +389,10 @@ print(jsonEncode(result));
 
 ## 开发说明
 
-1. 开屏广告放在runApp之前调用体验最佳
-3. iOS信息流广告的点击事件需要传入`rootViewController`，使用的是`(UIApplication.shared.delegate?.window??.rootViewController)!`，暂未发现问题。
+1. iOS信息流广告的点击事件需要传入`rootViewController`，使用的是`(UIApplication.shared.delegate?.window??.rootViewController)!`，暂未发现问题。
+4. `BannerView`、`FeedView`通过[`Hybrid Composition`](https://github.com/flutter/flutter/wiki/Hybrid-Composition)实现。在安卓上，`PlatformView`最低支持API 19。
 
-4. `BannerView`、`FeedView`通过`PlatformView`实现。在安卓上，`PlatformView`最低支持API 20。
-
-
+ 
 
 ## 贡献
 

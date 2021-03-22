@@ -71,19 +71,24 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
           ]),
       body: Container(
           key: _bodyKey,
-          child: ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              return _buildItem(index);
+          child: RefreshIndicator(
+            onRefresh: () async {
+              await _loadFeedAd();
             },
+            child: ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) {
+                return _buildItem(index);
+              },
+            ),
           )),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         key: _otherKey,
-        onPressed: () {
-          _loadFeedAd();
+        onPressed: () async {
+          await _loadFeedAd(isRefresh: false);
         },
-        child: Icon(Icons.refresh),
+        child: Icon(Icons.get_app),
       ),
     );
   }
@@ -122,7 +127,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
   }
 
   /// 加载广告
-  _loadFeedAd() async {
+  _loadFeedAd({bool isRefresh = true}) async {
     var expressSize = PangleExpressSize(width: 375, height: 284);
     PangleAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedConfig(
@@ -153,7 +158,13 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
       feedIds.add(item.feedId);
     }
     setState(() {
-      this.items..addAll(data);
+      if (isRefresh) {
+        this.items
+          ..clear()
+          ..addAll(data);
+      } else {
+        this.items.addAll(data);
+      }
     });
   }
 

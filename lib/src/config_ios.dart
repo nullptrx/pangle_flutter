@@ -150,7 +150,7 @@ class IOSBannerConfig implements Config {
     @required this.slotId,
     @required this.expressSize,
     this.interval,
-  }) : assert(expressSize != null);
+  });
 
   /// Convert config to json
   @override
@@ -201,7 +201,7 @@ class IOSInterstitialConfig implements Config {
   const IOSInterstitialConfig({
     @required this.slotId,
     @required this.expressSize,
-  }) : assert(expressSize != null);
+  });
 
   /// Convert config to json
   @override

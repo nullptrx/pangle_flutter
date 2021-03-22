@@ -52,15 +52,14 @@ AndroidConfig({
 ///
 /// [slotId] The unique identifier of splash ad.
 /// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
-/// [hideSkipButton] optional. Whether hide skip button, default NO. If you hide the skip button, you need to customize the countdown.
-/// [isExpress] optional. experimental. 个性化模板广告.
-/// [expressSize] optional. 模板宽高
-IOSSplashConfig({
+/// [hideSkipButton] optional. Whether hide skip button, default NO.
+///    If you hide the skip button, you need to customize the countdown.
+///  [isExpress] 开屏无模板渲染，默认false
+const IOSSplashConfig({
   @required this.slotId,
   this.tolerateTimeout,
   this.hideSkipButton,
-  this.isExpress,
-  this.expressSize,
+  this.isExpress = false,
 });
 
 /// The splash ad config for Android
@@ -68,15 +67,15 @@ IOSSplashConfig({
 /// [slotId] The unique identifier of splash ad.
 /// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
 /// [hideSkipButton] optional. Whether hide skip button, default NO. If you hide the skip button, you need to customize the countdown.
-/// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-/// [isExpress] optional. experimental. 个性化模板广告.
+/// [isSupportDeepLink] optional. Whether to support deeplink. Default true.
+/// [isExpress] 开屏广告无模板渲染，默认false
 /// [expressSize] optional. 模板宽高
-AndroidSplashConfig({
+const AndroidSplashConfig({
   @required this.slotId,
   this.tolerateTimeout,
   this.hideSkipButton,
-  this.isSupportDeepLink,
-  this.isExpress,
+  this.isSupportDeepLink = true,
+  this.isExpress = false,
   this.expressSize,
 });
 ```
@@ -98,16 +97,14 @@ AndroidSplashConfig({
 /// [rewardName] optional. reward name.
 /// [rewardAmount] optional. number of rewards.
 /// [extra] optional. serialized string.
-/// [isExpress] optional. 个性化模板广告.
-/// [loadingType] optional. 加载广告的类型，默认[LoadingType.normal]
-IOSRewardedVideoConfig({
+/// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
+const IOSRewardedVideoConfig({
   @required this.slotId,
   this.userId,
   this.rewardName,
   this.rewardAmount,
   this.extra,
-  this.isExpress,
-  this.loadingType,
+  this.loadingType = PangleLoadingType.normal,
 });
 
 /// The rewarded video ad config for Android
@@ -124,16 +121,18 @@ IOSRewardedVideoConfig({
 /// [extra] optional. serialized string.
 /// [isVertical] optional. Whether video is vertical orientation. Vertical, if true. Otherwise, horizontal.
 /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-/// [isExpress] optional. 个性化模板广告.
-AndroidRewardedVideoConfig({
+/// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
+/// [expressSize] optional. 模板宽高
+const AndroidRewardedVideoConfig({
   @required this.slotId,
   this.userId,
   this.rewardName,
   this.rewardAmount,
   this.extra,
-  this.isVertical,
-  this.isSupportDeepLink,
-  this.isExpress,
+  this.isVertical = true,
+  this.isSupportDeepLink = true,
+  this.loadingType,
+  this.expressSize,
 });
 ```
 
@@ -144,36 +143,30 @@ AndroidRewardedVideoConfig({
 ```dart
 /// The feed ad config for iOS
 ///
-/// [slotId] required. The unique identifier of a feed ad.
-/// [imgSize] required. Image size.
-/// [isExpress] optional. 个性化模板广告.
+/// [slotId] required. The unique identifier of a banner ad.
 /// [expressSize] optional. 模板宽高
 /// [isUserInteractionEnabled] 广告位是否可点击，true可以，false不可以
-/// [interval] The carousel interval, in seconds, is set in the range of 30~120s
-IOSBannerAdConfig({
+/// [interval] The carousel interval, in seconds, is set in the range of 30~120s,
+///   and is passed during initialization. If it does not meet the requirements,
+///   it will not be in carousel ad.
+const IOSBannerConfig({
   @required this.slotId,
-  this.imgSize = PangleImgSize.banner600_150,
-  this.count,
-  this.isExpress,
-  this.expressSize,
-  this.isUserInteractionEnabled = true,
+  @required this.expressSize,
   this.interval,
 });
 
 /// The feed ad config for Android
 ///
-/// [slotId] required. The unique identifier of a feed ad.
-/// [imgSize] required. Image size.
-/// [isSupportDeepLink] optional. Whether to support deeplink.
-/// [isExpress] optional. 个性化模板广告.
+/// [slotId] required. The unique identifier of a banner ad.
+/// [isSupportDeepLink] optional. Whether to support deeplink. default true.
 /// [expressSize] optional. 模板宽高
-/// [interval] The carousel interval, in seconds, is set in the range of 30~120s
-AndroidBannerAdConfig({
+/// [interval] The carousel interval, in seconds, is set in the range of 30~120s,
+///   and is passed during initialization. If it does not meet the requirements,
+///   it will not be in carousel ad.
+const AndroidBannerConfig({
   @required this.slotId,
-  this.imgSize = PangleImgSize.banner600_150,
-  this.isSupportDeepLink,
-  this.isExpress,
-  this.expressSize,
+  @required this.expressSize,
+  this.isSupportDeepLink = true,
   this.interval,
 });
 ```
@@ -186,39 +179,25 @@ AndroidBannerAdConfig({
 /// The feed ad config for iOS
 ///
 /// [slotId] required. The unique identifier of a feed ad.
-/// [imgSize] required. Image size.
-/// [tag] optional. experimental. Mark it.
 /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
-/// [isSupportDeepLink] optional. Whether to support deeplink.
-/// [isExpress] optional. 个性化模板广告.
-/// [expressSize] optional. 模板宽高
-IOSFeedAdConfig({
+/// [expressSize] optional. 模板宽高.
+const IOSFeedConfig({
   @required this.slotId,
-  this.imgSize = PangleImgSize.feed690_388,
-  this.tag,
+  @required this.expressSize,
   this.count,
-  this.isSupportDeepLink,
-  this.isExpress,
-  this.expressSize,
 });
 
-/// The feed ad config for iOS
+/// The feed ad config for Android
 ///
 /// [slotId] required. The unique identifier of a feed ad.
-/// [imgSize] required. Image size.
-/// [tag] optional. experimental. Mark it.
 /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
 /// [isSupportDeepLink] optional. Whether to support deeplink.
-/// [isExpress] optional. 个性化模板广告.
-/// [expressSize] optional. 模板宽高
-AndroidFeedAdConfig({
+/// [isExpress] optional. 个性化模板广告
+const AndroidFeedConfig({
   @required this.slotId,
-  this.imgSize = PangleImgSize.feed690_388,
-  this.tag,
+  @required this.expressSize,
   this.count,
-  this.isSupportDeepLink,
-  this.isExpress,
-  this.expressSize,
+  this.isSupportDeepLink = true,
 });
 ```
 
@@ -228,31 +207,23 @@ AndroidFeedAdConfig({
 /// The interstitial ad config for iOS
 ///
 /// [slotId] required. The unique identifier of a interstitial ad.
-/// [imgSize] required. Image size.
-/// [isExpress] optional. 个性化模板广告.
-/// [expressSize] optional. 模板宽高
-IOSInterstitialAdConfig({
+/// [expressSize] optional. 模板宽高.
+const IOSInterstitialConfig({
   @required this.slotId,
-  this.imgSize = PangleImgSize.interstitial600_400,
-  this.isExpress,
-  this.expressSize,
-})
+  @required this.expressSize,
+});
 
 
 /// The interstitial ad config for Android
 ///
 /// [slotId] required. The unique identifier of a interstitial ad.
-/// [imgSize] required. Image size.
-/// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-/// [isExpress] optional. experimental. 个性化模板广告
+/// [isSupportDeepLink] optional. Whether to support deep link. default true.
 /// [expressSize] optional. 模板宽高
-AndroidInterstitialAdConfig({
+const AndroidInterstitialConfig({
   @required this.slotId,
-  this.imgSize = PangleImgSize.interstitial600_400,
-  this.isSupportDeepLink,
-  this.isExpress,
-  this.expressSize,
-})
+  @required this.expressSize,
+  this.isSupportDeepLink = true,
+});
 ```
 
 
@@ -264,12 +235,10 @@ AndroidInterstitialAdConfig({
 ///
 /// [slotId] required. The unique identifier of a full screen video ad.
 /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
-/// [isExpress] optional. 个性化模板广告
-IOSFullscreenVideoConfig({
+const IOSFullscreenVideoConfig({
   @required this.slotId,
   this.loadingType = PangleLoadingType.normal,
-  this.isExpress = true,
-})
+});
 
 
 /// The full screen video ad config for Android
@@ -278,14 +247,13 @@ IOSFullscreenVideoConfig({
 /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
 /// [orientation] 设置期望视频播放的方向，默认[PangleOrientation.veritical]
 /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
-/// [isExpress] optional. 个性化模板广告
 /// [expressSize] optional. 模板宽高
-AndroidFullscreenVideoConfig({
+const AndroidFullscreenVideoConfig({
   @required this.slotId,
   this.isSupportDeepLink = true,
   this.orientation = PangleOrientation.veritical,
   this.loadingType = PangleLoadingType.normal,
-  this.isExpress = true,
-})
+  this.expressSize,
+});
 ```
 

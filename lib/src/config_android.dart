@@ -244,7 +244,6 @@ class AndroidFeedConfig implements Config {
   final String slotId;
   final int count;
   final bool isSupportDeepLink;
-  final bool isExpress;
   final PangleExpressSize expressSize;
 
   /// The feed ad config for Android
@@ -253,13 +252,11 @@ class AndroidFeedConfig implements Config {
   /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
   /// [isSupportDeepLink] optional. Whether to support deeplink.
   /// [isExpress] optional. 个性化模板广告
-  /// [expressSize] optional. 模板宽高
   const AndroidFeedConfig({
     @required this.slotId,
     @required this.expressSize,
     this.count,
     this.isSupportDeepLink = true,
-    this.isExpress = true,
   });
 
   /// Convert config to json
@@ -269,7 +266,6 @@ class AndroidFeedConfig implements Config {
       'slotId': slotId,
       'count': count,
       'isSupportDeepLink': isSupportDeepLink,
-      'isExpress': isExpress,
       'expressSize': expressSize?.toJson(),
     };
   }
