@@ -7,13 +7,13 @@ import io.github.nullptrx.pangleflutter.PangleAdManager
 import io.github.nullptrx.pangleflutter.common.PangleLoadingType
 import io.github.nullptrx.pangleflutter.common.kBlock
 
-internal class FLTRewardedVideoAd(var target: Activity?, val loadingType: PangleLoadingType, var result: (Any) -> Unit = {}) : TTAdNative.RewardVideoAdListener {
+internal class FLTRewardedVideoAd(val slotId: String, var target: Activity?, val loadingType: PangleLoadingType, var result: (Any) -> Unit = {}) : TTAdNative.RewardVideoAdListener {
 
   var ttVideoAd: TTRewardVideoAd? = null
 
   override fun onRewardVideoAdLoad(ad: TTRewardVideoAd?) {
     if (loadingType == PangleLoadingType.preload || loadingType == PangleLoadingType.preload_only) {
-      PangleAdManager.shared.setRewardedVideoAd(ad)
+      PangleAdManager.shared.setRewardedVideoAd(slotId, ad)
       if (loadingType == PangleLoadingType.preload_only) {
         invoke(0, verify = false)
       }

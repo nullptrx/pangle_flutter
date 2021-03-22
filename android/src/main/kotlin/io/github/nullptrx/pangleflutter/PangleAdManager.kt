@@ -36,8 +36,8 @@ class PangleAdManager {
 
 
   private val expressAdCollection = Collections.synchronizedMap(mutableMapOf<String, TTNativeExpressAd>())
-  private val rewardedVideoAdCollection = Collections.synchronizedList(mutableListOf<TTRewardVideoAd>())
-  private val fullScreenVideoAdCollection = Collections.synchronizedList(mutableListOf<TTFullScreenVideoAd>())
+  private val rewardedVideoAdData = Collections.synchronizedMap(mutableMapOf<String, MutableList<TTRewardVideoAd>>())
+  private val fullScreenVideoAdData = Collections.synchronizedMap(mutableMapOf<String, MutableList<TTFullScreenVideoAd>>())
 
   private lateinit var ttAdManager: TTAdManager
   private var ttAdNative: TTAdNative? = null
@@ -74,10 +74,11 @@ class PangleAdManager {
     return false
   }
 
-  fun showRewardedVideoAd(activity: Activity?, result: (Any) -> Unit = {}): Boolean {
+  fun showRewardedVideoAd(slotId: String, activity: Activity?, result: (Any) -> Unit = {}): Boolean {
     activity ?: return false
-    if (rewardedVideoAdCollection.size > 0) {
-      val ad = rewardedVideoAdCollection.removeAt(0)
+    val data = rewardedVideoAdData[slotId] ?: mutableListOf()
+    if (data.size > 0) {
+      val ad = data.removeFirst()
       ad.setRewardAdInteractionListener(RewardAdInteractionImpl { obj ->
         result.invoke(obj)
       })
@@ -87,16 +88,19 @@ class PangleAdManager {
     return false
   }
 
-  fun setRewardedVideoAd(ad: TTRewardVideoAd?) {
+  fun setRewardedVideoAd(slotId: String, ad: TTRewardVideoAd?) {
     ad?.also {
-      rewardedVideoAdCollection.add(it)
+      val data = rewardedVideoAdData[slotId] ?: mutableListOf()
+      data.add(ad)
+      rewardedVideoAdData[slotId] = data
     }
   }
 
-  fun showFullScreenVideoAd(activity: Activity?, result: (Any) -> Unit = {}): Boolean {
+  fun showFullScreenVideoAd(slotId: String, activity: Activity?, result: (Any) -> Unit = {}): Boolean {
     activity ?: return false
-    if (fullScreenVideoAdCollection.size > 0) {
-      val ad = fullScreenVideoAdCollection.removeAt(0)
+    val data = fullScreenVideoAdData[slotId] ?: mutableListOf()
+    if (data.size > 0) {
+      val ad = data.removeFirst()
       ad.setFullScreenVideoAdInteractionListener(FullScreenVideoAdInteractionImpl { obj ->
         result.invoke(obj)
       })
@@ -106,9 +110,11 @@ class PangleAdManager {
     return false
   }
 
-  fun setFullScreenVideoAd(ad: TTFullScreenVideoAd?) {
+  fun setFullScreenVideoAd(slotId: String, ad: TTFullScreenVideoAd?) {
     ad?.also {
-      fullScreenVideoAdCollection.add(it)
+      val data = fullScreenVideoAdData[slotId] ?: mutableListOf()
+      data.add(ad)
+      fullScreenVideoAdData[slotId] = data
     }
   }
 
@@ -252,7 +258,8 @@ class PangleAdManager {
 
     activity ?: return
 
-    ttAdNative?.loadRewardVideoAd(adSlot, FLTRewardedVideoAd(activity, loadingType, result))
+
+    ttAdNative?.loadRewardVideoAd(adSlot, FLTRewardedVideoAd(adSlot.codeId, activity, loadingType, result))
 
   }
 
@@ -282,7 +289,7 @@ class PangleAdManager {
 
     activity ?: return
 
-    ttAdNative?.loadFullScreenVideoAd(adSlot, FLTFullScreenVideoAd(activity, loadingType, result))
+    ttAdNative?.loadFullScreenVideoAd(adSlot, FLTFullScreenVideoAd(adSlot.codeId, activity, loadingType, result))
 
   }
 

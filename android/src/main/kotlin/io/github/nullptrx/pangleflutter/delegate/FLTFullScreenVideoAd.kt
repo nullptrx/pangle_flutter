@@ -9,7 +9,7 @@ import io.github.nullptrx.pangleflutter.common.PangleLoadingType
 import io.github.nullptrx.pangleflutter.common.kBlock
 
 
-class FLTFullScreenVideoAd(var target: Activity?, val loadingType: PangleLoadingType, var result: (Any) -> Unit = {}) : TTAdNative.FullScreenVideoAdListener {
+class FLTFullScreenVideoAd(var slotId: String, var target: Activity?, val loadingType: PangleLoadingType, var result: (Any) -> Unit = {}) : TTAdNative.FullScreenVideoAdListener {
   private var ttVideoAd: TTFullScreenVideoAd? = null
 
   /**
@@ -20,7 +20,7 @@ class FLTFullScreenVideoAd(var target: Activity?, val loadingType: PangleLoading
   @MainThread
   override fun onFullScreenVideoAdLoad(ad: TTFullScreenVideoAd?) {
     if (loadingType == PangleLoadingType.preload || loadingType == PangleLoadingType.preload_only) {
-      PangleAdManager.shared.setFullScreenVideoAd(ad)
+      PangleAdManager.shared.setFullScreenVideoAd(slotId, ad)
       if (loadingType == PangleLoadingType.preload_only) {
         invoke(0)
       }

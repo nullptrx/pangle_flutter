@@ -154,10 +154,9 @@ class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         val loadingTypeIndex = call.argument<Int>("loadingType") ?: 0
         val loadingType = PangleLoadingType.values()[loadingTypeIndex]
 
-
         if (PangleLoadingType.preload == loadingType || PangleLoadingType.normal == loadingType) {
-
-          val loadResult = pangle.showRewardedVideoAd(activity) {
+          val slotId = call.argument<String>("slotId")!!
+          val loadResult = pangle.showRewardedVideoAd(slotId, activity) {
             if (PangleLoadingType.preload == loadingType) {
               loadRewardedVideoAdOnly(call, PangleLoadingType.preload_only)
             }
@@ -236,8 +235,8 @@ class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         val loadingType = PangleLoadingType.values()[loadingTypeIndex]
 
         if (PangleLoadingType.preload == loadingType || PangleLoadingType.normal == loadingType) {
-
-          val loadResult = pangle.showFullScreenVideoAd(activity) {
+          val slotId = call.argument<String>("slotId")!!
+          val loadResult = pangle.showFullScreenVideoAd(slotId, activity) {
             if (PangleLoadingType.preload == loadingType) {
               loadFullscreenVideoAdOnly(call, PangleLoadingType.preload_only)
             }
