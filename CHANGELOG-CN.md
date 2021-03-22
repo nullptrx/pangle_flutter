@@ -1,3 +1,11 @@
+## 0.10.1
+
+* 移除对自渲染广告的支持（isExpress参数移除）
+* 优化激励视频和全屏视频的加载
+* 修复 #20
+* 重构`BannerView`, `FeedView`, `SplashView`
+* 增加`pangle.removeFeedAd()`接口（清除信息流广告缓存）
+
 ## 0.9.1
 
 * 适配open_ad_sdk 3.5.0.0, iOS不受影响

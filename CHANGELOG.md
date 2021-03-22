@@ -1,3 +1,11 @@
+## 0.10.1
+
+- Remove Self-rendering ads support（Remove parameter `isExpress`）
+- Optimize loading rewarded video & fullscreen video ads
+- Fix #20
+- Refactor `BannerView`, `FeedView`, `SplashView`
+- Add `pangle.removeFeedAd()` interface (Remove caches of feed ads)
+
 ## 0.9.1
 
 * Adapt to open_ad_sdk 3.5.0.0 for Android. iOS are not affected
