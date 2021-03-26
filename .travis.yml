@@ -1,5 +1,10 @@
 matrix:
   include:
+    - os: osx
+      script:
+        - flutter packages get
+        - flutter format --set-exit-if-changed lib example
+        - flutter analyze lib example
     - os: linux
       language: android
       licenses:
