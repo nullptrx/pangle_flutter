@@ -2,7 +2,7 @@
 
 #  <div align="center">穿山甲 Flutter SDK</div>
 
-<div align="center">`pangle_flutter`是一款集成了穿山甲 Android 和 iOS SDK的Flutter插件。</div>
+<div align="center">`pangle_flutter`是一款集成了字节跳动穿山甲 Android 和 iOS SDK的 Flutter 插件。</div> 
 
 <div align="center">
 	<a href="https://flutter.io">
@@ -21,10 +21,18 @@
   <img src="https://codecov.io/gh/nullptrX/pangle_flutter/branch/master/graph/badge.svg" 	      />
   </a>
   	<a href="https://opensource.org/licenses/MIT">
-    <img src="https://img.shields.io/badge/License-MIT-red.svg"
+    <img src="https://img.shields.io/badge/License-MIT-green.svg"
       alt="License: MIT" />
   </a>
 </div><br>
+
+
+## 目录
+
+  * [版本迁移](#版本迁移)
+  * [使用文档](#使用文档)
+  * [集成步骤](#集成步骤)
+  * [交流](#交流)
 
 
 
@@ -426,8 +434,8 @@ print(jsonEncode(result));
 
 ## 贡献
 
-- 有任何更好的实现方式或增加额外的功能，提交PR。
-- 有任何使用上的问题，提交issue。
+- 有任何更好的实现方式或增加额外的功能，提交[PR](https://github.com/nullptrX/pangle_flutter/issues/new?template=feature_request.md)。
+- 有任何使用上的问题，提交 [issue](https://github.com/nullptrX/pangle_flutter/issues/new?template=bug_report.md)。
 
 
 
