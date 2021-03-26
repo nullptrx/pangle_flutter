@@ -31,3 +31,7 @@ script:
   - flutter test --no-pub --coverage
   # export coverage
   - bash <(curl -s https://codecov.io/bash)
+  - flutter build apk --debug
+  - flutter build apk --profile
+  - flutter build apk --release
+  - flutter build ios
