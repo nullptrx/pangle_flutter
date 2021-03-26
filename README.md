@@ -3,6 +3,7 @@
 #  <div align="center">穿山甲 Flutter SDK</div>
 
 <div align="center">`pangle_flutter`是一款集成了字节跳动穿山甲 Android 和 iOS SDK的 Flutter 插件。</div> 
+<br>
 
 <div align="center">
 	<a href="https://flutter.io">
@@ -17,14 +18,12 @@
     <img src="https://travis-ci.com/nullptrX/pangle_flutter.svg?branch=master"
       alt="Build Status" />
   </a>
-  <a href="https://codecov.io/gh/nullptrX/pangle_flutter">
-  <img src="https://codecov.io/gh/nullptrX/pangle_flutter/branch/master/graph/badge.svg" 	      />
-  </a>
   	<a href="https://opensource.org/licenses/MIT">
     <img src="https://img.shields.io/badge/License-MIT-green.svg"
       alt="License: MIT" />
   </a>
 </div><br>
+
 
 
 ## 目录

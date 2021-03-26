@@ -1,33 +1,64 @@
-language: bash
-os:
-  - osx
-sudo: false
-git:
-  depth: 3
+matrix:
+  include:
+    - os: linux
+      language: android
+      licenses:
+        - 'android-sdk-preview-license-.+'
+        - 'android-sdk-license-.+'
+        - 'google-gdk-license-.+'
+      android:
+        components:
+          - tools
+          - platform-tools
+          - build-tools-30.0.3
+          - android-30
+          - sys-img-arm64-v8a-google_apis-30
+          - extra-android-m2repository
+          - extra-google-m2repository
+          - extra-google-android-support
+      jdk: oraclejdk8
+      sudo: false
+      addons:
+        apt:
+          # Flutter depends on /usr/lib/x86_64-linux-gnu/libstdc++.so.6 version GLIBCXX_3.4.18
+          sources:
+            - ubuntu-toolchain-r-test # if we don't specify this, the libstdc++6 we get is the wrong version
+          packages:
+            - libstdc++6
+            - fonts-droid
+      before_script:
+        - wget https://services.gradle.org/distributions/gradle-6.5.1-bin.zip
+        - unzip -qq gradle-6.5.1-bin.zip
+        - export GRADLE_HOME=$PWD/gradle-6.5.1
+        - export PATH=$GRADLE_HOME/bin:$PATH
+        - git clone https://github.com/flutter/flutter.git -b stable --depth 1
+        - export PATH=$PATH:$PWD/flutter/bin
+        - export PATH=$PATH:$PWD/flutter/bin/cache/dart-sdk/bin
+        - flutter doctor
+        - yes | sdkmanager "platforms;android-30"
+        - yes | sdkmanager "build-tools;30.0.3"
+      script:
+        - cd example || exit
+        - flutter -v build apk --debug
+        - flutter -v build apk --profile
+        - flutter -v build apk --release
+
+    - os: osx
+      language: generic
+      osx_image: xcode12u
+      before_script:
+        - brew update
+        - brew install --HEAD libimobiledevice
+        - brew install ideviceinstaller
+        - brew install ios-deploy
+        - git clone https://github.com/flutter/flutter.git -b stable --depth 1
+        - export PATH=$PATH:$PWD/flutter/bin
+        - export PATH=$PATH:$PWD/flutter/bin/cache/dart-sdk/bin
+        - flutter doctor
+      script:
+        - cd example || exit
+        - flutter -v build ios --no-codesign
+
 cache:
   directories:
     - $HOME/.pub-cache
-env:
-  - FLUTTER_VERSION=beta
-  - FLUTTER_VERSION=dev
-  - FLUTTER_VERSION=stable
-matrix:
-  allow_failures:
-    - env: FLUTTER_VERSION=dev
-    - env: FLUTTER_VERSION=beta
-before_script:
-  - cd ..
-  - git clone https://github.com/flutter/flutter.git -b $FLUTTER_VERSION
-  - export PATH=$PATH:$PWD/flutter/bin
-  - export PATH=$PATH:$PWD/flutter/bin/cache/dart-sdk/bin
-  - flutter doctor
-  - cd -
-script:
-  # abort on error
-  - set -e
-  - flutter packages get
-  - flutter format --set-exit-if-changed lib example
-  - flutter analyze lib example
-  - flutter test --no-pub --coverage
-  # export coverage
-  - bash <(curl -s https://codecov.io/bash)

@@ -1,3 +1,7 @@
+## 1.0.1
+
+- Solve build packages failed (remove unrelated files)
+
 ## 1.0.0
 
 - null-safety

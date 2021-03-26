@@ -1,3 +1,7 @@
+## 1.0.1
+
+- 解决Android Module依赖方式打包失败的问题
+
 ## 1.0.0
 
 - null-safety
