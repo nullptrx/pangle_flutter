@@ -31,17 +31,11 @@ matrix:
         - unzip -qq gradle-6.5.1-bin.zip
         - export GRADLE_HOME=$PWD/gradle-6.5.1
         - export PATH=$GRADLE_HOME/bin:$PATH
-        - git clone https://github.com/flutter/flutter.git -b stable --depth 1
-        - export PATH=$PATH:$PWD/flutter/bin
-        - export PATH=$PATH:$PWD/flutter/bin/cache/dart-sdk/bin
-        - flutter doctor
         - yes | sdkmanager "platforms;android-30"
         - yes | sdkmanager "build-tools;30.0.3"
       script:
         - cd example || exit
-        - flutter -v build apk --debug
-        - flutter -v build apk --profile
-        - flutter -v build apk --release
+        - flutter -v build apk
 
     - os: osx
       language: generic
@@ -51,13 +45,15 @@ matrix:
         - brew install --HEAD libimobiledevice
         - brew install ideviceinstaller
         - brew install ios-deploy
-        - git clone https://github.com/flutter/flutter.git -b stable --depth 1
-        - export PATH=$PATH:$PWD/flutter/bin
-        - export PATH=$PATH:$PWD/flutter/bin/cache/dart-sdk/bin
-        - flutter doctor
       script:
         - cd example || exit
         - flutter -v build ios --no-codesign
+
+install:
+  - git clone https://github.com/flutter/flutter.git -b stable --depth 1
+  - export PATH=$PATH:$PWD/flutter/bin
+  - export PATH=$PATH:$PWD/flutter/bin/cache/dart-sdk/bin
+  - flutter doctor
 
 cache:
   directories:
