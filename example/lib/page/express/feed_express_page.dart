@@ -1,3 +1,25 @@
+/*
+ * Copyright (c) 2021 nullptrX
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 import 'dart:async';
 import 'dart:io';
 
@@ -16,8 +38,8 @@ class FeedExpressPage extends StatefulWidget {
 
 class Item {
   bool isAd;
-  String id;
-  String feedId;
+  String? id;
+  String? feedId;
 
   Item({this.isAd = false, this.feedId, this.id});
 }
@@ -28,7 +50,7 @@ class Item {
 
 class _FeedExpressPageState extends State<FeedExpressPage> {
   final items = <Item>[];
-  final feedIds = <String>[];
+  final feedIds = <String?>[];
 
   final _bodyKey = GlobalKey();
   final _otherKey = GlobalKey();
@@ -105,7 +127,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
               _initConstraintBounds(controller);
             },
             onDislike: (option) {
-              pangle.removeFeedAd([item.feedId]);
+              pangle.removeFeedAd([item.feedId!]);
               setState(() {
                 items.removeAt(index);
               });
@@ -170,7 +192,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
 
   /// 移除广告
   _removeFeedAd() async {
-    int count = await pangle.removeFeedAd(feedIds);
+    int? count = await pangle.removeFeedAd(feedIds as List<String>);
     print('Feed Ad Removed: $count');
   }
 
@@ -179,11 +201,11 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
       return;
     }
 
-    RenderBox bodyBox = _bodyKey.currentContext.findRenderObject();
+    RenderBox bodyBox = _bodyKey.currentContext!.findRenderObject() as RenderBox;
     final bodyBound = PangleHelper.fromRenderBox(bodyBox);
     controller.updateTouchableBounds([bodyBound]);
 
-    RenderBox otherBox = _otherKey.currentContext.findRenderObject();
+    RenderBox otherBox = _otherKey.currentContext!.findRenderObject() as RenderBox;
     final otherBound = PangleHelper.fromRenderBox(otherBox);
 
     controller.updateRestrictedBounds([otherBound]);

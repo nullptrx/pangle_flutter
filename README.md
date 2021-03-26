@@ -1,12 +1,34 @@
-# 穿山甲 Flutter SDK
+<div align="center"><img src="https://repository-images.githubusercontent.com/283126613/4be19c80-e615-11ea-984b-8a1790ce942a"/></div>
 
-[![pub package](https://img.shields.io/pub/v/pangle_flutter.svg)](https://pub.dartlang.org/packages/pangle_flutter) [![Licence](https://img.shields.io/github/license/nullptrX/pangle_flutter)](https://github.com/nullptrX/pangle_flutter/blob/master/LICENSE) [![flutter](https://img.shields.io/badge/flutter-2.0.1-green)](https://flutter.dev/docs/get-started/install) 
+#  <div align="center">穿山甲 Flutter SDK</div>
+
+<div align="center">`pangle_flutter`是一款集成了穿山甲 Android 和 iOS SDK的Flutter插件。</div>
+
+<div align="center">
+	<a href="https://flutter.io">
+    <img src="https://img.shields.io/badge/Platform-Flutter-yellow.svg"
+      alt="Platform" />
+  </a>
+  	<a href="https://pub.dartlang.org/packages/pangle_flutter">
+    <img src="https://img.shields.io/pub/v/pangle_flutter.svg"
+      alt="Pub Package" />
+  </a>
+  	<a href="https://travis-ci.com/nullptrX/pangle_flutter">
+    <img src="https://travis-ci.com/nullptrX/pangle_flutter.svg?branch=master"
+      alt="Build Status" />
+  </a>
+  <a href="https://codecov.io/gh/nullptrX/pangle_flutter">
+  <img src="https://codecov.io/gh/nullptrX/pangle_flutter/branch/master/graph/badge.svg" 	      />
+  </a>
+  	<a href="https://opensource.org/licenses/MIT">
+    <img src="https://img.shields.io/badge/License-MIT-red.svg"
+      alt="License: MIT" />
+  </a>
+</div><br>
 
 
 
-## 简介
-
-`pangle_flutter`是一款集成了穿山甲 Android 和 iOS SDK的Flutter插件。部分代码由官方范例修改而来。
+原生平台相关范例：
 
 - [Android Demo](https://github.com/bytedance/pangle-sdk-demo)
 - [iOS Demo](https://github.com/bytedance/Bytedance-UnionAD)
@@ -19,19 +41,19 @@
 
 
 
-## 版本迁移至0.10.1
+## 版本迁移
 
 > 1. 不再需要传入isExpress参数
 > 2. BannerView, FeedView, SplashView均需要包一层限制大小的Widget, 可选Container, SizeBox, AspectRatio, Expanded等
 > 3. BannerView, FeedView, SplashView的控制点击实现变动，可参考example进行更改。
 > 4. 从v0.10.1开始不再提供自渲染广告位加载，后续会在新的分支实现，敬请期待。
-> 5. Android依赖方式变更，查看[如何配置](SETUP.md)
+> 5. Android依赖方式变更，查看 [如何配置](SETUP.md)
 
 
 
 ## SDK对应版本
 
-[[Android] 3.5.0.0](https://sf1-be-tos.pglstatp-toutiao.com/obj/union-platform/d8bcf772441c03541ab14c808536a802.zip)（理论上3.5+都支持）
+[[Android] 3.5.0.0](https://sf1-be-tos.pglstatp-toutiao.com/obj/union-platform/d8bcf772441c03541ab14c808536a802.zip) （理论上3.5+都支持）
 
 [[iOS] 3.4.2.8](https://sf1-be-tos.pglstatp-toutiao.com/obj/union-platform/d93cdd1e574e09338f628a78fc808107.zip) （理论上3.4+都支持）
 

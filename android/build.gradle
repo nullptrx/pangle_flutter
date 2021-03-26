@@ -53,4 +53,9 @@ dependencies {
 //    implementation project(':open_ad_sdk')
 
     compileOnly 'io.github.nullptrx:pangle:3.5.0.3@aar'
+    implementation "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }

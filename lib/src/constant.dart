@@ -76,16 +76,6 @@ enum PangleLoadingType {
   preload_only,
 }
 
-@Deprecated('Use `PangleLoadingType` instead.')
-class LoadingType {
-  static PangleLoadingType get normal => PangleLoadingType.normal;
-
-  static PangleLoadingType get preload => PangleLoadingType.preload;
-
-  // ignore: non_constant_identifier_names
-  static PangleLoadingType get preload_only => PangleLoadingType.preload_only;
-}
-
 enum PangleOrientation {
   // ignore: unused_field
   _,
