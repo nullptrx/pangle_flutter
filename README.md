@@ -82,7 +82,7 @@
 
 ## 范例截图
 
-<img src="https://cdn.jsdelivr.net/gh/nullptrX/assets/images/20210322143743.gif"/>
+<img src="https://raw.githubusercontent.com/nullptrX/assets/master/images/20210322143743.gif"/>
 
 
 
@@ -253,7 +253,9 @@ Container(
       expressSize: PangleExpressSize(width: 600, height: 260),
     ),
     onBannerViewCreated: (BannerViewController controller){
+      // 传入Rect.zero屏蔽点击，传入[](默认就是[])允许点击
       controller.updateTouchableBounds([Rect.zero]);
+      // 传入Rect.zero无影响
       controller.updateRestrictedBounds([Rect.zero]);
     },
     onClick: () {},

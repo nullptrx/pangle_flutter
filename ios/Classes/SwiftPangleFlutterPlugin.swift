@@ -44,7 +44,7 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         case "init":
             let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
             instance.initialize(args)
-            result(nil)
+            result([:])
         case "getTrackingAuthorizationStatus":
             if #available(iOS 14.0, *) {
                 result(ATTrackingManager.trackingAuthorizationStatus.rawValue)

@@ -2,6 +2,7 @@ package io.github.nullptrx.pangleflutter
 
 import android.app.Activity
 import android.content.Context
+import com.bytedance.sdk.openadsdk.TTAdSdk
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -126,10 +127,19 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
       "init" -> {
         try {
 
-          pangle.initialize(activity, call.arguments.asMap() ?: mapOf())
+          pangle.initialize(activity, call.arguments.asMap()
+              ?: mapOf(), object : TTAdSdk.InitCallback {
+            override fun success() {
+              result.success(mapOf<String, Any?>())
+            }
+
+            override fun fail(code: Int, message: String?) {
+              result.success(mapOf("code" to code, "message" to message))
+            }
+          })
         } catch (e: Exception) {
         }
-        result.success(null)
+
       }
 
       "requestPermissionIfNecessary" -> {

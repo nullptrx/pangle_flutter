@@ -115,7 +115,7 @@ class PangleAdManager {
   }
 
 
-  fun initialize(activity: Activity?, args: Map<String, Any?>) {
+  fun initialize(activity: Activity?, args: Map<String, Any?>, callback: TTAdSdk.InitCallback) {
     activity ?: return
     val context: Context = activity
 
@@ -179,7 +179,7 @@ class PangleAdManager {
       }
     }.build()
 
-    TTAdSdk.init(applicationContext, config)
+    TTAdSdk.init(applicationContext, config, callback)
 
     ttAdManager = TTAdSdk.getAdManager()
     ttAdNative = ttAdManager.createAdNative(activity)

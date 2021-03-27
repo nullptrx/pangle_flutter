@@ -107,15 +107,21 @@ class PanglePlugin {
   ///
   /// [iOS] config for iOS
   /// [android] config for Android
-  Future<Null> init({
+  Future<PangleResult> init({
     IOSConfig? iOS,
     AndroidConfig? android,
   }) async {
+    Map<String, dynamic>? result;
     if (Platform.isIOS && iOS != null) {
-      await _methodChannel.invokeMethod('init', iOS.toJSON());
+      result = await _methodChannel.invokeMapMethod('init', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      await _methodChannel.invokeMethod('init', android.toJSON());
+      result = await _methodChannel.invokeMapMethod('init', android.toJSON());
     }
+    if(result?.isEmpty == true) {
+      return PangleResult(code: 0);
+    }
+    
+    return PangleResult.fromJson(result);
   }
 
   /// Load splash ad datas.
