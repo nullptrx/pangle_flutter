@@ -13,38 +13,8 @@
 - Module方式
 
 >1. 导入AAR module
->
 >2. 创建一个新module，`File->New->New Module...->Import .JAR/AAR Package`，选择`open_ad_sdk.aar`完成导入。
->
->3. 在`app`目录下build.gradle中，添加依赖
->
->   ```groovy
->   dependencies {
->       implementation project(':open_ad_sdk')
->   }
->   ```
-
-
-
-- Maven仓库依赖方式
-
-> 在`app`目录下build.gradle中，添加依赖
->
-> ```groovy
-> dependencies {
->   	// 添加依赖
->     implementation 'io.github.nullptrx:pangle:3.5.0.3@aar'
-> }
-> 
-> repositories {
->     google()
->     jcenter()
->     // 添加仓库地址（这是我托管在github上的仓库，版本md5与原sdk一致，请放心使用）
->     maven { url 'https://cdn.jsdelivr.net/gh/nullptrX/repo/m2/' }
-> }
-> ```
-
-
+>3. 注意module名字必须是 **open_ad_sdk**, 因为这是本插件所依赖包。如有什么建议，可在Issues里面讨论。
 
 
 

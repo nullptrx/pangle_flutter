@@ -27,8 +27,8 @@ import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 
 import 'common/common.dart';
-import 'page/cn/constant.dart';
-import 'page/cn/native/custom_splash_page.dart';
+import 'page/global/constant.dart';
+import 'page/global/home_page.dart';
 
 /// 使用本插件需要知道的几个类，基本覆盖了开始使用时需要用到的入口类
 ///
@@ -59,7 +59,7 @@ class PangleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       ///
-      home: CustomSplashPage(isRoot: true),
+      home: HomePage(),
       theme: kThemeData,
     );
   }

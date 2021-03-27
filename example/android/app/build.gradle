@@ -60,13 +60,5 @@ flutter {
 
 dependencies {
     implementation "androidx.core:core-ktx:1.3.2"
-    implementation 'io.github.nullptrx:pangle:3.5.0.3@aar'
-//    implementation project(':open_ad_sdk')
 }
 
-repositories {
-    google()
-    jcenter()
-//    maven { url 'https://cdn.jsdelivr.net/gh/nullptrX/repo/m2/' }
-    maven { url 'https://raw.githubusercontent.com/nullptrX/repo/master/m2' }
-}

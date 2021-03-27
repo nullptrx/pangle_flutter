@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.1'
+        classpath 'com.android.tools.build:gradle:4.1.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -18,20 +18,38 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
-        // maven { url 'http://localhost:8081/repository/m2/' }
-        // maven { url 'https://raw.githubusercontent.com/nullptrX/repo/master/m2' }
-        maven { url 'https://cdn.jsdelivr.net/gh/nullptrX/repo/m2/' }
     }
 }
 
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+def kEnv = localProperties.getProperty('pangle_flutter.env')
+if (kEnv == null) {
+    kEnv = 'cn'
+}
+
 android {
     compileSdkVersion 29
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        main.manifest.srcFile "src/main/AndroidManifest-${kEnv}.xml"
+        switch (kEnv) {
+            case 'cn':
+                main.java.srcDirs += 'src/main/cn'
+                break
+            case 'global':
+                main.java.srcDirs += 'src/main/global'
+                break
+        }
     }
     defaultConfig {
         minSdkVersion 16
@@ -46,16 +64,16 @@ android {
         }
     }
 
+    gradle.buildFinished { r ->
+        println ''
+        System.err.println "pangle_flutter: $kEnv"
+        println ''
+    }
 }
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
-//    implementation project(':open_ad_sdk')
-
-    compileOnly 'io.github.nullptrx:pangle:3.5.0.3@aar'
-    implementation "androidx.core:core-ktx:+"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-}
-repositories {
-    mavenCentral()
+    implementation project(':open_ad_sdk')
+//    implementation "androidx.core:core-ktx:+"
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
