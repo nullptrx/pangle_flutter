@@ -38,10 +38,10 @@ class FeedExpressPage extends StatefulWidget {
 
 class Item {
   bool isAd;
-  String? id;
-  String? feedId;
+  String id;
+  String feedId;
 
-  Item({this.isAd = false, this.feedId, this.id});
+  Item({this.isAd = false, this.feedId = '', this.id = ''});
 }
 
 // class _ItemKey extends GlobalObjectKey<State> {
@@ -50,7 +50,7 @@ class Item {
 
 class _FeedExpressPageState extends State<FeedExpressPage> {
   final items = <Item>[];
-  final feedIds = <String?>[];
+  final feedIds = <String>[];
 
   final _bodyKey = GlobalKey();
   final _otherKey = GlobalKey();
@@ -127,7 +127,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
               _initConstraintBounds(controller);
             },
             onDislike: (option) {
-              pangle.removeFeedAd([item.feedId!]);
+              pangle.removeFeedAd([item.feedId]);
               setState(() {
                 items.removeAt(index);
               });

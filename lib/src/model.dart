@@ -207,7 +207,7 @@ class PangleResult {
   /// 适用于需要验证结果的广告，如激励视频
   final bool? verify;
 
-  const PangleResult({this.code, this.message, this.verify = false});
+  const PangleResult({this.code, this.message, this.verify});
 
   /// 是否成功
   bool get ok => code == 0;
