@@ -20,8 +20,6 @@
  * SOFTWARE.
  */
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 import 'package:sprintf/sprintf.dart';

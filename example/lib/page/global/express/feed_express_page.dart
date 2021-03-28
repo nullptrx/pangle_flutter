@@ -192,7 +192,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
 
   /// 移除广告
   _removeFeedAd() async {
-    int? count = await pangle.removeFeedAd(feedIds as List<String>);
+    int? count = await pangle.removeFeedAd(feedIds);
     print('Feed Ad Removed: $count');
   }
 
