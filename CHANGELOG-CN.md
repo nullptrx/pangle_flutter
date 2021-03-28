@@ -1,3 +1,7 @@
+## 1.1.0
+
+- 适配Android海外SDK功能
+
 ## 1.0.1
 
 - 解决Android Module依赖方式打包失败的问题

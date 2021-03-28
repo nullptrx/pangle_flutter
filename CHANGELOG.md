@@ -1,3 +1,7 @@
+## 1.1.0
+
+- Adapt pangle overseas android sdk
+
 ## 1.0.1
 
 - Solve build packages failed (remove unrelated files)
