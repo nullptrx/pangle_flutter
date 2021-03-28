@@ -99,16 +99,14 @@ dependencies:
 - [基本配置入口](SETUP.md)
 
 
-- iOS从版本3.4.1.9开始pod方式变更
-
-  原话：【变更】pod方式变更，国内使用pod 'Ads-CN',海外使用pod 'Ads-Global'
+- iOS版本依赖配置
 
   本项目默认集成`Ads-CN`， 如果你是国内APP，无需额外配置；如果你是海外APP，请参照如下配置：
 
   打开你flutter应用ios项目下的`Podfile`，在`target 'Runner do`上面添加如下代码即可（如果不熟悉Podfile，也可以参考本项目[example/ios/Podfile](example/ios/Podfile)里面的配置）。
 
   ```ruby
-  # add code begin
+# add code begin
   def flutter_install_ios_plugin_pods(ios_application_path = nil)
     # defined_in_file is set by CocoaPods and is a Pathname to the Podfile.
     ios_application_path ||= File.dirname(defined_in_file.realpath) if self.respond_to?(:defined_in_file)
@@ -134,7 +132,7 @@ dependencies:
   
         pod plugin_name, :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
         if plugin_name == 'pangle_flutter'
-          # cn代表国内，global代表海外
+          # cn表示国内，global表示海外
           pod 'pangle_flutter/global', :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
         end
   
@@ -143,6 +141,43 @@ dependencies:
   end
   # add code end
   ```
+
+- Android版本依赖配置
+
+  本项目默认依赖国内版本，如果你需要配置海外版本，以本插件example为例。在项目根目录下`local.properties`文件内配置一个属性，导入依赖方式同国内一样，[查看配置方法](SETUP.md)。
+
+  ```properties
+  # cn表示国内，global表示海外
+  pangle_flutter.env=global
+  ```
+
+  
+
+  ![](https://cdn.jsdelivr.net/gh/nullptrX/assets/images/20210328114750.png)
+
+  海外版本使用方法基本与国内一致，需注意部分配置属性海外并不适用，在调用时填入了不存在的参数也不会有什么影响。
+
+  ```dart
+  
+  pangle.init(
+    iOS: IOSConfig(
+      appId: kAppId,
+      logLevel: PangleLogLevel.error,
+    ),
+    android: AndroidConfig(
+      appId: kAppId,
+      debug: false,
+      allowShowNotify: true,
+      allowShowPageWhenScreenLock: false,
+      /// 海外不存在该配置
+      directDownloadNetworkType: [
+        AndroidDirectDownloadNetworkType.k2G,
+      ]),
+  )
+  
+  ```
+
+  
 
 
 

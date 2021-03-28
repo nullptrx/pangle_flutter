@@ -65,9 +65,7 @@ android {
     }
 
     gradle.buildFinished { r ->
-        println ''
         System.err.println "pangle_flutter: $kEnv"
-        println ''
     }
 }
 

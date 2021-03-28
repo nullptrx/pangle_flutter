@@ -20,9 +20,10 @@
  * SOFTWARE.
  */
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:pangle_flutter_example/page/home_page_provider.dart';
 
 import '../../common/ext.dart';
 import '../home_page_provider.dart';
@@ -41,5 +42,14 @@ class _HomePageState extends State<HomePage> with HomePageProviderStateMixin {
 
   void loadExpressAd() {
     context.navigateTo(ExpressPage());
+  }
+
+  @override
+  void requestPermissions() async {
+    if (Platform.isIOS) {
+      requestPermissionsOnIOS();
+    } else {
+      showPrivacyProtectionOnAndroid();
+    }
   }
 }

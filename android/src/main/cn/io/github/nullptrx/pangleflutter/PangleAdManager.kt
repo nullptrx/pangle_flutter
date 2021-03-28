@@ -3,8 +3,6 @@ package io.github.nullptrx.pangleflutter
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageInfo
-import android.os.Handler
-import android.os.Looper
 import com.bytedance.sdk.openadsdk.AdSlot
 import com.bytedance.sdk.openadsdk.TTAdConfig
 import com.bytedance.sdk.openadsdk.TTAdConstant
@@ -40,8 +38,6 @@ class PangleAdManager {
   private val expressAdCollection = Collections.synchronizedMap(mutableMapOf<String, TTNativeExpressAd>())
   private val rewardedVideoAdData = Collections.synchronizedMap(mutableMapOf<String, MutableList<TTRewardVideoAd>>())
   private val fullScreenVideoAdData = Collections.synchronizedMap(mutableMapOf<String, MutableList<TTFullScreenVideoAd>>())
-
-  private val handler = Handler(Looper.getMainLooper())
 
   private lateinit var ttAdManager: TTAdManager
   private var ttAdNative: TTAdNative? = null
@@ -123,7 +119,7 @@ class PangleAdManager {
   }
 
 
-  fun initialize(activity: Activity?, args: Map<String, Any?>, callback: (Map<String, Any?>) -> Unit) {
+  fun initialize(activity: Activity?, args: Map<String, Any?>) {
     activity ?: return
     val context: Context = activity
 
@@ -239,19 +235,7 @@ class PangleAdManager {
 
     }.build()
 
-    TTAdSdk.init(applicationContext, config, object : TTAdSdk.InitCallback {
-      override fun success() {
-        handler.post {
-          callback(mapOf())
-        }
-      }
-
-      override fun fail(code: Int, message: String?) {
-        handler.post {
-          callback(mapOf("code" to code, "message" to message))
-        }
-      }
-    })
+    TTAdSdk.init(applicationContext, config)
 
     ttAdManager = TTAdSdk.getAdManager()
     ttAdNative = ttAdManager.createAdNative(activity)

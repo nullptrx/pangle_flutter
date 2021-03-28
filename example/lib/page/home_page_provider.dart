@@ -64,7 +64,7 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
               ),
             ),
             ElevatedButton(
-              onPressed: _requestPermissions,
+              onPressed: requestPermissions,
               child: Text('Request Permissions'),
             ),
             SizedBox(height: 30),
@@ -91,27 +91,25 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
     });
   }
 
-  void _requestPermissions() async {
-    if (Platform.isIOS) {
-      _requestPermissionsIOS();
-    } else {
-      _requestPermissionsAndroid();
-    }
-  }
+  void requestPermissions();
 
-  void _requestPermissionsAndroid() async {
+  void requestPermissionsOnAndroid() async {
     // await [Permission.location, Permission.phone, Permission.storage].request();
 
     await pangle.requestPermissionIfNecessary();
   }
 
-  void _requestPermissionsIOS() async {
+  void requestPermissionsOnIOS() async {
     var status = await pangle.getTrackingAuthorizationStatus();
     print('trackingAuthorizationStatus: $status');
     if (status == PangleAuthorizationStatus.notDetermined) {
       status = await pangle.requestTrackingAuthorization();
       print('requestTrackingAuthorization: $status');
     }
+  }
+
+  void showPrivacyProtectionOnAndroid() async {
+    await pangle.showPrivacyProtection();
   }
 
   void loadNativeAd();

@@ -44,7 +44,6 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
             AspectRatio(
               aspectRatio: 300 / 250.0,
               child: BannerView(
-                // key: _banner1Key,
                 iOS: IOSBannerConfig(
                   slotId: kBannerExpressId300x250,
                   expressSize: PangleExpressSize.aspectRatio(300 / 250),

@@ -44,11 +44,13 @@ class PanglePlugin {
 
   _handleMethod(MethodCall call) {}
 
+  /// 获取SDK版本号
   Future<String?> getSdkVersion() async {
     return await _methodChannel.invokeMethod('getSdkVersion');
   }
 
-  /// Request permissions
+  /// 请求权限（仅国内Android）
+  ///
   /// 穿山甲SDK不强制获取权限，即使没有获取可选权限SDK也能正常运行；
   /// 获取权限将帮助穿山甲优化投放广告精准度和用户的交互体验，提高eCPM。
   /// 常见问题：
@@ -64,6 +66,14 @@ class PanglePlugin {
   Future<Null> requestPermissionIfNecessary() async {
     if (Platform.isAndroid) {
       await _methodChannel.invokeMethod('requestPermissionIfNecessary');
+    }
+  }
+
+  /// 显示隐私保护协议弹窗（仅海外）
+  /// ```
+  Future<Null> showPrivacyProtection() async {
+    if (Platform.isAndroid) {
+      await _methodChannel.invokeMethod('showPrivacyProtection');
     }
   }
 
@@ -107,21 +117,15 @@ class PanglePlugin {
   ///
   /// [iOS] config for iOS
   /// [android] config for Android
-  Future<PangleResult> init({
+  Future<Null> init({
     IOSConfig? iOS,
     AndroidConfig? android,
   }) async {
-    Map<String, dynamic>? result;
     if (Platform.isIOS && iOS != null) {
-      result = await _methodChannel.invokeMapMethod('init', iOS.toJSON());
+      await _methodChannel.invokeMethod('init', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      result = await _methodChannel.invokeMapMethod('init', android.toJSON());
+      await _methodChannel.invokeMethod('init', android.toJSON());
     }
-    if(result?.isEmpty == true) {
-      return PangleResult(code: 0);
-    }
-    
-    return PangleResult.fromJson(result);
   }
 
   /// Load splash ad datas.

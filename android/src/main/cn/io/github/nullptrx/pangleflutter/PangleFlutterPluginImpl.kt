@@ -124,14 +124,8 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
         result.success(version)
       }
       "init" -> {
-        try {
-
-          pangle.initialize(activity, call.arguments.asMap() ?: mapOf()) {
-            result.success(it)
-          }
-        } catch (e: Exception) {
-        }
-        
+        pangle.initialize(activity, call.arguments.asMap() ?: mapOf())
+        result.success(null)
       }
 
       "requestPermissionIfNecessary" -> {
