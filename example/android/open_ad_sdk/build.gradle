@@ -14,10 +14,7 @@ if (kEnv == null) {
 
 switch (kEnv) {
     case 'cn':
-        artifacts.add("default", file('open_ad_sdk_cn.aar'))
-        break
-    case 'global':
-        artifacts.add("default", file('open_ad_sdk_global.aar'))
+        artifacts.add("default", file('open_ad_sdk.aar'))
         break
 }
 

@@ -24,10 +24,10 @@ const kEnv = '''
 Android Studio 4.1.2
 Xcode 12.4
 
-Flutter 2.0.1
-Dart 2.12.0
+Flutter 2.0.5
+Dart 2.12.3
 Kotlin 1.4.21
-Swift 5.3.0
+Swift 5.3.2
 ''';
 const kDependencies = '''
 Pangle SDK V%s
