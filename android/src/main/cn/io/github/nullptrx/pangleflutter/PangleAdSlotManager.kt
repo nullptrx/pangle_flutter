@@ -106,4 +106,14 @@ object PangleAdSlotManager {
     }.build()
   }
 
+  fun getNativeBannerAdSlot(slotId: String, size: TTSize, count: Int, isSupportDeepLink: Boolean): AdSlot {
+
+    return AdSlot.Builder().apply {
+      setCodeId(slotId)
+      setImageAcceptedSize(size.width, size.height)
+      setAdCount(count)
+      setSupportDeepLink(isSupportDeepLink)
+    }
+        .build()
+  }
 }

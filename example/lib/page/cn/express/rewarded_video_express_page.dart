@@ -79,7 +79,11 @@ class _RewardedVideoExpressPageState extends State<RewardedVideoExpressPage> {
         loadingType: PangleLoadingType.preload_only,
       ),
     );
-    print(jsonEncode(result));
+    var data = jsonEncode(result);
+    print(data);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(data)),
+    );
   }
 
   _onTapShow() async {
@@ -93,7 +97,11 @@ class _RewardedVideoExpressPageState extends State<RewardedVideoExpressPage> {
         loadingType: PangleLoadingType.normal,
       ),
     );
-    print(jsonEncode(result));
+    var data = jsonEncode(result);
+    print(data);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(data)),
+    );
   }
 
   _onTapShowAndLoad() async {
@@ -107,6 +115,10 @@ class _RewardedVideoExpressPageState extends State<RewardedVideoExpressPage> {
         loadingType: PangleLoadingType.preload,
       ),
     );
-    print(jsonEncode(result));
+    var data = jsonEncode(result);
+    print(data);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(data)),
+    );
   }
 }

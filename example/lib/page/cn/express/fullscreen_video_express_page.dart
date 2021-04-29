@@ -76,7 +76,11 @@ class _FullscreenVideoExpressPageState
         loadingType: PangleLoadingType.preload_only,
       ),
     );
-
+    var data = jsonEncode(result);
+    print(data);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(data)),
+    );
     setState(() {
       _loaded = result.ok;
     });
@@ -93,7 +97,11 @@ class _FullscreenVideoExpressPageState
         loadingType: PangleLoadingType.normal,
       ),
     );
-    print(jsonEncode(result));
+    var data = jsonEncode(result);
+    print(data);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(data)),
+    );
     setState(() {
       _loaded = false;
     });

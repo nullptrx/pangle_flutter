@@ -30,6 +30,7 @@ const kBannerExpressId600x260 = '945940906';
 
 const kFeedExpressId375x284 = '945940981';
 
+const kInterstitialExpressIdFull = '945999649';
 const kInterstitialExpressId3x2 = '945940989';
 const kInterstitialExpressId1x1 = '945940988';
 

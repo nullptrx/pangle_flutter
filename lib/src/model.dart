@@ -143,15 +143,15 @@ class PangleExpressSize {
 }
 
 /// image size
-class PangleImageSize {
+class PangleSize {
   final double width;
   final double height;
 
-  /// 模板渲染时必填
+  /// 自渲染时必填
   ///
   /// [width] 宽度，必选, 如果width超过屏幕，默认使用屏幕宽
   /// [height] 高度，必选
-  PangleImageSize({required double width, required double height})
+  PangleSize({required double width, required double height})
       : assert(width > 0),
         assert(height > 0),
         this.width = width > kPangleScreenWidth ? kPangleScreenWidth : width,
@@ -160,30 +160,28 @@ class PangleImageSize {
             : height;
 
   /// [aspectRatio] item宽高比例
-  PangleImageSize.aspectRatio(double aspectRatio)
+  PangleSize.aspectRatio(double aspectRatio)
       : assert(aspectRatio > 0),
         this.width = kPangleScreenWidth,
         this.height = kPangleScreenWidth / aspectRatio;
 
-  PangleImageSize.aspectRatio9_16()
+  PangleSize.aspectRatio9_16()
       : this.width = kPangleScreenWidth,
         this.height = kPangleScreenWidth / 0.5625;
 
-  PangleImageSize.aspectRatio16_9()
+  PangleSize.aspectRatio16_9()
       : this.width = kPangleScreenWidth,
         this.height = kPangleScreenWidth * 0.5625;
 
-  PangleImageSize.percent(double widthPercent, double heightPercent)
+  PangleSize.percent(double widthPercent, double heightPercent)
       : this.width = kPangleScreenWidth * widthPercent,
         this.height = kPangleScreenHeight * heightPercent;
 
-  PangleImageSize.widthPercent(double widthPercent,
-      {required double aspectRatio})
+  PangleSize.widthPercent(double widthPercent, {required double aspectRatio})
       : this.width = kPangleScreenWidth * widthPercent,
         this.height = kPangleScreenWidth * widthPercent / aspectRatio;
 
-  PangleImageSize.heightPercent(double heightPercent,
-      {required double aspectRatio})
+  PangleSize.heightPercent(double heightPercent, {required double aspectRatio})
       : this.width = kPangleScreenHeight * heightPercent * aspectRatio,
         this.height = kPangleScreenHeight * heightPercent;
 
@@ -204,13 +202,16 @@ class PangleResult {
   /// 一般是错误信息
   final String? message;
 
-  /// 适用于需要验证结果的广告，如激励视频
+  /// 适用于需要验证结果的广告，目前仅激励视频有返回
   final bool? verify;
 
   const PangleResult({this.code, this.message, this.verify});
 
   /// 是否成功
   bool get ok => code == 0;
+
+  /// 是否验证成功
+  bool get isVerify => verify == true;
 
   /// 解析插件返回的结果
   ///
@@ -226,10 +227,13 @@ class PangleResult {
   }
 
   Map<String, dynamic> toJson() {
-    return {
+    var data = {
       'code': code,
       'message': message,
-      'verify': verify,
     };
+    if (verify != null) {
+      data['verify'] = verify;
+    }
+    return data;
   }
 }

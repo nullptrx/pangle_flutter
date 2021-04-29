@@ -105,22 +105,23 @@ dependencies:
 
   打开你flutter应用ios项目下的`Podfile`，在`target 'Runner do`上面添加如下代码即可（如果不熟悉Podfile，也可以参考本项目[example/ios/Podfile](example/ios/Podfile)里面的配置）。
 
-  ```ruby
+```ruby
+
 # add code begin
   def flutter_install_ios_plugin_pods(ios_application_path = nil)
     # defined_in_file is set by CocoaPods and is a Pathname to the Podfile.
     ios_application_path ||= File.dirname(defined_in_file.realpath) if self.respond_to?(:defined_in_file)
     raise 'Could not find iOS application path' unless ios_application_path
-  
+
     # Prepare symlinks folder. We use symlinks to avoid having Podfile.lock
     # referring to absolute paths on developers' machines.
-  
+      
     symlink_dir = File.expand_path('.symlinks', ios_application_path)
     system('rm', '-rf', symlink_dir) # Avoid the complication of dependencies like FileUtils.
-  
+      
     symlink_plugins_dir = File.expand_path('plugins', symlink_dir)
     system('mkdir', '-p', symlink_plugins_dir)
-  
+      
     plugins_file = File.join(ios_application_path, '..', '.flutter-plugins-dependencies')
     plugin_pods = flutter_parse_plugins_file(plugins_file)
     plugin_pods.each do |plugin_hash|
@@ -129,18 +130,18 @@ dependencies:
       if (plugin_name && plugin_path)
         symlink = File.join(symlink_plugins_dir, plugin_name)
         File.symlink(plugin_path, symlink)
-  
+      
         pod plugin_name, :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
         if plugin_name == 'pangle_flutter'
           # cn表示国内，global表示海外
           pod 'pangle_flutter/global', :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
         end
-  
+      
       end
     end
   end
   # add code end
-  ```
+```
 
 - Android版本依赖配置
 

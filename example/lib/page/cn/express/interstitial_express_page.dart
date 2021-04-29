@@ -50,6 +50,12 @@ class _InterstitialExpressPageState extends State<InterstitialExpressPage> {
                 child: Text('Show Ad'),
               ),
             ),
+            Center(
+              child: ElevatedButton(
+                onPressed: _onTapShowFullscreen,
+                child: Text('Show Fullscreen Ad'),
+              ),
+            ),
           ],
         ),
       ),
@@ -72,6 +78,31 @@ class _InterstitialExpressPageState extends State<InterstitialExpressPage> {
         expressSize: PangleExpressSize.widthPercent(0.8, aspectRatio: 1.667),
       ),
     );
-    print(jsonEncode(result));
+    var data = jsonEncode(result);
+    print(data);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(data)),
+    );
+  }
+
+  _onTapShowFullscreen() async {
+
+    final result = await pangle.loadInterstitialAd(
+      iOS: IOSInterstitialConfig(
+        slotId: kInterstitialExpressIdFull,
+        // 该宽高为你申请的广告位宽高，请根据实际情况赋值
+        expressSize: PangleExpressSize.aspectRatio9_16(),
+      ),
+      android: AndroidInterstitialConfig(
+        slotId: kInterstitialExpressIdFull,
+        // 该宽高为你申请的广告位宽高，请根据实际情况赋值
+        expressSize: PangleExpressSize.aspectRatio9_16(),
+      ),
+    );
+    var data = jsonEncode(result);
+    print(data);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(data)),
+    );
   }
 }

@@ -40,7 +40,7 @@ abstract class FeedViewPlatform {
 ///
 /// See also the `onFeedViewPlatformCreated` argument for [FeedViewPlatform.build].
 typedef FeedViewPlatformCreatedCallback = void Function(
-    FeedViewPlatformController webViewPlatformController);
+    FeedViewPlatformController feedViewPlatformController);
 
 /// Interface for talking to the feedview's platform implementation.
 ///

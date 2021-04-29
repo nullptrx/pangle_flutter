@@ -41,7 +41,7 @@ abstract class BannerViewPlatform {
 ///
 /// See also the `onBannerViewPlatformCreated` argument for [BannerViewPlatform.build].
 typedef BannerViewPlatformCreatedCallback = void Function(
-    BannerViewPlatformController webViewPlatformController);
+    BannerViewPlatformController bannerViewPlatformController);
 
 /// Interface for talking to the bannerview's platform implementation.
 ///

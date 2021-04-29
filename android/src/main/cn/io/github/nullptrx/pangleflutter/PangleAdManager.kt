@@ -293,5 +293,9 @@ class PangleAdManager {
 
   }
 
+  fun loadBannerAd(adSlot: AdSlot, listener: TTAdNative.BannerAdListener) {
+    ttAdNative?.loadBannerAd(adSlot, listener)
+  }
+
 }
 

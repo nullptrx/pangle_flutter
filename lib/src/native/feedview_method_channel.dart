@@ -20,36 +20,35 @@
  * SOFTWARE.
  */
 
-import 'dart:io';
+import 'package:flutter/services.dart';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'feedview_platform_interface.dart';
 
-import '../../common/ext.dart';
-import '../home_page_provider.dart';
-import 'global.dart';
-
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> with HomePageProviderStateMixin {
-  @override
-  void loadNativeAd() {
-    context.navigateTo(NativePage());
+/// A [NativeFeedViewPlatformController] that uses a method channel to control the feedview.
+class MethodChannelNativeFeedViewPlatform implements NativeFeedViewPlatformController {
+  /// Constructs an instance that will listen for webviews broadcasting to the
+  /// given [id], using the given [WebViewPlatformCallbacksHandler].
+  MethodChannelNativeFeedViewPlatform(int id, this._platformCallbacksHandler)
+      : _channel = MethodChannel('${kNativeFeedViewType}_$id') {
+    _channel.setMethodCallHandler(_onMethodCall);
   }
 
-  void loadExpressAd() {
-    context.navigateTo(ExpressPage());
-  }
+  final NativeFeedViewPlatformCallbacksHandler _platformCallbacksHandler;
 
-  @override
-  void requestPermissions() async {
-    if (Platform.isIOS) {
-      requestPermissionsOnIOS();
-    } else {
-      showPrivacyProtectionOnAndroid();
+  final MethodChannel _channel;
+
+  Future<dynamic> _onMethodCall(MethodCall call) async {
+    switch (call.method) {
+      case "onClick":
+        _platformCallbacksHandler.onClick();
+        break;
+      case "onShow":
+        _platformCallbacksHandler.onShow();
+        break;
+      case "onDislike":
+        String option = call.arguments['option'];
+        _platformCallbacksHandler.onDislike(option);
+        break;
     }
   }
 }
