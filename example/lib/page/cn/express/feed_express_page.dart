@@ -126,7 +126,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
             onFeedViewCreated: (controller) {
               _initConstraintBounds(controller);
             },
-            onDislike: (option) {
+            onDislike: (option, enforce) {
               pangle.removeFeedAd([item.feedId!]);
               setState(() {
                 items.removeAt(index);

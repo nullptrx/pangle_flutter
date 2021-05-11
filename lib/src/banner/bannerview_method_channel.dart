@@ -49,7 +49,8 @@ class MethodChannelBannerViewPlatform implements BannerViewPlatformController {
         break;
       case "onDislike":
         String option = call.arguments['option'];
-        _platformCallbacksHandler.onDislike(option);
+        bool enforce = call.arguments['enforce'];
+        _platformCallbacksHandler.onDislike(option, enforce);
         break;
       case "onRenderSuccess":
         _platformCallbacksHandler.onRenderSuccess();

@@ -82,12 +82,11 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
             alignment: Alignment.center,
             color: Colors.white,
             height: 100,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                FlutterLogo(size: 40),
-                SizedBox(height: 10),
-                Text('Pangle Flutter'),
+                FlutterLogo(size: 60),
+                Text('Pangle Flutter', style: TextStyle(fontSize: 40)),
               ],
             ),
           )

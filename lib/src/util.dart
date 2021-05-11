@@ -24,7 +24,7 @@ import 'package:flutter/widgets.dart';
 
 typedef PangleMessageCallback(int code, String message);
 
-typedef PangleOptionCallback(String message);
+typedef PangleOptionCallback(String message, bool enforce);
 
 class PangleHelper {
   PangleHelper._();
