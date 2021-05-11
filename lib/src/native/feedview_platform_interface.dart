@@ -30,7 +30,8 @@ abstract class NativeFeedViewPlatform {
   Widget build({
     required BuildContext context,
     required Map<String, dynamic> creationParams,
-    required NativeFeedViewPlatformCallbacksHandler feedViewPlatformCallbacksHandler,
+    required NativeFeedViewPlatformCallbacksHandler
+        feedViewPlatformCallbacksHandler,
     NativeFeedViewPlatformCreatedCallback? onFeedViewPlatformCreated,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   });
@@ -52,8 +53,7 @@ typedef NativeFeedViewPlatformCreatedCallback = void Function(
 /// Extending this class (using `extends`) ensures that the subclass will get the default
 /// implementation, while platform implementations that `implements` this interface will be broken
 /// by newly added [NativeFeedViewPlatformController] methods.
-abstract class NativeFeedViewPlatformController {
-}
+abstract class NativeFeedViewPlatformController {}
 
 /// Interface for callbacks made by [NativeFeedViewPlatformController].
 ///
@@ -64,5 +64,7 @@ abstract class NativeFeedViewPlatformCallbacksHandler {
 
   void onShow();
 
-  void onDislike(String option);
+  /// [option]
+  /// [enforce] 当enforce参数返回true时，代表穿山甲会主动关闭掉广告，广告移除后需要开发者对界面进行适配。
+  void onDislike(String option, bool enforce);
 }

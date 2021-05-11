@@ -27,7 +27,8 @@ import 'package:flutter/widgets.dart';
 import 'bannerview_platform_interface.dart';
 
 /// A [NativeBannerViewPlatformController] that uses a method channel to control the bannerview.
-class MethodChannelNativeBannerViewPlatform implements NativeBannerViewPlatformController {
+class MethodChannelNativeBannerViewPlatform
+    implements NativeBannerViewPlatformController {
   /// Constructs an instance that will listen for webviews broadcasting to the
   /// given [id], using the given [WebViewPlatformCallbacksHandler].
   MethodChannelNativeBannerViewPlatform(int id, this._platformCallbacksHandler)
@@ -49,7 +50,8 @@ class MethodChannelNativeBannerViewPlatform implements NativeBannerViewPlatformC
         break;
       case "onDislike":
         String option = call.arguments['option'];
-        _platformCallbacksHandler.onDislike(option);
+        bool enforce = call.arguments['enforce'];
+        _platformCallbacksHandler.onDislike(option, enforce);
         break;
       case "onError":
         int code = call.arguments['code'];

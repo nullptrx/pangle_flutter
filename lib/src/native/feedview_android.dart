@@ -34,7 +34,8 @@ class AndroidNativeFeedView implements NativeFeedViewPlatform {
   Widget build({
     required BuildContext context,
     required Map<String, dynamic> creationParams,
-    required NativeFeedViewPlatformCallbacksHandler feedViewPlatformCallbacksHandler,
+    required NativeFeedViewPlatformCallbacksHandler
+        feedViewPlatformCallbacksHandler,
     NativeFeedViewPlatformCreatedCallback? onFeedViewPlatformCreated,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   }) {

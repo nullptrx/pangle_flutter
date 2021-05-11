@@ -25,7 +25,8 @@ import 'package:flutter/services.dart';
 import 'feedview_platform_interface.dart';
 
 /// A [NativeFeedViewPlatformController] that uses a method channel to control the feedview.
-class MethodChannelNativeFeedViewPlatform implements NativeFeedViewPlatformController {
+class MethodChannelNativeFeedViewPlatform
+    implements NativeFeedViewPlatformController {
   /// Constructs an instance that will listen for webviews broadcasting to the
   /// given [id], using the given [WebViewPlatformCallbacksHandler].
   MethodChannelNativeFeedViewPlatform(int id, this._platformCallbacksHandler)
@@ -47,7 +48,8 @@ class MethodChannelNativeFeedViewPlatform implements NativeFeedViewPlatformContr
         break;
       case "onDislike":
         String option = call.arguments['option'];
-        _platformCallbacksHandler.onDislike(option);
+        bool enforce = call.arguments['enforce'];
+        _platformCallbacksHandler.onDislike(option, enforce);
         break;
     }
   }

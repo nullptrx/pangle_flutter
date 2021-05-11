@@ -36,7 +36,8 @@ import 'util.dart';
 
 /// Optional callback invoked when a web view is first created. [controller] is
 /// the [NativeBannerViewController] for the created banner view.
-typedef void NativeBannerViewCreatedCallback(NativeBannerViewController controller);
+typedef void NativeBannerViewCreatedCallback(
+    NativeBannerViewController controller);
 
 class NativeBannerView extends StatefulWidget {
   const NativeBannerView({
@@ -131,7 +132,6 @@ class NativeBannerView extends StatefulWidget {
 
   /// 获取广告失败
   final PangleMessageCallback? onError;
-
 }
 
 class _NativeBannerViewState extends State<NativeBannerView>
@@ -172,7 +172,7 @@ class _NativeBannerViewState extends State<NativeBannerView>
   }
 
   void _onWebViewPlatformCreated(
-      NativeBannerViewPlatformController bannerViewPlatform,
+    NativeBannerViewPlatformController bannerViewPlatform,
   ) {
     final NativeBannerViewController controller = NativeBannerViewController._(
         widget, bannerViewPlatform, _platformCallbacksHandler);
@@ -226,7 +226,8 @@ class NativeBannerViewController {
   }
 }
 
-class _PlatformCallbacksHandler implements NativeBannerViewPlatformCallbacksHandler {
+class _PlatformCallbacksHandler
+    implements NativeBannerViewPlatformCallbacksHandler {
   _PlatformCallbacksHandler(this._widget);
 
   NativeBannerView _widget;
@@ -237,8 +238,8 @@ class _PlatformCallbacksHandler implements NativeBannerViewPlatformCallbacksHand
   }
 
   @override
-  void onDislike(String option) {
-    _widget.onDislike?.call(option);
+  void onDislike(String option, bool enforce) {
+    _widget.onDislike?.call(option, enforce);
   }
 
   @override

@@ -86,7 +86,6 @@ class _InterstitialExpressPageState extends State<InterstitialExpressPage> {
   }
 
   _onTapShowFullscreen() async {
-
     final result = await pangle.loadInterstitialAd(
       iOS: IOSInterstitialConfig(
         slotId: kInterstitialExpressIdFull,

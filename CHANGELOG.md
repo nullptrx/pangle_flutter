@@ -1,3 +1,7 @@
+## 1.2.0
+
+- Support native ads.
+
 ## 1.1.0
 
 - Adapt pangle overseas android sdk
