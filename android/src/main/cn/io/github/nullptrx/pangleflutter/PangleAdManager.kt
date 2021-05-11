@@ -48,6 +48,14 @@ class PangleAdManager {
     return ttAdManager.sdkVersion
   }
 
+  fun getThemeStatus(): Int {
+    return ttAdManager.themeStatus
+  }
+
+  fun setThemeStatus(theme: Int) {
+    ttAdManager.themeStatus = theme
+  }
+
   /**
    * Express
    */
