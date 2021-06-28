@@ -1,5 +1,3 @@
-package example.android.open_ad_sdk
-
 configurations.maybeCreate("default")
 
 def localProperties = new Properties()
