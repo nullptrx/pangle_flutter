@@ -150,7 +150,8 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
 
   /// 加载广告
   _loadFeedAd({bool isRefresh = true}) async {
-    var expressSize = PangleExpressSize(width: 375, height: 284);
+    // var expressSize = PangleExpressSize(width: 375, height: 284);
+    var expressSize = PangleExpressSize.aspectRatio(375 / 284);
     PangleAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedConfig(
         slotId: kFeedExpressId375x284,
