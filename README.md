@@ -42,27 +42,19 @@
 
 
 
-> 从 [0.10.1](https://pub.flutter-io.cn/packages/pangle_flutter/versions/0.10.1) 开始，不再支持旧版自渲染方式加载广告。所有可请求广告为[穿山甲官网](https://pangle.cn)目前可创建广告位。
->
-> 因自渲染广告位，官方不推荐使用，且API不会经常变动，后续会单独提交一个自渲染版本出来。如果你仍需要该功能，可使用[0.9.1](https://pub.flutter-io.cn/packages/pangle_flutter/versions/0.9.1)或在其基础上修改。
-
-
-
 ## 版本迁移
 
 > 1. 不再需要传入isExpress参数
 > 2. BannerView, FeedView, SplashView均需要包一层限制大小的Widget, 可选Container, SizeBox, AspectRatio, Expanded等
 > 3. BannerView, FeedView, SplashView的控制点击实现变动，可参考example进行更改。
-> 4. 从v0.10.1开始不再提供自渲染广告位加载，后续会在新的分支实现，敬请期待。
-> 5. Android依赖方式变更，查看 [如何配置](SETUP.md)
 
 
 
 ## SDK对应版本
 
-[[Android] 3.6.1.0](https://www.pangle.cn/union/media/union/download/log?id=4) （理论上3.6+都支持）
+[[Android] 3.8.0.0](https://www.pangle.cn/union/media/union/download/log?id=4) （理论上3.8+都支持）
 
-[[iOS] 3.6.1.1](https://www.pangle.cn/union/media/union/download/log?id=16) （理论上3.6+都支持）
+[[iOS] 3.7.0.5](https://www.pangle.cn/union/media/union/download/log?id=16) （理论上3.7+都支持）
 
 注：如果出现高版本不兼容问题，可联系我升级适配，或者使用上面指定版本。
 

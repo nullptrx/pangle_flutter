@@ -78,5 +78,4 @@ class _InterstitialExpressPageState extends State<InterstitialExpressPage> {
       SnackBar(content: Text(data)),
     );
   }
-
 }
