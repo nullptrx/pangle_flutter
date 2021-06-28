@@ -18,6 +18,7 @@ import io.github.nullptrx.pangleflutter.delegate.FLTSplashAd
 import io.github.nullptrx.pangleflutter.util.asMap
 import io.github.nullptrx.pangleflutter.view.BannerViewFactory
 import io.github.nullptrx.pangleflutter.view.FeedViewFactory
+import io.github.nullptrx.pangleflutter.view.NativeBannerViewFactory
 import io.github.nullptrx.pangleflutter.view.SplashViewFactory
 
 /** PangleFlutterPlugin */
@@ -47,10 +48,13 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
         registrar.platformViewRegistry().registerViewFactory("nullptrx.github.io/pangle_feedview",
             feedViewFactory)
 
-        splashViewFactory = SplashViewFactory(messenger)
+        val splashViewFactory = SplashViewFactory(messenger)
         registrar.platformViewRegistry().registerViewFactory("nullptrx.github.io/pangle_splashview",
             splashViewFactory)
 
+        val nativeBannerViewFactory = NativeBannerViewFactory(messenger)
+        registrar.platformViewRegistry().registerViewFactory("nullptrx.github.io/pangle_nativebannerview",
+            nativeBannerViewFactory)
 
         feedViewFactory?.attachActivity(activity)
         bannerViewFactory?.attachActivity(activity)
@@ -64,7 +68,6 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
   private var context: Context? = null
   private var bannerViewFactory: BannerViewFactory? = null
   private var feedViewFactory: FeedViewFactory? = null
-  private var splashViewFactory: SplashViewFactory? = null
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activity = binding.activity
@@ -104,10 +107,13 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
     binding.platformViewRegistry.registerViewFactory("nullptrx.github.io/pangle_feedview",
         feedViewFactory)
 
-    splashViewFactory = SplashViewFactory(binding.binaryMessenger)
+    val splashViewFactory = SplashViewFactory(binding.binaryMessenger)
     binding.platformViewRegistry.registerViewFactory("nullptrx.github.io/pangle_splashview",
         splashViewFactory)
 
+    val nativeBannerViewFactory = NativeBannerViewFactory(binding.binaryMessenger)
+    binding.platformViewRegistry.registerViewFactory("nullptrx.github.io/pangle_nativebannerview",
+        nativeBannerViewFactory)
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -248,6 +254,16 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
 
 
       }
+      "setThemeStatus" -> {
+        val theme: Int = call.arguments()
+        pangle.setThemeStatus(theme)
+        result.success(null)
+      }
+      "getThemeStatus" -> {
+        val theme = pangle.getThemeStatus()
+        result.success(theme)
+      }
+
       else -> result.notImplemented()
     }
 

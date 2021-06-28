@@ -59,6 +59,12 @@ class _FullscreenVideoExpressPageState
                 child: Text('Show Ad'),
               ),
             ),
+            Center(
+              child: ElevatedButton(
+                onPressed: _onTapShowFullscreen,
+                child: Text('Show Fullscreen Ad'),
+              ),
+            ),
           ],
         ),
       ),
@@ -76,7 +82,11 @@ class _FullscreenVideoExpressPageState
         loadingType: PangleLoadingType.preload_only,
       ),
     );
-
+    var data = jsonEncode(result);
+    print(data);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(data)),
+    );
     setState(() {
       _loaded = result.ok;
     });
@@ -93,9 +103,29 @@ class _FullscreenVideoExpressPageState
         loadingType: PangleLoadingType.normal,
       ),
     );
-    print(jsonEncode(result));
+    var data = jsonEncode(result);
+    print(data);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(data)),
+    );
     setState(() {
       _loaded = false;
     });
+  }
+
+  _onTapShowFullscreen() async {
+    final result = await pangle.loadFullscreenVideoAd(
+      iOS: IOSFullscreenVideoConfig(
+        slotId: kFullscreenIdFull,
+      ),
+      android: AndroidFullscreenVideoConfig(
+        slotId: kFullscreenIdFull,
+      ),
+    );
+    var data = jsonEncode(result);
+    print(data);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(data)),
+    );
   }
 }

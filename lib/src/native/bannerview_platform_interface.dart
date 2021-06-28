@@ -24,49 +24,55 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
-final kSplashViewType = 'nullptrx.github.io/pangle_splashview';
+final kNativeBannerViewType = 'nullptrx.github.io/pangle_nativebannerview';
 
-abstract class SplashViewPlatform {
+abstract class NativeBannerViewPlatform {
   Widget build({
     required BuildContext context,
     required Map<String, dynamic> creationParams,
-    required SplashViewPlatformCallbacksHandler
-        splashViewPlatformCallbacksHandler,
-    SplashViewPlatformCreatedCallback? onSplashViewPlatformCreated,
+    required NativeBannerViewPlatformCallbacksHandler
+        bannerViewPlatformCallbacksHandler,
+    NativeBannerViewPlatformCreatedCallback? onBannerViewPlatformCreated,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   });
 }
 
-/// Signature for callbacks reporting that a [SplashViewPlatformController] was created.
+/// Signature for callbacks reporting that a [NativeBannerViewPlatformController] was created.
 ///
-/// See also the `onSplashViewPlatformCreated` argument for [SplashViewPlatform.build].
-typedef SplashViewPlatformCreatedCallback = void Function(
-    SplashViewPlatformController splashViewPlatformController);
+/// See also the `onBannerViewPlatformCreated` argument for [NativeBannerViewPlatform.build].
+typedef NativeBannerViewPlatformCreatedCallback = void Function(
+    NativeBannerViewPlatformController nativeBannerViewPlatformController);
 
-/// Interface for talking to the splashview's platform implementation.
+/// Interface for talking to the bannerview's platform implementation.
 ///
-/// An instance implementing this interface is passed to the `onSplashViewPlatformCreated` callback that is
-/// passed to [SplashViewPlatformBuilder#onSplashViewPlatformCreated].
+/// An instance implementing this interface is passed to the `onBannerViewPlatformCreated` callback that is
+/// passed to [BannerViewPlatformBuilder#onBannerViewPlatformCreated].
 ///
 /// Platform implementations that live in a separate package should extend this class rather than
 /// implement it as pangle_flutter does not consider newly added methods to be breaking changes.
 /// Extending this class (using `extends`) ensures that the subclass will get the default
 /// implementation, while platform implementations that `implements` this interface will be broken
-/// by newly added [SplashViewPlatformController] methods.
-abstract class SplashViewPlatformController {}
+/// by newly added [NativeBannerViewPlatformController] methods.
+abstract class NativeBannerViewPlatformController {
+  /// 更新可点击区域
+  Future<void> updateTouchableBounds(List<Rect> bounds);
 
-/// Interface for callbacks made by [SplashViewPlatformController].
+  /// 更新不可点击区域
+  Future<void> updateRestrictedBounds(List<Rect> bounds);
+}
+
+/// Interface for callbacks made by [NativeBannerViewPlatformController].
 ///
-/// The splashview plugin implements this class, and passes an instance to the [SplashViewPlatformController].
-/// [SplashViewPlatformController] is notifying this handler on events that happened on the platform's splashview.
-abstract class SplashViewPlatformCallbacksHandler {
+/// The bannerview plugin implements this class, and passes an instance to the [NativeBannerViewPlatformController].
+/// [NativeBannerViewPlatformController] is notifying this handler on events that happened on the platform's bannerview.
+abstract class NativeBannerViewPlatformCallbacksHandler {
   void onClick();
 
   void onShow();
 
-  void onSkip();
-
-  void onTimeOver();
-
   void onError(int code, String message);
+
+  /// [option]
+  /// [enforce] 当enforce参数返回true时，代表穿山甲会主动关闭掉广告，广告移除后需要开发者对界面进行适配。
+  void onDislike(String option, bool enforce);
 }

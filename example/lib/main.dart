@@ -43,7 +43,7 @@ import 'page/cn/native/custom_splash_page.dart';
 /// [PangleAd] 信息流加载获得的数据源
 /// [FeedView] 信息流广告Widget
 ///
-/// [BannerView] 横幅广告Widget
+/// [NativeBannerView] 横幅广告Widget
 ///
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

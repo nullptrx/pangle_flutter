@@ -51,6 +51,10 @@ class FLTFullScreenVideoAd(var slotId: String, var target: Activity?, val loadin
 
   }
 
+  override fun onFullScreenVideoCached(ad: TTFullScreenVideoAd?) {
+
+  }
+
   private fun invoke(code: Int = 0, message: String? = null) {
     if (result == kBlock) {
       return

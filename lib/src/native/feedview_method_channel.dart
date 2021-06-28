@@ -20,22 +20,21 @@
  * SOFTWARE.
  */
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
-import 'platform_interface.dart';
+import 'feedview_platform_interface.dart';
 
-/// A [BannerViewPlatformController] that uses a method channel to control the bannerview.
-class MethodChannelBannerViewPlatform implements BannerViewPlatformController {
+/// A [NativeFeedViewPlatformController] that uses a method channel to control the feedview.
+class MethodChannelNativeFeedViewPlatform
+    implements NativeFeedViewPlatformController {
   /// Constructs an instance that will listen for webviews broadcasting to the
   /// given [id], using the given [WebViewPlatformCallbacksHandler].
-  MethodChannelBannerViewPlatform(int id, this._platformCallbacksHandler)
-      : _channel = MethodChannel('${kBannerViewType}_$id') {
+  MethodChannelNativeFeedViewPlatform(int id, this._platformCallbacksHandler)
+      : _channel = MethodChannel('${kNativeFeedViewType}_$id') {
     _channel.setMethodCallHandler(_onMethodCall);
   }
 
-  final BannerViewPlatformCallbacksHandler _platformCallbacksHandler;
+  final NativeFeedViewPlatformCallbacksHandler _platformCallbacksHandler;
 
   final MethodChannel _channel;
 
@@ -52,53 +51,6 @@ class MethodChannelBannerViewPlatform implements BannerViewPlatformController {
         bool enforce = call.arguments['enforce'];
         _platformCallbacksHandler.onDislike(option, enforce);
         break;
-      case "onRenderSuccess":
-        _platformCallbacksHandler.onRenderSuccess();
-        break;
-      case "onRenderFail":
-        int code = call.arguments['code'];
-        String message = call.arguments['message'];
-        _platformCallbacksHandler.onRenderFail(code, message);
-        break;
-      case "onError":
-        int code = call.arguments['code'];
-        String message = call.arguments['message'];
-        _platformCallbacksHandler.onError(code, message);
-        break;
     }
-  }
-
-  @override
-  Future<void> updateTouchableBounds(List<Rect> bounds) async {
-    if (defaultTargetPlatform != TargetPlatform.iOS) {
-      return;
-    }
-    final json = [];
-    for (final bound in bounds) {
-      json.add({
-        'x': bound.left,
-        'y': bound.top,
-        'w': bound.width,
-        'h': bound.height,
-      });
-    }
-    await _channel.invokeMethod('updateTouchableBounds', json);
-  }
-
-  @override
-  Future<void> updateRestrictedBounds(List<Rect> bounds) async {
-    if (defaultTargetPlatform != TargetPlatform.iOS) {
-      return;
-    }
-    final json = [];
-    for (final bound in bounds) {
-      json.add({
-        'x': bound.left,
-        'y': bound.top,
-        'w': bound.width,
-        'h': bound.height,
-      });
-    }
-    await _channel.invokeMethod('updateRestrictedBounds', json);
   }
 }

@@ -45,7 +45,7 @@ internal final class FLTNativeExpressAdViewDelegate: NSObject, BUNativeExpressAd
     }
 
     public func nativeExpressAdView(_ nativeExpressAdView: BUNativeExpressAdView, dislikeWithReason filterWords: [BUDislikeWords]) {
-        postMessage(nativeExpressAdView, "onDislike", arguments: ["option": filterWords.first?.name ?? ""])
+        postMessage(nativeExpressAdView, "onDislike", arguments: ["option": filterWords.first?.name ?? "", "enforce": false])
     }
 
     func nativeExpressAdViewDidClick(_ nativeExpressAdView: BUNativeExpressAdView) {

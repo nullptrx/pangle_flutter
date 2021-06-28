@@ -24,18 +24,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import 'platform_interface.dart';
+import 'bannerview_platform_interface.dart';
 
-/// A [BannerViewPlatformController] that uses a method channel to control the bannerview.
-class MethodChannelBannerViewPlatform implements BannerViewPlatformController {
+/// A [NativeBannerViewPlatformController] that uses a method channel to control the bannerview.
+class MethodChannelNativeBannerViewPlatform
+    implements NativeBannerViewPlatformController {
   /// Constructs an instance that will listen for webviews broadcasting to the
   /// given [id], using the given [WebViewPlatformCallbacksHandler].
-  MethodChannelBannerViewPlatform(int id, this._platformCallbacksHandler)
-      : _channel = MethodChannel('${kBannerViewType}_$id') {
+  MethodChannelNativeBannerViewPlatform(int id, this._platformCallbacksHandler)
+      : _channel = MethodChannel('${kNativeBannerViewType}_$id') {
     _channel.setMethodCallHandler(_onMethodCall);
   }
 
-  final BannerViewPlatformCallbacksHandler _platformCallbacksHandler;
+  final NativeBannerViewPlatformCallbacksHandler _platformCallbacksHandler;
 
   final MethodChannel _channel;
 
@@ -51,14 +52,6 @@ class MethodChannelBannerViewPlatform implements BannerViewPlatformController {
         String option = call.arguments['option'];
         bool enforce = call.arguments['enforce'];
         _platformCallbacksHandler.onDislike(option, enforce);
-        break;
-      case "onRenderSuccess":
-        _platformCallbacksHandler.onRenderSuccess();
-        break;
-      case "onRenderFail":
-        int code = call.arguments['code'];
-        String message = call.arguments['message'];
-        _platformCallbacksHandler.onRenderFail(code, message);
         break;
       case "onError":
         int code = call.arguments['code'];

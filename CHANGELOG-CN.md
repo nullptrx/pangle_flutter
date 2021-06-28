@@ -1,3 +1,8 @@
+## 1.2.0
+
+- 适配广告SDK(Android 3.8.0.0, iOS 3.7.0.5)
+- 修复 iOS 上 FeedView 的 onDislike 不回调
+
 ## 1.1.0
 
 - 适配Android海外SDK功能
@@ -206,7 +211,6 @@ FeedView(
 ## 0.0.1
 
 * 初步实现开屏、激励视频、Banner、信息流广告。
-
 
 
 

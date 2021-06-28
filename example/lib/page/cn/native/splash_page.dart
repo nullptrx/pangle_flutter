@@ -20,6 +20,8 @@
  * SOFTWARE.
  */
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 
@@ -54,7 +56,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   _onTapShow() async {
-    await pangle.loadSplashAd(
+    final result = await pangle.loadSplashAd(
       iOS: IOSSplashConfig(
         slotId: kSplashId,
         isExpress: false,
@@ -63,6 +65,11 @@ class _SplashPageState extends State<SplashPage> {
         slotId: kSplashId,
         isExpress: false,
       ),
+    );
+    var data = jsonEncode(result);
+    print(data);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(data)),
     );
   }
 }

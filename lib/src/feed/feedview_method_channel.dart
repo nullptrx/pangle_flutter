@@ -50,7 +50,8 @@ class MethodChannelFeedViewPlatform implements FeedViewPlatformController {
         break;
       case "onDislike":
         String option = call.arguments['option'];
-        _platformCallbacksHandler.onDislike(option);
+        bool enforce = call.arguments['enforce'] ?? false;
+        _platformCallbacksHandler.onDislike(option, enforce);
         break;
       case "onRenderSuccess":
         _platformCallbacksHandler.onRenderSuccess();

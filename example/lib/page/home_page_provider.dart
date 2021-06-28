@@ -28,6 +28,7 @@ import '../common/version.dart';
 
 mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
   String? _denpendencies;
+  int _theme = 0;
 
   @override
   void initState() {
@@ -61,9 +62,21 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
                 child: Text(_denpendencies ?? ''),
               ),
             ),
+            ListTile(
+              title: Text('Theme: '),
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text('$_theme'),
+              ),
+            ),
             ElevatedButton(
               onPressed: requestPermissions,
               child: Text('Request Permissions'),
+            ),
+            SizedBox(height: 30),
+            ElevatedButton(
+              onPressed: changeTheme,
+              child: Text('Change Theme'),
             ),
             SizedBox(height: 30),
             ElevatedButton(
@@ -95,6 +108,15 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
     // await [Permission.location, Permission.phone, Permission.storage].request();
 
     await pangle.requestPermissionIfNecessary();
+  }
+
+  void changeTheme() async {
+    var theme = await pangle.getThemeStatus();
+    var newTheme = theme == 0 ? 1 : 0;
+    pangle.setThemeStatus(newTheme);
+    setState(() {
+      _theme = newTheme;
+    });
   }
 
   void requestPermissionsOnIOS() async {

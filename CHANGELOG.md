@@ -1,3 +1,8 @@
+## 1.2.0
+
+- Adapt ads sdk(Android 3.8.0.0, iOS 3.7.0.5)
+- Fix FeedView's onDislike not callback on iOS
+
 ## 1.1.0
 
 - Adapt pangle overseas android sdk
@@ -206,7 +211,6 @@ FeedView(
 ## 0.0.1
 
 * Init `Splash Ads`, `Rewarded Video Ads`, `Banner Ads`, `Feed Ads`.
-
 
 
 

@@ -1,5 +1,5 @@
 group 'io.github.nullptrx.pangleflutter'
-version '1.1.0'
+version '1.2.0'
 
 buildscript {
     ext.kotlin_version = '1.4.21'
@@ -46,9 +46,6 @@ android {
             case 'cn':
                 main.java.srcDirs += 'src/main/cn'
                 break
-            case 'global':
-                main.java.srcDirs += 'src/main/global'
-                break
         }
     }
     defaultConfig {
@@ -70,8 +67,8 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:+'
     implementation project(':open_ad_sdk')
 //    implementation "androidx.core:core-ktx:+"
-//    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
