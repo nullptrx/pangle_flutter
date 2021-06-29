@@ -23,6 +23,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 
 import '../../../common/ext.dart';
@@ -82,12 +83,16 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
             alignment: Alignment.center,
             color: Colors.white,
             height: 100,
-            child: Column(
+            child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 FlutterLogo(size: 40),
-                SizedBox(height: 10),
-                Text('Pangle Flutter'),
+                SizedBox(width: 20),
+                Text(
+                  'Pangle Flutter',
+                  style: GoogleFonts.zcoolQingKeHuangYou(
+                      fontSize: 24, color: Colors.black),
+                ),
               ],
             ),
           )

@@ -31,14 +31,11 @@ class FLTInterstitialExpressAd(var target: Activity?, var result: (Any) -> Unit)
   override fun onShow() {
   }
 
-  override fun onSelected(index: Int, selection: String) {
+  override fun onSelected(index: Int, selection: String?, p2: Boolean) {
 
   }
 
   override fun onCancel() {
-  }
-
-  override fun onRefuse() {
   }
 
   override fun onAdDismiss() {

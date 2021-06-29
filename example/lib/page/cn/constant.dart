@@ -33,4 +33,7 @@ const kFeedExpressId375x284 = '945940981';
 const kInterstitialExpressId3x2 = '945940989';
 const kInterstitialExpressId1x1 = '945940988';
 
+// 新模板渲染插屏
+const kFullscreenIdFull = '945999649';
+// 全屏视频
 const kFullscreenVideoExpressId = '945940986';

@@ -226,8 +226,8 @@ class _PlatformCallbacksHandler implements FeedViewPlatformCallbacksHandler {
   }
 
   @override
-  void onDislike(String option) {
-    _widget.onDislike?.call(option);
+  void onDislike(String option, bool enforce) {
+    _widget.onDislike?.call(option, enforce);
   }
 
   @override

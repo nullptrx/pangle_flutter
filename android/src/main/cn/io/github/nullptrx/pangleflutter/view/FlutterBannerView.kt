@@ -114,15 +114,12 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
 
   }
 
-  override fun onSelected(index: Int, option: String) {
+  override fun onSelected(index: Int, option: String?, enforce: Boolean) {
     //用户选择不喜欢原因后，移除广告展示
-    postMessage("onDislike", mapOf("option" to option))
+    postMessage("onDislike", mapOf("option" to option, "enforce" to enforce))
   }
 
   override fun onCancel() {
-  }
-
-  override fun onRefuse() {
   }
 
   private fun postMessage(method: String, arguments: Map<String, Any?> = mapOf()) {

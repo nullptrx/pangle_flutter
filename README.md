@@ -42,27 +42,19 @@
 
 
 
-> 从 [0.10.1](https://pub.flutter-io.cn/packages/pangle_flutter/versions/0.10.1) 开始，不再支持旧版自渲染方式加载广告。所有可请求广告为[穿山甲官网](https://pangle.cn)目前可创建广告位。
->
-> 因自渲染广告位，官方不推荐使用，且API不会经常变动，后续会单独提交一个自渲染版本出来。如果你仍需要该功能，可使用[0.9.1](https://pub.flutter-io.cn/packages/pangle_flutter/versions/0.9.1)或在其基础上修改。
-
-
-
 ## 版本迁移
 
 > 1. 不再需要传入isExpress参数
 > 2. BannerView, FeedView, SplashView均需要包一层限制大小的Widget, 可选Container, SizeBox, AspectRatio, Expanded等
 > 3. BannerView, FeedView, SplashView的控制点击实现变动，可参考example进行更改。
-> 4. 从v0.10.1开始不再提供自渲染广告位加载，后续会在新的分支实现，敬请期待。
-> 5. Android依赖方式变更，查看 [如何配置](SETUP.md)
 
 
 
 ## SDK对应版本
 
-[[Android] 3.5.0.0](https://sf1-be-tos.pglstatp-toutiao.com/obj/union-platform/d8bcf772441c03541ab14c808536a802.zip) （理论上3.5+都支持）
+[[Android] 3.8.0.0](https://www.pangle.cn/union/media/union/download/log?id=4) （理论上3.8+都支持）
 
-[[iOS] 3.4.2.8](https://sf1-be-tos.pglstatp-toutiao.com/obj/union-platform/d93cdd1e574e09338f628a78fc808107.zip) （理论上3.4+都支持）
+[[iOS] 3.7.0.5](https://www.pangle.cn/union/media/union/download/log?id=16) （理论上3.7+都支持）
 
 注：如果出现高版本不兼容问题，可联系我升级适配，或者使用上面指定版本。
 
@@ -105,22 +97,23 @@ dependencies:
 
   打开你flutter应用ios项目下的`Podfile`，在`target 'Runner do`上面添加如下代码即可（如果不熟悉Podfile，也可以参考本项目[example/ios/Podfile](example/ios/Podfile)里面的配置）。
 
-  ```ruby
+```ruby
+
 # add code begin
   def flutter_install_ios_plugin_pods(ios_application_path = nil)
     # defined_in_file is set by CocoaPods and is a Pathname to the Podfile.
     ios_application_path ||= File.dirname(defined_in_file.realpath) if self.respond_to?(:defined_in_file)
     raise 'Could not find iOS application path' unless ios_application_path
-  
+
     # Prepare symlinks folder. We use symlinks to avoid having Podfile.lock
     # referring to absolute paths on developers' machines.
-  
+      
     symlink_dir = File.expand_path('.symlinks', ios_application_path)
     system('rm', '-rf', symlink_dir) # Avoid the complication of dependencies like FileUtils.
-  
+      
     symlink_plugins_dir = File.expand_path('plugins', symlink_dir)
     system('mkdir', '-p', symlink_plugins_dir)
-  
+      
     plugins_file = File.join(ios_application_path, '..', '.flutter-plugins-dependencies')
     plugin_pods = flutter_parse_plugins_file(plugins_file)
     plugin_pods.each do |plugin_hash|
@@ -129,18 +122,18 @@ dependencies:
       if (plugin_name && plugin_path)
         symlink = File.join(symlink_plugins_dir, plugin_name)
         File.symlink(plugin_path, symlink)
-  
+      
         pod plugin_name, :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
         if plugin_name == 'pangle_flutter'
           # cn表示国内，global表示海外
           pod 'pangle_flutter/global', :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
         end
-  
+      
       end
     end
   end
   # add code end
-  ```
+```
 
 - Android版本依赖配置
 

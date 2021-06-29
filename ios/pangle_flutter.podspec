@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'pangle_flutter'
-  s.version          = '1.1.0'
+  s.version          = '1.2.0'
   s.summary          = 'Flutter plugin for Pangle Ad SDK.'
   s.description      = <<-DESC
 Flutter plugin for Pangle Ad SDK.
@@ -22,13 +22,12 @@ Flutter plugin for Pangle Ad SDK.
   s.default_subspec   = 'cn'
 
   s.subspec 'cn' do |ss|
-    ss.ios.dependency 'Ads-CN', '~> 3.4'
+    ss.ios.dependency 'Ads-CN', '~> 3.7'
   end
 
   s.subspec 'global' do |ss|
-    ss.ios.dependency 'Ads-Global', '~> 3.4'
+    ss.ios.dependency 'Ads-Global', '~> 3.7'
   end
-
 
   # Flutter.framework does not contain a i386 slice. Only x86_64 simulators are supported.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'VALID_ARCHS[sdk=iphonesimulator*]' => 'x86_64' }

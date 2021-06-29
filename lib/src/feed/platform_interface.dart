@@ -40,7 +40,7 @@ abstract class FeedViewPlatform {
 ///
 /// See also the `onFeedViewPlatformCreated` argument for [FeedViewPlatform.build].
 typedef FeedViewPlatformCreatedCallback = void Function(
-    FeedViewPlatformController webViewPlatformController);
+    FeedViewPlatformController feedViewPlatformController);
 
 /// Interface for talking to the feedview's platform implementation.
 ///
@@ -73,5 +73,7 @@ abstract class FeedViewPlatformCallbacksHandler {
 
   void onRenderFail(int code, String message);
 
-  void onDislike(String option);
+  /// [option]
+  /// [enforce] 当enforce参数返回true时，代表穿山甲会主动关闭掉广告，广告移除后需要开发者对界面进行适配。
+  void onDislike(String option, bool enforce);
 }

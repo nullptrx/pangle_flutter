@@ -26,20 +26,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
-import 'banner/bannerview_android.dart';
-import 'banner/bannerview_ios.dart';
-import 'banner/platform_interface.dart';
+import 'native/bannerview_android.dart';
+import 'native/bannerview_ios.dart';
+import 'native/bannerview_platform_interface.dart';
 import 'config.dart';
 import 'config_android.dart';
 import 'config_ios.dart';
 import 'util.dart';
 
 /// Optional callback invoked when a web view is first created. [controller] is
-/// the [BannerViewController] for the created banner view.
-typedef void BannerViewCreatedCallback(BannerViewController controller);
+/// the [NativeBannerViewController] for the created banner view.
+typedef void NativeBannerViewCreatedCallback(
+    NativeBannerViewController controller);
 
-class BannerView extends StatefulWidget {
-  const BannerView({
+class NativeBannerView extends StatefulWidget {
+  const NativeBannerView({
     Key? key,
     this.iOS,
     this.android,
@@ -49,15 +50,13 @@ class BannerView extends StatefulWidget {
     this.onShow,
     this.onDislike,
     this.onError,
-    this.onRenderSuccess,
-    this.onRenderFail,
   }) : super(key: key);
 
   final IOSBannerConfig? iOS;
-  final AndroidBannerConfig? android;
+  final AndroidNativeBannerConfig? android;
 
   /// If not null invoked once the banner view is created.
-  final BannerViewCreatedCallback? onBannerViewCreated;
+  final NativeBannerViewCreatedCallback? onBannerViewCreated;
 
   /// Which gestures should be consumed by the banner view.
   ///
@@ -70,30 +69,30 @@ class BannerView extends StatefulWidget {
   /// were not claimed by any other gesture recognizer.
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
-  static BannerViewPlatform? _platform;
+  static NativeBannerViewPlatform? _platform;
 
   /// Sets a custom [BannerViewPlatform].
   ///
   /// This property can be set to use a custom platform implementation for BannerViews.
   ///
-  /// Setting `platform` doesn't affect [BannerView]s that were already created.
+  /// Setting `platform` doesn't affect [NativeBannerView]s that were already created.
   ///
   /// The default value is [AndroidBannerView] on Android and [CupertinoBannerView] on iOS.
-  static set platform(BannerViewPlatform? platform) {
+  static set platform(NativeBannerViewPlatform? platform) {
     _platform = platform;
   }
 
   /// The BannerView platform that's used by this BannerVIew.
   ///
   /// The default value is [AndroidBannerView] on Android and [CupertinoBannerView] on iOS.
-  static BannerViewPlatform get platform {
+  static NativeBannerViewPlatform get platform {
     if (_platform == null) {
       switch (defaultTargetPlatform) {
         case TargetPlatform.android:
-          _platform = AndroidBannerView();
+          _platform = AndroidNativeBannerView();
           break;
         case TargetPlatform.iOS:
-          _platform = CupertinoBannerView();
+          _platform = CupertinoNativeBannerView();
           break;
         default:
           throw UnsupportedError(
@@ -120,7 +119,7 @@ class BannerView extends StatefulWidget {
   }
 
   @override
-  _BannerViewState createState() => _BannerViewState();
+  _NativeBannerViewState createState() => _NativeBannerViewState();
 
   /// 广告被点击
   final VoidCallback? onClick;
@@ -133,18 +132,12 @@ class BannerView extends StatefulWidget {
 
   /// 获取广告失败
   final PangleMessageCallback? onError;
-
-  /// 渲染广告成功
-  final VoidCallback? onRenderSuccess;
-
-  /// 渲染广告失败
-  final PangleMessageCallback? onRenderFail;
 }
 
-class _BannerViewState extends State<BannerView>
+class _NativeBannerViewState extends State<NativeBannerView>
     with AutomaticKeepAliveClientMixin {
-  final Completer<BannerViewController> _controller =
-      Completer<BannerViewController>();
+  final Completer<NativeBannerViewController> _controller =
+      Completer<NativeBannerViewController>();
 
   _PlatformCallbacksHandler? _platformCallbacksHandler;
 
@@ -154,7 +147,7 @@ class _BannerViewState extends State<BannerView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return BannerView.platform.build(
+    return NativeBannerView.platform.build(
       context: context,
       creationParams: widget.config!.toJSON(),
       bannerViewPlatformCallbacksHandler: _platformCallbacksHandler!,
@@ -170,18 +163,18 @@ class _BannerViewState extends State<BannerView>
   }
 
   @override
-  void didUpdateWidget(BannerView oldWidget) {
+  void didUpdateWidget(NativeBannerView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _controller.future.then((BannerViewController controller) {
+    _controller.future.then((NativeBannerViewController controller) {
       _platformCallbacksHandler!._widget = widget;
       controller._updateWidget(widget);
     });
   }
 
   void _onWebViewPlatformCreated(
-    BannerViewPlatformController bannerViewPlatform,
+    NativeBannerViewPlatformController bannerViewPlatform,
   ) {
-    final BannerViewController controller = BannerViewController._(
+    final NativeBannerViewController controller = NativeBannerViewController._(
         widget, bannerViewPlatform, _platformCallbacksHandler);
     _controller.complete(controller);
     if (widget.onBannerViewCreated != null) {
@@ -190,18 +183,18 @@ class _BannerViewState extends State<BannerView>
   }
 }
 
-/// Controls a [BannerView].
+/// Controls a [NativeBannerView].
 ///
-/// A [BannerViewController] instance can be obtained by setting the [BannerView.onBannerViewCreated]
-/// callback for a [BannerView] widget.
-class BannerViewController {
-  BannerViewController._(
+/// A [NativeBannerViewController] instance can be obtained by setting the [NativeBannerView.onBannerViewCreated]
+/// callback for a [NativeBannerView] widget.
+class NativeBannerViewController {
+  NativeBannerViewController._(
     this._widget,
     this._bannerViewPlatformController,
     this._platformCallbacksHandler,
   );
 
-  final BannerViewPlatformController _bannerViewPlatformController;
+  final NativeBannerViewPlatformController _bannerViewPlatformController;
 
   // todo unused_field
   // ignore: unused_field
@@ -209,9 +202,9 @@ class BannerViewController {
 
   // todo unused_field
   // ignore: unused_field
-  BannerView _widget;
+  NativeBannerView _widget;
 
-  Future<void> _updateWidget(BannerView widget) async {
+  Future<void> _updateWidget(NativeBannerView widget) async {
     _widget = widget;
   }
 
@@ -233,10 +226,11 @@ class BannerViewController {
   }
 }
 
-class _PlatformCallbacksHandler implements BannerViewPlatformCallbacksHandler {
+class _PlatformCallbacksHandler
+    implements NativeBannerViewPlatformCallbacksHandler {
   _PlatformCallbacksHandler(this._widget);
 
-  BannerView _widget;
+  NativeBannerView _widget;
 
   @override
   void onClick() {
@@ -251,16 +245,6 @@ class _PlatformCallbacksHandler implements BannerViewPlatformCallbacksHandler {
   @override
   void onError(int code, String message) {
     _widget.onError?.call(code, message);
-  }
-
-  @override
-  void onRenderFail(int code, String message) {
-    _widget.onRenderFail?.call(code, message);
-  }
-
-  @override
-  void onRenderSuccess() {
-    _widget.onRenderSuccess?.call();
   }
 
   @override

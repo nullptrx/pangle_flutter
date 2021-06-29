@@ -24,49 +24,47 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
-final kSplashViewType = 'nullptrx.github.io/pangle_splashview';
+final kNativeFeedViewType = 'nullptrx.github.io/pangle_nativefeedview';
 
-abstract class SplashViewPlatform {
+abstract class NativeFeedViewPlatform {
   Widget build({
     required BuildContext context,
     required Map<String, dynamic> creationParams,
-    required SplashViewPlatformCallbacksHandler
-        splashViewPlatformCallbacksHandler,
-    SplashViewPlatformCreatedCallback? onSplashViewPlatformCreated,
+    required NativeFeedViewPlatformCallbacksHandler
+        feedViewPlatformCallbacksHandler,
+    NativeFeedViewPlatformCreatedCallback? onFeedViewPlatformCreated,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   });
 }
 
-/// Signature for callbacks reporting that a [SplashViewPlatformController] was created.
+/// Signature for callbacks reporting that a [NativeFeedViewPlatformController] was created.
 ///
-/// See also the `onSplashViewPlatformCreated` argument for [SplashViewPlatform.build].
-typedef SplashViewPlatformCreatedCallback = void Function(
-    SplashViewPlatformController splashViewPlatformController);
+/// See also the `onFeedViewPlatformCreated` argument for [NativeFeedViewPlatform.build].
+typedef NativeFeedViewPlatformCreatedCallback = void Function(
+    NativeFeedViewPlatformController nativeFeedViewPlatformController);
 
-/// Interface for talking to the splashview's platform implementation.
+/// Interface for talking to the feedview's platform implementation.
 ///
-/// An instance implementing this interface is passed to the `onSplashViewPlatformCreated` callback that is
-/// passed to [SplashViewPlatformBuilder#onSplashViewPlatformCreated].
+/// An instance implementing this interface is passed to the `onFeedViewPlatformCreated` callback that is
+/// passed to [FeedViewPlatformBuilder#onFeedViewPlatformCreated].
 ///
 /// Platform implementations that live in a separate package should extend this class rather than
 /// implement it as pangle_flutter does not consider newly added methods to be breaking changes.
 /// Extending this class (using `extends`) ensures that the subclass will get the default
 /// implementation, while platform implementations that `implements` this interface will be broken
-/// by newly added [SplashViewPlatformController] methods.
-abstract class SplashViewPlatformController {}
+/// by newly added [NativeFeedViewPlatformController] methods.
+abstract class NativeFeedViewPlatformController {}
 
-/// Interface for callbacks made by [SplashViewPlatformController].
+/// Interface for callbacks made by [NativeFeedViewPlatformController].
 ///
-/// The splashview plugin implements this class, and passes an instance to the [SplashViewPlatformController].
-/// [SplashViewPlatformController] is notifying this handler on events that happened on the platform's splashview.
-abstract class SplashViewPlatformCallbacksHandler {
+/// The feedview plugin implements this class, and passes an instance to the [NativeFeedViewPlatformController].
+/// [NativeFeedViewPlatformController] is notifying this handler on events that happened on the platform's feedview.
+abstract class NativeFeedViewPlatformCallbacksHandler {
   void onClick();
 
   void onShow();
 
-  void onSkip();
-
-  void onTimeOver();
-
-  void onError(int code, String message);
+  /// [option]
+  /// [enforce] 当enforce参数返回true时，代表穿山甲会主动关闭掉广告，广告移除后需要开发者对界面进行适配。
+  void onDislike(String option, bool enforce);
 }

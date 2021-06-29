@@ -238,6 +238,39 @@ class AndroidBannerConfig implements Config {
   }
 }
 
+class AndroidNativeBannerConfig implements Config {
+  final String slotId;
+  final bool isSupportDeepLink;
+  final PangleSize size;
+  final int? interval;
+
+  /// The feed ad config for Android
+  ///
+  /// [slotId] required. The unique identifier of a banner ad.
+  /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
+  /// [size] ads size
+  /// [interval] The carousel interval, in seconds, is set in the range of 30~120s,
+  ///   and is passed during initialization. If it does not meet the requirements,
+  ///   it will not be in carousel ad.
+  const AndroidNativeBannerConfig({
+    required this.slotId,
+    required this.size,
+    this.isSupportDeepLink = true,
+    this.interval,
+  });
+
+  /// Convert config to json
+  @override
+  Map<String, dynamic> toJSON() {
+    return {
+      'slotId': slotId,
+      'isSupportDeepLink': isSupportDeepLink,
+      'size': size.toJson(),
+      'interval': interval,
+    };
+  }
+}
+
 class AndroidFeedConfig implements Config {
   final String slotId;
   final int? count;

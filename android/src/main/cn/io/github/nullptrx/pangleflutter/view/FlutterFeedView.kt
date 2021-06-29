@@ -85,14 +85,11 @@ class FlutterFeedView(
   override fun onShow() {
   }
 
-  override fun onSelected(index: Int, option: String) {
-    postMessage("onDislike", mapOf("option" to option))
+  override fun onSelected(index: Int, option: String?, enforce: Boolean) {
+    postMessage("onDislike", mapOf("option" to option, "enforce" to enforce))
   }
 
   override fun onCancel() {
-  }
-
-  override fun onRefuse() {
   }
 
   private fun postMessage(method: String, arguments: Map<String, Any?> = mapOf()) {

@@ -1,35 +1,32 @@
 package io.github.nullptrx.pangleflutter.view
 
-import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import com.bytedance.sdk.openadsdk.TTAdDislike
 import com.bytedance.sdk.openadsdk.TTAdNative
-import com.bytedance.sdk.openadsdk.TTNativeExpressAd
+import com.bytedance.sdk.openadsdk.TTBannerAd
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 import io.github.nullptrx.pangleflutter.PangleAdManager
 import io.github.nullptrx.pangleflutter.PangleAdSlotManager
-import io.github.nullptrx.pangleflutter.common.TTSizeF
+import io.github.nullptrx.pangleflutter.common.TTSize
 import io.github.nullptrx.pangleflutter.util.asMap
 
-class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val id: Int, params: Map<String, Any?>) : PlatformView, MethodChannel.MethodCallHandler, TTAdNative.NativeExpressAdListener,
-    TTNativeExpressAd.AdInteractionListener, TTAdDislike.DislikeInteractionCallback {
+class FlutterNativeBannerView(val context: Context, messenger: BinaryMessenger, val id: Int, params: Map<String, Any?>) : PlatformView, MethodChannel.MethodCallHandler, TTAdNative.BannerAdListener,
+    TTBannerAd.AdInteractionListener, TTAdDislike.DislikeInteractionCallback {
 
-  private val methodChannel: MethodChannel = MethodChannel(messenger, "nullptrx.github.io/pangle_bannerview_$id")
+  private val methodChannel: MethodChannel = MethodChannel(messenger, "nullptrx.github.io/pangle_nativebannerview_$id")
   private val container: FrameLayout
-  private val context: Context
   private var interval: Int? = null
-  private var ttAdNative: TTNativeExpressAd? = null
+  private var ttAdNative: TTBannerAd? = null
 
 
   init {
     methodChannel.setMethodCallHandler(this)
-    context = activity
     container = FrameLayout(context)
 
     val slotId = params["slotId"] as? String
@@ -39,12 +36,12 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
       interval = params["interval"] as Int?
 
 
-      val expressArgs: Map<String, Double> = params["expressSize"]?.asMap() ?: mapOf()
-      val w: Float = expressArgs.getValue("width").toFloat()
-      val h: Float = expressArgs.getValue("height").toFloat()
-      val expressSize = TTSizeF(w, h)
-      val adSlot = PangleAdSlotManager.getBannerAdSlot(slotId, expressSize, 1, isSupportDeepLink)
-      PangleAdManager.shared.loadBannerExpressAd(adSlot, this)
+      val expressArgs: Map<String, Double> = params["size"]?.asMap() ?: mapOf()
+      val w: Int = expressArgs.getValue("width").toInt()
+      val h: Int = expressArgs.getValue("height").toInt()
+      val size = TTSize(w, h)
+      val adSlot = PangleAdSlotManager.getNativeBannerAdSlot(slotId, size, 1, isSupportDeepLink)
+      PangleAdManager.shared.loadBannerAd(adSlot, this)
     }
   }
 
@@ -54,7 +51,6 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
 
   override fun dispose() {
     methodChannel.setMethodCallHandler(null)
-    ttAdNative?.destroy()
     container.removeAllViews()
   }
 
@@ -62,36 +58,24 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
     postMessage("onError", mapOf("message" to message, "code" to code))
   }
 
-  override fun onNativeExpressAdLoad(ttNativeExpressAds: MutableList<TTNativeExpressAd>?) {
-    if (ttNativeExpressAds == null || ttNativeExpressAds.isEmpty()) {
-      return
-    }
-
-    val ad = ttNativeExpressAds[0]
+  override fun onBannerAdLoad(ad: TTBannerAd) {
     ttAdNative = ad
     //设置广告互动监听回调
-    ad.setExpressInteractionListener(this)
+    ad.setBannerInteractionListener(this)
 
     //在banner中显示网盟提供的dislike icon，有助于广告投放精准度提升
-    ad.setDislikeCallback(activity, this)
+    ad.setShowDislikeIcon(this)
     // 设置轮播的时间间隔  间隔在30s到120秒之间的值，不设置默认不轮播
     interval?.also {
       ad.setSlideIntervalTime(it)
     }
-
     container.removeAllViews()
     val params = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-    val expressAdView = ad.expressAdView
-    container.addView(expressAdView, params)
-//      container.addView(expressAdView)
-    ad.render()
+    val bannerView = ad.bannerView
+    container.addView(bannerView, params)
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-  }
-
-
-  override fun onAdDismiss() {
   }
 
   override fun onAdClicked(view: View, type: Int) {
@@ -102,23 +86,15 @@ class FlutterBannerView(val activity: Activity, messenger: BinaryMessenger, val 
     postMessage("onShow")
   }
 
-  override fun onRenderSuccess(view: View, width: Float, height: Float) {
-    postMessage("onRenderSuccess")
+  override fun onShow() {
   }
 
-  override fun onRenderFail(view: View, message: String?, code: Int) {
-    postMessage("onRenderFail", mapOf("message" to message, "code" to code))
-  }
-
-  override fun onSelected(index: Int, option: String) {
+  override fun onSelected(index: Int, option: String?, enforce: Boolean) {
     //用户选择不喜欢原因后，移除广告展示
-    postMessage("onDislike", mapOf("option" to option))
+    postMessage("onDislike", mapOf("option" to option, "enforce" to enforce))
   }
 
   override fun onCancel() {
-  }
-
-  override fun onRefuse() {
   }
 
   private fun postMessage(method: String, arguments: Map<String, Any?> = mapOf()) {

@@ -72,6 +72,10 @@ class _InterstitialExpressPageState extends State<InterstitialExpressPage> {
         expressSize: PangleExpressSize.widthPercent(0.8, aspectRatio: 1.667),
       ),
     );
-    print(jsonEncode(result));
+    var data = jsonEncode(result);
+    print(data);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(data)),
+    );
   }
 }

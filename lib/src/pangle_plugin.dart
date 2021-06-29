@@ -49,6 +49,18 @@ class PanglePlugin {
     return await _methodChannel.invokeMethod('getSdkVersion');
   }
 
+  /// 获取当前主题类型
+  /// 0：正常模式；1：夜间模式
+  Future<int> getThemeStatus() async {
+    return await _methodChannel.invokeMethod('getThemeStatus');
+  }
+
+  /// 设置主题类型
+  /// [theme] 0：正常模式；1：夜间模式；默认为0；传非法值，按照0处理
+  Future<void> setThemeStatus(int theme) async {
+    await _methodChannel.invokeMethod('setThemeStatus', theme);
+  }
+
   /// 请求权限（仅国内Android）
   ///
   /// 穿山甲SDK不强制获取权限，即使没有获取可选权限SDK也能正常运行；

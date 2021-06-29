@@ -29,6 +29,9 @@ internal class FLTRewardedVideoAd(val slotId: String, var target: Activity?, val
   override fun onRewardVideoCached() {
   }
 
+  override fun onRewardVideoCached(ad: TTRewardVideoAd?) {
+  }
+
   override fun onError(code: Int, message: String?) {
     invoke(code, message)
 
