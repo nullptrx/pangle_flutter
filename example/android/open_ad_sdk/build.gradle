@@ -1,0 +1,20 @@
+configurations.maybeCreate("default")
+
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+def kEnv = localProperties.getProperty('pangle_flutter.env')
+if (kEnv == null) {
+    kEnv = 'cn'
+}
+
+switch (kEnv) {
+    case 'cn':
+        artifacts.add("default", file('open_ad_sdk.aar'))
+        break
+}
+
