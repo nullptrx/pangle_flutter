@@ -51,3 +51,16 @@ flutter create .
 Solution: Your Xcode project is incompatible with this version of Flutter. Run `rm -rf ios/Runner.xcodeproj` and `flutter create .` to regenerate.
 
 
+
+## 3. scanning files to index
+
+一直卡在扫描文件。
+
+解决方案：关闭IDE，然后android项目根目录下执行下面命令行，等待构建成功后重新打开项目。
+
+```shell
+./gradlew build
+```
+
+
+
