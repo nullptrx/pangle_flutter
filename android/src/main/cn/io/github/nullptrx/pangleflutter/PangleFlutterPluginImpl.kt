@@ -142,7 +142,7 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
       "loadSplashAd" -> {
         val slotId = call.argument<String>("slotId")!!
         val isExpress = call.argument<Boolean>("isExpress") ?: false
-       val tolerateTimeout = call.argument<Float>("tolerateTimeout")
+   val tolerateTimeout = (call.argument<Float>("tolerateTimeout") as Double).toFloat()
         val hideSkipButton = call.argument<Boolean>("hideSkipButton")
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
         val imgSize = TTSize(1080, 1920)
