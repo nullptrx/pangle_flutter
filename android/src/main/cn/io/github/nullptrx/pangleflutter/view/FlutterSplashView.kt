@@ -36,7 +36,7 @@ class FlutterSplashView(val context: Context, messenger: BinaryMessenger, val id
       val h: Int = imgArgs["height"] ?: 1920
       val imgSize = TTSize(w, h)
       val adSlot = PangleAdSlotManager.getSplashAdSlot(slotId, imgSize, isSupportDeepLink)
-      PangleAdManager.shared.loadSplashAd(adSlot, this, timeout = tolerateTimeout?.toFloat())
+      PangleAdManager.shared.loadSplashAd(adSlot, this, timeout = tolerateTimeout)
     }
   }
 

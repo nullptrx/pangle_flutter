@@ -35,9 +35,12 @@ class PangleAdManager {
   }
 
 
-  private val expressAdCollection = Collections.synchronizedMap(mutableMapOf<String, TTNativeExpressAd>())
-  private val rewardedVideoAdData = Collections.synchronizedMap(mutableMapOf<String, MutableList<TTRewardVideoAd>>())
-  private val fullScreenVideoAdData = Collections.synchronizedMap(mutableMapOf<String, MutableList<TTFullScreenVideoAd>>())
+  private val expressAdCollection =
+    Collections.synchronizedMap(mutableMapOf<String, TTNativeExpressAd>())
+  private val rewardedVideoAdData =
+    Collections.synchronizedMap(mutableMapOf<String, MutableList<TTRewardVideoAd>>())
+  private val fullScreenVideoAdData =
+    Collections.synchronizedMap(mutableMapOf<String, MutableList<TTFullScreenVideoAd>>())
 
   private lateinit var ttAdManager: TTAdManager
   private var ttAdNative: TTAdNative? = null
@@ -82,7 +85,11 @@ class PangleAdManager {
     return false
   }
 
-  fun showRewardedVideoAd(slotId: String, activity: Activity?, result: (Any) -> Unit = {}): Boolean {
+  fun showRewardedVideoAd(
+    slotId: String,
+    activity: Activity?,
+    result: (Any) -> Unit = {}
+  ): Boolean {
     activity ?: return false
     val data = rewardedVideoAdData[slotId] ?: mutableListOf()
     if (data.size > 0) {
@@ -104,7 +111,11 @@ class PangleAdManager {
     }
   }
 
-  fun showFullScreenVideoAd(slotId: String, activity: Activity?, result: (Any) -> Unit = {}): Boolean {
+  fun showFullScreenVideoAd(
+    slotId: String,
+    activity: Activity?,
+    result: (Any) -> Unit = {}
+  ): Boolean {
     activity ?: return false
     val data = fullScreenVideoAdData[slotId] ?: mutableListOf()
     if (data.size > 0) {
@@ -133,11 +144,13 @@ class PangleAdManager {
 
     val appId: String = args["appId"] as String
     val debug: Boolean? = args["debug"] as Boolean?
+    val async: Boolean? = args["async"] as Boolean?
     val allowShowNotify: Boolean? = args["allowShowNotify"] as Boolean?
     val allowShowPageWhenScreenLock: Boolean? = args["allowShowPageWhenScreenLock"] as Boolean?
     val supportMultiProcess: Boolean? = args["supportMultiProcess"] as Boolean?
     val useTextureView: Boolean? = args["useTextureView"] as Boolean?
-    val directDownloadNetworkType = (args["directDownloadNetworkType"] as List<*>?)?.asList<Int>()?.toIntArray()
+    val directDownloadNetworkType =
+      (args["directDownloadNetworkType"] as List<*>?)?.asList<Int>()?.toIntArray()
     val paid: Boolean? = args["paid"] as Boolean?
     val titleBarThemeIndex: Int? = args["titleBarTheme"] as Int?
     val isCanUseLocation: Boolean? = args["isCanUseLocation"] as Boolean?
@@ -170,6 +183,9 @@ class PangleAdManager {
     val appName = pkgInfo.applicationInfo.loadLabel(packageManager).toString()
 
     val config = TTAdConfig.Builder().apply {
+      async?.also {
+        asyncInit(it)
+      }
       appName(appName)
       appId(appId)
       debug?.also {
@@ -254,7 +270,7 @@ class PangleAdManager {
     ttAdManager.requestPermissionIfNecessary(context)
   }
 
-  fun loadSplashAd(adSlot: AdSlot, listener: TTAdNative.SplashAdListener, timeout: Float? = null) {
+  fun loadSplashAd(adSlot: AdSlot, listener: TTAdNative.SplashAdListener, timeout: Double? = null) {
     if (timeout == null) {
       ttAdNative?.loadSplashAd(adSlot, listener)
     } else {
@@ -262,12 +278,20 @@ class PangleAdManager {
     }
   }
 
-  fun loadRewardVideoAd(adSlot: AdSlot, activity: Activity?, loadingType: PangleLoadingType, result: (Any) -> Unit = {}) {
+  fun loadRewardVideoAd(
+    adSlot: AdSlot,
+    activity: Activity?,
+    loadingType: PangleLoadingType,
+    result: (Any) -> Unit = {}
+  ) {
 
     activity ?: return
 
 
-    ttAdNative?.loadRewardVideoAd(adSlot, FLTRewardedVideoAd(adSlot.codeId, activity, loadingType, result))
+    ttAdNative?.loadRewardVideoAd(
+      adSlot,
+      FLTRewardedVideoAd(adSlot.codeId, activity, loadingType, result)
+    )
 
   }
 
@@ -293,11 +317,19 @@ class PangleAdManager {
     ttAdNative?.loadNativeExpressAd(adSlot, listener)
   }
 
-  fun loadFullscreenVideoAd(adSlot: AdSlot, activity: Activity?, loadingType: PangleLoadingType, result: (Any) -> Unit) {
+  fun loadFullscreenVideoAd(
+    adSlot: AdSlot,
+    activity: Activity?,
+    loadingType: PangleLoadingType,
+    result: (Any) -> Unit
+  ) {
 
     activity ?: return
 
-    ttAdNative?.loadFullScreenVideoAd(adSlot, FLTFullScreenVideoAd(adSlot.codeId, activity, loadingType, result))
+    ttAdNative?.loadFullScreenVideoAd(
+      adSlot,
+      FLTFullScreenVideoAd(adSlot.codeId, activity, loadingType, result)
+    )
 
   }
 

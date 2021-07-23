@@ -91,7 +91,9 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                 Text(
                   'Pangle Flutter',
                   style: GoogleFonts.zcoolQingKeHuangYou(
-                      fontSize: 24, color: Colors.black),
+                    fontSize: 24,
+                    color: Colors.black,
+                  ),
                 ),
               ],
             ),
