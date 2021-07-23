@@ -27,6 +27,7 @@ import 'model.dart';
 class AndroidConfig implements Config {
   final String appId;
   final bool? debug;
+  final bool? async;
   final bool? useTextureView;
   final AndroidTitleBarTheme titleBarTheme;
   final bool? allowShowNotify;
@@ -46,6 +47,7 @@ class AndroidConfig implements Config {
   ///
   /// [appId] 必选参数，设置应用的AppId
   /// [debug] 测试阶段打开，可以通过日志排查问题，上线时去除该调用
+  /// [async] 是否异步初始化
   /// [allowShowNotify] 是否允许sdk展示通知栏提示
   /// [allowShowPageWhenScreenLock] 是否在锁屏场景支持展示广告落地页
   /// [supportMultiProcess] 可选参数，设置是否支持多进程：true支持、false不支持。默认为false不支持
@@ -54,7 +56,6 @@ class AndroidConfig implements Config {
   /// [useTextureView] 可选参数，设置是否使用texture播放视频：true使用、false不使用。默认为false不使用（使用的是surface）
   /// [titleBarTheme] 可选参数，设置落地页主题，默认为light
   /// TODO [keywords] 可选参数，设置用户画像的关键词列表 **不能超过为1000个字符**。须征得用户同意才可传入该参数
-  /// TODO [isAsyncInit] 是否异步初始化sdk
   /// [isCanUseLocation] （仅国内）是否允许SDK主动使用地理位置信息。true可以获取，false禁止获取。默认为true
   /// [location] （仅国内）当isCanUseLocation=false时，可传入地理位置信息，穿山甲sdk使用您传入的地理位置信息
   /// [isCanUsePhoneState] （仅国内）是否允许SDK主动使用手机硬件参数，如：imei。true可以使用，false禁止使用。默认为true
@@ -65,6 +66,7 @@ class AndroidConfig implements Config {
   const AndroidConfig({
     required this.appId,
     this.debug,
+    this.async,
     this.allowShowNotify,
     this.allowShowPageWhenScreenLock,
     this.supportMultiProcess = false,
@@ -86,6 +88,7 @@ class AndroidConfig implements Config {
   Map<String, dynamic> toJSON() {
     return {
       'appId': appId,
+      'async': async,
       'debug': debug,
       'allowShowNotify': allowShowNotify,
       'allowShowPageWhenScreenLock': allowShowPageWhenScreenLock,
