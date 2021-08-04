@@ -89,3 +89,8 @@ enum PangleAuthorizationStatus {
   denied,
   authorized,
 }
+
+enum PangleTheme {
+  light,
+  dark,
+}

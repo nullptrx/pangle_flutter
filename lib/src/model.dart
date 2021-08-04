@@ -20,6 +20,7 @@
  * SOFTWARE.
  */
 
+import 'dart:convert';
 import 'dart:ui';
 
 /// 信息流响应信息
@@ -235,5 +236,10 @@ class PangleResult {
       data['verify'] = verify;
     }
     return data;
+  }
+
+  @override
+  String toString() {
+    return jsonEncode(this);
   }
 }

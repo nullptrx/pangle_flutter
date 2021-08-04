@@ -3,26 +3,11 @@ package io.github.nullptrx.pangleflutter
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageInfo
-import com.bytedance.sdk.openadsdk.AdSlot
-import com.bytedance.sdk.openadsdk.TTAdConfig
-import com.bytedance.sdk.openadsdk.TTAdConstant
-import com.bytedance.sdk.openadsdk.TTAdManager
-import com.bytedance.sdk.openadsdk.TTAdNative
-import com.bytedance.sdk.openadsdk.TTAdSdk
-import com.bytedance.sdk.openadsdk.TTCustomController
-import com.bytedance.sdk.openadsdk.TTFullScreenVideoAd
-import com.bytedance.sdk.openadsdk.TTLocation
-import com.bytedance.sdk.openadsdk.TTNativeExpressAd
-import com.bytedance.sdk.openadsdk.TTRewardVideoAd
+import com.bytedance.sdk.openadsdk.*
 import io.github.nullptrx.pangleflutter.common.PangleLoadingType
 import io.github.nullptrx.pangleflutter.common.PangleTitleBarTheme
 import io.github.nullptrx.pangleflutter.common.TTSizeF
-import io.github.nullptrx.pangleflutter.delegate.FLTBannerExpressAd
-import io.github.nullptrx.pangleflutter.delegate.FLTFeedExpressAd
-import io.github.nullptrx.pangleflutter.delegate.FLTFullScreenVideoAd
-import io.github.nullptrx.pangleflutter.delegate.FLTRewardedVideoAd
-import io.github.nullptrx.pangleflutter.delegate.FullScreenVideoAdInteractionImpl
-import io.github.nullptrx.pangleflutter.delegate.RewardAdInteractionImpl
+import io.github.nullptrx.pangleflutter.delegate.*
 import io.github.nullptrx.pangleflutter.util.asList
 import io.github.nullptrx.pangleflutter.util.asMap
 import java.util.*
@@ -42,21 +27,21 @@ class PangleAdManager {
   private val fullScreenVideoAdData =
     Collections.synchronizedMap(mutableMapOf<String, MutableList<TTFullScreenVideoAd>>())
 
-  private lateinit var ttAdManager: TTAdManager
+  private var ttAdManager: TTAdManager? = null
   private var ttAdNative: TTAdNative? = null
     get() = field
 
 
   fun getSdkVersion(): String {
-    return ttAdManager.sdkVersion
+    return ttAdManager?.sdkVersion ?: ""
   }
 
   fun getThemeStatus(): Int {
-    return ttAdManager.themeStatus
+    return ttAdManager?.themeStatus ?: -1
   }
 
   fun setThemeStatus(theme: Int) {
-    ttAdManager.themeStatus = theme
+    ttAdManager?.themeStatus = theme
   }
 
   /**
@@ -146,13 +131,16 @@ class PangleAdManager {
   }
 
 
-  fun initialize(activity: Activity?, args: Map<String, Any?>) {
+  fun initialize(
+    activity: Activity?,
+    args: Map<String, Any?>,
+    callback: (Map<String, Any?>) -> Unit
+  ) {
     activity ?: return
     val context: Context = activity
 
     val appId: String = args["appId"] as String
     val debug: Boolean? = args["debug"] as Boolean?
-    val async: Boolean? = args["async"] as Boolean?
     val allowShowNotify: Boolean? = args["allowShowNotify"] as Boolean?
     val allowShowPageWhenScreenLock: Boolean? = args["allowShowPageWhenScreenLock"] as Boolean?
     val supportMultiProcess: Boolean? = args["supportMultiProcess"] as Boolean?
@@ -191,9 +179,6 @@ class PangleAdManager {
     val appName = pkgInfo.applicationInfo.loadLabel(packageManager).toString()
 
     val config = TTAdConfig.Builder().apply {
-      async?.also {
-        asyncInit(it)
-      }
       appName(appName)
       appId(appId)
       debug?.also {
@@ -254,11 +239,6 @@ class PangleAdManager {
           return ttLocation
         }
 
-        // 之前的问题代码，这里kotlin不会报错
-//        override fun getDevOaid(): String {
-//          return devOaid?:super.getDevOaid()
-//        }
-
         // 修改后，返回String?
         override fun getDevOaid(): String? {
           return devOaid
@@ -267,15 +247,22 @@ class PangleAdManager {
 
     }.build()
 
-    TTAdSdk.init(applicationContext, config)
+    TTAdSdk.init(applicationContext, config, object : TTAdSdk.InitCallback {
+      override fun success() {
+        callback(mapOf("code" to 0, "message" to ""))
+      }
+
+      override fun fail(code: Int, message: String?) {
+        callback(mapOf("code" to code, "message" to (message ?: "")))
+      }
+    })
 
     ttAdManager = TTAdSdk.getAdManager()
-    ttAdNative = ttAdManager.createAdNative(activity)
-
+    ttAdNative = ttAdManager?.createAdNative(activity)
   }
 
   fun requestPermissionIfNecessary(context: Context) {
-    ttAdManager.requestPermissionIfNecessary(context)
+    ttAdManager?.requestPermissionIfNecessary(context)
   }
 
   fun loadSplashAd(adSlot: AdSlot, listener: TTAdNative.SplashAdListener, timeout: Double? = null) {

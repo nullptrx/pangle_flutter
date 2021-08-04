@@ -9,7 +9,11 @@ import io.github.nullptrx.pangleflutter.common.kBlock
 import io.github.nullptrx.pangleflutter.dialog.NativeSplashDialog
 import io.github.nullptrx.pangleflutter.dialog.SupportSplashDialog
 
-internal class FLTSplashAd(val hideSkipButton: Boolean?, var activity: Activity?, var result: (Any) -> Unit = {}) : TTAdNative.SplashAdListener {
+internal class FLTSplashAd(
+  val hideSkipButton: Boolean?,
+  var activity: Activity?,
+  var result: (Any) -> Unit = {}
+) : TTAdNative.SplashAdListener {
   private var supportDialog: SupportSplashDialog? = null
   private var nativeDialog: NativeSplashDialog? = null
 

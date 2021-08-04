@@ -21,6 +21,9 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:pangle_flutter/pangle_flutter.dart';
+
+var kThemeStatus = PangleTheme.light;
 
 const _textTheme = TextTheme(
   button: TextStyle(

@@ -71,7 +71,7 @@ class PangleApp extends StatelessWidget {
 /// [iOS] iOS平台配置参数
 /// [android] android平台配置参数
 Future<Null> initPangle() async {
-  await pangle.init(
+  PangleResult ret = await pangle.init(
     iOS: IOSConfig(
       appId: kAppId,
       logLevel: PangleLogLevel.error,
@@ -85,4 +85,5 @@ Future<Null> initPangle() async {
           AndroidDirectDownloadNetworkType.k2G,
         ]),
   );
+  print(ret);
 }

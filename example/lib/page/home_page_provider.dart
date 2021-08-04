@@ -24,15 +24,17 @@ import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 import 'package:sprintf/sprintf.dart';
 
+import '../common/common.dart';
 import '../common/version.dart';
 
 mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
   String? _denpendencies;
-  int _theme = 0;
+  PangleTheme _theme = PangleTheme.light;
 
   @override
   void initState() {
     super.initState();
+    loadTheme();
     _initDependencies();
   }
 
@@ -110,10 +112,20 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
     await pangle.requestPermissionIfNecessary();
   }
 
+  void loadTheme() async {
+    var theme = await pangle.getThemeStatus();
+    kThemeStatus = theme;
+    setState(() {
+      _theme = theme;
+    });
+  }
+
   void changeTheme() async {
     var theme = await pangle.getThemeStatus();
-    var newTheme = theme == 0 ? 1 : 0;
+    var newTheme = theme == PangleTheme.light ? PangleTheme.dark : PangleTheme.light;
     pangle.setThemeStatus(newTheme);
+
+    kThemeStatus = newTheme;
     setState(() {
       _theme = newTheme;
     });

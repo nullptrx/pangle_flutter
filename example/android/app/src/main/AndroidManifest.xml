@@ -11,6 +11,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="Pangle Flutter"
         android:networkSecurityConfig="@xml/pangle_network_config"
+        android:usesCleartextTraffic="true"
         tools:replace="android:label">
         <activity
             android:name="io.github.nullptrx.pangleflutterexample.MainActivity"

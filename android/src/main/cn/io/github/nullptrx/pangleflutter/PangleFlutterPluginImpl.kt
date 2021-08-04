@@ -2,6 +2,8 @@ package io.github.nullptrx.pangleflutter
 
 import android.app.Activity
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -42,19 +44,27 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
         methodChannel?.setMethodCallHandler(this)
 
         bannerViewFactory = BannerViewFactory(messenger)
-        registrar.platformViewRegistry().registerViewFactory("nullptrx.github.io/pangle_bannerview",
-            bannerViewFactory)
+        registrar.platformViewRegistry().registerViewFactory(
+          "nullptrx.github.io/pangle_bannerview",
+          bannerViewFactory
+        )
         feedViewFactory = FeedViewFactory(messenger)
-        registrar.platformViewRegistry().registerViewFactory("nullptrx.github.io/pangle_feedview",
-            feedViewFactory)
+        registrar.platformViewRegistry().registerViewFactory(
+          "nullptrx.github.io/pangle_feedview",
+          feedViewFactory
+        )
 
         val splashViewFactory = SplashViewFactory(messenger)
-        registrar.platformViewRegistry().registerViewFactory("nullptrx.github.io/pangle_splashview",
-            splashViewFactory)
+        registrar.platformViewRegistry().registerViewFactory(
+          "nullptrx.github.io/pangle_splashview",
+          splashViewFactory
+        )
 
         val nativeBannerViewFactory = NativeBannerViewFactory(messenger)
-        registrar.platformViewRegistry().registerViewFactory("nullptrx.github.io/pangle_nativebannerview",
-            nativeBannerViewFactory)
+        registrar.platformViewRegistry().registerViewFactory(
+          "nullptrx.github.io/pangle_nativebannerview",
+          nativeBannerViewFactory
+        )
 
         feedViewFactory?.attachActivity(activity)
         bannerViewFactory?.attachActivity(activity)
@@ -68,6 +78,7 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
   private var context: Context? = null
   private var bannerViewFactory: BannerViewFactory? = null
   private var feedViewFactory: FeedViewFactory? = null
+  private val handler = Handler(Looper.getMainLooper())
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activity = binding.activity
@@ -101,19 +112,27 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
     methodChannel?.setMethodCallHandler(this)
 
     bannerViewFactory = BannerViewFactory(binding.binaryMessenger)
-    binding.platformViewRegistry.registerViewFactory("nullptrx.github.io/pangle_bannerview",
-        bannerViewFactory)
+    binding.platformViewRegistry.registerViewFactory(
+      "nullptrx.github.io/pangle_bannerview",
+      bannerViewFactory
+    )
     feedViewFactory = FeedViewFactory(binding.binaryMessenger)
-    binding.platformViewRegistry.registerViewFactory("nullptrx.github.io/pangle_feedview",
-        feedViewFactory)
+    binding.platformViewRegistry.registerViewFactory(
+      "nullptrx.github.io/pangle_feedview",
+      feedViewFactory
+    )
 
     val splashViewFactory = SplashViewFactory(binding.binaryMessenger)
-    binding.platformViewRegistry.registerViewFactory("nullptrx.github.io/pangle_splashview",
-        splashViewFactory)
+    binding.platformViewRegistry.registerViewFactory(
+      "nullptrx.github.io/pangle_splashview",
+      splashViewFactory
+    )
 
     val nativeBannerViewFactory = NativeBannerViewFactory(binding.binaryMessenger)
-    binding.platformViewRegistry.registerViewFactory("nullptrx.github.io/pangle_nativebannerview",
-        nativeBannerViewFactory)
+    binding.platformViewRegistry.registerViewFactory(
+      "nullptrx.github.io/pangle_nativebannerview",
+      nativeBannerViewFactory
+    )
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -130,8 +149,11 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
         result.success(version)
       }
       "init" -> {
-        pangle.initialize(activity, call.arguments.asMap() ?: mapOf())
-        result.success(null)
+        pangle.initialize(activity, call.arguments.asMap() ?: mapOf()) {
+          handler.post {
+            result.success(it)
+          }
+        }
       }
 
       "requestPermissionIfNecessary" -> {
@@ -183,7 +205,8 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
         val w: Float = expressArgs.getValue("width").toFloat()
         val h: Float = expressArgs.getValue("height").toFloat()
         val expressSize = TTSizeF(w, h)
-        val adSlot = PangleAdSlotManager.getBannerAdSlot(slotId, expressSize, count, isSupportDeepLink)
+        val adSlot =
+          PangleAdSlotManager.getBannerAdSlot(slotId, expressSize, count, isSupportDeepLink)
         pangle.loadBanner2ExpressAd(adSlot) {
           result.success(it)
         }
@@ -198,7 +221,8 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
         val w: Float = expressArgs.getValue("width").toFloat()
         val h: Float = expressArgs.getValue("height").toFloat()
         val expressSize = TTSizeF(w, h)
-        val adSlot = PangleAdSlotManager.getFeedAdSlot(slotId, expressSize, count, isSupportDeepLink)
+        val adSlot =
+          PangleAdSlotManager.getFeedAdSlot(slotId, expressSize, count, isSupportDeepLink)
         pangle.loadFeedExpressAd(adSlot) {
           result.success(it)
         }
@@ -225,7 +249,8 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
         val h: Float = expressArgs.getValue("height").toFloat()
         val expressSize = TTSizeF(w, h)
 
-        val adSlot = PangleAdSlotManager.getInterstitialAdSlot(slotId, expressSize, isSupportDeepLink)
+        val adSlot =
+          PangleAdSlotManager.getInterstitialAdSlot(slotId, expressSize, isSupportDeepLink)
         pangle.loadInteractionExpressAd(adSlot, FLTInterstitialExpressAd(activity) {
           result.success(it)
         })
@@ -269,7 +294,11 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
 
   }
 
-  private fun loadRewardedVideoAdOnly(call: MethodCall, loadingType: PangleLoadingType, result: MethodChannel.Result? = null) {
+  private fun loadRewardedVideoAdOnly(
+    call: MethodCall,
+    loadingType: PangleLoadingType,
+    result: MethodChannel.Result? = null
+  ) {
 
     val slotId = call.argument<String>("slotId")!!
     val userId = call.argument<String>("userId")
@@ -282,7 +311,16 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
     val w: Float = expressArgs.getValue("width").toFloat()
     val h: Float = expressArgs.getValue("height").toFloat()
     val expressSize = TTSizeF(w, h)
-    val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(slotId, expressSize, userId, rewardName, rewardAmount, isVertical, isSupportDeepLink, extra)
+    val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(
+      slotId,
+      expressSize,
+      userId,
+      rewardName,
+      rewardAmount,
+      isVertical,
+      isSupportDeepLink,
+      extra
+    )
 
     PangleAdManager.shared.loadRewardVideoAd(adSlot, activity, loadingType) {
       if (PangleLoadingType.preload_only == loadingType || PangleLoadingType.normal == loadingType) {
@@ -291,17 +329,26 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
     }
   }
 
-  private fun loadFullscreenVideoAdOnly(call: MethodCall, loadingType: PangleLoadingType, result: MethodChannel.Result? = null) {
+  private fun loadFullscreenVideoAdOnly(
+    call: MethodCall,
+    loadingType: PangleLoadingType,
+    result: MethodChannel.Result? = null
+  ) {
     val slotId = call.argument<String>("slotId")!!
     val orientationIndex = call.argument<Int>("orientation")
-        ?: PangleOrientation.veritical.ordinal
+      ?: PangleOrientation.veritical.ordinal
     val orientation = PangleOrientation.values()[orientationIndex]
     val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
     val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
     val w: Float = expressArgs.getValue("width").toFloat()
     val h: Float = expressArgs.getValue("height").toFloat()
     val expressSize = TTSizeF(w, h)
-    val adSlot = PangleAdSlotManager.getFullScreenVideoAdSlot(slotId, expressSize, orientation, isSupportDeepLink)
+    val adSlot = PangleAdSlotManager.getFullScreenVideoAdSlot(
+      slotId,
+      expressSize,
+      orientation,
+      isSupportDeepLink
+    )
 
     PangleAdManager.shared.loadFullscreenVideoAd(adSlot, activity, loadingType) {
       if (PangleLoadingType.preload_only == loadingType || PangleLoadingType.normal == loadingType) {

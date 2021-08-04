@@ -30,7 +30,7 @@ import 'package:pangle_flutter/pangle_flutter.dart';
 import '../../../widget/loading.dart';
 import '../../common/empty_page.dart';
 import '../constant.dart';
-
+import '../../../common/common.dart';
 class FeedExpressPage extends StatefulWidget {
   @override
   _FeedExpressPageState createState() => _FeedExpressPageState();
@@ -54,6 +54,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
 
   final _bodyKey = GlobalKey();
   final _otherKey = GlobalKey();
+  var _bgColor = kThemeStatus == PangleTheme.light ? Colors.white : Colors.black;
 
   Completer<BannerViewController> controller = Completer();
 
@@ -118,7 +119,9 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
   Widget _buildItem(int index) {
     var item = items[index];
     if (item.isAd) {
-      return Center(
+      return Container(
+        color: _bgColor,
+        alignment: Alignment.center,
         child: AspectRatio(
           aspectRatio: 375 / 284.0,
           child: FeedView(
@@ -202,13 +205,11 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
       return;
     }
 
-    RenderBox bodyBox =
-        _bodyKey.currentContext!.findRenderObject() as RenderBox;
+    RenderBox bodyBox = _bodyKey.currentContext!.findRenderObject() as RenderBox;
     final bodyBound = PangleHelper.fromRenderBox(bodyBox);
     controller.updateTouchableBounds([bodyBound]);
 
-    RenderBox otherBox =
-        _otherKey.currentContext!.findRenderObject() as RenderBox;
+    RenderBox otherBox = _otherKey.currentContext!.findRenderObject() as RenderBox;
     final otherBound = PangleHelper.fromRenderBox(otherBox);
 
     controller.updateRestrictedBounds([otherBound]);

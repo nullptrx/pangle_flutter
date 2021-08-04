@@ -51,14 +51,18 @@ class PanglePlugin {
 
   /// 获取当前主题类型
   /// 0：正常模式；1：夜间模式
-  Future<int> getThemeStatus() async {
-    return await _methodChannel.invokeMethod('getThemeStatus');
+  Future<PangleTheme> getThemeStatus() async {
+    int status = await _methodChannel.invokeMethod('getThemeStatus');
+    if (status == 1) {
+      return PangleTheme.dark;
+    }
+    return PangleTheme.light;
   }
 
   /// 设置主题类型
   /// [theme] 0：正常模式；1：夜间模式；默认为0；传非法值，按照0处理
-  Future<void> setThemeStatus(int theme) async {
-    await _methodChannel.invokeMethod('setThemeStatus', theme);
+  Future<void> setThemeStatus(PangleTheme theme) async {
+    await _methodChannel.invokeMethod('setThemeStatus', theme.index);
   }
 
   /// 请求权限（仅国内Android）
@@ -129,15 +133,17 @@ class PanglePlugin {
   ///
   /// [iOS] config for iOS
   /// [android] config for Android
-  Future<Null> init({
+  Future<PangleResult> init({
     IOSConfig? iOS,
     AndroidConfig? android,
   }) async {
+    Map<String, dynamic>? result;
     if (Platform.isIOS && iOS != null) {
-      await _methodChannel.invokeMethod('init', iOS.toJSON());
+      result = await _methodChannel.invokeMapMethod('init', iOS.toJSON());
     } else if (Platform.isAndroid && android != null) {
-      await _methodChannel.invokeMethod('init', android.toJSON());
+      result = await _methodChannel.invokeMapMethod('init', android.toJSON());
     }
+    return PangleResult.fromJson(result);
   }
 
   /// Load splash ad datas.

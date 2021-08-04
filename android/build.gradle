@@ -2,10 +2,10 @@ group 'io.github.nullptrx.pangleflutter'
 version '1.2.0'
 
 buildscript {
-    ext.kotlin_version = '1.4.21'
+    ext.kotlin_version = '1.5.21'
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -17,7 +17,10 @@ buildscript {
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
+        // maven { url 'http://localhost:8081/repository/m2/' }
+        // maven { url 'https://raw.githubusercontent.com/nullptrX/repo/master/m2' }
+        maven { url 'https://cdn.jsdelivr.net/gh/nullptrX/repo/m2/' }
     }
 }
 
@@ -61,14 +64,14 @@ android {
         }
     }
 
-    gradle.buildFinished { r ->
-        System.err.println "pangle_flutter: $kEnv"
-    }
+//    gradle.buildFinished { r ->
+//        System.err.println "pangle_flutter: $kEnv"
+//    }
+
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', includes: ['*.aar'])
+    api 'io.github.nullptrx:pangle:3.9.0.0@aar'
     implementation 'androidx.appcompat:appcompat:+'
-    // implementation project(':open_ad_sdk')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
