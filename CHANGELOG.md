@@ -1,3 +1,9 @@
+## 1.3.0
+
+- Upgrade android sdk version to 3.9.0.0, upgrade ios sdk version to 3.8+
+- Remove open_ad_sdk module, use maven repository instead of aar package
+- Optimize example
+
 ## 1.2.0
 
 - Adapt ads sdk(Android 3.8.0.0, iOS 3.7.0.5)

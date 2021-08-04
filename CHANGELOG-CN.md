@@ -1,3 +1,9 @@
+## 1.3.0
+
+- 升级android sdk版本到3.9+,ios sdk版本到3.8+
+- 移除open_ad_sdk模块, 使用maven仓库代替aar包
+- 优化范例
+
 ## 1.2.0
 
 - 适配广告SDK(Android 3.8.0.0, iOS 3.7.0.5)
