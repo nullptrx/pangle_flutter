@@ -122,7 +122,8 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
 
   void changeTheme() async {
     var theme = await pangle.getThemeStatus();
-    var tmpTheme = theme == PangleTheme.light ? PangleTheme.dark : PangleTheme.light;
+    var tmpTheme =
+        theme == PangleTheme.light ? PangleTheme.dark : PangleTheme.light;
     var newTheme = await pangle.setThemeStatus(tmpTheme);
 
     kThemeStatus = newTheme;

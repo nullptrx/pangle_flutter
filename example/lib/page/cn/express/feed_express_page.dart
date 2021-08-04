@@ -55,7 +55,8 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
 
   final _bodyKey = GlobalKey();
   final _otherKey = GlobalKey();
-  var _bgColor = kThemeStatus == PangleTheme.light ? Colors.white : Colors.black;
+  var _bgColor =
+      kThemeStatus == PangleTheme.light ? Colors.white : Colors.black;
 
   Completer<BannerViewController> controller = Completer();
 
@@ -206,11 +207,13 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
       return;
     }
 
-    RenderBox bodyBox = _bodyKey.currentContext!.findRenderObject() as RenderBox;
+    RenderBox bodyBox =
+        _bodyKey.currentContext!.findRenderObject() as RenderBox;
     final bodyBound = PangleHelper.fromRenderBox(bodyBox);
     controller.updateTouchableBounds([bodyBound]);
 
-    RenderBox otherBox = _otherKey.currentContext!.findRenderObject() as RenderBox;
+    RenderBox otherBox =
+        _otherKey.currentContext!.findRenderObject() as RenderBox;
     final otherBound = PangleHelper.fromRenderBox(otherBox);
 
     controller.updateRestrictedBounds([otherBound]);

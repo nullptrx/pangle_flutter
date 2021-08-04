@@ -32,7 +32,8 @@ class BannerExpressPage extends StatefulWidget {
 }
 
 class _BannerExpressPageState extends State<BannerExpressPage> {
-  var _bgColor = kThemeStatus == PangleTheme.light ? Colors.white : Colors.black;
+  var _bgColor =
+      kThemeStatus == PangleTheme.light ? Colors.white : Colors.black;
   final rows = <Widget>[];
 
   @override
@@ -75,7 +76,8 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
             ),
             onDislike: (message, enforce) {
               setState(() {
-                rows.removeWhere((element) => (element.key as BannerExpressKey?)?.value == 1);
+                rows.removeWhere((element) =>
+                    (element.key as BannerExpressKey?)?.value == 1);
               });
             },
           ),
@@ -101,7 +103,8 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
           },
           onDislike: (message, enforce) {
             setState(() {
-              rows.removeWhere((element) => (element.key as BannerExpressKey?)?.value == 2);
+              rows.removeWhere(
+                  (element) => (element.key as BannerExpressKey?)?.value == 2);
             });
           },
           onClick: () {},
