@@ -94,6 +94,10 @@ class PangleAdManager {
     val data = rewardedVideoAdData[slotId] ?: mutableListOf()
     if (data.size > 0) {
       val ad = data.removeFirst()
+      // 3.8.0.6 新增过期时间
+      if (ad.expirationTimestamp < System.currentTimeMillis()) {
+        return false
+      }
       ad.setRewardAdInteractionListener(RewardAdInteractionImpl { obj ->
         result.invoke(obj)
       })
@@ -120,6 +124,10 @@ class PangleAdManager {
     val data = fullScreenVideoAdData[slotId] ?: mutableListOf()
     if (data.size > 0) {
       val ad = data.removeFirst()
+      // 3.8.0.6 新增过期时间
+      if (ad.expirationTimestamp < System.currentTimeMillis()) {
+        return false
+      }
       ad.setFullScreenVideoAdInteractionListener(FullScreenVideoAdInteractionImpl { obj ->
         result.invoke(obj)
       })
