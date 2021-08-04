@@ -31,6 +31,7 @@ import '../../../widget/loading.dart';
 import '../../common/empty_page.dart';
 import '../constant.dart';
 import '../../../common/common.dart';
+
 class FeedExpressPage extends StatefulWidget {
   @override
   _FeedExpressPageState createState() => _FeedExpressPageState();
@@ -38,10 +39,10 @@ class FeedExpressPage extends StatefulWidget {
 
 class Item {
   bool isAd;
-  String? id;
-  String? feedId;
+  String id;
+  final String feedId;
 
-  Item({this.isAd = false, this.feedId, this.id});
+  Item({this.isAd = false, this.feedId = '', this.id = ''});
 }
 
 // class _ItemKey extends GlobalObjectKey<State> {
@@ -50,7 +51,7 @@ class Item {
 
 class _FeedExpressPageState extends State<FeedExpressPage> {
   final items = <Item>[];
-  final feedIds = <String?>[];
+  final feedIds = <String>[];
 
   final _bodyKey = GlobalKey();
   final _otherKey = GlobalKey();
@@ -130,7 +131,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
               _initConstraintBounds(controller);
             },
             onDislike: (option, enforce) {
-              pangle.removeFeedAd([item.feedId!]);
+              pangle.removeFeedAd([item.feedId]);
               setState(() {
                 items.removeAt(index);
               });

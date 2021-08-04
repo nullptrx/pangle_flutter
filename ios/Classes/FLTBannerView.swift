@@ -69,10 +69,9 @@ extension BannerView: BUNativeExpressBannerViewDelegate {
         let e = error as NSError?
         postMessage("onRenderFail", arguments: ["code": e?.code ?? -1, "message": e?.localizedDescription])
     }
-
-
+    
     public func nativeExpressBannerAdView(_ bannerAdView: BUNativeExpressBannerView, dislikeWithReason filterWords: [BUDislikeWords]?) {
-        postMessage("onDislike", arguments: ["option": filterWords?.first?.name ?? ""])
+        postMessage("onDislike", arguments: ["option": filterWords?.first?.name ?? "", "enforce": false])
     }
 
     public func nativeExpressBannerAdViewRenderSuccess(_ bannerAdView: BUNativeExpressBannerView) {

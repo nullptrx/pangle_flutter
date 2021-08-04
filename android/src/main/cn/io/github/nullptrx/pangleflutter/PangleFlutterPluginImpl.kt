@@ -280,9 +280,10 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
 
       }
       "setThemeStatus" -> {
-        val theme: Int = call.arguments()
+        var theme: Int = call.arguments()
         pangle.setThemeStatus(theme)
-        result.success(null)
+        theme = pangle.getThemeStatus()
+        result.success(theme)
       }
       "getThemeStatus" -> {
         val theme = pangle.getThemeStatus()

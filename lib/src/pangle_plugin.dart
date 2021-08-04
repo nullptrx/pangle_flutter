@@ -61,8 +61,12 @@ class PanglePlugin {
 
   /// 设置主题类型
   /// [theme] 0：正常模式；1：夜间模式；默认为0；传非法值，按照0处理
-  Future<void> setThemeStatus(PangleTheme theme) async {
-    await _methodChannel.invokeMethod('setThemeStatus', theme.index);
+  Future<PangleTheme> setThemeStatus(PangleTheme theme) async {
+    int status = await _methodChannel.invokeMethod('setThemeStatus', theme.index);
+    if (status == 1) {
+      return PangleTheme.dark;
+    }
+    return PangleTheme.light;
   }
 
   /// 请求权限（仅国内Android）

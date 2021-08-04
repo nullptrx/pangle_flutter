@@ -50,12 +50,7 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.max,
-          children: rows
-            ..addAll(<Widget>[
-              SizedBox(height: 1080),
-              Center(child: Text('--- 这是底线 ---')),
-              SizedBox(height: 16),
-            ]),
+          children: rows,
         ),
       ),
     );
@@ -65,11 +60,11 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
     rows.clear();
     rows.addAll(<Widget>[
       AspectRatio(
+        key: BannerExpressKey(1),
         aspectRatio: 600 / 260.0,
         child: Container(
           color: _bgColor,
           child: BannerView(
-            key: BannerKey(1),
             iOS: IOSBannerConfig(
               slotId: kBannerExpressId600x260,
               expressSize: PangleExpressSize(width: 600, height: 260),
@@ -80,17 +75,17 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
             ),
             onDislike: (message, enforce) {
               setState(() {
-                rows.removeAt(0);
+                rows.removeWhere((element) => (element.key as BannerExpressKey?)?.value == 1);
               });
             },
           ),
         ),
       ),
       Container(
+        key: BannerExpressKey(2),
         color: _bgColor,
         height: kPangleScreenWidth * 260 / 600,
         child: BannerView(
-          key: BannerKey(2),
           iOS: IOSBannerConfig(
             slotId: kBannerExpressId600x260,
             expressSize: PangleExpressSize(width: 600, height: 260),
@@ -100,21 +95,25 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
             expressSize: PangleExpressSize(width: 600, height: 260),
           ),
           onBannerViewCreated: (BannerViewController controller) {
-            controller.updateTouchableBounds([Rect.zero]);
-            controller.updateRestrictedBounds([Rect.zero]);
+            controller.updateTouchableBounds([]);
+            // controller.updateTouchableBounds([Rect.zero]);
+            // controller.updateRestrictedBounds([Rect.zero]);
           },
           onDislike: (message, enforce) {
             setState(() {
-              rows.removeAt(1);
+              rows.removeWhere((element) => (element.key as BannerExpressKey?)?.value == 2);
             });
           },
           onClick: () {},
         ),
       ),
+      SizedBox(height: 1080),
+      Center(child: Text('--- 这是底线 ---')),
+      SizedBox(height: 16),
     ]);
   }
 }
 
-class BannerKey extends GlobalObjectKey {
-  BannerKey(Object value) : super(value);
+class BannerExpressKey extends GlobalObjectKey {
+  BannerExpressKey(Object value) : super(value);
 }

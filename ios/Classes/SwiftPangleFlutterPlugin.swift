@@ -85,6 +85,13 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         case "loadFullscreenVideoAd":
             let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
             instance.loadFullscreenVideoAd(args, result: result)
+        case "getThemeStatus":
+            result(BUAdSDKManager.themeStatus().rawValue)
+        case "setThemeStatus":
+            let value: Int = call.arguments as? Int ?? 0
+            let status: BUAdSDKThemeStatus = BUAdSDKThemeStatus.init(rawValue: value) ?? .normal
+            BUAdSDKManager.setThemeStatus(status)
+            result(BUAdSDKManager.themeStatus().rawValue)
         default:
             result(FlutterMethodNotImplemented)
         }
