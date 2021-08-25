@@ -52,6 +52,7 @@ class Item {
 class _FeedExpressPageState extends State<FeedExpressPage> {
   final items = <Item>[];
   final feedIds = <String>[];
+  final feedDialogIds = <String>[];
 
   final _bodyKey = GlobalKey();
   final _otherKey = GlobalKey();
@@ -111,7 +112,8 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
       floatingActionButton: FloatingActionButton(
         key: _otherKey,
         onPressed: () async {
-          await _loadFeedAd(isRefresh: false);
+          // await _loadFeedAd(isRefresh: false);
+          _showFeedDialog();
         },
         child: Icon(Icons.get_app),
       ),
@@ -198,7 +200,8 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
 
   /// 移除广告
   _removeFeedAd() async {
-    int? count = await pangle.removeFeedAd(feedIds as List<String>);
+    int? count = await pangle.removeFeedAd(feedIds);
+    await pangle.removeFeedAd(feedDialogIds);
     print('Feed Ad Removed: $count');
   }
 
@@ -217,5 +220,50 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
     final otherBound = PangleHelper.fromRenderBox(otherBox);
 
     controller.updateRestrictedBounds([otherBound]);
+  }
+
+  void _showFeedDialog() async {
+    // Dialog默认insetPadding horizontal 40
+    final maxWidth = MediaQuery.of(context).size.width;
+    var width = maxWidth - 80;
+    var height = width / (375 / 284);
+    var expressSize = PangleExpressSize(
+      width: width,
+      height: height,
+    );
+    PangleAd feedAd = await pangle.loadFeedAd(
+      iOS: IOSFeedConfig(
+        slotId: kFeedExpressId375x284,
+        expressSize: expressSize,
+        // slotId: kFeedId,
+      ),
+      android: AndroidFeedConfig(
+        slotId: kFeedExpressId375x284,
+        expressSize: expressSize,
+        // slotId: kFeedId,
+      ),
+    );
+    if (feedAd.count > 0) {
+      if (feedDialogIds.isNotEmpty) {
+        pangle.removeFeedAd(feedDialogIds);
+      }
+      feedDialogIds
+        ..clear()
+        ..addAll(feedAd.data);
+
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: AspectRatio(
+              aspectRatio: 375 / 284,
+              child: FeedView(
+                id: feedDialogIds.first,
+              ),
+            ),
+          );
+        },
+      );
+    }
   }
 }

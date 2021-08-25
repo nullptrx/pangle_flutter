@@ -1,4 +1,9 @@
-<div align="center"><img src="https://repository-images.githubusercontent.com/283126613/4be19c80-e615-11ea-984b-8a1790ce942a"/></div>
+
+<div align="center"><img src="https://repository-images.githubusercontent.com/283126613/361b7272-24cf-4b91-b6c4-ded2956210b4"/></div>
+
+>Thanks for non-commercial open source development authorization by [JetBrains](https://jb.gg/OpenSource).
+
+
 
 #  <div align="center">穿山甲 Flutter SDK</div>
 
