@@ -71,7 +71,7 @@ android {
 }
 
 dependencies {
-    api 'io.github.nullptrx:pangle:3.9.0.0@aar'
+    api 'io.github.nullptrx:pangle:3.9.0.5@aar'
     implementation 'androidx.appcompat:appcompat:+'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
