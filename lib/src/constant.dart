@@ -95,7 +95,6 @@ enum PangleTheme {
   dark,
 }
 
-
 /// 开屏页广告可点击区域
 enum PangleSplashButtonType {
   _,
