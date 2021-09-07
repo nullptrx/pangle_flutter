@@ -114,8 +114,14 @@ class SplashView: UIView {
         let slotId: String = params["slotId"] as! String
         let tolerateTimeout: Double? = params["tolerateTimeout"] as? Double
         let hideSkipButton: Bool? = params["hideSkipButton"] as? Bool
-
-        let splashAdView = BUSplashAdView(slotID: slotId, frame: frame)
+        let splashButtonType = BUSplashButtonType(rawValue: params["splashButtonType"] as? Int ?? BUSplashButtonType.fullScreen.rawValue) ?? .fullScreen
+        let frame = UIScreen.main.bounds
+        // BUSplashAdView(slotID: slotId, frame: frame)
+        let slot = BUAdSlot.init()
+        slot.id = slotId
+        slot.splashButtonType = splashButtonType
+        let splashAdView = BUSplashAdView.init(slot: slot, frame: frame)
+        // let splashAdView = BUSplashAdView(slotID: slotId, frame: frame)
         splashAdView.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
         let vc = AppUtil.getVC()
         splashAdView.rootViewController = vc

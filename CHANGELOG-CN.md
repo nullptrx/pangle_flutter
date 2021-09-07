@@ -1,3 +1,7 @@
+## 1.4.1
+
+- 修复IOSSplashConfig设置splashButtonType无效
+
 ## 1.4.0
 
 - 升级android sdk版本到3.9.0.5,ios sdk版本到3.9+

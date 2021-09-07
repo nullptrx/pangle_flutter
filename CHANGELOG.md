@@ -1,3 +1,7 @@
+## 1.4.1
+
+- Fix splashButtonType not work(IOSSplashConfig)
+
 ## 1.4.0
 
 - Upgrade android sdk version to 3.9.0.5, upgrade ios sdk version to 3.9+

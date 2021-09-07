@@ -30,5 +30,5 @@ Kotlin 1.5.30
 Swift 5.4.2
 ''';
 const kDependencies = '''
-Pangle SDK V%s
+Pangle SDK V%s≥
 ''';
