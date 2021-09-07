@@ -51,7 +51,7 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             ListTile(
-              title: Text('Environment:'),
+              title: Text('Testing environment:'),
               subtitle: Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(kEnv),

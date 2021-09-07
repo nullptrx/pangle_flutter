@@ -168,6 +168,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
       android: AndroidFeedConfig(
         slotId: kFeedExpressId375x284,
         expressSize: expressSize,
+        downloadType: PangleDownloadType.none,
         // slotId: kFeedId,
       ),
     );
