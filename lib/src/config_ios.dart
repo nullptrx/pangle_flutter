@@ -60,6 +60,7 @@ class IOSSplashConfig implements Config {
   final double? tolerateTimeout;
   final bool? hideSkipButton;
   final bool isExpress;
+  final PangleSplashButtonType splashButtonType;
 
   /// The splash ad config for iOS
   ///
@@ -68,11 +69,13 @@ class IOSSplashConfig implements Config {
   /// [hideSkipButton] optional. Whether hide skip button, default NO.
   ///    If you hide the skip button, you need to customize the countdown.
   ///  [isExpress] 开屏无模板渲染，默认false
+  ///  [splashButtonType] optional, 可点击广告区域，默认全屏
   const IOSSplashConfig({
     required this.slotId,
     this.tolerateTimeout,
     this.hideSkipButton,
     this.isExpress = false,
+    this.splashButtonType = PangleSplashButtonType.fullScreen,
   });
 
   /// Convert config to json
@@ -83,6 +86,7 @@ class IOSSplashConfig implements Config {
       'isExpress': isExpress,
       'tolerateTimeout': tolerateTimeout,
       'hideSkipButton': hideSkipButton,
+      'splashButtonType': splashButtonType.index,
     };
   }
 }

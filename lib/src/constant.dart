@@ -94,3 +94,21 @@ enum PangleTheme {
   light,
   dark,
 }
+
+
+/// 开屏页广告可点击区域
+enum PangleSplashButtonType {
+  _,
+  // 开发者自行进行开屏广告点击区域调整，SDK未做点击区域限制以避免点击区域冲突；
+  fullScreen,
+  // 选择由SDK控制点击区域仅为按钮区域，选择此项时开发者不应叠加点击区域限制；
+  downloadBar,
+}
+
+/// 下载类广告是否二次确认弹窗
+enum PangleDownloadType {
+  // 对于应用的下载不做特殊处
+  none,
+  // 应用每次下载都需要触发弹窗披露应用信息（不含跳转商店的场景），该配置优先级高于下载网络弹窗配置；
+  popup,
+}

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import com.bytedance.sdk.openadsdk.TTAdConstant
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -45,25 +46,21 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
 
         bannerViewFactory = BannerViewFactory(messenger)
         registrar.platformViewRegistry().registerViewFactory(
-          "nullptrx.github.io/pangle_bannerview",
-          bannerViewFactory
+          "nullptrx.github.io/pangle_bannerview", bannerViewFactory
         )
         feedViewFactory = FeedViewFactory(messenger)
         registrar.platformViewRegistry().registerViewFactory(
-          "nullptrx.github.io/pangle_feedview",
-          feedViewFactory
+          "nullptrx.github.io/pangle_feedview", feedViewFactory
         )
 
         val splashViewFactory = SplashViewFactory(messenger)
         registrar.platformViewRegistry().registerViewFactory(
-          "nullptrx.github.io/pangle_splashview",
-          splashViewFactory
+          "nullptrx.github.io/pangle_splashview", splashViewFactory
         )
 
         val nativeBannerViewFactory = NativeBannerViewFactory(messenger)
         registrar.platformViewRegistry().registerViewFactory(
-          "nullptrx.github.io/pangle_nativebannerview",
-          nativeBannerViewFactory
+          "nullptrx.github.io/pangle_nativebannerview", nativeBannerViewFactory
         )
 
         feedViewFactory?.attachActivity(activity)
@@ -113,25 +110,21 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
 
     bannerViewFactory = BannerViewFactory(binding.binaryMessenger)
     binding.platformViewRegistry.registerViewFactory(
-      "nullptrx.github.io/pangle_bannerview",
-      bannerViewFactory
+      "nullptrx.github.io/pangle_bannerview", bannerViewFactory
     )
     feedViewFactory = FeedViewFactory(binding.binaryMessenger)
     binding.platformViewRegistry.registerViewFactory(
-      "nullptrx.github.io/pangle_feedview",
-      feedViewFactory
+      "nullptrx.github.io/pangle_feedview", feedViewFactory
     )
 
     val splashViewFactory = SplashViewFactory(binding.binaryMessenger)
     binding.platformViewRegistry.registerViewFactory(
-      "nullptrx.github.io/pangle_splashview",
-      splashViewFactory
+      "nullptrx.github.io/pangle_splashview", splashViewFactory
     )
 
     val nativeBannerViewFactory = NativeBannerViewFactory(binding.binaryMessenger)
     binding.platformViewRegistry.registerViewFactory(
-      "nullptrx.github.io/pangle_nativebannerview",
-      nativeBannerViewFactory
+      "nullptrx.github.io/pangle_nativebannerview", nativeBannerViewFactory
     )
   }
 
@@ -162,13 +155,18 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
         }
       }
       "loadSplashAd" -> {
-        val slotId = call.argument<String>("slotId")!!
-        val isExpress = call.argument<Boolean>("isExpress") ?: false
+        val slotId =
+          call.argument<String>("slotId")!! // val isExpress = call.argument<Boolean>("isExpress") ?: false
         val tolerateTimeout = call.argument<Double>("tolerateTimeout")
         val hideSkipButton = call.argument<Boolean>("hideSkipButton")
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
         val imgSize = TTSize(1080, 1920)
-        val adSlot = PangleAdSlotManager.getSplashAdSlot(slotId, imgSize, isSupportDeepLink)
+        val splashButtonType =
+          call.argument<Int>("splashButtonType") ?: TTAdConstant.SPLASH_BUTTON_TYPE_FULL_SCREEN
+        val downloadType = call.argument<Int>("downloadType") ?: TTAdConstant.DOWNLOAD_TYPE_NO_POPUP
+        val adSlot = PangleAdSlotManager.getSplashAdSlot(
+          slotId, imgSize, isSupportDeepLink, splashButtonType, downloadType
+        )
         pangle.loadSplashAd(adSlot, FLTSplashAd(hideSkipButton, activity) {
           result.success(it)
         }, tolerateTimeout)
@@ -205,8 +203,10 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
         val w: Float = expressArgs.getValue("width").toFloat()
         val h: Float = expressArgs.getValue("height").toFloat()
         val expressSize = TTSizeF(w, h)
-        val adSlot =
-          PangleAdSlotManager.getBannerAdSlot(slotId, expressSize, count, isSupportDeepLink)
+        val downloadType = call.argument<Int>("downloadType") ?: TTAdConstant.DOWNLOAD_TYPE_NO_POPUP
+        val adSlot = PangleAdSlotManager.getBannerAdSlot(
+          slotId, expressSize, count, isSupportDeepLink, downloadType
+        )
         pangle.loadBanner2ExpressAd(adSlot) {
           result.success(it)
         }
@@ -216,13 +216,14 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
         val slotId = call.argument<String>("slotId")!!
         val count = call.argument<Int>("count") ?: kDefaultFeedAdCount
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
-
         val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
         val w: Float = expressArgs.getValue("width").toFloat()
         val h: Float = expressArgs.getValue("height").toFloat()
         val expressSize = TTSizeF(w, h)
-        val adSlot =
-          PangleAdSlotManager.getFeedAdSlot(slotId, expressSize, count, isSupportDeepLink)
+        val downloadType = call.argument<Int>("downloadType") ?: TTAdConstant.DOWNLOAD_TYPE_NO_POPUP
+        val adSlot = PangleAdSlotManager.getFeedAdSlot(
+          slotId, expressSize, count, isSupportDeepLink, downloadType
+        )
         pangle.loadFeedExpressAd(adSlot) {
           result.success(it)
         }
@@ -243,14 +244,15 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
       "loadInterstitialAd" -> {
         val slotId = call.argument<String>("slotId")!!
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
-
         val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
         val w: Float = expressArgs.getValue("width").toFloat()
         val h: Float = expressArgs.getValue("height").toFloat()
         val expressSize = TTSizeF(w, h)
+        val downloadType = call.argument<Int>("downloadType") ?: TTAdConstant.DOWNLOAD_TYPE_NO_POPUP
 
-        val adSlot =
-          PangleAdSlotManager.getInterstitialAdSlot(slotId, expressSize, isSupportDeepLink)
+        val adSlot = PangleAdSlotManager.getInterstitialAdSlot(
+          slotId, expressSize, isSupportDeepLink, downloadType
+        )
         pangle.loadInteractionExpressAd(adSlot, FLTInterstitialExpressAd(activity) {
           result.success(it)
         })
@@ -296,9 +298,7 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
   }
 
   private fun loadRewardedVideoAdOnly(
-    call: MethodCall,
-    loadingType: PangleLoadingType,
-    result: MethodChannel.Result? = null
+    call: MethodCall, loadingType: PangleLoadingType, result: MethodChannel.Result? = null
   ) {
 
     val slotId = call.argument<String>("slotId")!!
@@ -312,6 +312,7 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
     val w: Float = expressArgs.getValue("width").toFloat()
     val h: Float = expressArgs.getValue("height").toFloat()
     val expressSize = TTSizeF(w, h)
+    val downloadType = call.argument<Int>("downloadType") ?: TTAdConstant.DOWNLOAD_TYPE_NO_POPUP
     val adSlot = PangleAdSlotManager.getRewardVideoAdSlot(
       slotId,
       expressSize,
@@ -320,7 +321,8 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
       rewardAmount,
       isVertical,
       isSupportDeepLink,
-      extra
+      extra,
+      downloadType
     )
 
     PangleAdManager.shared.loadRewardVideoAd(adSlot, activity, loadingType) {
@@ -331,24 +333,19 @@ open class PangleFlutterPluginImpl : FlutterPlugin, MethodCallHandler, ActivityA
   }
 
   private fun loadFullscreenVideoAdOnly(
-    call: MethodCall,
-    loadingType: PangleLoadingType,
-    result: MethodChannel.Result? = null
+    call: MethodCall, loadingType: PangleLoadingType, result: MethodChannel.Result? = null
   ) {
     val slotId = call.argument<String>("slotId")!!
-    val orientationIndex = call.argument<Int>("orientation")
-      ?: PangleOrientation.veritical.ordinal
+    val orientationIndex = call.argument<Int>("orientation") ?: PangleOrientation.veritical.ordinal
     val orientation = PangleOrientation.values()[orientationIndex]
     val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
     val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
     val w: Float = expressArgs.getValue("width").toFloat()
     val h: Float = expressArgs.getValue("height").toFloat()
     val expressSize = TTSizeF(w, h)
+    val downloadType = call.argument<Int>("downloadType") ?: TTAdConstant.DOWNLOAD_TYPE_NO_POPUP
     val adSlot = PangleAdSlotManager.getFullScreenVideoAdSlot(
-      slotId,
-      expressSize,
-      orientation,
-      isSupportDeepLink
+      slotId, expressSize, orientation, isSupportDeepLink, downloadType
     )
 
     PangleAdManager.shared.loadFullscreenVideoAd(adSlot, activity, loadingType) {

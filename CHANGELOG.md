@@ -1,3 +1,8 @@
+## 1.4.0
+
+- Upgrade android sdk version to 3.9.0.5, upgrade ios sdk version to 3.9+
+- Add new option for requesting ads(clickable area & downloading type popup dialog)
+
 ## 1.3.0
 
 - Upgrade android sdk version to 3.9.0.0, upgrade ios sdk version to 3.8+

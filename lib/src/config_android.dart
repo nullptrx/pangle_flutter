@@ -111,6 +111,8 @@ class AndroidSplashConfig implements Config {
   final bool isExpress;
   final bool isSupportDeepLink;
   final PangleExpressSize? expressSize;
+  final PangleSplashButtonType splashButtonType;
+  final PangleDownloadType downloadType;
 
   /// The splash ad config for Android
   ///
@@ -120,6 +122,8 @@ class AndroidSplashConfig implements Config {
   /// [isSupportDeepLink] optional. Whether to support deeplink. Default true.
   /// [isExpress] 开屏广告无模板渲染，默认false
   /// [expressSize] optional. 模板宽高
+  /// [splashButtonType] optional, 可点击广告区域，默认全屏
+  /// [downloadType] optional, 下载类广告是否展示二次确认弹窗
   const AndroidSplashConfig({
     required this.slotId,
     this.tolerateTimeout,
@@ -127,6 +131,8 @@ class AndroidSplashConfig implements Config {
     this.isSupportDeepLink = true,
     this.isExpress = false,
     this.expressSize,
+    this.splashButtonType = PangleSplashButtonType.fullScreen,
+    this.downloadType = PangleDownloadType.none,
   });
 
   /// Convert config to json
@@ -139,6 +145,8 @@ class AndroidSplashConfig implements Config {
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
       'expressSize': expressSize?.toJson(),
+      'splashButtonType': splashButtonType.index,
+      'downloadType': downloadType.index,
     };
   }
 }
@@ -153,6 +161,7 @@ class AndroidRewardedVideoConfig implements Config {
   final bool isSupportDeepLink;
   final PangleLoadingType? loadingType;
   final PangleExpressSize? expressSize;
+  final PangleDownloadType downloadType;
 
   /// The rewarded video ad config for Android
   ///
@@ -170,6 +179,7 @@ class AndroidRewardedVideoConfig implements Config {
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
   /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
   /// [expressSize] optional. 模板宽高
+  /// [downloadType] optional, 下载类广告是否展示二次确认弹窗
   const AndroidRewardedVideoConfig({
     required this.slotId,
     this.userId,
@@ -180,6 +190,7 @@ class AndroidRewardedVideoConfig implements Config {
     this.isSupportDeepLink = true,
     this.loadingType,
     this.expressSize,
+    this.downloadType = PangleDownloadType.none,
   });
 
   /// Convert config to json
@@ -200,6 +211,7 @@ class AndroidRewardedVideoConfig implements Config {
       'isSupportDeepLink': isSupportDeepLink,
       'loadingType': loadingType?.index,
       'expressSize': expressSize.toJson(),
+      'downloadType': downloadType.index,
     };
   }
 }
@@ -209,6 +221,7 @@ class AndroidBannerConfig implements Config {
   final bool isSupportDeepLink;
   final PangleExpressSize expressSize;
   final int? interval;
+  final PangleDownloadType downloadType;
 
   /// The feed ad config for Android
   ///
@@ -218,11 +231,13 @@ class AndroidBannerConfig implements Config {
   /// [interval] The carousel interval, in seconds, is set in the range of 30~120s,
   ///   and is passed during initialization. If it does not meet the requirements,
   ///   it will not be in carousel ad.
+  /// [downloadType] optional, 下载类广告是否展示二次确认弹窗
   const AndroidBannerConfig({
     required this.slotId,
     required this.expressSize,
     this.isSupportDeepLink = true,
     this.interval,
+    this.downloadType = PangleDownloadType.none,
   });
 
   /// Convert config to json
@@ -233,6 +248,7 @@ class AndroidBannerConfig implements Config {
       'isSupportDeepLink': isSupportDeepLink,
       'expressSize': expressSize.toJson(),
       'interval': interval,
+      'downloadType': downloadType.index,
     };
   }
 }
@@ -242,6 +258,7 @@ class AndroidNativeBannerConfig implements Config {
   final bool isSupportDeepLink;
   final PangleSize size;
   final int? interval;
+  final PangleDownloadType downloadType;
 
   /// The feed ad config for Android
   ///
@@ -251,11 +268,13 @@ class AndroidNativeBannerConfig implements Config {
   /// [interval] The carousel interval, in seconds, is set in the range of 30~120s,
   ///   and is passed during initialization. If it does not meet the requirements,
   ///   it will not be in carousel ad.
+  /// [downloadType] optional, 下载类广告是否展示二次确认弹窗
   const AndroidNativeBannerConfig({
     required this.slotId,
     required this.size,
     this.isSupportDeepLink = true,
     this.interval,
+    this.downloadType = PangleDownloadType.none,
   });
 
   /// Convert config to json
@@ -266,6 +285,7 @@ class AndroidNativeBannerConfig implements Config {
       'isSupportDeepLink': isSupportDeepLink,
       'size': size.toJson(),
       'interval': interval,
+      'downloadType': downloadType.index,
     };
   }
 }
@@ -275,18 +295,21 @@ class AndroidFeedConfig implements Config {
   final int? count;
   final bool isSupportDeepLink;
   final PangleExpressSize expressSize;
+  final PangleDownloadType downloadType;
 
   /// The feed ad config for Android
   ///
   /// [slotId] required. The unique identifier of a feed ad.
   /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
   /// [isSupportDeepLink] optional. Whether to support deeplink.
-  /// [isExpress] optional. 个性化模板广告
+  /// [expressSize] 期望信息流广告宽高
+  /// [downloadType] optional, 下载类广告是否展示二次确认弹窗
   const AndroidFeedConfig({
     required this.slotId,
     required this.expressSize,
     this.count,
     this.isSupportDeepLink = true,
+    this.downloadType = PangleDownloadType.none,
   });
 
   /// Convert config to json
@@ -297,6 +320,7 @@ class AndroidFeedConfig implements Config {
       'count': count,
       'isSupportDeepLink': isSupportDeepLink,
       'expressSize': expressSize.toJson(),
+      'downloadType': downloadType.index,
     };
   }
 }
@@ -305,16 +329,19 @@ class AndroidInterstitialConfig implements Config {
   final String slotId;
   final bool isSupportDeepLink;
   final PangleExpressSize expressSize;
+  final PangleDownloadType downloadType;
 
   /// The interstitial ad config for Android
   ///
   /// [slotId] required. The unique identifier of a interstitial ad.
   /// [isSupportDeepLink] optional. Whether to support deep link. default true.
   /// [expressSize] optional. 模板宽高
+  /// [downloadType] optional, 下载类广告是否展示二次确认弹窗
   const AndroidInterstitialConfig({
     required this.slotId,
     required this.expressSize,
     this.isSupportDeepLink = true,
+    this.downloadType = PangleDownloadType.none,
   });
 
   /// Convert config to json
@@ -324,6 +351,7 @@ class AndroidInterstitialConfig implements Config {
       'slotId': slotId,
       'isSupportDeepLink': isSupportDeepLink,
       'expressSize': expressSize.toJson(),
+      'downloadType': downloadType.index,
     };
   }
 }
@@ -334,6 +362,7 @@ class AndroidFullscreenVideoConfig implements Config {
   final PangleOrientation orientation;
   final PangleLoadingType loadingType;
   final PangleExpressSize? expressSize;
+  final PangleDownloadType downloadType;
 
   /// The full screen video ad config for Android
   ///
@@ -342,12 +371,14 @@ class AndroidFullscreenVideoConfig implements Config {
   /// [orientation] 设置期望视频播放的方向，默认[PangleOrientation.veritical]
   /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
   /// [expressSize] optional. 模板宽高
+  /// [downloadType] optional, 下载类广告是否展示二次确认弹窗
   const AndroidFullscreenVideoConfig({
     required this.slotId,
     this.isSupportDeepLink = true,
     this.orientation = PangleOrientation.veritical,
     this.loadingType = PangleLoadingType.normal,
     this.expressSize,
+    this.downloadType = PangleDownloadType.none,
   });
 
   /// Convert config to json
@@ -363,6 +394,7 @@ class AndroidFullscreenVideoConfig implements Config {
       'orientation': orientation.index,
       'loadingType': loadingType.index,
       'expressSize': expressSize.toJson(),
+      'downloadType': downloadType.index,
     };
   }
 }
