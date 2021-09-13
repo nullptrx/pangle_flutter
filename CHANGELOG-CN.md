@@ -1,3 +1,7 @@
+## 1.4.2
+
+- 修复不兼容v2 版本嵌入警告
+
 ## 1.4.1
 
 - 修复IOSSplashConfig设置splashButtonType无效

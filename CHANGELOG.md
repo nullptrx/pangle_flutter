@@ -1,3 +1,7 @@
+## 1.4.2
+
+- Migrating the plugin to the V2 embedding
+
 ## 1.4.1
 
 - Fix splashButtonType not work(IOSSplashConfig)

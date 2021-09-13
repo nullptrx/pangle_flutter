@@ -1,5 +1,5 @@
 group 'io.github.nullptrx.pangleflutter'
-version '1.4.1'
+version '1.4.2'
 
 buildscript {
     ext.kotlin_version = '1.5.30'
@@ -35,22 +35,12 @@ if (localPropertiesFile.exists()) {
         localProperties.load(reader)
     }
 }
-def kEnv = localProperties.getProperty('pangle_flutter.env')
-if (kEnv == null) {
-    kEnv = 'cn'
-}
 
 android {
     compileSdkVersion 29
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
-        main.manifest.srcFile "src/main/AndroidManifest-${kEnv}.xml"
-        switch (kEnv) {
-            case 'cn':
-                main.java.srcDirs += 'src/main/cn'
-                break
-        }
     }
     defaultConfig {
         minSdkVersion 16
