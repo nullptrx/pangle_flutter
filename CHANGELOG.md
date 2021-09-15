@@ -1,3 +1,7 @@
+## 1.4.3
+
+- Downgrade kotlin's version
+
 ## 1.4.2
 
 - Migrating the plugin to the V2 embedding
