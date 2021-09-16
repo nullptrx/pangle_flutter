@@ -17,9 +17,16 @@ import io.github.nullptrx.pangleflutter.PangleAdSlotManager
 import io.github.nullptrx.pangleflutter.common.TTSize
 import io.github.nullptrx.pangleflutter.util.asMap
 
-class FlutterSplashView(val context: Context, messenger: BinaryMessenger, val id: Int, params: Map<String, Any?>) : PlatformView, MethodChannel.MethodCallHandler, TTAdNative.SplashAdListener, TTSplashAd.AdInteractionListener {
+class FlutterSplashView(
+  val context: Context,
+  messenger: BinaryMessenger,
+  val id: Int,
+  params: Map<String, Any?>
+) : PlatformView, MethodChannel.MethodCallHandler, TTAdNative.SplashAdListener,
+  TTSplashAd.AdInteractionListener {
 
-  private val methodChannel: MethodChannel = MethodChannel(messenger, "nullptrx.github.io/pangle_splashview_$id")
+  private val methodChannel: MethodChannel =
+    MethodChannel(messenger, "nullptrx.github.io/pangle_splashview_$id")
   private val container: FrameLayout
   private var hideSkipButton = false
 
@@ -31,14 +38,21 @@ class FlutterSplashView(val context: Context, messenger: BinaryMessenger, val id
       val isSupportDeepLink = params["isSupportDeepLink"] as? Boolean ?: true
       val tolerateTimeout = params["tolerateTimeout"] as Double?
       hideSkipButton = params["hideSkipButton"] as? Boolean ?: false
-      val splashButtonType = params["splashButtonType"] as Int? ?: TTAdConstant.SPLASH_BUTTON_TYPE_FULL_SCREEN
+      val splashButtonType =
+        params["splashButtonType"] as Int? ?: TTAdConstant.SPLASH_BUTTON_TYPE_FULL_SCREEN
       val downloadType = params["downloadType"] as Int? ?: TTAdConstant.DOWNLOAD_TYPE_NO_POPUP
 
       val imgArgs: Map<String, Int?> = params["imageSize"]?.asMap() ?: mapOf()
       val w: Int = imgArgs["width"] ?: 1080
       val h: Int = imgArgs["height"] ?: 1920
       val imgSize = TTSize(w, h)
-      val adSlot = PangleAdSlotManager.getSplashAdSlot(slotId, imgSize, isSupportDeepLink, splashButtonType, downloadType)
+      val adSlot = PangleAdSlotManager.getSplashAdSlot(
+        slotId,
+        imgSize,
+        isSupportDeepLink,
+        splashButtonType,
+        downloadType
+      )
       PangleAdManager.shared.loadSplashAd(adSlot, this, timeout = tolerateTimeout)
     }
   }
@@ -61,6 +75,7 @@ class FlutterSplashView(val context: Context, messenger: BinaryMessenger, val id
   }
 
   override fun onSplashAdLoad(splashAd: TTSplashAd) {
+    postMessage("onLoad")
     splashAd.apply {
 
       if (hideSkipButton) {

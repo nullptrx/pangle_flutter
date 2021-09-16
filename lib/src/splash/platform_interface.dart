@@ -60,9 +60,11 @@ abstract class SplashViewPlatformController {}
 /// The splashview plugin implements this class, and passes an instance to the [SplashViewPlatformController].
 /// [SplashViewPlatformController] is notifying this handler on events that happened on the platform's splashview.
 abstract class SplashViewPlatformCallbacksHandler {
-  void onClick();
+  void onLoad();
 
   void onShow();
+
+  void onClick();
 
   void onSkip();
 

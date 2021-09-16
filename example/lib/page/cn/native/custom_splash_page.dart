@@ -40,6 +40,8 @@ class CustomSplashPage extends StatefulWidget {
 }
 
 class _CustomSplashPageState extends State<CustomSplashPage> {
+  bool loaded = false;
+
   @override
   void initState() {
     super.initState();
@@ -58,55 +60,71 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: SplashView(
-              iOS: IOSSplashConfig(
-                slotId: kSplashId,
-                isExpress: false,
-                tolerateTimeout: 3,
-                splashButtonType: PangleSplashButtonType.downloadBar,
-              ),
-              android: AndroidSplashConfig(
-                slotId: kSplashId,
-                isExpress: false,
-                tolerateTimeout: 3,
-                splashButtonType: PangleSplashButtonType.downloadBar,
-                downloadType: PangleDownloadType.popup,
-              ),
-              onShow: _handleAdStart,
-              onTimeOver: _handleAdEnd,
-              onClick: _handleAdEnd,
-              onSkip: _handleAdEnd,
-              onError: (code, message) => _handleAdEnd(),
+      body: Stack(
+        children: [
+          Center(
+            child: FlutterLogo(
+              size: 50,
             ),
           ),
-          Container(
-            alignment: Alignment.center,
-            color: Colors.white,
-            height: 100,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                FlutterLogo(size: 40),
-                SizedBox(width: 20),
-                Text(
-                  'Pangle Flutter',
-                  style: GoogleFonts.zcoolQingKeHuangYou(
-                    fontSize: 24,
-                    color: Colors.black,
+          Offstage(
+            offstage: !loaded,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: SplashView(
+                    iOS: IOSSplashConfig(
+                      slotId: kSplashId,
+                      isExpress: false,
+                      tolerateTimeout: 3,
+                      splashButtonType: PangleSplashButtonType.downloadBar,
+                    ),
+                    android: AndroidSplashConfig(
+                      slotId: kSplashId,
+                      isExpress: false,
+                      tolerateTimeout: 3,
+                      splashButtonType: PangleSplashButtonType.downloadBar,
+                      downloadType: PangleDownloadType.popup,
+                    ),
+                    onLoad: _handleAdStart,
+                    onTimeOver: _handleAdEnd,
+                    onClick: _handleAdEnd,
+                    onSkip: _handleAdEnd,
+                    onError: (code, message) => _handleAdEnd(),
                   ),
                 ),
+                Container(
+                  alignment: Alignment.center,
+                  color: Colors.white,
+                  height: 100,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      FlutterLogo(size: 60),
+                      SizedBox(width: 20),
+                      Text(
+                        'Pangle Flutter',
+                        style: GoogleFonts.zcoolQingKeHuangYou(
+                          fontSize: 24,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  _handleAdStart() {}
+  _handleAdStart() {
+    setState(() {
+      loaded = true;
+    });
+  }
 
   _handleAdEnd() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [

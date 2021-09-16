@@ -45,9 +45,10 @@ class SplashView extends StatefulWidget {
     this.android,
     this.onSplashViewCreated,
     this.gestureRecognizers,
+    this.onLoad,
+    this.onShow,
     this.onClick,
     this.onSkip,
-    this.onShow,
     this.onTimeOver,
     this.onError,
   }) : super(key: key);
@@ -121,14 +122,17 @@ class SplashView extends StatefulWidget {
   @override
   _SplashViewState createState() => _SplashViewState();
 
+  /// 广告已加载
+  final VoidCallback? onLoad;
+
+  /// 广告展示
+  final VoidCallback? onShow;
+
   /// 广告被点击
   final VoidCallback? onClick;
 
   /// 跳过广告
   final VoidCallback? onSkip;
-
-  /// 广告展示
-  final VoidCallback? onShow;
 
   /// 倒计时结束
   final VoidCallback? onTimeOver;
@@ -220,13 +224,18 @@ class _PlatformCallbacksHandler implements SplashViewPlatformCallbacksHandler {
   SplashView _widget;
 
   @override
-  void onClick() {
-    _widget.onClick?.call();
+  void onLoad() {
+    _widget.onLoad?.call();
   }
 
   @override
   void onShow() {
     _widget.onShow?.call();
+  }
+
+  @override
+  void onClick() {
+    _widget.onClick?.call();
   }
 
   @override

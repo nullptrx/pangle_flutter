@@ -59,6 +59,7 @@ extension SplashView: BUSplashAdDelegate {
     }
 
     public func splashAdDidLoad(_ splashAd: BUSplashAdView) {
+        postMessage("onLoad")
     }
 
     public func splashAd(_ splashAd: BUSplashAdView, didFailWithError error: Error?) {
