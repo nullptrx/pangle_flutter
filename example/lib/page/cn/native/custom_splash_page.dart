@@ -43,13 +43,13 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
   }
 
   @override
   void dispose() {
     super.dispose();
-    SystemChrome.setEnabledSystemUIOverlays([
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [
       SystemUiOverlay.top,
       SystemUiOverlay.bottom,
     ]);
@@ -109,7 +109,7 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
   _handleAdStart() {}
 
   _handleAdEnd() {
-    SystemChrome.setEnabledSystemUIOverlays([
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [
       SystemUiOverlay.top,
       SystemUiOverlay.bottom,
     ]);

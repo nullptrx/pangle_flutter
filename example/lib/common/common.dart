@@ -32,10 +32,14 @@ const _textTheme = TextTheme(
 );
 
 final kThemeData = ThemeData(
+  colorScheme: ColorScheme.fromSwatch(
+    accentColor: Color(0xFFFF4081),
+    primaryColorDark: Color(0xFFFF4081),
+  ),
+  appBarTheme: AppBarTheme(
+    backgroundColor: Color(0xFFFF4081),
+  ),
   primaryColor: Color(0xFFFF4081),
-  buttonColor: Colors.redAccent[400],
-  accentColor: Colors.white,
-  accentTextTheme: _textTheme,
   primaryTextTheme: _textTheme,
   buttonTheme: ButtonThemeData(
     highlightColor: Colors.redAccent[400],
