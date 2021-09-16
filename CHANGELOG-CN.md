@@ -1,3 +1,7 @@
+## 1.4.4
+
+- SplashView新增onLoad回调
+
 ## 1.4.3
 
 - 降级kotlin依赖版本

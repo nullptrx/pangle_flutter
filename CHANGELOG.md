@@ -1,3 +1,7 @@
+## 1.4.4
+
+- Add `onLoad` callback for SplashView when an ad is loaded.
+
 ## 1.4.3
 
 - Downgrade kotlin's version
