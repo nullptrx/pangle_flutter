@@ -26,7 +26,6 @@ public class FLTSplashView: NSObject, FlutterPlatformView {
 //        container.addGestureRecognizer(gesture)
 
         container.loadSplash()
-
     }
 
     public func view() -> UIView {
@@ -38,7 +37,6 @@ public class FLTSplashView: NSObject, FlutterPlatformView {
     }
 }
 
-
 extension SplashView: BUSplashAdDelegate {
     public func splashAdCountdown(toZero splashAd: BUSplashAdView) {
         postMessage("onTimeOver")
@@ -48,8 +46,7 @@ extension SplashView: BUSplashAdDelegate {
         postMessage("onClick")
     }
 
-    public func splashAdDidClose(_ splashAd: BUSplashAdView) {
-    }
+    public func splashAdDidClose(_ splashAd: BUSplashAdView) {}
 
     public func splashAdDidClickSkip(_ splashAd: BUSplashAdView) {
         postMessage("onSkip")
@@ -67,24 +64,28 @@ extension SplashView: BUSplashAdDelegate {
         let e = error as NSError?
         postMessage("onError", arguments: ["code": e?.code ?? -1, "message": e?.localizedDescription])
     }
-    
+
     private func postMessage(_ method: String, arguments: [String: Any?] = [:]) {
         methodChannel?.invokeMethod(method, arguments: arguments)
     }
 }
 
 class SplashView: UIView {
-
     private var mounted: Bool = false
     private var params: [String: Any?] = [:]
-    private var methodChannel: FlutterMethodChannel? = nil
+    private var methodChannel: FlutterMethodChannel?
 
     init(frame: CGRect, params: [String: Any?], methodChannel: FlutterMethodChannel) {
         self.params = params
         self.methodChannel = methodChannel
+        let expressArgs = params["expressSize"] as? [String: Double] ?? [:]
+        let uiframe = UIScreen.main.bounds
+        let width = expressArgs["width"] ?? uiframe.width
+        let height = expressArgs["height"] ?? uiframe.height
+        let frame = CGRect(x: 0, y: 0, width: width, height: height)
         super.init(frame: frame)
 
-        methodChannel.setMethodCallHandler(self.handle(_:result:))
+        methodChannel.setMethodCallHandler(handle(_:result:))
     }
 
     deinit {
@@ -104,11 +105,6 @@ class SplashView: UIView {
     }
 
     override func layoutSubviews() {
-
-//        if !mounted {
-//            mounted = true
-//            loadSplash()
-//        }
         super.layoutSubviews()
     }
 
@@ -117,12 +113,12 @@ class SplashView: UIView {
         let tolerateTimeout: Double? = params["tolerateTimeout"] as? Double
         let hideSkipButton: Bool? = params["hideSkipButton"] as? Bool
         let splashButtonType = BUSplashButtonType(rawValue: params["splashButtonType"] as? Int ?? BUSplashButtonType.fullScreen.rawValue) ?? .fullScreen
-        let frame = UIScreen.main.bounds
+
         // BUSplashAdView(slotID: slotId, frame: frame)
-        let slot = BUAdSlot.init()
+        let slot = BUAdSlot()
         slot.id = slotId
         slot.splashButtonType = splashButtonType
-        let splashAdView = BUSplashAdView.init(slot: slot, frame: frame)
+        let splashAdView = BUSplashAdView(slot: slot, frame: frame)
         // let splashAdView = BUSplashAdView(slotID: slotId, frame: frame)
         splashAdView.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
         let vc = AppUtil.getVC()

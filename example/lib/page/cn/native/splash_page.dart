@@ -59,11 +59,9 @@ class _SplashPageState extends State<SplashPage> {
     final result = await pangle.loadSplashAd(
       iOS: IOSSplashConfig(
         slotId: kSplashId,
-        isExpress: false,
       ),
       android: AndroidSplashConfig(
         slotId: kSplashId,
-        isExpress: false,
       ),
     );
     var data = jsonEncode(result);

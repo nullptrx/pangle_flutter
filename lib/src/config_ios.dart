@@ -59,8 +59,8 @@ class IOSSplashConfig implements Config {
   final String slotId;
   final double? tolerateTimeout;
   final bool? hideSkipButton;
-  final bool isExpress;
   final PangleSplashButtonType splashButtonType;
+  final PangleExpressSize? expressSize;
 
   /// The splash ad config for iOS
   ///
@@ -68,14 +68,14 @@ class IOSSplashConfig implements Config {
   /// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
   /// [hideSkipButton] optional. Whether hide skip button, default NO.
   ///    If you hide the skip button, you need to customize the countdown.
-  ///  [isExpress] 开屏无模板渲染，默认false
   ///  [splashButtonType] optional, 可点击广告区域，默认全屏
+  ///  [expressSize] optional, 配置广告宽高，默认全屏
   const IOSSplashConfig({
     required this.slotId,
     this.tolerateTimeout,
     this.hideSkipButton,
-    this.isExpress = false,
     this.splashButtonType = PangleSplashButtonType.fullScreen,
+    this.expressSize,
   });
 
   /// Convert config to json
@@ -83,10 +83,10 @@ class IOSSplashConfig implements Config {
   Map<String, dynamic> toJSON() {
     return {
       'slotId': slotId,
-      'isExpress': isExpress,
       'tolerateTimeout': tolerateTimeout,
       'hideSkipButton': hideSkipButton,
       'splashButtonType': splashButtonType.index,
+      'expressSize': expressSize?.toJson(),
     };
   }
 }

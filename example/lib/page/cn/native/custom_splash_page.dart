@@ -74,14 +74,16 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                 Expanded(
                   child: SplashView(
                     iOS: IOSSplashConfig(
+                      expressSize: PangleExpressSize(
+                        width: kPangleScreenWidth,
+                        height: kPangleScreenHeight - 100,
+                      ),
                       slotId: kSplashId,
-                      isExpress: false,
                       tolerateTimeout: 3,
                       splashButtonType: PangleSplashButtonType.downloadBar,
                     ),
                     android: AndroidSplashConfig(
                       slotId: kSplashId,
-                      isExpress: false,
                       tolerateTimeout: 3,
                       splashButtonType: PangleSplashButtonType.downloadBar,
                       downloadType: PangleDownloadType.popup,
