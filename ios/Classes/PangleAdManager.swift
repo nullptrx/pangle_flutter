@@ -40,7 +40,7 @@ public final class PangleAdManager: NSObject {
         let appId: String = args["appId"] as! String
         let logLevel: Int? = args["logLevel"] as? Int
         let coppa: UInt? = args["coppa"] as? UInt
-        let isPaidApp: Bool? = args["coppa"] as? Bool
+        let isPaidApp: Bool? = args["isPaidApp"] as? Bool
 
         BUAdSDKManager.setAppID(appId)
 
