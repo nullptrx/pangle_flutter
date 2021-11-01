@@ -53,7 +53,7 @@ internal final class FLTNativeExpressAdTask: FLTTaskProtocol {
             self.manager.delegate = delegate
             self.delegate = delegate
             
-            self.manager.loadAd(self.count)
+            self.manager.loadAdData(withCount: self.count)
         }
     }
     

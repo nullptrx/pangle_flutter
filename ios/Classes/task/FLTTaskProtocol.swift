@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol FLTTaskProtocol: class {
+protocol FLTTaskProtocol: AnyObject {
     func execute() -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void
 
     func execute(_ loadingType: LoadingType) -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void

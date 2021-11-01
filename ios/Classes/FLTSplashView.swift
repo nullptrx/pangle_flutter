@@ -25,6 +25,7 @@ public class FLTSplashView: NSObject, FlutterPlatformView {
 //        gesture.delegate = self.uiGesture
 //        container.addGestureRecognizer(gesture)
 
+        container.loadSplash()
 
     }
 
@@ -66,7 +67,7 @@ extension SplashView: BUSplashAdDelegate {
         let e = error as NSError?
         postMessage("onError", arguments: ["code": e?.code ?? -1, "message": e?.localizedDescription])
     }
-
+    
     private func postMessage(_ method: String, arguments: [String: Any?] = [:]) {
         methodChannel?.invokeMethod(method, arguments: arguments)
     }
@@ -104,14 +105,14 @@ class SplashView: UIView {
 
     override func layoutSubviews() {
 
-        if !mounted {
-            mounted = true
-            loadSplash()
-        }
+//        if !mounted {
+//            mounted = true
+//            loadSplash()
+//        }
         super.layoutSubviews()
     }
 
-    private func loadSplash() {
+    func loadSplash() {
         let slotId: String = params["slotId"] as! String
         let tolerateTimeout: Double? = params["tolerateTimeout"] as? Double
         let hideSkipButton: Bool? = params["hideSkipButton"] as? Bool

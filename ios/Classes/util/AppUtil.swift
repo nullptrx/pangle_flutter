@@ -15,6 +15,10 @@ class AppUtil {
 //        let viewController: UIViewController = (UIApplication.shared.delegate?.window??.rootViewController)!
         return viewController!
     }
+    
+//    static func getKeyWindowVC() -> UIViewController {
+//        return UIApplication.shared.keyWindow!.rootViewController
+//    }
 
     static func getCurrentVC() -> UIViewController? {
         let rootViewController = UIApplication.shared.keyWindow?.rootViewController

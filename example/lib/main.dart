@@ -74,7 +74,7 @@ Future<Null> initPangle() async {
   PangleResult ret = await pangle.init(
     iOS: IOSConfig(
       appId: kAppId,
-      logLevel: PangleLogLevel.error,
+      logLevel: PangleLogLevel.debug,
     ),
     android: AndroidConfig(
         appId: kAppId,
