@@ -1,3 +1,9 @@
+## 1.4.5
+
+- 修复iOS中SplashView的onLoad不回调问题
+- 修复iOS中初始化参数isPaidApp误写成coppa
+- 优化因SDK升级导致iOS中SplashView无法自适应屏幕大小的问题，新增PangleExpressSize配置显示大小
+
 ## 1.4.4
 
 - SplashView新增onLoad回调

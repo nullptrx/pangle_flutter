@@ -1,3 +1,9 @@
+## 1.4.5
+
+- Fixed the issue that the onLoad of SplashView in iOS does not call back
+- Fix that the initialization parameter isPaidApp in iOS was incorrectly written as coppa
+- Optimized the problem that SplashView in iOS cannot adapt to the screen size due to the SDK upgrade, and added PangleExpressSize to configure the display size
+
 ## 1.4.4
 
 - Add `onLoad` callback for SplashView when an ad is loaded.
