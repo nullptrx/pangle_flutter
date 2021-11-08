@@ -80,6 +80,7 @@ Future<Null> initPangle() async {
         appId: kAppId,
         debug: false,
         allowShowNotify: true,
+        useTextureView: true,
         allowShowPageWhenScreenLock: false,
         directDownloadNetworkType: [
           AndroidDirectDownloadNetworkType.k2G,
