@@ -52,6 +52,7 @@ class AndroidConfig implements Config {
   /// [directDownloadNetworkType] （仅国内）可选参数，允许直接下载的网络状态集合
   /// [isPaidApp] 可选参数，设置是否为计费用户：true计费用户、false非计费用户。默认为false非计费用户。须征得用户同意才可传入该参数
   /// [useTextureView] 可选参数，设置是否使用texture播放视频：true使用、false不使用。默认为false不使用（使用的是surface）
+  ///   暂时修改为默认true 使用TextureView渲染视频
   /// [titleBarTheme] 可选参数，设置落地页主题，默认为light
   /// TODO [keywords] 可选参数，设置用户画像的关键词列表 **不能超过为1000个字符**。须征得用户同意才可传入该参数
   /// [isCanUseLocation] （仅国内）是否允许SDK主动使用地理位置信息。true可以获取，false禁止获取。默认为true
@@ -69,7 +70,7 @@ class AndroidConfig implements Config {
     this.supportMultiProcess = false,
     this.directDownloadNetworkType = const [],
     this.isPaidApp,
-    this.useTextureView,
+    this.useTextureView = true,
     this.titleBarTheme = AndroidTitleBarTheme.light,
     this.isCanUseLocation,
     this.location,
