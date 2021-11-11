@@ -29,13 +29,19 @@ import 'config_android.dart';
 import 'config_ios.dart';
 import 'constant.dart';
 import 'model.dart';
+import 'pangle_event_type.dart';
 
 final pangle = PanglePlugin._();
+
+typedef void PangleEventCallback(String event);
 
 /// Pangle Ad Plugin
 class PanglePlugin {
   static const MethodChannel _methodChannel = const MethodChannel(
     'nullptrx.github.io/pangle',
+  );
+  static const EventChannel _eventChannel = const EventChannel(
+    'nullptrx.github.io/pangle_event',
   );
 
   PanglePlugin._() {
@@ -178,22 +184,33 @@ class PanglePlugin {
   ///
   /// [iOS] config for iOS
   /// [android] config for Android
+  /// [callback] event callback
   /// return code & message
   Future<PangleResult> loadRewardedVideoAd({
     IOSRewardedVideoConfig? iOS,
     AndroidRewardedVideoConfig? android,
+    PangleEventCallback? callback,
   }) async {
+    final subscription = _eventChannel
+        .receiveBroadcastStream(PangleEventType.rewarded_video.index)
+        .listen((event) {
+      callback?.call(event);
+    });
     Map<String, dynamic>? result;
-    if (Platform.isIOS && iOS != null) {
-      result = await _methodChannel.invokeMapMethod(
-        'loadRewardedVideoAd',
-        iOS.toJSON(),
-      );
-    } else if (Platform.isAndroid && android != null) {
-      result = await _methodChannel.invokeMapMethod(
-        'loadRewardedVideoAd',
-        android.toJSON(),
-      );
+    try {
+      if (Platform.isIOS && iOS != null) {
+        result = await _methodChannel.invokeMapMethod(
+          'loadRewardedVideoAd',
+          iOS.toJSON(),
+        );
+      } else if (Platform.isAndroid && android != null) {
+        result = await _methodChannel.invokeMapMethod(
+          'loadRewardedVideoAd',
+          android.toJSON(),
+        );
+      }
+    } finally {
+      subscription.cancel();
     }
     return PangleResult.fromJson(result);
   }
@@ -236,46 +253,69 @@ class PanglePlugin {
   ///
   /// [iOS] config for iOS
   /// [android] config for Android
+  /// [callback] event callback
   /// return loaded ad count.
   Future<PangleResult> loadInterstitialAd({
     IOSInterstitialConfig? iOS,
     AndroidInterstitialConfig? android,
+    PangleEventCallback? callback,
   }) async {
+    final subscription = _eventChannel
+        .receiveBroadcastStream(PangleEventType.interstitial.index)
+        .listen((event) {
+      callback?.call(event);
+    });
     Map<String, dynamic>? result;
-    if (Platform.isIOS && iOS != null) {
-      result = await _methodChannel.invokeMapMethod(
-        'loadInterstitialAd',
-        iOS.toJSON(),
-      );
-    } else if (Platform.isAndroid && android != null) {
-      result = await _methodChannel.invokeMapMethod(
-        'loadInterstitialAd',
-        android.toJSON(),
-      );
+    try {
+      if (Platform.isIOS && iOS != null) {
+        result = await _methodChannel.invokeMapMethod(
+          'loadInterstitialAd',
+          iOS.toJSON(),
+        );
+      } else if (Platform.isAndroid && android != null) {
+        result = await _methodChannel.invokeMapMethod(
+          'loadInterstitialAd',
+          android.toJSON(),
+        );
+      }
+    } finally {
+      subscription.cancel();
     }
     return PangleResult.fromJson(result);
   }
 
   /// Request full screen video ad data.
   ///
+  /// 全屏视频广告，新模板渲染插屏
   /// [iOS] config for iOS
   /// [android] config for Android
+  /// [callback] event callback
   /// return code & message.
   Future<PangleResult> loadFullscreenVideoAd({
     IOSFullscreenVideoConfig? iOS,
     AndroidFullscreenVideoConfig? android,
+    PangleEventCallback? callback,
   }) async {
+    final subscription = _eventChannel
+        .receiveBroadcastStream(PangleEventType.fullscreen.index)
+        .listen((event) {
+      callback?.call(event);
+    });
     Map<String, dynamic>? result;
-    if (Platform.isIOS && iOS != null) {
-      result = await _methodChannel.invokeMapMethod(
-        'loadFullscreenVideoAd',
-        iOS.toJSON(),
-      );
-    } else if (Platform.isAndroid && android != null) {
-      result = await _methodChannel.invokeMapMethod(
-        'loadFullscreenVideoAd',
-        android.toJSON(),
-      );
+    try {
+      if (Platform.isIOS && iOS != null) {
+        result = await _methodChannel.invokeMapMethod(
+          'loadFullscreenVideoAd',
+          iOS.toJSON(),
+        );
+      } else if (Platform.isAndroid && android != null) {
+        result = await _methodChannel.invokeMapMethod(
+          'loadFullscreenVideoAd',
+          android.toJSON(),
+        );
+      }
+    } finally {
+      subscription.cancel();
     }
     return PangleResult.fromJson(result);
   }

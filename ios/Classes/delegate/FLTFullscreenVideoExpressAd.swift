@@ -27,6 +27,7 @@ internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFulls
     }
 
     func nativeExpressFullscreenVideoAdDidLoad(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {
+        PangleEventStreamHandler.fullscreen("load")
         let preload = self.loadingType == .preload || self.loadingType == .preload_only
         if preload {
             self.loadingType = .normal
@@ -42,6 +43,7 @@ internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFulls
     }
 
     func nativeExpressFullscreenVideoAdDidClose(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {
+        PangleEventStreamHandler.fullscreen("close")
         if self.isSkipped {
             return
         }
@@ -53,6 +55,7 @@ internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFulls
     }
 
     func nativeExpressFullscreenVideoAdDidClickSkip(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {
+        PangleEventStreamHandler.fullscreen("skip")
         self.isSkipped = true
         let error = NSError(domain: "skip", code: -1, userInfo: nil)
         if fullscreenVideoAd.didReceiveFail != nil {
@@ -62,21 +65,12 @@ internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFulls
         }
     }
 
-    func nativeExpressFullscreenVideoAdViewRenderSuccess(_ rewardedVideoAd: BUNativeExpressFullscreenVideoAd) {
-    }
-
     func nativeExpressFullscreenVideoAdDidDownLoadVideo(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {
-    }
-
-    func nativeExpressFullscreenVideoAdViewRenderFail(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd, error: Error?) {
-        if fullscreenVideoAd.didReceiveFail != nil {
-            fullscreenVideoAd.didReceiveFail?(error)
-        } else {
-            self.fail?(error)
-        }
+        PangleEventStreamHandler.fullscreen("cached")
     }
 
     func nativeExpressFullscreenVideoAd(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd, didFailWithError error: Error?) {
+        PangleEventStreamHandler.fullscreen("error")
         if fullscreenVideoAd.didReceiveFail != nil {
             fullscreenVideoAd.didReceiveFail?(error)
         } else {
@@ -85,6 +79,15 @@ internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFulls
     }
 
     func nativeExpressFullscreenVideoAdDidPlayFinish(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd, didFailWithError error: Error?) {
+        PangleEventStreamHandler.fullscreen("complete")
+    }
+    
+    func nativeExpressFullscreenVideoAdDidClick(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {
+        PangleEventStreamHandler.fullscreen("click")
+    }
+    
+    func nativeExpressFullscreenVideoAdDidVisible(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {
+        PangleEventStreamHandler.fullscreen("show")
     }
 
 }

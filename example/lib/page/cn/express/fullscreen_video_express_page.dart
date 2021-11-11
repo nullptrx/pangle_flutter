@@ -102,6 +102,9 @@ class _FullscreenVideoExpressPageState
         slotId: kFullscreenVideoExpressId,
         loadingType: PangleLoadingType.normal,
       ),
+      callback: (event) {
+        print(event);
+      },
     );
     var data = jsonEncode(result);
     print(data);

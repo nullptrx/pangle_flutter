@@ -13,11 +13,16 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
     public static let kDefaultFeedAdCount = 3
     public static let kDefaultRewardAmount = 1
     public static let kDefaultSplashTimeout = 3000
+    public static let kMethodChannelName = "nullptrx.github.io/pangle"
+    public static let kEventChannelName = "nullptrx.github.io/pangle_event"
 
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "nullptrx.github.io/pangle", binaryMessenger: registrar.messenger())
+        let channel = FlutterMethodChannel(name: kMethodChannelName, binaryMessenger: registrar.messenger())
         let instance = SwiftPangleFlutterPlugin(channel)
         registrar.addMethodCallDelegate(instance, channel: channel)
+        
+        let eventChannel = FlutterEventChannel(name: kEventChannelName, binaryMessenger: registrar.messenger())
+        eventChannel.setStreamHandler(PangleEventStreamHandler())
 
         let bannerViewFactory = BannerViewFactory(messenger: registrar.messenger())
         registrar.register(bannerViewFactory, withId: "nullptrx.github.io/pangle_bannerview")
