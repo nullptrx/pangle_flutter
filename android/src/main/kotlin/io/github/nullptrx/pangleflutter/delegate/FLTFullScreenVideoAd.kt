@@ -87,7 +87,7 @@ class FullScreenVideoAdInteractionImpl(var result: (Any) -> Unit?) :
   // 视频广告播完验证奖励有效性回调，参数分别为是否有效，奖励数量，奖励名称
   override fun onSkippedVideo() {
     PangleEventStreamHandler.fullscreen("skip")
-    invoke(-1, "skip")
+    // invoke(-1, "skip")
   }
   
   override fun onAdShow() {

@@ -83,7 +83,6 @@ internal class RewardAdInteractionImpl(var result: (Any) -> Unit?) :
   }
   
   override fun onSkippedVideo() {
-    //    invoke(-1, "skip")
     PangleEventStreamHandler.rewardedVideo("skip")
   }
   

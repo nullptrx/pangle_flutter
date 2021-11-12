@@ -74,9 +74,9 @@ internal final class FLTRewardedVideoExpressAd: NSObject, BUNativeExpressRewarde
 //        }
     }
 
-    func nativeExpressRewardedVideoAdServerRewardDidFail(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd) {
+    func nativeExpressRewardedVideoAdServerRewardDidFail(_ rewardedVideoAd: BUNativeExpressRewardedVideoAd, error: Error?) {
         PangleEventStreamHandler.rewardedVideo("reward_verify_fail")
-        let error = NSError(domain: "verify_fail", code: -1, userInfo: nil)
+//        let error = NSError(domain: "verify_fail", code: -1, userInfo: nil)
         if rewardedVideoAd.didReceiveFail != nil {
             rewardedVideoAd.didReceiveFail?(error)
         } else {

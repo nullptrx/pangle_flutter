@@ -71,6 +71,9 @@ class _InterstitialExpressPageState extends State<InterstitialExpressPage> {
         // 该宽高为你申请的广告位宽高，请根据实际情况赋值
         expressSize: PangleExpressSize.widthPercent(0.8, aspectRatio: 1.667),
       ),
+      callback: (event) {
+        print('interstitial: $event');
+      },
     );
     var data = jsonEncode(result);
     print(data);

@@ -1,3 +1,9 @@
+## 1.4.6
+
+- The useTextureView property defaults to true (pangle.init(...))
+- Optimize gradle dependency library version limit
+- Added callbacks for interstitial, full-screen video, and rewarded video events
+
 ## 1.4.5
 
 - Fixed the issue that the onLoad of SplashView in iOS does not call back

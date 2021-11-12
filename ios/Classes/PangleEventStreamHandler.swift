@@ -8,20 +8,20 @@
 import Foundation
 
 public final class PangleEventStreamHandler: NSObject, FlutterStreamHandler {
-    private static var eventSinks: [PangleEventType: FlutterEventSink?] = [:]
+    private static var eventSinks: [PangleEventType: FlutterEventSink] = [:]
 
     public static func interstitial(_ event: String = "unknown") {
-        guard let eventSink: FlutterEventSink = eventSinks[.interstitial]! else { return }
+        guard let eventSink = eventSinks[.fullscreen]  else { return }
         eventSink(event)
     }
 
     public static func fullscreen(_ event: String = "unknown") {
-        guard let eventSink: FlutterEventSink = eventSinks[.fullscreen]! else { return }
+        guard let eventSink = eventSinks[.fullscreen]  else { return }
         eventSink(event)
     }
 
     public static func rewardedVideo(_ event: String = "unknown") {
-        guard let eventSink: FlutterEventSink = eventSinks[.rewarded_video]! else { return }
+        guard let eventSink = eventSinks[.rewarded_video] else { return }
         eventSink(event)
     }
 

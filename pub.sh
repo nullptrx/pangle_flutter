@@ -9,7 +9,7 @@ fi
 
 case $PARAM in
 dev|develop)
-  dartfmt -w .
+  dart format .
   # flutter packages pub publish --dry-run
   pub publish --dry-run
   ;;

@@ -12,7 +12,6 @@ internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFulls
     typealias Success = () -> Void
     typealias Fail = (Error?) -> Void
 
-    private var isSkipped = false
     private var loadingType: LoadingType
     private var slotId: String
 
@@ -41,12 +40,9 @@ internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFulls
             fullscreenVideoAd.show(fromRootViewController: vc)
         }
     }
-
+    
     func nativeExpressFullscreenVideoAdDidClose(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {
         PangleEventStreamHandler.fullscreen("close")
-        if self.isSkipped {
-            return
-        }
         if fullscreenVideoAd.didReceiveSuccess != nil {
             fullscreenVideoAd.didReceiveSuccess?()
         } else {
@@ -56,13 +52,6 @@ internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFulls
 
     func nativeExpressFullscreenVideoAdDidClickSkip(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {
         PangleEventStreamHandler.fullscreen("skip")
-        self.isSkipped = true
-        let error = NSError(domain: "skip", code: -1, userInfo: nil)
-        if fullscreenVideoAd.didReceiveFail != nil {
-            fullscreenVideoAd.didReceiveFail?(error)
-        } else {
-            self.fail?(error)
-        }
     }
 
     func nativeExpressFullscreenVideoAdDidDownLoadVideo(_ fullscreenVideoAd: BUNativeExpressFullscreenVideoAd) {

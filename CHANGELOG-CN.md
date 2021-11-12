@@ -1,3 +1,9 @@
+## 1.4.6
+
+- useTextureView属性默认为true(pangle.init(...))
+- 优化gradle依赖库版本限制
+- 新增插屏、全屏视频、激励视频事件回调
+
 ## 1.4.5
 
 - 修复iOS中SplashView的onLoad不回调问题
