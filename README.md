@@ -108,35 +108,33 @@ dependencies:
 ```ruby
 
 # add code begin
-  def flutter_install_ios_plugin_pods(ios_application_path = nil)
+  def flutter_install_plugin_pods(application_path = nil, relative_symlink_dir, platform)
     # defined_in_file is set by CocoaPods and is a Pathname to the Podfile.
-    ios_application_path ||= File.dirname(defined_in_file.realpath) if self.respond_to?(:defined_in_file)
-    raise 'Could not find iOS application path' unless ios_application_path
+    application_path ||= File.dirname(defined_in_file.realpath) if self.respond_to?(:defined_in_file)
+    raise 'Could not find application path' unless application_path
 
     # Prepare symlinks folder. We use symlinks to avoid having Podfile.lock
     # referring to absolute paths on developers' machines.
-      
-    symlink_dir = File.expand_path('.symlinks', ios_application_path)
+
+    symlink_dir = File.expand_path(relative_symlink_dir, application_path)
     system('rm', '-rf', symlink_dir) # Avoid the complication of dependencies like FileUtils.
-      
+
     symlink_plugins_dir = File.expand_path('plugins', symlink_dir)
     system('mkdir', '-p', symlink_plugins_dir)
-      
-    plugins_file = File.join(ios_application_path, '..', '.flutter-plugins-dependencies')
-    plugin_pods = flutter_parse_plugins_file(plugins_file)
+
+    plugins_file = File.join(application_path, '..', '.flutter-plugins-dependencies')
+    plugin_pods = flutter_parse_plugins_file(plugins_file, platform)
     plugin_pods.each do |plugin_hash|
       plugin_name = plugin_hash['name']
       plugin_path = plugin_hash['path']
       if (plugin_name && plugin_path)
         symlink = File.join(symlink_plugins_dir, plugin_name)
         File.symlink(plugin_path, symlink)
-      
-        pod plugin_name, :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
+
         if plugin_name == 'pangle_flutter'
           # cn表示国内，global表示海外
           pod 'pangle_flutter/global', :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
         end
-      
       end
     end
   end
@@ -183,6 +181,8 @@ dependencies:
 
 
 ## 使用说明
+
+支持开屏广告、激励视频、全屏视频（新模板渲染插屏广告）、模板渲染信息流、模板渲染插屏、模板渲染Banner。（如有自渲染广告位请联系我，或提交Feature request）
 
 ### 1. 信息流广告
 
