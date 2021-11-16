@@ -1,3 +1,7 @@
+## 1.4.7
+
+- Fix the type conversion problem in FLTSplashView
+
 ## 1.4.6
 
 - The useTextureView property defaults to true (pangle.init(...))

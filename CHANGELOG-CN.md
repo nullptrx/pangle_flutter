@@ -1,3 +1,7 @@
+## 1.4.7
+
+- 修复FLTSplashView中类型转换问题
+
 ## 1.4.6
 
 - useTextureView属性默认为true(pangle.init(...))
