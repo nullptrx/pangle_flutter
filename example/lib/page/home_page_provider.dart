@@ -46,51 +46,53 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
       ),
       body: Padding(
         padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            ListTile(
-              title: Text('Testing environment:'),
-              subtitle: Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text(kEnv),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              ListTile(
+                title: Text('Testing environment:'),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(kEnv),
+                ),
               ),
-            ),
-            ListTile(
-              title: Text('Dependencies:'),
-              subtitle: Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text(_denpendencies ?? ''),
+              ListTile(
+                title: Text('Dependencies:'),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(_denpendencies ?? ''),
+                ),
               ),
-            ),
-            ListTile(
-              title: Text('Theme: '),
-              subtitle: Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text('$_theme'),
+              ListTile(
+                title: Text('Theme: '),
+                subtitle: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text('$_theme'),
+                ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: requestPermissions,
-              child: Text('Request Permissions'),
-            ),
-            SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: changeTheme,
-              child: Text('Change Theme'),
-            ),
-            SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: loadNativeAd,
-              child: Text('Native AD'),
-            ),
-            SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: loadExpressAd,
-              child: Text('Express AD'),
-            ),
-          ],
+              ElevatedButton(
+                onPressed: requestPermissions,
+                child: Text('Request Permissions'),
+              ),
+              SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: changeTheme,
+                child: Text('Change Theme'),
+              ),
+              SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: loadNativeAd,
+                child: Text('Native AD'),
+              ),
+              SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: loadExpressAd,
+                child: Text('Express AD'),
+              ),
+            ],
+          ),
         ),
       ),
     );
