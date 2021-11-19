@@ -37,12 +37,15 @@ public class FLTBannerView: NSObject, FlutterPlatformView {
                 v.subviews.forEach {
                     if String(describing: $0.classForCoder) == "BUWKWebViewClient" {
                         let webview = $0 as! WKWebView
-                        webview.navigationDelegate = nil
+                        
+                        webview.stopLoading()
                         if #available(iOS 14.0, *) {
                             webview.configuration.userContentController.removeAllScriptMessageHandlers()
                         } else {
                             webview.configuration.userContentController.removeScriptMessageHandler(forName: "callMethodParams")
                         }
+                        webview.navigationDelegate = nil
+                        webview.scrollView.delegate = nil
                     }
                 }
             }

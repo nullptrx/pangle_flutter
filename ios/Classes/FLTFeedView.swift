@@ -10,26 +10,26 @@ import Flutter
 import WebKit
 
 public class FLTFeedView: NSObject, FlutterPlatformView {
-    private let widget: FeedView
+    private let container: FeedView
     private var id: String?
 
     init(_ frame: CGRect, id: Int64, params: [String: Any?], messenger: FlutterBinaryMessenger) {
         let channelName = String(format: "nullptrx.github.io/pangle_feedview_%ld", id)
         let methodChannel = FlutterMethodChannel(name: channelName, binaryMessenger: messenger)
-        widget = FeedView(frame: frame, params: params, methodChannel: methodChannel)
+        container = FeedView(frame: frame, params: params, methodChannel: methodChannel)
         super.init()
     }
-
+    
+    public func view() -> UIView {
+        container
+    }
+    
     deinit {
         removeAllView()
     }
 
-    public func view() -> UIView {
-        widget
-    }
-
     private func removeAllView() {
-        widget.subviews.forEach {
+        container.subviews.forEach {
             if $0 is BUNativeExpressAdView {
                 let v = $0 as! BUNativeExpressAdView
                 v.extraDelegate = nil
@@ -38,12 +38,14 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
                 v.subviews.forEach {
                     if String(describing: $0.classForCoder) == "BUWKWebViewClient" {
                         let webview = $0 as! WKWebView
-                        webview.navigationDelegate = nil
+                        webview.stopLoading()
                         if #available(iOS 14.0, *) {
                             webview.configuration.userContentController.removeAllScriptMessageHandlers()
                         } else {
                             webview.configuration.userContentController.removeScriptMessageHandler(forName: "callMethodParams")
                         }
+                        webview.navigationDelegate = nil
+                        webview.scrollView.delegate = nil
                     }
                 }
             }
@@ -52,7 +54,7 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
             }
             $0.removeFromSuperview()
         }
-        widget.removeFromSuperview()
+        container.removeFromSuperview()
     }
 
 
