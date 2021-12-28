@@ -1,3 +1,9 @@
+## 1.5.0-beta
+
+- Update ad sdk
+    - Android: Delete the rewardName and rewardAmount params in AndroidRewardedVideoConfig
+    - iOS: Delete the isPaidApp param in IOSConfig
+
 ## 1.4.7
 
 - Fix the type conversion problem in FLTSplashView

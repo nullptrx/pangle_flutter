@@ -1,3 +1,9 @@
+## 1.5.0-beta
+
+- 升级穿山甲SDK
+    - Android: AndroidRewardedVideoConfig中删除 rewardName，rewardAmountc参数
+    - iOS: IOSConfig中删除 isPaidApp参数
+
 ## 1.4.7
 
 - 修复FLTSplashView中类型转换问题
