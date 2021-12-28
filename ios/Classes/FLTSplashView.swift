@@ -80,8 +80,8 @@ class SplashView: UIView {
         self.methodChannel = methodChannel
         let expressArgs = params["expressSize"] as? [String: Double] ?? [:]
         let uiframe = UIScreen.main.bounds
-        let width = expressArgs["width"] ?? uiframe.width
-        let height = expressArgs["height"] ?? uiframe.height
+        let width: Double = expressArgs["width"] ?? Double(uiframe.width)
+        let height: Double = expressArgs["height"] ?? Double(uiframe.height)
         let frame = CGRect(x: 0, y: 0, width: width, height: height)
         super.init(frame: frame)
 

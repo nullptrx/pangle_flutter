@@ -131,6 +131,7 @@ dependencies:
         symlink = File.join(symlink_plugins_dir, plugin_name)
         File.symlink(plugin_path, symlink)
 
+        pod plugin_name, :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
         if plugin_name == 'pangle_flutter'
           # cn表示国内，global表示海外
           pod 'pangle_flutter/global', :path => File.join('.symlinks', 'plugins', plugin_name, 'ios')
