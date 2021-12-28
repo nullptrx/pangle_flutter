@@ -40,21 +40,14 @@ public final class PangleAdManager: NSObject {
         let appId: String = args["appId"] as! String
         let logLevel: Int? = args["logLevel"] as? Int
         let coppa: UInt? = args["coppa"] as? UInt
-        let isPaidApp: Bool? = args["isPaidApp"] as? Bool
 
         BUAdSDKManager.setAppID(appId)
-
-        if isPaidApp != nil {
-            BUAdSDKManager.setIsPaidApp(isPaidApp!)
-        }
 
         if logLevel != nil {
             BUAdSDKManager.setLoglevel(BUAdSDKLogLevel(rawValue: logLevel!)!)
         }
 
-        if coppa != nil {
-            BUAdSDKManager.setCoppa(coppa!)
-        }
+        BUAdSDKManager.setCoppa(((coppa!=nil) && (coppa! > 0)) ? 1 : 0)
     }
 
     public func loadSplashAd(_ args: [String: Any?], result: @escaping FlutterResult) {
