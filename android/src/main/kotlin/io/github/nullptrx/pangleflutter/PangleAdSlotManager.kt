@@ -33,8 +33,6 @@ object PangleAdSlotManager {
     slotId: String,
     expressSize: TTSizeF,
     userId: String?,
-    rewardName: String?,
-    rewardAmount: Int?,
     isVertical: Boolean,
     isSupportDeepLink: Boolean,
     extra: String?,
@@ -49,12 +47,6 @@ object PangleAdSlotManager {
       ) //        setExpressViewAcceptedSize(500f, 500f)
       // 可选参数 设置是否支持deeplink
       setSupportDeepLink(isSupportDeepLink) //激励视频奖励的名称，针对激励视频参数
-      rewardName?.also {
-        setRewardName(it)
-      } //激励视频奖励个数
-      rewardAmount?.also {
-        setRewardAmount(it)
-      } //用户ID,使用激励视频必传参数
       //表来标识应用侧唯一用户；若非服务器回调模式或不需sdk透传，可设置为空字符串
       setUserID(userId ?: "") //设置期望视频播放的方向，为TTAdConstant.HORIZONTAL或TTAdConstant.VERTICAL
       setOrientation(if (isVertical) TTAdConstant.VERTICAL else TTAdConstant.HORIZONTAL) //激励视频奖励透传参数，字符串，如果用json对象，必须使用序列化为String类型,可为空

@@ -316,8 +316,6 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
     
     val slotId = call.argument<String>("slotId")!!
     val userId = call.argument<String>("userId")
-    val rewardName = call.argument<String>("rewardName")
-    val rewardAmount = call.argument<Int>("rewardAmount")
     val extra = call.argument<String>("extra")
     val isVertical = call.argument<Boolean>("isVertical") ?: true
     val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
@@ -330,8 +328,6 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
       slotId,
       expressSize,
       userId,
-      rewardName,
-      rewardAmount,
       isVertical,
       isSupportDeepLink,
       extra,

@@ -28,19 +28,16 @@ class IOSConfig implements Config {
   final String appId;
   final PangleLogLevel? logLevel;
   final int? coppa;
-  final bool? isPaidApp;
 
   /// Register the ad config for iOS
   ///
   /// [appId] the unique identifier of the App
   /// [logLevel] optional. default none
   /// [coppa] optional. Coppa 0 adult, 1 child
-  /// [isPaidApp] optional. Set whether the app is a paid app, the default is a non-paid app.
   const IOSConfig({
     required this.appId,
     this.logLevel,
     this.coppa,
-    this.isPaidApp,
   });
 
   /// Convert config to json
@@ -50,7 +47,6 @@ class IOSConfig implements Config {
       'appId': appId,
       'logLevel': logLevel?.index,
       'coppa': coppa,
-      'isPaidApp': isPaidApp,
     };
   }
 }

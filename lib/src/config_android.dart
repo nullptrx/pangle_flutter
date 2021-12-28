@@ -155,8 +155,6 @@ class AndroidSplashConfig implements Config {
 class AndroidRewardedVideoConfig implements Config {
   final String slotId;
   final String? userId;
-  final String? rewardName;
-  final int? rewardAmount;
   final String? extra;
   final bool isVertical;
   final bool isSupportDeepLink;
@@ -173,8 +171,6 @@ class AndroidRewardedVideoConfig implements Config {
   //   It is the unique identifier of each user.
   //   In the non-server callback mode, it will also be pass-through when the video is finished playing.
   //   Only the string can be passed in this case, not nil.
-  /// [rewardName] optional. reward name.
-  /// [rewardAmount] optional. number of rewards.
   /// [extra] optional. serialized string.
   /// [isVertical] optional. Whether video is vertical orientation. Vertical, if true. Otherwise, horizontal.
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
@@ -184,8 +180,6 @@ class AndroidRewardedVideoConfig implements Config {
   const AndroidRewardedVideoConfig({
     required this.slotId,
     this.userId,
-    this.rewardName,
-    this.rewardAmount,
     this.extra,
     this.isVertical = true,
     this.isSupportDeepLink = true,
@@ -205,8 +199,6 @@ class AndroidRewardedVideoConfig implements Config {
     return {
       'slotId': slotId,
       'userId': userId,
-      'rewardName': rewardName,
-      'rewardAmount': rewardAmount,
       'extra': extra,
       'isVertical': isVertical,
       'isSupportDeepLink': isSupportDeepLink,
