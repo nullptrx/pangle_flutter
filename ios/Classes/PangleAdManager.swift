@@ -47,7 +47,7 @@ public final class PangleAdManager: NSObject {
             BUAdSDKManager.setLoglevel(BUAdSDKLogLevel(rawValue: logLevel!)!)
         }
 
-        BUAdSDKManager.setCoppa(((coppa!=nil) && (coppa! > 0)) ? 1 : 0)
+        BUAdSDKManager.setCoppa(((coppa != nil) && (coppa! > 0)) ? 1 : 0)
     }
 
     public func loadSplashAd(_ args: [String: Any?], result: @escaping FlutterResult) {
