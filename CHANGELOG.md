@@ -1,3 +1,7 @@
+## 1.5.0+1-beta
+
+- Add useHybridComposition param (AndroidSplashView, AndroidBannerView, AndroidFeedView)
+
 ## 1.5.0-beta
 
 - Update ad sdk

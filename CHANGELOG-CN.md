@@ -1,3 +1,7 @@
+## 1.5.0+1-beta
+
+- 添加useHybridComposition参数 (AndroidSplashView, AndroidBannerView, AndroidFeedView)
+
 ## 1.5.0-beta
 
 - 升级穿山甲SDK
