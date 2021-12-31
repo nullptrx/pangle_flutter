@@ -30,6 +30,12 @@ import 'splashview_method_channel.dart';
 import 'platform_interface.dart';
 
 class AndroidSplashView implements SplashViewPlatform {
+  final bool useHybridComposition;
+
+  AndroidSplashView({
+    this.useHybridComposition = false,
+  });
+
   @override
   Widget build({
     required BuildContext context,
@@ -39,38 +45,70 @@ class AndroidSplashView implements SplashViewPlatform {
     SplashViewPlatformCreatedCallback? onSplashViewPlatformCreated,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   }) {
-    return PlatformViewLink(
-        viewType: kSplashViewType,
-        surfaceFactory: (
-          BuildContext context,
-          PlatformViewController controller,
-        ) {
-          return AndroidViewSurface(
-            controller: controller as AndroidViewController,
-            gestureRecognizers: gestureRecognizers ??
-                const <Factory<OneSequenceGestureRecognizer>>{},
-            hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-          );
-        },
-        onCreatePlatformView: (PlatformViewCreationParams params) {
-          return PlatformViewsService.initSurfaceAndroidView(
-            id: params.id,
-            viewType: kSplashViewType,
-            layoutDirection: TextDirection.ltr,
-            creationParams: creationParams,
-            creationParamsCodec: const StandardMessageCodec(),
-          )
-            ..addOnPlatformViewCreatedListener(params.onPlatformViewCreated)
-            ..addOnPlatformViewCreatedListener((id) async {
-              if (onSplashViewPlatformCreated == null) {
-                return;
-              }
-              onSplashViewPlatformCreated(MethodChannelSplashViewPlatform(
-                id,
-                splashViewPlatformCallbacksHandler,
-              ));
-            })
-            ..create();
-        });
+    if (useHybridComposition) {
+      return PlatformViewLink(
+          viewType: kSplashViewType,
+          surfaceFactory: (
+            BuildContext context,
+            PlatformViewController controller,
+          ) {
+            return AndroidViewSurface(
+              controller: controller as AndroidViewController,
+              gestureRecognizers: gestureRecognizers ??
+                  const <Factory<OneSequenceGestureRecognizer>>{},
+              hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+            );
+          },
+          onCreatePlatformView: (PlatformViewCreationParams params) {
+            return PlatformViewsService.initSurfaceAndroidView(
+              id: params.id,
+              viewType: kSplashViewType,
+              layoutDirection: TextDirection.ltr,
+              creationParams: creationParams,
+              creationParamsCodec: const StandardMessageCodec(),
+            )
+              ..addOnPlatformViewCreatedListener(params.onPlatformViewCreated)
+              ..addOnPlatformViewCreatedListener((id) async {
+                if (onSplashViewPlatformCreated == null) {
+                  return;
+                }
+                onSplashViewPlatformCreated(MethodChannelSplashViewPlatform(
+                  id,
+                  splashViewPlatformCallbacksHandler,
+                ));
+              })
+              ..create();
+          });
+    } else {
+      return GestureDetector(
+        // We prevent text selection by intercepting the long press event.
+        // This is a temporary stop gap due to issues with text selection on Android:
+        // https://github.com/flutter/flutter/issues/24585 - the text selection
+        // dialog is not responding to touch events.
+        // https://github.com/flutter/flutter/issues/24584 - the text selection
+        // handles are not showing.
+        // TODO(amirh): remove this when the issues above are fixed.
+        onLongPress: () {},
+        excludeFromSemantics: true,
+        child: AndroidView(
+          viewType: kSplashViewType,
+          gestureRecognizers: gestureRecognizers ??
+              const <Factory<OneSequenceGestureRecognizer>>{},
+          layoutDirection: TextDirection.ltr,
+          creationParams: creationParams,
+          creationParamsCodec: const StandardMessageCodec(),
+          hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+          onPlatformViewCreated: (id) {
+            if (onSplashViewPlatformCreated == null) {
+              return;
+            }
+            onSplashViewPlatformCreated(MethodChannelSplashViewPlatform(
+              id,
+              splashViewPlatformCallbacksHandler,
+            ));
+          },
+        ),
+      );
+    }
   }
 }

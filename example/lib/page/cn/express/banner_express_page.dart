@@ -41,6 +41,7 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
   @override
   void initState() {
     super.initState();
+    BannerView.platform = AndroidBannerView(useHybridComposition: true);
     initBanner();
   }
 

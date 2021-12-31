@@ -30,6 +30,12 @@ import 'feedview_method_channel.dart';
 import 'platform_interface.dart';
 
 class AndroidFeedView implements FeedViewPlatform {
+  final bool useHybridComposition;
+
+  AndroidFeedView({
+    this.useHybridComposition = false,
+  });
+
   @override
   Widget build({
     required BuildContext context,
@@ -38,38 +44,70 @@ class AndroidFeedView implements FeedViewPlatform {
     FeedViewPlatformCreatedCallback? onFeedViewPlatformCreated,
     Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers,
   }) {
-    return PlatformViewLink(
-        viewType: kFeedViewType,
-        surfaceFactory: (
-          BuildContext context,
-          PlatformViewController controller,
-        ) {
-          return AndroidViewSurface(
-            controller: controller as AndroidViewController,
-            gestureRecognizers: gestureRecognizers ??
-                const <Factory<OneSequenceGestureRecognizer>>{},
-            hitTestBehavior: PlatformViewHitTestBehavior.opaque,
-          );
-        },
-        onCreatePlatformView: (PlatformViewCreationParams params) {
-          return PlatformViewsService.initSurfaceAndroidView(
-            id: params.id,
-            viewType: kFeedViewType,
-            layoutDirection: TextDirection.ltr,
-            creationParams: creationParams,
-            creationParamsCodec: const StandardMessageCodec(),
-          )
-            ..addOnPlatformViewCreatedListener(params.onPlatformViewCreated)
-            ..addOnPlatformViewCreatedListener((id) async {
-              if (onFeedViewPlatformCreated == null) {
-                return;
-              }
-              onFeedViewPlatformCreated(MethodChannelFeedViewPlatform(
-                id,
-                feedViewPlatformCallbacksHandler,
-              ));
-            })
-            ..create();
-        });
+    if (useHybridComposition) {
+      return PlatformViewLink(
+          viewType: kFeedViewType,
+          surfaceFactory: (
+            BuildContext context,
+            PlatformViewController controller,
+          ) {
+            return AndroidViewSurface(
+              controller: controller as AndroidViewController,
+              gestureRecognizers: gestureRecognizers ??
+                  const <Factory<OneSequenceGestureRecognizer>>{},
+              hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+            );
+          },
+          onCreatePlatformView: (PlatformViewCreationParams params) {
+            return PlatformViewsService.initSurfaceAndroidView(
+              id: params.id,
+              viewType: kFeedViewType,
+              layoutDirection: TextDirection.ltr,
+              creationParams: creationParams,
+              creationParamsCodec: const StandardMessageCodec(),
+            )
+              ..addOnPlatformViewCreatedListener(params.onPlatformViewCreated)
+              ..addOnPlatformViewCreatedListener((id) async {
+                if (onFeedViewPlatformCreated == null) {
+                  return;
+                }
+                onFeedViewPlatformCreated(MethodChannelFeedViewPlatform(
+                  id,
+                  feedViewPlatformCallbacksHandler,
+                ));
+              })
+              ..create();
+          });
+    } else {
+      return GestureDetector(
+        // We prevent text selection by intercepting the long press event.
+        // This is a temporary stop gap due to issues with text selection on Android:
+        // https://github.com/flutter/flutter/issues/24585 - the text selection
+        // dialog is not responding to touch events.
+        // https://github.com/flutter/flutter/issues/24584 - the text selection
+        // handles are not showing.
+        // TODO(amirh): remove this when the issues above are fixed.
+        onLongPress: () {},
+        excludeFromSemantics: true,
+        child: AndroidView(
+          viewType: kFeedViewType,
+          gestureRecognizers: gestureRecognizers ??
+              const <Factory<OneSequenceGestureRecognizer>>{},
+          layoutDirection: TextDirection.ltr,
+          creationParams: creationParams,
+          creationParamsCodec: const StandardMessageCodec(),
+          hitTestBehavior: PlatformViewHitTestBehavior.opaque,
+          onPlatformViewCreated: (id) {
+            if (onFeedViewPlatformCreated == null) {
+              return;
+            }
+            onFeedViewPlatformCreated(MethodChannelFeedViewPlatform(
+              id,
+              feedViewPlatformCallbacksHandler,
+            ));
+          },
+        ),
+      );
+    }
   }
 }
