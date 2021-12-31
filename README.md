@@ -1,5 +1,4 @@
-
-<div align="center"><img src="https://repository-images.githubusercontent.com/283126613/361b7272-24cf-4b91-b6c4-ded2956210b4"/></div>
+<!--<div align="center"><img src="https://repository-images.githubusercontent.com/283126613/361b7272-24cf-4b91-b6c4-ded2956210b4"/></div>-->
 
 >Thanks for non-commercial open source development authorization by [JetBrains](https://jb.gg/OpenSource).
 
@@ -82,7 +81,7 @@
 
 ## 范例截图
 
-<img src="https://raw.githubusercontent.com/nullptrX/assets/master/images/20210322143743.gif"/>
+<img src="https://raw.githubusercontent.com/nullptrX/assets/master/images/20210322143743.gif" width=30%/>
 
 
 
@@ -142,46 +141,8 @@ dependencies:
   # add code end
 ```
 
-- Android版本依赖配置
+- 使用说明
 
-  本项目默认依赖国内版本，如果你需要配置海外版本，以本插件example为例。在项目根目录下`local.properties`文件内配置一个属性，导入依赖方式同国内一样，[查看配置方法](SETUP.md)。
-
-  ```properties
-  # cn表示国内，global表示海外
-  pangle_flutter.env=global
-  ```
-
-  
-
-  ![](https://cdn.jsdelivr.net/gh/nullptrX/assets/images/20210328114750.png)
-
-  海外版本使用方法基本与国内一致，需注意部分配置属性海外并不适用，在调用时填入了不存在的参数也不会有什么影响。
-
-  ```dart
-  
-  pangle.init(
-    iOS: IOSConfig(
-      appId: kAppId,
-      logLevel: PangleLogLevel.error,
-    ),
-    android: AndroidConfig(
-      appId: kAppId,
-      debug: false,
-      allowShowNotify: true,
-      allowShowPageWhenScreenLock: false,
-      /// 海外不存在该配置
-      directDownloadNetworkType: [
-        AndroidDirectDownloadNetworkType.k2G,
-      ]),
-  )
-  
-  ```
-
-  
-
-
-
-## 使用说明
 
 支持开屏广告、激励视频、全屏视频（新模板渲染插屏广告）、模板渲染信息流、模板渲染插屏、模板渲染Banner。（如有自渲染广告位请联系我，或提交Feature request）
 
@@ -231,6 +192,13 @@ await pangle.loadSplashAd(
 
 
 /// 自定义类型
+/// Hybrid Composition支持
+@override
+void initState() {
+  super.initState();
+  SplashView.platform = AndroidSplashView(useHybridComposition: true);
+}
+
 /// 同Widget类用法
 SplashView(
   iOS: IOSSplashConfig(slotId: kSplashId, isExpress: false),
@@ -268,6 +236,13 @@ pangle.loadRewardVideoAd(
 基本覆盖了原生回调事件，现在点击右上角关闭[ x ]按钮，需要开发者手动移除，不再自动移除Item。
 
 ```dart
+/// Hybrid Composition支持
+@override
+void initState() {
+  super.initState();
+  BannerView.platform = AndroidBannerView(useHybridComposition: true);
+}
+
 /// Banner通过PlatformView实现，使用方法同Widget
 /// [kBannerId] Banner广告ID, 对应Android的CodeId，对应iOS的slotID
 BannerView(
@@ -343,6 +318,13 @@ onBannerViewCreated: (BannerViewController controller){
 - 加载数据
 
 ```dart
+/// Hybrid Composition支持
+@override
+void initState() {
+  super.initState();
+  FeedView.platform = AndroidFeedView(useHybridComposition: true);
+}
+
 /// 使用方法
 /// 你的数据模型
 class Item {
@@ -461,12 +443,13 @@ _removeFeedAd() async {
 print(jsonEncode(result));
 ```
 
+### 其他广告
 
+另外已实现全屏视频广告、新模板渲染插屏，使用方式大同小异。
 
 ## 开发说明
 
-1. iOS信息流广告的点击事件需要传入`rootViewController`，使用的是`(UIApplication.shared.delegate?.window??.rootViewController)!`，暂未发现问题。
-4. `BannerView`、`FeedView`通过[`Hybrid Composition`](https://github.com/flutter/flutter/wiki/Hybrid-Composition)实现。在安卓上，`PlatformView`最低支持API 19。
+~~1. iOS信息流广告的点击事件需要传入`rootViewController`，使用的是`(UIApplication.shared.delegate?.window??.rootViewController)!`，暂未发现问题。~~
 
  
 
