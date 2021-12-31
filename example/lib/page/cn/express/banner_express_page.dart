@@ -20,9 +20,11 @@
  * SOFTWARE.
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 
+import '../../common/empty_page.dart';
 import '../../../common/common.dart';
 import '../constant.dart';
 
@@ -47,6 +49,15 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Banner Express AD'),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          Navigator.of(context).push(CupertinoPageRoute(
+            builder: (context) => EmptyPage(),
+          ));
+        },
+        child: Icon(Icons.get_app),
       ),
       body: SingleChildScrollView(
         child: Column(
