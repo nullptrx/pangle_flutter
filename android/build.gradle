@@ -36,7 +36,7 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -62,7 +62,6 @@ android {
 
 dependencies {
     api 'com.pangle.cn:ads-sdk-pro:[4.2,4.3)'
-    // api 'io.github.nullptrx:pangle:3.9.0.5@aar'
     implementation 'androidx.appcompat:appcompat:[1.3,1.4)'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
