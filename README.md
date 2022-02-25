@@ -58,9 +58,9 @@
 
 - 已经内部依赖相关sdk，无需额外导入。如需替换新的sdk，请自行fork本项目更改依赖。
 
-[[Android] 4.0.1.9](https://www.pangle.cn/union/media/union/download/log?id=4)
+[[Android] 4.2+](https://www.pangle.cn/union/media/union/download/log?id=4)
 
-[[iOS] 4.0+](https://www.pangle.cn/union/media/union/download/log?id=16)
+[[iOS] 4.2+](https://www.pangle.cn/union/media/union/download/log?id=16)
 
 
 注：如果出现高版本不兼容问题，可联系我升级适配，或者使用上面指定版本。
