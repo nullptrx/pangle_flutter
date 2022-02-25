@@ -23,7 +23,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 
 import '../../../common/ext.dart';
@@ -45,7 +46,8 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+        overlays: []);
   }
 
   @override
@@ -95,6 +97,7 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                     onError: (code, message) => _handleAdEnd(),
                   ),
                 ),
+                Divider(height: 1),
                 Container(
                   alignment: Alignment.center,
                   color: Colors.white,
@@ -106,10 +109,14 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                       SizedBox(width: 20),
                       Text(
                         'Pangle Flutter',
-                        style: GoogleFonts.zcoolQingKeHuangYou(
+                        style: TextStyle(
                           fontSize: 24,
                           color: Colors.black,
                         ),
+                        // style: GoogleFonts.zcoolQingKeHuangYou(
+                        //   fontSize: 24,
+                        //   color: Colors.black,
+                        // ),
                       ),
                     ],
                   ),
@@ -129,10 +136,6 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
   }
 
   _handleAdEnd() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [
-      SystemUiOverlay.top,
-      SystemUiOverlay.bottom,
-    ]);
     Navigator.of(context).pop();
     if (widget.isRoot) {
       context.navigateTo(HomePage());

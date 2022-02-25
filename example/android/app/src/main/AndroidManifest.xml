@@ -7,13 +7,14 @@
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
     <application
-        android:name="io.flutter.app.FlutterApplication"
+        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:label="Pangle Flutter"
         android:networkSecurityConfig="@xml/pangle_network_config"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
         <activity
+            android:exported="true"
             android:name="io.github.nullptrx.pangleflutterexample.MainActivity"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"

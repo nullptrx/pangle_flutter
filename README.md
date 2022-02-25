@@ -467,7 +467,5 @@ print(jsonEncode(result));
 
 ## 感谢赞助
 
-<a href="https://github.com/BokAugust">
-    <img src="https://avatars.githubusercontent.com/u/11717134" style="width:45px;height:45px;"/>
-</a>
+<a href="https://github.com/BokAugust">BokAugust</a>
 
