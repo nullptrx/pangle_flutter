@@ -256,7 +256,6 @@ class PangleAdManager {
         callback(mapOf("code" to code, "message" to (message ?: "")))
       }
     })
-
     ttAdManager = TTAdSdk.getAdManager()
     ttAdNative = ttAdManager?.createAdNative(activity)
   }

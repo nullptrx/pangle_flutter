@@ -21,6 +21,7 @@
  */
 
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
@@ -137,6 +138,17 @@ class PanglePlugin {
       }
     }
     return null;
+  }
+
+  /// 是否遵循隐私协议的选择框
+  /// 也可自定义设置GDPR，用来标识本次广告是否遵循欧盟通用数据保护条例。
+  /// 0：正常模式；1：夜间模式
+  Future<bool> openGDPRPrivacy() async {
+    if (Platform.isIOS) {
+      bool confirm = await _methodChannel.invokeMethod('openGDPRPrivacy');
+      return confirm;
+    }
+    return false;
   }
 
   /// Register the App key that’s already been applied before requesting an

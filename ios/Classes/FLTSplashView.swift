@@ -71,6 +71,7 @@ extension SplashView: BUSplashAdDelegate {
 }
 
 class SplashView: UIView {
+    private var splashView: BUSplashAdView? = nil
     private var mounted: Bool = false
     private var params: [String: Any?] = [:]
     private var methodChannel: FlutterMethodChannel?
@@ -112,12 +113,10 @@ class SplashView: UIView {
         let slotId: String = params["slotId"] as! String
         let tolerateTimeout: Double? = params["tolerateTimeout"] as? Double
         let hideSkipButton: Bool? = params["hideSkipButton"] as? Bool
-        let splashButtonType = BUSplashButtonType(rawValue: params["splashButtonType"] as? Int ?? BUSplashButtonType.fullScreen.rawValue) ?? .fullScreen
 
         // BUSplashAdView(slotID: slotId, frame: frame)
         let slot = BUAdSlot()
         slot.id = slotId
-        slot.splashButtonType = splashButtonType
         let splashAdView = BUSplashAdView(slot: slot, frame: frame)
         // let splashAdView = BUSplashAdView(slotID: slotId, frame: frame)
         splashAdView.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
@@ -133,5 +132,12 @@ class SplashView: UIView {
 
         addSubview(splashAdView)
         splashAdView.loadAdData()
+        splashView = splashAdView
+    }
+    
+    override func removeFromSuperview() {
+        super.removeFromSuperview()
+        splashView?.removeFromSuperview()
+        splashView = nil
     }
 }

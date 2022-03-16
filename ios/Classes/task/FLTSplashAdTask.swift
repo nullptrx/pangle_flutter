@@ -19,12 +19,10 @@ internal final class FLTSplashAdTask: FLTTaskProtocol {
         let slotId: String = args["slotId"] as! String
         let tolerateTimeout: Double? = args["tolerateTimeout"] as? Double
         let hideSkipButton: Bool? = args["hideSkipButton"] as? Bool
-        let splashButtonType = BUSplashButtonType(rawValue: args["splashButtonType"] as? Int ?? BUSplashButtonType.fullScreen.rawValue) ?? .fullScreen
         let frame = UIScreen.main.bounds
         // BUSplashAdView(slotID: slotId, frame: frame)
         let slot = BUAdSlot.init()
         slot.id = slotId
-        slot.splashButtonType = splashButtonType
         let splashView = BUSplashAdView.init(slot: slot, frame: frame)
         if tolerateTimeout != nil {
             splashView.tolerateTimeout = tolerateTimeout!

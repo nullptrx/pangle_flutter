@@ -1,3 +1,11 @@
+## 1.6.0
+
+- Adapt pangle SDK 4.3+ (Android & iOS)
+- Delete the splashButtonType param in AndroidSplashConfig and IOSSplashConfig
+- Delete the downloadType param in config_android.dart
+- Add gdpr,idfa params (IOSConfig)
+- Add openGDPRPrivacy method (iOS)
+
 ## 1.5.0+1
 
 - Release

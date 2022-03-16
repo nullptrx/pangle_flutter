@@ -82,13 +82,10 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                       ),
                       slotId: kSplashId,
                       tolerateTimeout: 3,
-                      splashButtonType: PangleSplashButtonType.downloadBar,
                     ),
                     android: AndroidSplashConfig(
                       slotId: kSplashId,
                       tolerateTimeout: 3,
-                      splashButtonType: PangleSplashButtonType.downloadBar,
-                      downloadType: PangleDownloadType.popup,
                     ),
                     onLoad: _handleAdStart,
                     onTimeOver: _handleAdEnd,

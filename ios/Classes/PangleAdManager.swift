@@ -39,15 +39,28 @@ public final class PangleAdManager: NSObject {
     public func initialize(_ args: [String: Any?]) {
         let appId: String = args["appId"] as! String
         let logLevel: Int? = args["logLevel"] as? Int
-        let coppa: UInt? = args["coppa"] as? UInt
-
+        let coppa: Int? = args["coppa"] as? Int
+        let gdpr: Int? = args["gdpr"] as? Int
+        let idfa: String? = args["idfa"] as? String
+        
         BUAdSDKManager.setAppID(appId)
 
         if logLevel != nil {
             BUAdSDKManager.setLoglevel(BUAdSDKLogLevel(rawValue: logLevel!)!)
         }
-
-        BUAdSDKManager.setCoppa(((coppa != nil) && (coppa! > 0)) ? 1 : 0)
+        
+        if coppa != nil {
+            BUAdSDKManager.setCoppa(coppa!)
+        }
+        
+        if gdpr != nil {
+            BUAdSDKManager.setGDPR(gdpr!)
+        }
+        
+        if idfa != nil {
+            BUAdSDKManager.setCustomIDFA(idfa)
+        }
+        
     }
 
     public func loadSplashAd(_ args: [String: Any?], result: @escaping FlutterResult) {
@@ -244,6 +257,13 @@ extension PangleAdManager {
             }
 
             return false
+        }
+    }
+    
+    public func openGDPRPrivacy(result: @escaping (Bool) -> Void)  {
+        let vc = AppUtil.getVC()
+        BUAdSDKManager.openGDPRPrivacy(fromRootViewController: vc) { confirm in
+            result(confirm)
         }
     }
 }

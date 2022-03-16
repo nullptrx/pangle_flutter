@@ -76,21 +76,27 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
                 onPressed: requestPermissions,
                 child: Text('Request Permissions'),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: openGDPRPrivacyOnIOS,
+                child: Text('GDPR Privacy For iOS'),
+              ),
+              SizedBox(height: 16),
               ElevatedButton(
                 onPressed: changeTheme,
                 child: Text('Change Theme'),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 16),
               ElevatedButton(
                 onPressed: loadNativeAd,
                 child: Text('Native AD'),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 16),
               ElevatedButton(
                 onPressed: loadExpressAd,
                 child: Text('Express AD'),
               ),
+              SizedBox(height: 90),
             ],
           ),
         ),
@@ -145,6 +151,11 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
 
   void showPrivacyProtectionOnAndroid() async {
     await pangle.showPrivacyProtection();
+  }
+
+  void openGDPRPrivacyOnIOS() async {
+    bool confirm = await pangle.openGDPRPrivacy();
+    print('GDPR Privacy: $confirm');
   }
 
   void loadNativeAd();

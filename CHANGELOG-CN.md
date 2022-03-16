@@ -1,3 +1,11 @@
+## 1.6.0
+
+- 适配穿山甲SDK 4.3+ (Android & iOS)
+- AndroidSplashConfig,IOSSplashConfig移除splashButtonType
+- Android相关Config移除downloadType
+- IOSConfig添加gdpr, idfa参数
+- iOS添加openGDPRPrivacy方法
+
 ## 1.5.0+1
 
 - 正式

@@ -97,6 +97,10 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
             let status: BUAdSDKThemeStatus = BUAdSDKThemeStatus.init(rawValue: value) ?? .normal
             BUAdSDKManager.setThemeStatus(status)
             result(BUAdSDKManager.themeStatus().rawValue)
+        case "openGDPRPrivacy":
+            instance.openGDPRPrivacy { confirm in
+                result(confirm)
+            }
         default:
             result(FlutterMethodNotImplemented)
         }

@@ -1,5 +1,6 @@
 package io.github.nullptrx.pangleflutter.util
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
@@ -46,6 +47,8 @@ object ScreenUtil {
     return height
   }
 
+  @Suppress("DEPRECATION")
+  @SuppressLint("ObsoleteSdkInt")
   fun hideBottomUIMenu(activity: Activity?) {
     if (activity == null) {
       return

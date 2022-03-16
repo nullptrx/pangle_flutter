@@ -43,10 +43,9 @@ class FlutterNativeBannerView(
       val expressArgs: Map<String, Double> = params["size"]?.asMap() ?: mapOf()
       val w: Int = expressArgs.getValue("width").toInt()
       val h: Int = expressArgs.getValue("height").toInt()
-      val downloadType = params["downloadType"] as Int? ?: TTAdConstant.DOWNLOAD_TYPE_NO_POPUP
       val size = TTSize(w, h)
       val adSlot =
-        PangleAdSlotManager.getNativeBannerAdSlot(slotId, size, 1, isSupportDeepLink, downloadType)
+        PangleAdSlotManager.getNativeBannerAdSlot(slotId, size, 1, isSupportDeepLink)
       PangleAdManager.shared.loadBannerAd(adSlot, this)
     }
   }

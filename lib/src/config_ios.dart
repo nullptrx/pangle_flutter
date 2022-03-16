@@ -28,16 +28,20 @@ class IOSConfig implements Config {
   final String appId;
   final PangleLogLevel? logLevel;
   final int? coppa;
+  final int? gdpr;
+  final String? idfa;
 
   /// Register the ad config for iOS
   ///
   /// [appId] the unique identifier of the App
   /// [logLevel] optional. default none
-  /// [coppa] optional. Coppa 0 adult, 1 child
+  /// [coppa] optional. Coppa -1:defalut 0:adult 1:child
   const IOSConfig({
     required this.appId,
     this.logLevel,
     this.coppa,
+    this.gdpr,
+    this.idfa,
   });
 
   /// Convert config to json
@@ -47,6 +51,8 @@ class IOSConfig implements Config {
       'appId': appId,
       'logLevel': logLevel?.index,
       'coppa': coppa,
+      'gdpr': gdpr,
+      'idfa': idfa,
     };
   }
 }
@@ -55,7 +61,6 @@ class IOSSplashConfig implements Config {
   final String slotId;
   final double? tolerateTimeout;
   final bool? hideSkipButton;
-  final PangleSplashButtonType splashButtonType;
   final PangleExpressSize? expressSize;
 
   /// The splash ad config for iOS
@@ -64,13 +69,11 @@ class IOSSplashConfig implements Config {
   /// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
   /// [hideSkipButton] optional. Whether hide skip button, default NO.
   ///    If you hide the skip button, you need to customize the countdown.
-  ///  [splashButtonType] optional, 可点击广告区域，默认全屏
   ///  [expressSize] optional, 配置广告宽高，默认全屏
   const IOSSplashConfig({
     required this.slotId,
     this.tolerateTimeout,
     this.hideSkipButton,
-    this.splashButtonType = PangleSplashButtonType.fullScreen,
     this.expressSize,
   });
 
@@ -81,7 +84,6 @@ class IOSSplashConfig implements Config {
       'slotId': slotId,
       'tolerateTimeout': tolerateTimeout,
       'hideSkipButton': hideSkipButton,
-      'splashButtonType': splashButtonType.index,
       'expressSize': expressSize?.toJson(),
     };
   }

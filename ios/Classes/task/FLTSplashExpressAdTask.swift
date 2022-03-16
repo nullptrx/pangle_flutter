@@ -19,7 +19,6 @@ internal final class FLTSplashExpressAdTask: FLTTaskProtocol {
         let slotId: String = args["slotId"] as! String
         let tolerateTimeout: Double? = args["tolerateTimeout"] as? Double
         let hideSkipButton: Bool? = args["hideSkipButton"] as? Bool
-        let splashButtonType = BUSplashButtonType(rawValue: args["splashButtonType"] as? Int ?? BUSplashButtonType.fullScreen.rawValue) ?? .fullScreen
         
         let expressArgs = args["expressSize"] as! [String: Double]
         let width = expressArgs["width"]!
@@ -29,7 +28,6 @@ internal final class FLTSplashExpressAdTask: FLTTaskProtocol {
         // BUNativeExpressSplashView(slotID: slotId, adSize: adSize, rootViewController: vc)
         let slot = BUAdSlot.init()
         slot.id = slotId
-        slot.splashButtonType = splashButtonType
         let splashView = BUNativeExpressSplashView.init(slot: slot, adSize: adSize, rootViewController: vc)
         if tolerateTimeout != nil {
             splashView.tolerateTimeout = tolerateTimeout!
