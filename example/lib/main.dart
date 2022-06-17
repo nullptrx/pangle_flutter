@@ -25,6 +25,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
+import 'package:pangle_flutter_example/common/version.dart';
 
 import 'common/common.dart';
 import 'page/cn/constant.dart';
@@ -47,7 +48,8 @@ import 'page/cn/native/custom_splash_page.dart';
 ///
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  initPangle();
+  await initPangle();
+  await initVersion();
   runApp(PangleApp());
 }
 

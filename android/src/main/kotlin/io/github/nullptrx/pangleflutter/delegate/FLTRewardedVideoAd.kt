@@ -1,6 +1,7 @@
 package io.github.nullptrx.pangleflutter.delegate
 
 import android.app.Activity
+import android.os.Bundle
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTRewardVideoAd
 import io.github.nullptrx.pangleflutter.PangleAdManager
@@ -14,9 +15,9 @@ internal class FLTRewardedVideoAd(
   val loadingType: PangleLoadingType,
   var result: (Any) -> Unit = {}
 ) : TTAdNative.RewardVideoAdListener {
-  
+
   var ttVideoAd: TTRewardVideoAd? = null
-  
+
   override fun onRewardVideoAdLoad(ad: TTRewardVideoAd?) {
     PangleEventStreamHandler.rewardedVideo("load")
     if (loadingType == PangleLoadingType.preload || loadingType == PangleLoadingType.preload_only) {
@@ -32,21 +33,21 @@ internal class FLTRewardedVideoAd(
       }
     }
   }
-  
+
   @Deprecated("已过时")
   override fun onRewardVideoCached() {
   }
-  
+
   override fun onRewardVideoCached(ad: TTRewardVideoAd?) {
     PangleEventStreamHandler.rewardedVideo("cached")
   }
-  
+
   override fun onError(code: Int, message: String?) {
     PangleEventStreamHandler.rewardedVideo("error")
     invoke(code, message)
-    
+
   }
-  
+
   private fun invoke(code: Int = 0, message: String? = null, verify: Boolean = false) {
     result.apply {
       val args = mutableMapOf<String, Any?>()
@@ -62,15 +63,17 @@ internal class FLTRewardedVideoAd(
     result = {}
     target = null
   }
-  
-  
+
+
 }
 
 internal class RewardAdInteractionImpl(var result: (Any) -> Unit?) :
   TTRewardVideoAd.RewardAdInteractionListener {
+  private var hasCallback = false
   private var verify = false
-  
+
   // 视频广告播完验证奖励有效性回调，参数分别为是否有效，奖励数量，奖励名称
+  @Deprecated("Deprecated in Java")
   override fun onRewardVerify(
     verify: Boolean,
     amount: Int,
@@ -78,37 +81,46 @@ internal class RewardAdInteractionImpl(var result: (Any) -> Unit?) :
     errorCode: Int,
     errorMsg: String
   ) {
+    this.hasCallback = true
     PangleEventStreamHandler.rewardedVideo(if (verify) "reward_verify_success" else "reward_verify_fail")
     this.verify = verify
   }
-  
+
+  override fun onRewardArrived(verify: Boolean, amount: Int, params: Bundle?) {
+    if (hasCallback) {
+      return
+    }
+    PangleEventStreamHandler.rewardedVideo(if (verify) "reward_verify_success" else "reward_verify_fail")
+    this.verify = verify
+  }
+
   override fun onSkippedVideo() {
     PangleEventStreamHandler.rewardedVideo("skip")
   }
-  
+
   override fun onAdShow() {
     PangleEventStreamHandler.rewardedVideo("show")
   }
-  
+
   override fun onAdVideoBarClick() {
     PangleEventStreamHandler.rewardedVideo("click")
   }
-  
+
   override fun onVideoComplete() {
     PangleEventStreamHandler.rewardedVideo("complete")
   }
-  
+
   override fun onAdClose() {
     PangleEventStreamHandler.rewardedVideo("close")
     invoke(verify = verify)
   }
-  
+
   override fun onVideoError() {
     PangleEventStreamHandler.rewardedVideo("render_fail")
     invoke(-1, "error")
   }
-  
-  
+
+
   private fun invoke(code: Int = 0, message: String? = null, verify: Boolean = false) {
     if (result == kBlock) {
       return

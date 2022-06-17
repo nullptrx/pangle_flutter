@@ -19,16 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+import 'dart:io';
 
-const kEnv = '''
+import 'package:device_info_plus/device_info_plus.dart';
+
+final kEnv = '''
 Android Studio Arctic Fox
 Xcode 12.5.1
 
-Flutter 2.2.3
-Dart 2.13.4
+Flutter 3.0.2
+Dart 2.17.3
 Kotlin 1.5.30
 Swift 5.4.2
 ''';
 const kDependencies = '''
-Pangle SDK V%s≥
+Pangle SDK %s
 ''';
+
+late var kAndroidAbove10;
+
+Future<void> initVersion() async {
+  if (Platform.isAndroid) {
+    DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    var info = await deviceInfoPlugin.androidInfo;
+    kAndroidAbove10 = (info.version.sdkInt ?? 0) >= 29;
+  }
+}

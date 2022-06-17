@@ -30,6 +30,7 @@ import 'bannerview_method_channel.dart';
 import 'platform_interface.dart';
 
 class AndroidBannerView implements BannerViewPlatform {
+  ///
   final bool useHybridComposition;
 
   AndroidBannerView({

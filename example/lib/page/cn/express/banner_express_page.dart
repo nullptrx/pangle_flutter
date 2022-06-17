@@ -20,12 +20,15 @@
  * SOFTWARE.
  */
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
+import 'package:pangle_flutter_example/common/version.dart';
 
-import '../../common/empty_page.dart';
 import '../../../common/common.dart';
+import '../../common/empty_page.dart';
 import '../constant.dart';
 
 class BannerExpressPage extends StatefulWidget {
@@ -41,7 +44,11 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
   @override
   void initState() {
     super.initState();
-    BannerView.platform = AndroidBannerView(useHybridComposition: true);
+    if (Platform.isAndroid) {
+      BannerView.platform = AndroidBannerView(
+        useHybridComposition: kAndroidAbove10,
+      );
+    }
     initBanner();
   }
 
