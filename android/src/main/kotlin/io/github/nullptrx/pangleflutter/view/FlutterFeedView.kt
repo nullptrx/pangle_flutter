@@ -2,6 +2,8 @@ package io.github.nullptrx.pangleflutter.view
 
 import android.app.Activity
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -17,13 +19,15 @@ import io.github.nullptrx.pangleflutter.PangleAdManager
 
 
 class FlutterFeedView(
-    val activity: Activity,
-    messenger: BinaryMessenger,
-    val id: Int,
-    params: Map<String, Any?>
-) : PlatformView, MethodChannel.MethodCallHandler, TTNativeExpressAd.ExpressAdInteractionListener, DislikeInteractionCallback {
+  val activity: Activity,
+  messenger: BinaryMessenger,
+  val id: Int,
+  params: Map<String, Any?>
+) : PlatformView, MethodChannel.MethodCallHandler, TTNativeExpressAd.ExpressAdInteractionListener,
+  DislikeInteractionCallback {
 
-  private val methodChannel: MethodChannel = MethodChannel(messenger, "nullptrx.github.io/pangle_feedview_$id")
+  private val methodChannel: MethodChannel =
+    MethodChannel(messenger, "nullptrx.github.io/pangle_feedview_$id")
   private val container: FrameLayout
   private var ttadId: String = ""
 
@@ -93,6 +97,8 @@ class FlutterFeedView(
   }
 
   private fun postMessage(method: String, arguments: Map<String, Any?> = mapOf()) {
-    methodChannel.invokeMethod(method, arguments)
+    Handler(Looper.getMainLooper()).post {
+      methodChannel.invokeMethod(method, arguments)
+    }
   }
 }

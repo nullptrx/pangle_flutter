@@ -1,6 +1,8 @@
 package io.github.nullptrx.pangleflutter.view
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -113,7 +115,9 @@ class FlutterSplashView(
   }
 
   private fun postMessage(method: String, arguments: Map<String, Any?> = mapOf()) {
-    methodChannel.invokeMethod(method, arguments)
+    Handler(Looper.getMainLooper()).post {
+      methodChannel.invokeMethod(method, arguments)
+    }
   }
 }
 

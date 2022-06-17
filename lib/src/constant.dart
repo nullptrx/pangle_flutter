@@ -94,4 +94,3 @@ enum PangleTheme {
   light,
   dark,
 }
-
