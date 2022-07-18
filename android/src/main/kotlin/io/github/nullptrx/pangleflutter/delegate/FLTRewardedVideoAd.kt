@@ -83,6 +83,19 @@ internal class RewardAdInteractionImpl(var result: (Any) -> Unit?) :
         this.verify = verify
     }
 
+    /**
+     * 激励视频播放完毕，验证是否有效发放奖励的回调 4400版本新增
+     *
+     * @param isRewardValid 奖励有效
+     * @param rewardType 奖励类型，0:基础奖励 >0:进阶奖励
+     * @param extraInfo 奖励的额外参数
+     */
+    override fun onRewardArrived(isRewardValid: Boolean, rewardType: Int, extraInfo: Bundle?) {
+        PangleEventStreamHandler.rewardedVideo(if (isRewardValid) "reward_verify_success" else "reward_verify_fail")
+        this.verify = isRewardValid
+    }
+
+
     override fun onSkippedVideo() {
         PangleEventStreamHandler.rewardedVideo("skip")
     }
