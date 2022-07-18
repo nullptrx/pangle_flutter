@@ -9,9 +9,9 @@ import io.github.nullptrx.pangleflutter.util.asMap
 
 class SplashViewFactory(val messenger: BinaryMessenger) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 
-  override fun create(context: Context, id: Int, args: Any?): PlatformView? {
+  override fun create(context: Context?, id: Int, args: Any?): PlatformView {
     val params = args?.asMap<String, Any?>() ?: mutableMapOf()
-    return FlutterSplashView(context, messenger, id, params)
+    return FlutterSplashView(context!!, messenger, id, params)
   }
 
 }

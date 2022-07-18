@@ -51,11 +51,11 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
         
         bannerViewFactory = BannerViewFactory(messenger)
         registrar.platformViewRegistry().registerViewFactory(
-          "nullptrx.github.io/pangle_bannerview", bannerViewFactory
+          "nullptrx.github.io/pangle_bannerview", bannerViewFactory!!
         )
         feedViewFactory = FeedViewFactory(messenger)
         registrar.platformViewRegistry().registerViewFactory(
-          "nullptrx.github.io/pangle_feedview", feedViewFactory
+          "nullptrx.github.io/pangle_feedview", feedViewFactory!!
         )
         
         val splashViewFactory = SplashViewFactory(messenger)
@@ -67,10 +67,9 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
         registrar.platformViewRegistry().registerViewFactory(
           "nullptrx.github.io/pangle_nativebannerview", nativeBannerViewFactory
         )
-        
-        feedViewFactory?.attachActivity(activity)
-        bannerViewFactory?.attachActivity(activity)
-        
+
+          feedViewFactory?.attachActivity(activity!!)
+          bannerViewFactory?.attachActivity(activity!!)
       }
     }
   }
@@ -119,11 +118,11 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
     
     bannerViewFactory = BannerViewFactory(binding.binaryMessenger)
     binding.platformViewRegistry.registerViewFactory(
-      "nullptrx.github.io/pangle_bannerview", bannerViewFactory
+      "nullptrx.github.io/pangle_bannerview", bannerViewFactory!!
     )
     feedViewFactory = FeedViewFactory(binding.binaryMessenger)
     binding.platformViewRegistry.registerViewFactory(
-      "nullptrx.github.io/pangle_feedview", feedViewFactory
+      "nullptrx.github.io/pangle_feedview", feedViewFactory!!
     )
     
     val splashViewFactory = SplashViewFactory(binding.binaryMessenger)
@@ -240,7 +239,7 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
       "removeFeedAd" -> {
         val feedIds = call.arguments<List<String>>()
         var count = 0
-        for (feedId in feedIds) {
+        for (feedId in feedIds!!) {
           val success = PangleAdManager.shared.removeExpressAd(feedId)
           if (success) {
             count++
@@ -289,7 +288,7 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
         
       }
       "setThemeStatus" -> {
-        var theme: Int = call.arguments()
+        var theme: Int = call.arguments()!!
         pangle.setThemeStatus(theme)
         theme = pangle.getThemeStatus()
         result.success(theme)

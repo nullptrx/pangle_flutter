@@ -13,10 +13,10 @@ class BannerViewFactory(val messenger: BinaryMessenger) : PlatformViewFactory(St
 
   private var activity: WeakReference<Activity>? = null
 
-  override fun create(context: Context, id: Int, args: Any?): PlatformView? {
+  override fun create(context: Context?, id: Int, args: Any?): PlatformView {
     val params: Map<String, Any?> = args?.asMap() ?: mutableMapOf()
-    val act = activity?.get() ?: return null
-    return FlutterBannerView(act, messenger, id, params)
+    val act = activity?.get()
+    return FlutterBannerView(act!!, messenger, id, params)
   }
 
 

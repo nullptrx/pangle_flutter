@@ -9,8 +9,8 @@ import io.github.nullptrx.pangleflutter.util.asMap
 
 class NativeBannerViewFactory(val messenger: BinaryMessenger) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 
-  override fun create(context: Context, id: Int, args: Any?): PlatformView {
+  override fun create(context: Context?, id: Int, args: Any?): PlatformView {
     val params: Map<String, Any?> = args?.asMap() ?: mutableMapOf()
-    return FlutterNativeBannerView(context, messenger, id, params)
+    return FlutterNativeBannerView(context!!, messenger, id, params)
   }
 }

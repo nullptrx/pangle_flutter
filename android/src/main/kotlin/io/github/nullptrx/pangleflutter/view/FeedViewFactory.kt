@@ -13,10 +13,10 @@ class FeedViewFactory(val messenger: BinaryMessenger) : PlatformViewFactory(Stan
 
   private var activity: WeakReference<Activity>? = null
 
-  override fun create(context: Context, id: Int, args: Any?): PlatformView? {
+  override fun create(context: Context?, id: Int, args: Any?): PlatformView {
     val params = args?.asMap<String, Any?>() ?: mutableMapOf()
-    val act = activity?.get() ?: return null
-    return FlutterFeedView(act, messenger, id, params)
+    val act = activity?.get()
+    return FlutterFeedView(act!!, messenger, id, params)
   }
 
   fun attachActivity(activity: Activity) {
