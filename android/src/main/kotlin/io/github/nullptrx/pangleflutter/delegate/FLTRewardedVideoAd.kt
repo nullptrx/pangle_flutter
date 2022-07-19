@@ -79,8 +79,7 @@ internal class RewardAdInteractionImpl(var result: (Any) -> Unit?) :
         errorCode: Int,
         errorMsg: String
     ) {
-        PangleEventStreamHandler.rewardedVideo(if (verify) "reward_verify_success" else "reward_verify_fail")
-        this.verify = verify
+        // 即将废弃。移除相关实现。
     }
 
     /**
