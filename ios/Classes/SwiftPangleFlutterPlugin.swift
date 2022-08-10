@@ -44,6 +44,8 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         let instance = PangleAdManager.shared
 
         switch call.method {
+        case "getDeviceInfo":
+            result(["systemVersion": UIDevice.current.systemVersion])
         case "getSdkVersion":
             result(BUAdSDKManager.sdkVersion)
         case "init":
