@@ -1,3 +1,9 @@
+## 1.7.0
+
+- 适配穿山甲SDK 4.6+ (Android & iOS)
+- 适配flutter 3.0.0
+- 新增getDeviceInfo方法
+
 ## 1.6.0
 
 - 适配穿山甲SDK 4.3+ (Android & iOS)

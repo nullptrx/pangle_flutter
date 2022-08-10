@@ -1,3 +1,9 @@
+## 1.7.0
+
+- Adapt pangle SDK 4.6+ (Android & iOS)
+- Adapt flutter 3.0.0
+- Add getDeviceInfo method
+
 ## 1.6.0
 
 - Adapt pangle SDK 4.3+ (Android & iOS)
