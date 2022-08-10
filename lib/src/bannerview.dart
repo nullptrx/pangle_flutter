@@ -36,7 +36,8 @@ import 'util.dart';
 
 /// Optional callback invoked when a web view is first created. [controller] is
 /// the [BannerViewController] for the created banner view.
-typedef void BannerViewCreatedCallback(BannerViewController controller);
+typedef BannerViewCreatedCallback = void Function(
+    BannerViewController controller);
 
 class BannerView extends StatefulWidget {
   const BannerView({

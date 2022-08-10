@@ -20,11 +20,8 @@
  * SOFTWARE.
  */
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-// import 'package:google_fonts/google_fonts.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 
 import '../../../common/ext.dart';
@@ -64,7 +61,7 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
     return Scaffold(
       body: Stack(
         children: [
-          Center(
+          const Center(
             child: FlutterLogo(
               size: 50,
             ),
@@ -83,7 +80,7 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                       slotId: kSplashId,
                       tolerateTimeout: 3,
                     ),
-                    android: AndroidSplashConfig(
+                    android: const AndroidSplashConfig(
                       slotId: kSplashId,
                       tolerateTimeout: 3,
                     ),
@@ -94,14 +91,14 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                     onError: (code, message) => _handleAdEnd(),
                   ),
                 ),
-                Divider(height: 1),
+                const Divider(height: 1),
                 Container(
                   alignment: Alignment.center,
                   color: Colors.white,
                   height: 100,
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: [
+                    children: const [
                       FlutterLogo(size: 60),
                       SizedBox(width: 20),
                       Text(

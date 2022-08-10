@@ -26,8 +26,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import 'splashview_method_channel.dart';
 import 'platform_interface.dart';
+import 'splashview_method_channel.dart';
 
 class AndroidSplashView implements SplashViewPlatform {
   final bool useHybridComposition;

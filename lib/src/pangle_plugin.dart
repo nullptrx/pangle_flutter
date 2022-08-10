@@ -21,10 +21,10 @@
  */
 
 import 'dart:async';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
+import 'package:pangle_flutter/src/build.dart';
 
 import 'config_android.dart';
 import 'config_ios.dart';
@@ -34,14 +34,14 @@ import 'pangle_event_type.dart';
 
 final pangle = PanglePlugin._();
 
-typedef void PangleEventCallback(String event);
+typedef PangleEventCallback = void Function(String event);
 
 /// Pangle Ad Plugin
 class PanglePlugin {
-  static const MethodChannel _methodChannel = const MethodChannel(
+  static const MethodChannel _methodChannel = MethodChannel(
     'nullptrx.github.io/pangle',
   );
-  static const EventChannel _eventChannel = const EventChannel(
+  static const EventChannel _eventChannel = EventChannel(
     'nullptrx.github.io/pangle_event',
   );
 
@@ -50,6 +50,22 @@ class PanglePlugin {
   }
 
   _handleMethod(MethodCall call) {}
+
+  /// 获取AndroidSDKVersion
+  Future<AndroidDeviceInfo> getAndroidDeviceInfo() async {
+    Map<String, dynamic>? deviceInfo =
+        await _methodChannel.invokeMapMethod('getDeviceInfo');
+
+    return AndroidDeviceInfo.fromMap(deviceInfo!);
+  }
+
+  /// 获取SDK版本号
+  Future<IOSDeviceInfo> getIOSDeviceInfo() async {
+    Map<String, dynamic>? deviceInfo =
+        await _methodChannel.invokeMapMethod('getDeviceInfo');
+
+    return IOSDeviceInfo.fromMap(deviceInfo!);
+  }
 
   /// 获取SDK版本号
   Future<String?> getSdkVersion() async {
@@ -91,7 +107,7 @@ class PanglePlugin {
   /// ```
   /// [Permission.location, Permission.phone, Permission.storage].request();
   /// ```
-  Future<Null> requestPermissionIfNecessary() async {
+  Future<void> requestPermissionIfNecessary() async {
     if (Platform.isAndroid) {
       await _methodChannel.invokeMethod('requestPermissionIfNecessary');
     }
@@ -99,7 +115,7 @@ class PanglePlugin {
 
   /// 显示隐私保护协议弹窗（仅海外）
   /// ```
-  Future<Null> showPrivacyProtection() async {
+  Future<void> showPrivacyProtection() async {
     if (Platform.isAndroid) {
       await _methodChannel.invokeMethod('showPrivacyProtection');
     }
@@ -204,7 +220,7 @@ class PanglePlugin {
     PangleEventCallback? callback,
   }) async {
     final subscription = _eventChannel
-        .receiveBroadcastStream(PangleEventType.rewarded_video.index)
+        .receiveBroadcastStream(PangleEventType.rewardedVideo.index)
         .listen((event) {
       callback?.call(event);
     });

@@ -20,7 +20,6 @@
  * SOFTWARE.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/ext.dart';
@@ -28,14 +27,16 @@ import 'native/custom_splash_page.dart';
 import 'native/splash_page.dart';
 
 class NativePage extends StatefulWidget {
+  const NativePage({Key? key}) : super(key: key);
+
   @override
   _NativePageState createState() => _NativePageState();
 }
 
 class _NativePageState extends State<NativePage> {
   final pages = {
-    'Custom Splash AD': CustomSplashPage(isRoot: false),
-    'Splash AD': SplashPage(),
+    'Custom Splash AD': const CustomSplashPage(isRoot: false),
+    'Splash AD': const SplashPage(),
   };
 
   @override
@@ -45,16 +46,16 @@ class _NativePageState extends State<NativePage> {
         title: const Text('Express Examples'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: ListView.separated(
-          separatorBuilder: (context, index) => Divider(),
+          separatorBuilder: (context, index) => const Divider(),
           itemCount: pages.length,
           itemBuilder: (context, index) {
             var titles = pages.keys.toList();
             final title = titles[index];
             return ListTile(
               title: Text(title),
-              trailing: Icon(Icons.navigate_next),
+              trailing: const Icon(Icons.navigate_next),
               onTap: () => _onTapItem(title),
             );
           },

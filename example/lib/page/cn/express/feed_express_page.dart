@@ -27,12 +27,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 
+import '../../../common/common.dart';
 import '../../../widget/loading.dart';
 import '../../common/empty_page.dart';
 import '../constant.dart';
-import '../../../common/common.dart';
 
 class FeedExpressPage extends StatefulWidget {
+  const FeedExpressPage({Key? key}) : super(key: key);
+
   @override
   _FeedExpressPageState createState() => _FeedExpressPageState();
 }
@@ -56,7 +58,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
 
   final _bodyKey = GlobalKey();
   final _otherKey = GlobalKey();
-  var _bgColor =
+  final _bgColor =
       kThemeStatus == PangleTheme.light ? Colors.white : Colors.black;
 
   Completer<BannerViewController> controller = Completer();
@@ -77,7 +79,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Feed Express AD'),
+        title: const Text('Feed Express AD'),
       ),
       bottomNavigationBar: BottomNavigationBar(
           onTap: (value) {
@@ -85,7 +87,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
               builder: (context) => EmptyPage(),
             ));
           },
-          items: [
+          items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.favorite),
               label: 'Like',
@@ -115,7 +117,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
           // await _loadFeedAd(isRefresh: false);
           _showFeedDialog();
         },
-        child: Icon(Icons.get_app),
+        child: const Icon(Icons.get_app),
       ),
     );
   }
@@ -189,11 +191,11 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
     }
     setState(() {
       if (isRefresh) {
-        this.items
+        items
           ..clear()
           ..addAll(data);
       } else {
-        this.items.addAll(data);
+        items.addAll(data);
       }
     });
   }
@@ -202,7 +204,7 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
   _removeFeedAd() async {
     int? count = await pangle.removeFeedAd(feedIds);
     await pangle.removeFeedAd(feedDialogIds);
-    print('Feed Ad Removed: $count');
+    debugPrint('Feed Ad Removed: $count');
   }
 
   _initConstraintBounds(FeedViewController controller) {

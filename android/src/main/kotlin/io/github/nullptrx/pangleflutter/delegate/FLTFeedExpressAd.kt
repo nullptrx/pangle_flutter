@@ -7,7 +7,8 @@ import io.github.nullptrx.pangleflutter.common.TTSizeF
 import io.github.nullptrx.pangleflutter.common.kBlock
 import kotlin.collections.set
 
-class FLTFeedExpressAd(val size: TTSizeF, var result: (Any) -> Unit = {}) : TTAdNative.NativeExpressAdListener {
+class FLTFeedExpressAd(val size: TTSizeF, var result: (Any) -> Unit = {}) :
+  TTAdNative.NativeExpressAdListener {
 
   override fun onError(code: Int, message: String) {
     invoke(code, message)
@@ -22,7 +23,12 @@ class FLTFeedExpressAd(val size: TTSizeF, var result: (Any) -> Unit = {}) : TTAd
     invoke(0, count = ttNativeExpressAds.size, data = data)
   }
 
-  private fun invoke(code: Int = 0, message: String? = null, count: Int = 0, data: List<String>? = null) {
+  private fun invoke(
+    code: Int = 0,
+    message: String? = null,
+    count: Int = 0,
+    data: List<String>? = null
+  ) {
     if (result == kBlock) {
       return
     }

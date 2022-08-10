@@ -20,7 +20,6 @@
  * SOFTWARE.
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/ext.dart';
@@ -31,6 +30,8 @@ import 'express/interstitial_express_page.dart';
 import 'express/rewarded_video_express_page.dart';
 
 class ExpressPage extends StatefulWidget {
+  const ExpressPage({Key? key}) : super(key: key);
+
   @override
   _ExpressPageState createState() => _ExpressPageState();
 }
@@ -38,10 +39,10 @@ class ExpressPage extends StatefulWidget {
 class _ExpressPageState extends State<ExpressPage> {
   final pages = {
     'Rewarded Video Express AD': RewardedVideoExpressPage(),
-    'Banner Express AD': BannerExpressPage(),
-    'Feed Express AD': FeedExpressPage(),
-    'Interstitial Express AD': InterstitialExpressPage(),
-    'FullScreenVideo Express AD': FullscreenVideoExpressPage(),
+    'Banner Express AD': const BannerExpressPage(),
+    'Feed Express AD': const FeedExpressPage(),
+    'Interstitial Express AD': const InterstitialExpressPage(),
+    'FullScreenVideo Express AD': const FullscreenVideoExpressPage(),
   };
 
   @override
@@ -51,16 +52,16 @@ class _ExpressPageState extends State<ExpressPage> {
         title: const Text('Express Examples'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: ListView.separated(
-          separatorBuilder: (context, index) => Divider(),
+          separatorBuilder: (context, index) => const Divider(),
           itemCount: pages.length,
           itemBuilder: (context, index) {
             var titles = pages.keys.toList();
             final title = titles[index];
             return ListTile(
               title: Text(title),
-              trailing: Icon(Icons.navigate_next),
+              trailing: const Icon(Icons.navigate_next),
               onTap: () => _onTapItem(title),
             );
           },

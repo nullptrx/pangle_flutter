@@ -21,7 +21,12 @@ class FLTBannerExpressAd(var result: (Any) -> Unit) : TTAdNative.NativeExpressAd
   }
 
 
-  private fun invoke(code: Int = 0, message: String? = null, count: Int = 0, data: List<String>? = null) {
+  private fun invoke(
+    code: Int = 0,
+    message: String? = null,
+    count: Int = 0,
+    data: List<String>? = null
+  ) {
     if (result == kBlock) {
       return
     }

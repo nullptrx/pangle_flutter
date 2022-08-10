@@ -33,7 +33,7 @@ import 'util.dart';
 
 /// Optional callback invoked when a web view is first created. [controller] is
 /// the [FeedViewController] for the created feed view.
-typedef void FeedViewCreatedCallback(FeedViewController controller);
+typedef FeedViewCreatedCallback = void Function(FeedViewController controller);
 
 class FeedView extends StatefulWidget {
   const FeedView({

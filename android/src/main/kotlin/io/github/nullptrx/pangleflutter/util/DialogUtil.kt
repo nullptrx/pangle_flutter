@@ -23,14 +23,19 @@ object DialogUtil {
       window?.apply {
         setWindowAnimations(R.style.PangleFlutterAnimNoAnim)
         setBackgroundDrawable(ColorDrawable(Color.BLACK))
-//        addFlags(FLAG_LAYOUT_NO_LIMITS or FLAG_FULLSCREEN or FLAG_LAYOUT_IN_SCREEN)
+        //        addFlags(FLAG_LAYOUT_NO_LIMITS or FLAG_FULLSCREEN or FLAG_LAYOUT_IN_SCREEN)
 
-        decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        decorView.systemUiVisibility =
+          View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        setFlags(
+          WindowManager.LayoutParams.FLAG_FULLSCREEN,
+          WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
         // 设置页面全屏显示
         val lp = attributes
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-          lp.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+          lp.layoutInDisplayCutoutMode =
+            WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
         // 设置页面延伸到刘海区显示
         attributes = lp

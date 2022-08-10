@@ -24,7 +24,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
-final kBannerViewType = 'nullptrx.github.io/pangle_bannerview';
+const kBannerViewType = 'nullptrx.github.io/pangle_bannerview';
 
 abstract class BannerViewPlatform {
   Widget build({

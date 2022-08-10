@@ -211,7 +211,7 @@ class PangleAdManager {
         paid(it)
       }
 
-//      httpStack(OKHttpStack())
+      //      httpStack(OKHttpStack())
 
       customController(object : TTCustomController() {
         override fun isCanUseLocation(): Boolean {

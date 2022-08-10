@@ -28,6 +28,8 @@ import 'package:pangle_flutter/pangle_flutter.dart';
 import '../constant.dart';
 
 class RewardedVideoExpressPage extends StatefulWidget {
+  const RewardedVideoExpressPage({Key? key}) : super(key: key);
+
   @override
   _RewardedVideoExpressPageState createState() =>
       _RewardedVideoExpressPageState();
@@ -40,50 +42,48 @@ class _RewardedVideoExpressPageState extends State<RewardedVideoExpressPage> {
       appBar: AppBar(
         title: const Text('Rewarded Video Express AD'),
       ),
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Center(
-              child: ElevatedButton(
-                onPressed: _onTapLoad,
-                child: Text('Load'),
-              ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Center(
+            child: ElevatedButton(
+              onPressed: _onTapLoad,
+              child: const Text('Load'),
             ),
-            Center(
-              child: ElevatedButton(
-                onPressed: _onTapShow,
-                child: Text('Show ad'),
-              ),
+          ),
+          Center(
+            child: ElevatedButton(
+              onPressed: _onTapShow,
+              child: const Text('Show ad'),
             ),
-            Center(
-              child: ElevatedButton(
-                onPressed: _onTapShowAndLoad,
-                child: Text('Show ad and preload'),
-              ),
+          ),
+          Center(
+            child: ElevatedButton(
+              onPressed: _onTapShowAndLoad,
+              child: const Text('Show ad and preload'),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   _onTapLoad() async {
     final result = await pangle.loadRewardedVideoAd(
-      iOS: IOSRewardedVideoConfig(
+      iOS: const IOSRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
-        loadingType: PangleLoadingType.preload_only,
+        loadingType: PangleLoadingType.preloadOnly,
       ),
-      android: AndroidRewardedVideoConfig(
+      android: const AndroidRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
-        loadingType: PangleLoadingType.preload_only,
+        loadingType: PangleLoadingType.preloadOnly,
       ),
       callback: (event) {
-        print('rewarded_video: $event');
+        debugPrint('rewarded_video: $event');
       },
     );
     var data = jsonEncode(result);
-    print(data);
+    debugPrint(data);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(data)),
     );
@@ -91,20 +91,20 @@ class _RewardedVideoExpressPageState extends State<RewardedVideoExpressPage> {
 
   _onTapShow() async {
     final result = await pangle.loadRewardedVideoAd(
-      iOS: IOSRewardedVideoConfig(
+      iOS: const IOSRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         loadingType: PangleLoadingType.normal,
       ),
-      android: AndroidRewardedVideoConfig(
+      android: const AndroidRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         loadingType: PangleLoadingType.normal,
       ),
       callback: (event) {
-        print('rewarded_video: $event');
+        debugPrint('rewarded_video: $event');
       },
     );
     var data = jsonEncode(result);
-    print(data);
+    debugPrint(data);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(data)),
     );
@@ -112,20 +112,20 @@ class _RewardedVideoExpressPageState extends State<RewardedVideoExpressPage> {
 
   _onTapShowAndLoad() async {
     final result = await pangle.loadRewardedVideoAd(
-      iOS: IOSRewardedVideoConfig(
+      iOS: const IOSRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         loadingType: PangleLoadingType.preload,
       ),
-      android: AndroidRewardedVideoConfig(
+      android: const AndroidRewardedVideoConfig(
         slotId: kRewardedVideoExpressId,
         loadingType: PangleLoadingType.preload,
       ),
       callback: (event) {
-        print('rewarded_video: $event');
+        debugPrint('rewarded_video: $event');
       },
     );
     var data = jsonEncode(result);
-    print(data);
+    debugPrint(data);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(data)),
     );

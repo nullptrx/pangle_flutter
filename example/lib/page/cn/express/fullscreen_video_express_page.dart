@@ -28,6 +28,8 @@ import 'package:pangle_flutter/pangle_flutter.dart';
 import '../constant.dart';
 
 class FullscreenVideoExpressPage extends StatefulWidget {
+  const FullscreenVideoExpressPage({Key? key}) : super(key: key);
+
   @override
   _FullscreenVideoExpressPageState createState() =>
       _FullscreenVideoExpressPageState();
@@ -43,50 +45,48 @@ class _FullscreenVideoExpressPageState
       appBar: AppBar(
         title: const Text('Fullscreen Video AD'),
       ),
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Center(
-              child: ElevatedButton(
-                onPressed: _onTapLoad,
-                child: Text('Load'),
-              ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Center(
+            child: ElevatedButton(
+              onPressed: _onTapLoad,
+              child: const Text('Load'),
             ),
-            Center(
-              child: ElevatedButton(
-                onPressed: _loaded ? _onTapShow : null,
-                child: Text('Show Ad'),
-              ),
+          ),
+          Center(
+            child: ElevatedButton(
+              onPressed: _loaded ? _onTapShow : null,
+              child: const Text('Show Ad'),
             ),
-            Center(
-              child: ElevatedButton(
-                onPressed: _onTapShowFullscreen,
-                child: Text('Show Fullscreen Ad'),
-              ),
+          ),
+          Center(
+            child: ElevatedButton(
+              onPressed: _onTapShowFullscreen,
+              child: const Text('Show Fullscreen Ad'),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   _onTapLoad() async {
     final result = await pangle.loadFullscreenVideoAd(
-      iOS: IOSFullscreenVideoConfig(
+      iOS: const IOSFullscreenVideoConfig(
         slotId: kFullscreenVideoExpressId,
-        loadingType: PangleLoadingType.preload_only,
+        loadingType: PangleLoadingType.preloadOnly,
       ),
-      android: AndroidFullscreenVideoConfig(
+      android: const AndroidFullscreenVideoConfig(
         slotId: kFullscreenVideoExpressId,
-        loadingType: PangleLoadingType.preload_only,
+        loadingType: PangleLoadingType.preloadOnly,
       ),
       callback: (event) {
-        print('fullscreen: $event');
+        debugPrint('fullscreen: $event');
       },
     );
     var data = jsonEncode(result);
-    print(data);
+    debugPrint(data);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(data)),
     );
@@ -97,20 +97,20 @@ class _FullscreenVideoExpressPageState
 
   _onTapShow() async {
     final result = await pangle.loadFullscreenVideoAd(
-      iOS: IOSFullscreenVideoConfig(
+      iOS: const IOSFullscreenVideoConfig(
         slotId: kFullscreenVideoExpressId,
         loadingType: PangleLoadingType.normal,
       ),
-      android: AndroidFullscreenVideoConfig(
+      android: const AndroidFullscreenVideoConfig(
         slotId: kFullscreenVideoExpressId,
         loadingType: PangleLoadingType.normal,
       ),
       callback: (event) {
-        print('fullscreen: $event');
+        debugPrint('fullscreen: $event');
       },
     );
     var data = jsonEncode(result);
-    print(data);
+    debugPrint(data);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(data)),
     );
@@ -121,18 +121,18 @@ class _FullscreenVideoExpressPageState
 
   _onTapShowFullscreen() async {
     final result = await pangle.loadFullscreenVideoAd(
-      iOS: IOSFullscreenVideoConfig(
+      iOS: const IOSFullscreenVideoConfig(
         slotId: kFullscreenIdFull,
       ),
-      android: AndroidFullscreenVideoConfig(
+      android: const AndroidFullscreenVideoConfig(
         slotId: kFullscreenIdFull,
       ),
       callback: (event) {
-        print('fullscreen: $event');
+        debugPrint('fullscreen: $event');
       },
     );
     var data = jsonEncode(result);
-    print(data);
+    debugPrint(data);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(data)),
     );

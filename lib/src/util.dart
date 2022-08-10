@@ -22,9 +22,9 @@
 
 import 'package:flutter/widgets.dart';
 
-typedef PangleMessageCallback(int code, String message);
+typedef PangleMessageCallback = Function(int code, String message);
 
-typedef PangleOptionCallback(String message, bool enforce);
+typedef PangleOptionCallback = Function(String message, bool enforce);
 
 class PangleHelper {
   PangleHelper._();

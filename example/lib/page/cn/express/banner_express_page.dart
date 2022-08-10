@@ -32,12 +32,14 @@ import '../../common/empty_page.dart';
 import '../constant.dart';
 
 class BannerExpressPage extends StatefulWidget {
+  const BannerExpressPage({Key? key}) : super(key: key);
+
   @override
   _BannerExpressPageState createState() => _BannerExpressPageState();
 }
 
 class _BannerExpressPageState extends State<BannerExpressPage> {
-  var _bgColor =
+  final _bgColor =
       kThemeStatus == PangleTheme.light ? Colors.white : Colors.black;
   final rows = <Widget>[];
 
@@ -46,7 +48,7 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
     super.initState();
     if (Platform.isAndroid) {
       BannerView.platform = AndroidBannerView(
-        useHybridComposition: kAndroidAbove10,
+        useHybridComposition: isAndroidAbove10,
       );
     }
     initBanner();
@@ -56,21 +58,23 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Banner Express AD'),
+        title: const Text('Banner Express AD'),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           Navigator.of(context).push(CupertinoPageRoute(
-            builder: (context) => EmptyPage(),
+            builder: (context) => const EmptyPage(),
           ));
         },
-        child: Icon(Icons.get_app),
+        child: const Icon(Icons.get_app),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          children: rows,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: rows,
+          ),
         ),
       ),
     );
@@ -80,7 +84,7 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
     rows.clear();
     rows.addAll(<Widget>[
       AspectRatio(
-        key: BannerExpressKey(1),
+        key: const BannerExpressKey(1),
         aspectRatio: 600 / 260.0,
         child: Container(
           color: _bgColor,
@@ -103,7 +107,7 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
         ),
       ),
       Container(
-        key: BannerExpressKey(2),
+        key: const BannerExpressKey(2),
         color: _bgColor,
         height: kPangleScreenWidth * 260 / 600,
         child: BannerView(
@@ -126,16 +130,23 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
                   (element) => (element.key as BannerExpressKey?)?.value == 2);
             });
           },
+          onError: (code, message) {
+            debugPrint('BannerView: $code, $message');
+          },
           onClick: () {},
         ),
       ),
-      SizedBox(height: 1080),
-      Center(child: Text('--- 这是底线 ---')),
-      SizedBox(height: 16),
+      const SizedBox(height: 1080),
+      const Center(
+          child: Text(
+        '--- 这是底线 ---',
+        style: TextStyle(color: Colors.black),
+      )),
+      const SizedBox(height: 16),
     ]);
   }
 }
 
 class BannerExpressKey extends GlobalObjectKey {
-  BannerExpressKey(Object value) : super(value);
+  const BannerExpressKey(Object value) : super(value);
 }

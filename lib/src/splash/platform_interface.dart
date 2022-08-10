@@ -24,7 +24,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
-final kSplashViewType = 'nullptrx.github.io/pangle_splashview';
+const kSplashViewType = 'nullptrx.github.io/pangle_splashview';
 
 abstract class SplashViewPlatform {
   Widget build({

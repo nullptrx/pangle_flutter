@@ -100,8 +100,8 @@ class PangleExpressSize {
   PangleExpressSize({required double width, required double height})
       : assert(width > 0),
         assert(height > 0),
-        this.width = width > kPangleScreenWidth ? kPangleScreenWidth : width,
-        this.height = height > kPangleScreenWidth / width * height
+        width = width > kPangleScreenWidth ? kPangleScreenWidth : width,
+        height = height > kPangleScreenWidth / width * height
             ? kPangleScreenWidth / width * height
             : height;
 
@@ -110,30 +110,30 @@ class PangleExpressSize {
   /// [aspectRatio] item宽高比例
   PangleExpressSize.aspectRatio(double aspectRatio)
       : assert(aspectRatio > 0),
-        this.width = kPangleScreenWidth,
-        this.height = kPangleScreenWidth / aspectRatio;
+        width = kPangleScreenWidth,
+        height = kPangleScreenWidth / aspectRatio;
 
   PangleExpressSize.aspectRatio9_16()
-      : this.width = kPangleScreenWidth,
-        this.height = kPangleScreenWidth / 0.5625;
+      : width = kPangleScreenWidth,
+        height = kPangleScreenWidth / 0.5625;
 
   PangleExpressSize.aspectRatio16_9()
-      : this.width = kPangleScreenWidth,
-        this.height = kPangleScreenWidth * 0.5625;
+      : width = kPangleScreenWidth,
+        height = kPangleScreenWidth * 0.5625;
 
   PangleExpressSize.percent(double widthPercent, double heightPercent)
-      : this.width = kPangleScreenWidth * widthPercent,
-        this.height = kPangleScreenHeight * heightPercent;
+      : width = kPangleScreenWidth * widthPercent,
+        height = kPangleScreenHeight * heightPercent;
 
   PangleExpressSize.widthPercent(double widthPercent,
       {required double aspectRatio})
-      : this.width = kPangleScreenWidth * widthPercent,
-        this.height = kPangleScreenWidth * widthPercent / aspectRatio;
+      : width = kPangleScreenWidth * widthPercent,
+        height = kPangleScreenWidth * widthPercent / aspectRatio;
 
   PangleExpressSize.heightPercent(double heightPercent,
       {required double aspectRatio})
-      : this.width = kPangleScreenHeight * heightPercent * aspectRatio,
-        this.height = kPangleScreenHeight * heightPercent;
+      : width = kPangleScreenHeight * heightPercent * aspectRatio,
+        height = kPangleScreenHeight * heightPercent;
 
   Map<String, dynamic> toJson() {
     return {
@@ -155,36 +155,36 @@ class PangleSize {
   PangleSize({required double width, required double height})
       : assert(width > 0),
         assert(height > 0),
-        this.width = width > kPangleScreenWidth ? kPangleScreenWidth : width,
-        this.height = height > kPangleScreenWidth / width * height
+        width = width > kPangleScreenWidth ? kPangleScreenWidth : width,
+        height = height > kPangleScreenWidth / width * height
             ? kPangleScreenWidth / width * height
             : height;
 
   /// [aspectRatio] item宽高比例
   PangleSize.aspectRatio(double aspectRatio)
       : assert(aspectRatio > 0),
-        this.width = kPangleScreenWidth,
-        this.height = kPangleScreenWidth / aspectRatio;
+        width = kPangleScreenWidth,
+        height = kPangleScreenWidth / aspectRatio;
 
   PangleSize.aspectRatio9_16()
-      : this.width = kPangleScreenWidth,
-        this.height = kPangleScreenWidth / 0.5625;
+      : width = kPangleScreenWidth,
+        height = kPangleScreenWidth / 0.5625;
 
   PangleSize.aspectRatio16_9()
-      : this.width = kPangleScreenWidth,
-        this.height = kPangleScreenWidth * 0.5625;
+      : width = kPangleScreenWidth,
+        height = kPangleScreenWidth * 0.5625;
 
   PangleSize.percent(double widthPercent, double heightPercent)
-      : this.width = kPangleScreenWidth * widthPercent,
-        this.height = kPangleScreenHeight * heightPercent;
+      : width = kPangleScreenWidth * widthPercent,
+        height = kPangleScreenHeight * heightPercent;
 
   PangleSize.widthPercent(double widthPercent, {required double aspectRatio})
-      : this.width = kPangleScreenWidth * widthPercent,
-        this.height = kPangleScreenWidth * widthPercent / aspectRatio;
+      : width = kPangleScreenWidth * widthPercent,
+        height = kPangleScreenWidth * widthPercent / aspectRatio;
 
   PangleSize.heightPercent(double heightPercent, {required double aspectRatio})
-      : this.width = kPangleScreenHeight * heightPercent * aspectRatio,
-        this.height = kPangleScreenHeight * heightPercent;
+      : width = kPangleScreenHeight * heightPercent * aspectRatio,
+        height = kPangleScreenHeight * heightPercent;
 
   Map<String, dynamic> toJson() {
     return {
@@ -218,7 +218,7 @@ class PangleResult {
   ///
   factory PangleResult.fromJson(Map<String, dynamic>? json) {
     if (json == null) {
-      return PangleResult(code: -1, message: 'unknown');
+      return const PangleResult(code: -1, message: 'unknown');
     }
     return PangleResult(
       code: json['code'],

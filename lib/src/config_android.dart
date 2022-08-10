@@ -181,9 +181,7 @@ class AndroidRewardedVideoConfig implements Config {
   @override
   Map<String, dynamic> toJSON() {
     var expressSize = this.expressSize;
-    if (expressSize == null) {
-      expressSize = PangleExpressSize.aspectRatio9_16();
-    }
+    expressSize ??= PangleExpressSize.aspectRatio9_16();
 
     return {
       'slotId': slotId,
@@ -347,9 +345,7 @@ class AndroidFullscreenVideoConfig implements Config {
   @override
   Map<String, dynamic> toJSON() {
     var expressSize = this.expressSize;
-    if (expressSize == null) {
-      expressSize = PangleExpressSize.aspectRatio9_16();
-    }
+    expressSize ??= PangleExpressSize.aspectRatio9_16();
     return {
       'slotId': slotId,
       'isSupportDeepLink': isSupportDeepLink,

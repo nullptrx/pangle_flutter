@@ -50,7 +50,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initPangle();
   await initVersion();
-  runApp(PangleApp());
+  runApp(const PangleApp());
 }
 
 /// 范例入口
@@ -61,7 +61,7 @@ class PangleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       ///
-      home: CustomSplashPage(isRoot: true),
+      home: const CustomSplashPage(isRoot: true),
       theme: kThemeData,
     );
   }
@@ -72,13 +72,13 @@ class PangleApp extends StatelessWidget {
 /// 工具类根据平台不同会有不同的配置
 /// [iOS] iOS平台配置参数
 /// [android] android平台配置参数
-Future<Null> initPangle() async {
+Future<void> initPangle() async {
   PangleResult ret = await pangle.init(
-    iOS: IOSConfig(
+    iOS: const IOSConfig(
       appId: kAppId,
       logLevel: PangleLogLevel.debug,
     ),
-    android: AndroidConfig(
+    android: const AndroidConfig(
         appId: kAppId,
         debug: false,
         allowShowNotify: true,
@@ -88,5 +88,5 @@ Future<Null> initPangle() async {
           AndroidDirectDownloadNetworkType.k2G,
         ]),
   );
-  print(ret);
+  debugPrint(ret.toString());
 }

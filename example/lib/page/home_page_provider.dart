@@ -45,28 +45,28 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
         title: const Text('Pangle Flutter Examples'),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               ListTile(
-                title: Text('Testing environment:'),
+                title: const Text('Testing environment:'),
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Text(kEnv),
                 ),
               ),
               ListTile(
-                title: Text('Dependencies:'),
+                title: const Text('Dependencies:'),
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Text(_denpendencies ?? ''),
                 ),
               ),
               ListTile(
-                title: Text('Theme: '),
+                title: const Text('Theme: '),
                 subtitle: Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Text('$_theme'),
@@ -74,29 +74,29 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
               ),
               ElevatedButton(
                 onPressed: requestPermissions,
-                child: Text('Request Permissions'),
+                child: const Text('Request Permissions'),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: openGDPRPrivacyOnIOS,
-                child: Text('GDPR Privacy For iOS'),
+                child: const Text('GDPR Privacy For iOS'),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: changeTheme,
-                child: Text('Change Theme'),
+                child: const Text('Change Theme'),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: loadNativeAd,
-                child: Text('Native AD'),
+                child: const Text('Native AD'),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: loadExpressAd,
-                child: Text('Express AD'),
+                child: const Text('Express AD'),
               ),
-              SizedBox(height: 90),
+              const SizedBox(height: 90),
             ],
           ),
         ),
@@ -142,10 +142,10 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
 
   void requestPermissionsOnIOS() async {
     var status = await pangle.getTrackingAuthorizationStatus();
-    print('trackingAuthorizationStatus: $status');
+    debugPrint('trackingAuthorizationStatus: $status');
     if (status == PangleAuthorizationStatus.notDetermined) {
       status = await pangle.requestTrackingAuthorization();
-      print('requestTrackingAuthorization: $status');
+      debugPrint('requestTrackingAuthorization: $status');
     }
   }
 
@@ -155,7 +155,7 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
 
   void openGDPRPrivacyOnIOS() async {
     bool confirm = await pangle.openGDPRPrivacy();
-    print('GDPR Privacy: $confirm');
+    debugPrint('GDPR Privacy: $confirm');
   }
 
   void loadNativeAd();

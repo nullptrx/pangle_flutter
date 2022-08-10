@@ -36,7 +36,8 @@ import 'util.dart';
 
 /// Optional callback invoked when a web view is first created. [controller] is
 /// the [SplashViewController] for the created splash view.
-typedef void SplashViewCreatedCallback(SplashViewController controller);
+typedef SplashViewCreatedCallback = void Function(
+    SplashViewController controller);
 
 class SplashView extends StatefulWidget {
   const SplashView({

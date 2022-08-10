@@ -25,7 +25,7 @@ enum class PangleImgSize(val width: Int = 0, val height: Int = 0) {
     val h = displayMetrics.widthPixels * height / width.toFloat()
     return TTSize(w, h.toInt())
   }
-  
+
   fun toDeviceSizeF(): TTSizeF {
     val displayMetrics = Resources.getSystem().displayMetrics
     val w = displayMetrics.widthPixels

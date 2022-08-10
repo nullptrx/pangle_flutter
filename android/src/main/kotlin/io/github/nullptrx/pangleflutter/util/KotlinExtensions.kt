@@ -47,24 +47,24 @@ fun <T : View> View.find(id: Int): T? {
 
 
 inline fun <reified T> Any.asType(): T? =
-    if (this is T) this
-    else null
+  if (this is T) this
+  else null
 
 inline fun <reified T> List<*>.asList(): List<T>? =
-    if (all { it is T })
-      @Suppress("UNCHECKED_CAST")
-      this as List<T>
-    else
-      null
+  if (all { it is T })
+    @Suppress("UNCHECKED_CAST")
+    this as List<T>
+  else
+    null
 
 inline fun <reified T, reified E> Map<*, *>.asMap(): Map<T, E>? =
-    if (all { it.key is T && it.value is E })
-      @Suppress("UNCHECKED_CAST")
-      this as Map<T, E>
-    else
-      null
+  if (all { it.key is T && it.value is E })
+    @Suppress("UNCHECKED_CAST")
+    this as Map<T, E>
+  else
+    null
 
 
 inline fun <reified T, reified E> Any.asMap(): Map<T, E>? =
-    if (this is Map<*, *>) this.asMap()
-    else null
+  if (this is Map<*, *>) this.asMap()
+  else null

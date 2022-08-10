@@ -9,13 +9,14 @@ import io.flutter.plugin.platform.PlatformViewFactory
 import io.github.nullptrx.pangleflutter.util.asMap
 import java.lang.ref.WeakReference
 
-class BannerViewFactory(val messenger: BinaryMessenger) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
+class BannerViewFactory(val messenger: BinaryMessenger) :
+  PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 
   private var activity: WeakReference<Activity>? = null
 
-  override fun create(context: Context, id: Int, args: Any?): PlatformView? {
+  override fun create(context: Context?, id: Int, args: Any?): PlatformView {
     val params: Map<String, Any?> = args?.asMap() ?: mutableMapOf()
-    val act = activity?.get() ?: return null
+    val act = activity?.get() ?: throw IllegalStateException("Unable to get BannerView instance")
     return FlutterBannerView(act, messenger, id, params)
   }
 

@@ -103,7 +103,9 @@ object ScreenUtil {
    * @return
    */
   fun hasNotchScreen(context: Context): Boolean {
-    return (getInt("ro.miui.notch", context) == 1 || hasNotchAtHuawei(context) || hasNotchAtOPPO(context)
+    return (getInt("ro.miui.notch", context) == 1 || hasNotchAtHuawei(context) || hasNotchAtOPPO(
+      context
+    )
         || hasNotchAtVivo(context) || isAndroidPHasNotch())
   }
 

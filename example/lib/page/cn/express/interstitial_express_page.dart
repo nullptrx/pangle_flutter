@@ -28,6 +28,8 @@ import 'package:pangle_flutter/pangle_flutter.dart';
 import '../constant.dart';
 
 class InterstitialExpressPage extends StatefulWidget {
+  const InterstitialExpressPage({Key? key}) : super(key: key);
+
   @override
   _InterstitialExpressPageState createState() =>
       _InterstitialExpressPageState();
@@ -40,18 +42,16 @@ class _InterstitialExpressPageState extends State<InterstitialExpressPage> {
       appBar: AppBar(
         title: const Text('Interstitial Express AD'),
       ),
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Center(
-              child: ElevatedButton(
-                onPressed: _onTapShow,
-                child: Text('Show Ad'),
-              ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Center(
+            child: ElevatedButton(
+              onPressed: _onTapShow,
+              child: const Text('Show Ad'),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -72,11 +72,11 @@ class _InterstitialExpressPageState extends State<InterstitialExpressPage> {
         expressSize: PangleExpressSize.widthPercent(0.8, aspectRatio: 1.667),
       ),
       callback: (event) {
-        print('interstitial: $event');
+        debugPrint('interstitial: $event');
       },
     );
     var data = jsonEncode(result);
-    print(data);
+    debugPrint(data);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(data)),
     );

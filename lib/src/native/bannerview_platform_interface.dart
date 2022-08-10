@@ -24,7 +24,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
-final kNativeBannerViewType = 'nullptrx.github.io/pangle_nativebannerview';
+const kNativeBannerViewType = 'nullptrx.github.io/pangle_nativebannerview';
 
 abstract class NativeBannerViewPlatform {
   Widget build({

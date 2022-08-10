@@ -26,7 +26,11 @@ class SupportSplashDialog : DialogFragment() {
     return DialogUtil.createDialog(ctx)
   }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+  override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
     return layoutView
   }
 

@@ -7,10 +7,12 @@ import io.flutter.plugin.platform.PlatformView
 import io.flutter.plugin.platform.PlatformViewFactory
 import io.github.nullptrx.pangleflutter.util.asMap
 
-class SplashViewFactory(val messenger: BinaryMessenger) : PlatformViewFactory(StandardMessageCodec.INSTANCE) {
+class SplashViewFactory(val messenger: BinaryMessenger) :
+  PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 
-  override fun create(context: Context, id: Int, args: Any?): PlatformView? {
+  override fun create(context: Context?, id: Int, args: Any?): PlatformView {
     val params = args?.asMap<String, Any?>() ?: mutableMapOf()
+    context ?: throw IllegalStateException("Unable to get SplashView instance")
     return FlutterSplashView(context, messenger, id, params)
   }
 

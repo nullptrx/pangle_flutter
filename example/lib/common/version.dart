@@ -21,7 +21,7 @@
  */
 import 'dart:io';
 
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:pangle_flutter/pangle_flutter.dart';
 
 final kEnv = '''
 Android Studio Arctic Fox
@@ -36,12 +36,11 @@ const kDependencies = '''
 Pangle SDK %s
 ''';
 
-late var kAndroidAbove10;
+late var isAndroidAbove10;
 
 Future<void> initVersion() async {
   if (Platform.isAndroid) {
-    DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
-    var info = await deviceInfoPlugin.androidInfo;
-    kAndroidAbove10 = (info.version.sdkInt ?? 0) >= 29;
+    var info = await pangle.getAndroidDeviceInfo();
+    isAndroidAbove10 = (info.sdkInt ?? 0) >= 29;
   }
 }

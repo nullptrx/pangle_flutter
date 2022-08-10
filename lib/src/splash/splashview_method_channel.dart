@@ -37,7 +37,7 @@ class MethodChannelSplashViewPlatform implements SplashViewPlatformController {
 
   final MethodChannel _channel;
 
-  Future<Null> _onMethodCall(MethodCall call) async {
+  Future<void> _onMethodCall(MethodCall call) async {
     switch (call.method) {
       case "onLoad":
         _platformCallbacksHandler.onLoad();

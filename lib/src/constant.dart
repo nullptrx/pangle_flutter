@@ -51,7 +51,7 @@ enum PangleImgSize {
 enum AndroidTitleBarTheme {
   light,
   dark,
-  no_title_bar,
+  noTitleBar,
 }
 
 /// available network type for downloading type ad.
@@ -69,11 +69,11 @@ class AndroidDirectDownloadNetworkType {
 ///
 /// [normal] Showing ads up without preloading.
 /// [preload] Showing ads up and preloading next ads.
-/// [preload_only] Preloading ads only, not showing ads up.
+/// [preloadOnly] Preloading ads only, not showing ads up.
 enum PangleLoadingType {
   normal,
   preload,
-  preload_only,
+  preloadOnly,
 }
 
 enum PangleOrientation {

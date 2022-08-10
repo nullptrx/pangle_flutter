@@ -24,7 +24,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
-final kFeedViewType = 'nullptrx.github.io/pangle_feedview';
+const kFeedViewType = 'nullptrx.github.io/pangle_feedview';
 
 abstract class FeedViewPlatform {
   Widget build({

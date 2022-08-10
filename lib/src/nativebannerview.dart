@@ -26,17 +26,17 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
-import 'native/bannerview_android.dart';
-import 'native/bannerview_ios.dart';
-import 'native/bannerview_platform_interface.dart';
 import 'config.dart';
 import 'config_android.dart';
 import 'config_ios.dart';
+import 'native/bannerview_android.dart';
+import 'native/bannerview_ios.dart';
+import 'native/bannerview_platform_interface.dart';
 import 'util.dart';
 
 /// Optional callback invoked when a web view is first created. [controller] is
 /// the [NativeBannerViewController] for the created banner view.
-typedef void NativeBannerViewCreatedCallback(
+typedef NativeBannerViewCreatedCallback = void Function(
     NativeBannerViewController controller);
 
 class NativeBannerView extends StatefulWidget {

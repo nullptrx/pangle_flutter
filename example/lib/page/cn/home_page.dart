@@ -30,6 +30,8 @@ import '../home_page_provider.dart';
 import 'cn.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -40,8 +42,9 @@ class _HomePageState extends State<HomePage> with HomePageProviderStateMixin {
     context.navigateTo(NativePage());
   }
 
+  @override
   void loadExpressAd() {
-    context.navigateTo(ExpressPage());
+    context.navigateTo(const ExpressPage());
   }
 
   @override

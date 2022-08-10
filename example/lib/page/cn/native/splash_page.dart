@@ -28,6 +28,8 @@ import 'package:pangle_flutter/pangle_flutter.dart';
 import '../constant.dart';
 
 class SplashPage extends StatefulWidget {
+  const SplashPage({Key? key}) : super(key: key);
+
   @override
   _SplashPageState createState() => _SplashPageState();
 }
@@ -39,33 +41,31 @@ class _SplashPageState extends State<SplashPage> {
       appBar: AppBar(
         title: const Text('Splash  AD'),
       ),
-      body: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Center(
-              child: ElevatedButton(
-                onPressed: _onTapShow,
-                child: Text('Show Ad'),
-              ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Center(
+            child: ElevatedButton(
+              onPressed: _onTapShow,
+              child: const Text('Show Ad'),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   _onTapShow() async {
     final result = await pangle.loadSplashAd(
-      iOS: IOSSplashConfig(
+      iOS: const IOSSplashConfig(
         slotId: kSplashId,
       ),
-      android: AndroidSplashConfig(
+      android: const AndroidSplashConfig(
         slotId: kSplashId,
       ),
     );
     var data = jsonEncode(result);
-    print(data);
+    debugPrint(data);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(data)),
     );
