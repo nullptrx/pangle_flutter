@@ -90,11 +90,11 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
           color: _bgColor,
           child: BannerView(
             iOS: IOSBannerConfig(
-              slotId: kBannerExpressId600x260,
+              slotId: kBannerExpressId,
               expressSize: PangleExpressSize(width: 600, height: 260),
             ),
             android: AndroidBannerConfig(
-              slotId: kBannerExpressId600x260,
+              slotId: kBannerExpressId,
               expressSize: PangleExpressSize(width: 600, height: 260),
             ),
             onDislike: (message, enforce) {
@@ -112,11 +112,11 @@ class _BannerExpressPageState extends State<BannerExpressPage> {
         height: kPangleScreenWidth * 260 / 600,
         child: BannerView(
           iOS: IOSBannerConfig(
-            slotId: kBannerExpressId600x260,
+            slotId: kBannerExpressId,
             expressSize: PangleExpressSize(width: 600, height: 260),
           ),
           android: AndroidBannerConfig(
-            slotId: kBannerExpressId600x260,
+            slotId: kBannerExpressId,
             expressSize: PangleExpressSize(width: 600, height: 260),
           ),
           onBannerViewCreated: (BannerViewController controller) {

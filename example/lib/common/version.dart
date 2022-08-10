@@ -23,7 +23,7 @@ import 'dart:io';
 
 import 'package:pangle_flutter/pangle_flutter.dart';
 
-final kEnv = '''
+const kEnv = '''
 Android Studio Arctic Fox
 Xcode 12.5.1
 
@@ -36,7 +36,7 @@ const kDependencies = '''
 Pangle SDK %s
 ''';
 
-late var isAndroidAbove10;
+var isAndroidAbove10 = false;
 
 Future<void> initVersion() async {
   if (Platform.isAndroid) {

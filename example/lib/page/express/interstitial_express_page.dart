@@ -62,12 +62,12 @@ class _InterstitialExpressPageState extends State<InterstitialExpressPage> {
 
     final result = await pangle.loadInterstitialAd(
       iOS: IOSInterstitialConfig(
-        slotId: kInterstitialExpressId3x2,
+        slotId: kInterstitialExpressId,
         // 该宽高为你申请的广告位宽高，请根据实际情况赋值
         expressSize: PangleExpressSize(width: width, height: height),
       ),
       android: AndroidInterstitialConfig(
-        slotId: kInterstitialExpressId3x2,
+        slotId: kInterstitialExpressId,
         // 该宽高为你申请的广告位宽高，请根据实际情况赋值
         expressSize: PangleExpressSize.widthPercent(0.8, aspectRatio: 1.667),
       ),

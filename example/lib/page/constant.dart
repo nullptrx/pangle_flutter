@@ -21,18 +21,16 @@
  */
 
 const kAppId = '5153502';
-
 const kSplashId = '887451293';
-
 const kRewardedVideoExpressId = '945940983';
-
-const kBannerExpressId600x260 = '945940906';
-
-const kFeedExpressId375x284 = '945940981';
-
-const kInterstitialExpressId3x2 = '945940989';
-const kInterstitialExpressId1x1 = '945940988';
-
+// 600x260
+const kBannerExpressId = '945940906';
+// 375x284
+const kFeedExpressId = '945940981';
+// 3x2
+// const kInterstitialExpressId = '945940989';
+// 1x1
+const kInterstitialExpressId = '945940988';
 // 新模板渲染插屏
 const kFullscreenIdFull = '945999649';
 // 全屏视频

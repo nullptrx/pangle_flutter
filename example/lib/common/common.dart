@@ -33,28 +33,28 @@ const _textTheme = TextTheme(
 
 final kThemeData = ThemeData(
   colorScheme: ColorScheme.fromSwatch(
-    accentColor: Color(0xFFFF4081),
-    primaryColorDark: Color(0xFFFF4081),
+    accentColor: const Color(0xFFFF4081),
+    primaryColorDark: const Color(0xFFFF4081),
   ),
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xFFFF4081),
   ),
-  primaryColor: Color(0xFFFF4081),
+  primaryColor: const Color(0xFFFF4081),
   primaryTextTheme: _textTheme,
   buttonTheme: ButtonThemeData(
     highlightColor: Colors.redAccent[400],
-    buttonColor: Color(0xFFFF4081),
+    buttonColor: const Color(0xFFFF4081),
     textTheme: ButtonTextTheme.accent,
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       onPrimary: Colors.white,
-      primary: Color(0xFFFF4081),
+      primary: const Color(0xFFFF4081),
       // minimumSize: Size(88, 36),
       // padding: EdgeInsets.symmetric(horizontal: 16),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
     ),
   ),
-  textTheme: TextTheme(),
+  textTheme: const TextTheme(),
 );

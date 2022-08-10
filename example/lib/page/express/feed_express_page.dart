@@ -163,12 +163,12 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
     var expressSize = PangleExpressSize.aspectRatio(375 / 284);
     PangleAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedConfig(
-        slotId: kFeedExpressId375x284,
+        slotId: kFeedExpressId,
         expressSize: expressSize,
         // slotId: kFeedId,
       ),
       android: AndroidFeedConfig(
-        slotId: kFeedExpressId375x284,
+        slotId: kFeedExpressId,
         expressSize: expressSize,
         // slotId: kFeedId,
       ),
@@ -235,12 +235,12 @@ class _FeedExpressPageState extends State<FeedExpressPage> {
     );
     PangleAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedConfig(
-        slotId: kFeedExpressId375x284,
+        slotId: kFeedExpressId,
         expressSize: expressSize,
         // slotId: kFeedId,
       ),
       android: AndroidFeedConfig(
-        slotId: kFeedExpressId375x284,
+        slotId: kFeedExpressId,
         expressSize: expressSize,
         // slotId: kFeedId,
       ),
