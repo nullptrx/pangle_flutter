@@ -26,8 +26,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/ext.dart';
-import '../home_page_provider.dart';
 import 'cn.dart';
+import 'home_page_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

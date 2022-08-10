@@ -29,8 +29,8 @@ import 'package:pangle_flutter/pangle_flutter.dart';
 
 import '../../../common/common.dart';
 import '../../../widget/loading.dart';
-import '../../common/empty_page.dart';
 import '../constant.dart';
+import '../empty_page.dart';
 
 class FeedExpressPage extends StatefulWidget {
   const FeedExpressPage({Key? key}) : super(key: key);

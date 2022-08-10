@@ -22,14 +22,13 @@
 
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 import 'package:pangle_flutter_example/common/version.dart';
 
 import 'common/common.dart';
-import 'page/cn/constant.dart';
-import 'page/cn/native/custom_splash_page.dart';
+import 'page/constant.dart';
+import 'page/native/custom_splash_page.dart';
 
 /// 使用本插件需要知道的几个类，基本覆盖了开始使用时需要用到的入口类
 ///

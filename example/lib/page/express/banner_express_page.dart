@@ -28,8 +28,8 @@ import 'package:pangle_flutter/pangle_flutter.dart';
 import 'package:pangle_flutter_example/common/version.dart';
 
 import '../../../common/common.dart';
-import '../../common/empty_page.dart';
 import '../constant.dart';
+import '../empty_page.dart';
 
 class BannerExpressPage extends StatefulWidget {
   const BannerExpressPage({Key? key}) : super(key: key);

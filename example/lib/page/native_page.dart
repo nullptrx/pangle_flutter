@@ -22,7 +22,7 @@
 
 import 'package:flutter/material.dart';
 
-import '../../common/ext.dart';
+import '../common/ext.dart';
 import 'native/custom_splash_page.dart';
 import 'native/splash_page.dart';
 
