@@ -8,10 +8,10 @@
 import BUAdSDK
 
 internal final class FLTSplashExpressAdTask: FLTTaskProtocol {
-    private var manager: BUNativeExpressSplashView
-    private var delegate: BUNativeExpressSplashViewDelegate?
+    private var manager: BUSplashAd
+    private var delegate: BUSplashAdDelegate?
 
-    internal init(_ manager: BUNativeExpressSplashView) {
+    internal init(_ manager: BUSplashAd) {
         self.manager = manager
     }
 
@@ -28,15 +28,15 @@ internal final class FLTSplashExpressAdTask: FLTTaskProtocol {
         // BUNativeExpressSplashView(slotID: slotId, adSize: adSize, rootViewController: vc)
         let slot = BUAdSlot.init()
         slot.id = slotId
-        let splashView = BUNativeExpressSplashView.init(slot: slot, adSize: adSize, rootViewController: vc)
+        let splashAd = BUSplashAd.init(slot: slot, adSize: adSize)
         if tolerateTimeout != nil {
-            splashView.tolerateTimeout = tolerateTimeout!
+            splashAd.tolerateTimeout = tolerateTimeout!
         }
         if hideSkipButton != nil {
-            splashView.hideSkipButton = hideSkipButton!
+            splashAd.hideSkipButton = hideSkipButton!
         }
-        vc.view.addSubview(splashView)
-        self.init(splashView)
+        vc.view.addSubview(splashAd.splashView!)
+        self.init(splashAd)
     }
 
     func execute() -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
@@ -53,7 +53,7 @@ internal final class FLTSplashExpressAdTask: FLTTaskProtocol {
             self.manager.delegate = delegate
             self.delegate = delegate
 
-            self.manager.loadAdData()
+            self.manager.loadData()
         }
     }
 }

@@ -1,10 +1,10 @@
 package io.github.nullptrx.pangleflutter.delegate
 
 import android.app.Activity
-import android.view.View
 import androidx.fragment.app.FragmentActivity
+import com.bytedance.sdk.openadsdk.CSJAdError
+import com.bytedance.sdk.openadsdk.CSJSplashAd
 import com.bytedance.sdk.openadsdk.TTAdNative
-import com.bytedance.sdk.openadsdk.TTSplashAd
 import io.github.nullptrx.pangleflutter.common.kBlock
 import io.github.nullptrx.pangleflutter.dialog.NativeSplashDialog
 import io.github.nullptrx.pangleflutter.dialog.SupportSplashDialog
@@ -13,50 +13,52 @@ internal class FLTSplashAd(
   val hideSkipButton: Boolean?,
   var activity: Activity?,
   var result: (Any) -> Unit = {}
-) : TTAdNative.SplashAdListener {
+) : TTAdNative.CSJSplashAdListener {
   private var supportDialog: SupportSplashDialog? = null
   private var nativeDialog: NativeSplashDialog? = null
 
 
-  override fun onError(code: Int, message: String) {
-    handleSplashEnd()
-    invoke(code, message)
+  override fun onSplashLoadSuccess() {
 
   }
 
-  override fun onTimeout() {
+  override fun onSplashLoadFail(error: CSJAdError) {
+    handleSplashEnd()
+    val msg = error.msg
+    val code = error.code
+    invoke(code, msg)
+  }
+
+  override fun onSplashRenderSuccess(ad: CSJSplashAd) {
+    loadAd(ad)
+  }
+
+  override fun onSplashRenderFail(ad: CSJSplashAd, error: CSJAdError) {
     handleSplashEnd()
     invoke(-1, "timeout")
   }
 
-  override fun onSplashAdLoad(ad: TTSplashAd) {
-    loadAd(ad)
-  }
-
-  fun loadAd(ad: TTSplashAd) {
+  fun loadAd(ad: CSJSplashAd) {
     val splashView = ad.splashView
     hideSkipButton?.also {
       if (it) {
-        ad.setNotAllowSdkCountdown()
+        ad.hideSkipButton()
       }
     }
-    ad.setSplashInteractionListener(object : TTSplashAd.AdInteractionListener {
-      override fun onAdClicked(view: View, type: Int) {
+    ad.setSplashAdListener(object : CSJSplashAd.SplashAdListener {
+
+      override fun onSplashAdShow(ad: CSJSplashAd?) {
+
+      }
+
+      override fun onSplashAdClick(ad: CSJSplashAd?) {
         handleSplashEnd()
         invoke(0, "click")
       }
 
-      override fun onAdSkip() {
+      override fun onSplashAdClose(ad: CSJSplashAd?, type: Int) {
         handleSplashEnd()
-        invoke(0, "skip")
-      }
-
-      override fun onAdShow(view: View?, type: Int) {
-      }
-
-      override fun onAdTimeOver() {
-        handleSplashEnd()
-        invoke(0, "timeover")
+        invoke(0, "close")
       }
 
     })
@@ -91,6 +93,5 @@ internal class FLTSplashAd(
       result = kBlock
     }
   }
-
 
 }

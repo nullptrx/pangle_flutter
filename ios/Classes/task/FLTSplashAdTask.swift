@@ -8,10 +8,10 @@
 import BUAdSDK
 
 internal final class FLTSplashAdTask: FLTTaskProtocol {
-    private var manager: BUSplashAdView
+    private var manager: BUSplashAd
     private var delegate: BUSplashAdDelegate?
 
-    internal init(_ manager: BUSplashAdView) {
+    internal init(_ manager: BUSplashAd) {
         self.manager = manager
     }
 
@@ -23,17 +23,17 @@ internal final class FLTSplashAdTask: FLTTaskProtocol {
         // BUSplashAdView(slotID: slotId, frame: frame)
         let slot = BUAdSlot.init()
         slot.id = slotId
-        let splashView = BUSplashAdView.init(slot: slot, frame: frame)
+        let splashAd = BUSplashAd.init(slot: slot, adSize: frame.size)
         if tolerateTimeout != nil {
-            splashView.tolerateTimeout = tolerateTimeout!
+            splashAd.tolerateTimeout = tolerateTimeout!
         }
         if hideSkipButton != nil {
-            splashView.hideSkipButton = hideSkipButton!
+            splashAd.hideSkipButton = hideSkipButton!
         }
         let vc = AppUtil.getVC()
-        vc.view.addSubview(splashView)
-        splashView.rootViewController = vc
-        self.init(splashView)
+        vc.view.addSubview(splashAd.splashView!)
+        
+        self.init(splashAd)
     }
 
     func execute() -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
@@ -50,7 +50,7 @@ internal final class FLTSplashAdTask: FLTTaskProtocol {
             self.manager.delegate = delegate
             self.delegate = delegate
 
-            self.manager.loadAdData()
+            self.manager.loadData()
         }
     }
 }

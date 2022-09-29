@@ -12,11 +12,11 @@ import WebKit
 public class FLTSplashView: NSObject, FlutterPlatformView {
     private let methodChannel: FlutterMethodChannel
     private let container: SplashView
-    private weak var bannerView: BUNativeExpressSplashView?
 
     init(_ frame: CGRect, id: Int64, params: [String: Any?], messenger: FlutterBinaryMessenger) {
         let channelName = String(format: "nullptrx.github.io/pangle_splashview_%lld", id)
         methodChannel = FlutterMethodChannel(name: channelName, binaryMessenger: messenger)
+    
         container = SplashView(frame: frame, params: params, methodChannel: methodChannel)
         super.init()
         container.autoresizesSubviews = true
@@ -38,31 +38,49 @@ public class FLTSplashView: NSObject, FlutterPlatformView {
 }
 
 extension SplashView: BUSplashAdDelegate {
-    public func splashAdCountdown(toZero splashAd: BUSplashAdView) {
-        postMessage("onTimeOver")
+    func splashAdRenderSuccess(_ splashAd: BUSplashAd) {
+        
     }
-
-    public func splashAdDidClick(_ splashAd: BUSplashAdView) {
+    
+    func splashAdRenderFail(_ splashAd: BUSplashAd, error: BUAdError?) {
+        
+    }
+    
+    func splashAdWillShow(_ splashAd: BUSplashAd) {
+        
+    }
+    
+    func splashAdDidClose(_ splashAd: BUSplashAd, closeType: BUSplashAdCloseType) {
+        
+    }
+    
+    func splashDidCloseOtherController(_ splashAd: BUSplashAd, interactionType: BUInteractionType) {
+        
+    }
+    
+    func splashVideoAdDidPlayFinish(_ splashAd: BUSplashAd, didFailWithError error: Error) {
+        
+    }
+    
+    func splashAdDidClick(_ splashAd: BUSplashAd) {
         postMessage("onClick")
     }
-
-    public func splashAdDidClose(_ splashAd: BUSplashAdView) {}
-
-    public func splashAdDidClickSkip(_ splashAd: BUSplashAdView) {
-        postMessage("onSkip")
-    }
-
-    public func splashAdWillVisible(_ splashAd: BUSplashAdView) {
-        postMessage("onShow")
-    }
-
-    public func splashAdDidLoad(_ splashAd: BUSplashAdView) {
+    
+    func splashAdLoadSuccess(_ splashAd: BUSplashAd) {
         postMessage("onLoad")
     }
+    
+    func splashAdLoadFail(_ splashAd: BUSplashAd, error: BUAdError?) {
+        postMessage("onError", arguments: ["code": error?.errorCode ?? -1, "message": error?.localizedDescription])
+    }
+    
 
-    public func splashAd(_ splashAd: BUSplashAdView, didFailWithError error: Error?) {
-        let e = error as NSError?
-        postMessage("onError", arguments: ["code": e?.code ?? -1, "message": e?.localizedDescription])
+    func splashAdDidShow(_ splashAd: BUSplashAd) {
+        postMessage("onShow")
+    }
+    
+    func splashAdViewControllerDidClose(_ splashAd: BUSplashAd) {
+        postMessage("onTimeOver")
     }
 
     private func postMessage(_ method: String, arguments: [String: Any?] = [:]) {
@@ -71,7 +89,7 @@ extension SplashView: BUSplashAdDelegate {
 }
 
 class SplashView: UIView {
-    private var splashView: BUSplashAdView? = nil
+    private var splashAd: BUSplashAd? = nil
     private var mounted: Bool = false
     private var params: [String: Any?] = [:]
     private var methodChannel: FlutterMethodChannel?
@@ -117,27 +135,28 @@ class SplashView: UIView {
         // BUSplashAdView(slotID: slotId, frame: frame)
         let slot = BUAdSlot()
         slot.id = slotId
-        let splashAdView = BUSplashAdView(slot: slot, frame: frame)
+        let splashAd = BUSplashAd.init(slotID: slotId, adSize: frame.size)
         // let splashAdView = BUSplashAdView(slotID: slotId, frame: frame)
-        splashAdView.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
+//        splashAd.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
         let vc = AppUtil.getVC()
-        splashAdView.rootViewController = vc
+        vc.view.addSubview(splashAd.splashView!)
+        
         if tolerateTimeout != nil {
-            splashAdView.tolerateTimeout = tolerateTimeout!
+            splashAd.tolerateTimeout = tolerateTimeout!
         }
         if hideSkipButton != nil {
-            splashAdView.hideSkipButton = hideSkipButton!
+            splashAd.hideSkipButton = hideSkipButton!
         }
-        splashAdView.delegate = self
+        splashAd.delegate = self
 
-        addSubview(splashAdView)
-        splashAdView.loadAdData()
-        splashView = splashAdView
+        addSubview(splashAd.splashView!)
+        splashAd.loadData()
+        self.splashAd = splashAd
     }
     
     override func removeFromSuperview() {
         super.removeFromSuperview()
-        splashView?.removeFromSuperview()
-        splashView = nil
+        self.splashAd?.removeSplashView()
+        self.splashAd = nil
     }
 }

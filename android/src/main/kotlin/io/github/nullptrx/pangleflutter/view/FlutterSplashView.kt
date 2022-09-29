@@ -7,9 +7,9 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
+import com.bytedance.sdk.openadsdk.CSJAdError
+import com.bytedance.sdk.openadsdk.CSJSplashAd
 import com.bytedance.sdk.openadsdk.TTAdNative
-import com.bytedance.sdk.openadsdk.TTSplashAd
-import com.bytedance.sdk.openadsdk.TTAdConstant
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -24,8 +24,8 @@ class FlutterSplashView(
   messenger: BinaryMessenger,
   val id: Int,
   params: Map<String, Any?>
-) : PlatformView, MethodChannel.MethodCallHandler, TTAdNative.SplashAdListener,
-  TTSplashAd.AdInteractionListener {
+) : PlatformView, MethodChannel.MethodCallHandler, TTAdNative.CSJSplashAdListener,
+  CSJSplashAd.SplashAdListener {
 
   private val methodChannel: MethodChannel =
     MethodChannel(messenger, "nullptrx.github.io/pangle_splashview_$id")
@@ -63,20 +63,21 @@ class FlutterSplashView(
     container.removeAllViews()
   }
 
-  override fun onError(code: Int, message: String?) {
-    postMessage("onError", mapOf("message" to message, "code" to code))
+
+  override fun onSplashLoadSuccess() {
+
   }
 
-  override fun onTimeout() {
-    postMessage("onError", mapOf("message" to "timeout", "code" to -1))
+  override fun onSplashLoadFail(error: CSJAdError) {
+    postMessage("onError", mapOf("message" to error.msg, "code" to error.code))
   }
 
-  override fun onSplashAdLoad(splashAd: TTSplashAd) {
+  override fun onSplashRenderSuccess(ad: CSJSplashAd) {
     postMessage("onLoad")
-    splashAd.apply {
+    ad.apply {
 
       if (hideSkipButton) {
-        setNotAllowSdkCountdown()
+        hideSkipButton()
       }
 
       val params = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT).apply {
@@ -84,10 +85,13 @@ class FlutterSplashView(
       }
       container.addView(splashView, params)
 
-      setSplashInteractionListener(this@FlutterSplashView)
+      setSplashAdListener(this@FlutterSplashView)
 
     }
+  }
 
+  override fun onSplashRenderFail(ad: CSJSplashAd, error: CSJAdError) {
+    postMessage("onError", mapOf("message" to error.msg, "code" to error.code))
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -97,20 +101,15 @@ class FlutterSplashView(
     }
   }
 
-
-  override fun onAdClicked(view: View, type: Int) {
-    postMessage("onClick")
-  }
-
-  override fun onAdSkip() {
-    postMessage("onSkip")
-  }
-
-  override fun onAdShow(view: View?, type: Int) {
+  override fun onSplashAdShow(ad: CSJSplashAd?) {
     postMessage("onShow")
   }
 
-  override fun onAdTimeOver() {
+  override fun onSplashAdClick(ad: CSJSplashAd?) {
+    postMessage("onClick")
+  }
+
+  override fun onSplashAdClose(ad: CSJSplashAd?, type: Int) {
     postMessage("onTimeOver")
   }
 

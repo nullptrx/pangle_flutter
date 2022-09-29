@@ -264,12 +264,13 @@ class PangleAdManager {
     ttAdManager?.requestPermissionIfNecessary(context)
   }
 
-  fun loadSplashAd(adSlot: AdSlot, listener: TTAdNative.SplashAdListener, timeout: Double? = null) {
-    if (timeout == null) {
-      ttAdNative?.loadSplashAd(adSlot, listener)
-    } else {
-      ttAdNative?.loadSplashAd(adSlot, listener, (timeout * 1000).toInt())
-    }
+  fun loadSplashAd(
+    adSlot: AdSlot,
+    listener: TTAdNative.CSJSplashAdListener,
+    timeout: Double? = 5.0
+  ) {
+    val second = timeout ?: 5.0
+    ttAdNative?.loadSplashAd(adSlot, listener, (second * 1000).toInt())
   }
 
   fun loadRewardVideoAd(

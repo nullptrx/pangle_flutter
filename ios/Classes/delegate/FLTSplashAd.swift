@@ -9,6 +9,47 @@ import BUAdSDK
 import Foundation
 
 internal final class FLTSplashAd: NSObject, BUSplashAdDelegate {
+    func splashAdDidClose(_ splashAd: BUSplashAd, closeType: BUSplashAdCloseType) {
+        
+    }
+    
+    func splashAdLoadSuccess(_ splashAd: BUSplashAd) {
+        
+    }
+    
+    func splashAdLoadFail(_ splashAd: BUSplashAd, error: BUAdError?) {
+        self.fail?(error)
+        splashAd.removeSplashView()
+    }
+    
+    func splashAdRenderSuccess(_ splashAd: BUSplashAd) {
+        
+    }
+    
+    func splashAdRenderFail(_ splashAd: BUSplashAd, error: BUAdError?) {
+        
+    }
+    
+    func splashAdWillShow(_ splashAd: BUSplashAd) {
+        
+    }
+    
+    func splashAdDidShow(_ splashAd: BUSplashAd) {
+        
+    }
+    
+    func splashAdViewControllerDidClose(_ splashAd: BUSplashAd) {
+        
+    }
+    
+    func splashDidCloseOtherController(_ splashAd: BUSplashAd, interactionType: BUInteractionType) {
+        
+    }
+    
+    func splashVideoAdDidPlayFinish(_ splashAd: BUSplashAd, didFailWithError error: Error) {
+        
+    }
+    
     typealias Success = (String) -> Void
     typealias Fail = (Error?) -> Void
     
@@ -20,23 +61,20 @@ internal final class FLTSplashAd: NSObject, BUSplashAdDelegate {
         self.fail = fail
     }
     
-    public func splashAdDidClick(_ splashAd: BUSplashAdView) {
+    public func splashAdDidClick(_ splashAd: BUSplashAd) {
         self.success?("click")
-        splashAd.removeFromSuperview()
+        splashAd.removeSplashView()
     }
     
-    func splashAdDidClickSkip(_ splashAd: BUSplashAdView) {
+    func splashAdDidClickSkip(_ splashAd: BUSplashAd) {
         self.success?("skip")
-        splashAd.removeFromSuperview()
+        splashAd.removeSplashView()
     }
     
-    public func splashAdDidClose(_ splashAd: BUSplashAdView) {
+    public func splashAdDidClose(_ splashAd: BUSplashAd) {
         self.success?("timeover")
-        splashAd.removeFromSuperview()
+        splashAd.removeSplashView()
     }
     
-    public func splashAd(_ splashAd: BUSplashAdView, didFailWithError error: Error?) {
-        self.fail?(error)
-        splashAd.removeFromSuperview()
-    }
+
 }
