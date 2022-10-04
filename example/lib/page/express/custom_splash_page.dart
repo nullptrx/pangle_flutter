@@ -59,6 +59,7 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           const Center(
@@ -83,7 +84,7 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                     android: AndroidSplashConfig(
                       expressSize: PangleExpressSize(
                         width: kPangleScreenWidth,
-                        height: kPangleScreenHeight - 100,
+                        height: kPangleScreenWidth * 1.778,
                       ),
                       slotId: kSplashId,
                       tolerateTimeout: 3,

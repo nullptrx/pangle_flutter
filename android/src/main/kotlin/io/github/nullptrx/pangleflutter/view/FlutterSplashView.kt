@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import com.bytedance.sdk.openadsdk.CSJAdError
 import com.bytedance.sdk.openadsdk.CSJSplashAd
@@ -80,7 +81,7 @@ class FlutterSplashView(
         hideSkipButton()
       }
 
-      val params = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT).apply {
+      val params = FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT).apply {
         gravity = Gravity.CENTER
       }
       container.addView(splashView, params)
