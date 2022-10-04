@@ -1,3 +1,8 @@
+## 1.8.0
+- Adapt pangle SDK 4.7+ (Android & iOS)
+- [SplashView] Remove "onSkip" & "onTimeOver", add "onClose"
+- [SplashView] Fix "expressSize" not working on Android
+
 ## 1.7.0
 
 - Adapt pangle SDK 4.6+ (Android & iOS)

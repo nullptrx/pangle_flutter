@@ -1,3 +1,8 @@
+## 1.8.0
+- 适配穿山甲SDK 4.7+ (Android & iOS)
+- [SplashView] 移除onSkip、onTimeOver,新增onClose
+- [SplashView] 修复Android中expressSize无效问题
+
 ## 1.7.0
 
 - 适配穿山甲SDK 4.6+ (Android & iOS)
