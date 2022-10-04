@@ -210,10 +210,8 @@ SplashView(
   onError: (int code, String message){},
   /// 广告被点击
   onClick: (){},
-  /// 广告被点击跳过
-  onSkip: (){},
-  /// 广告倒计时结束
-  onTimeOver: (){},
+  /// 广告已结束
+  onClose: (){},
 );
 ```
 

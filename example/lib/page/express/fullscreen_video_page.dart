@@ -27,16 +27,14 @@ import 'package:pangle_flutter/pangle_flutter.dart';
 
 import '../constant.dart';
 
-class FullscreenVideoExpressPage extends StatefulWidget {
-  const FullscreenVideoExpressPage({Key? key}) : super(key: key);
+class FullscreenVideoPage extends StatefulWidget {
+  const FullscreenVideoPage({Key? key}) : super(key: key);
 
   @override
-  _FullscreenVideoExpressPageState createState() =>
-      _FullscreenVideoExpressPageState();
+  _FullscreenVideoPageState createState() => _FullscreenVideoPageState();
 }
 
-class _FullscreenVideoExpressPageState
-    extends State<FullscreenVideoExpressPage> {
+class _FullscreenVideoPageState extends State<FullscreenVideoPage> {
   bool _loaded = false;
 
   @override

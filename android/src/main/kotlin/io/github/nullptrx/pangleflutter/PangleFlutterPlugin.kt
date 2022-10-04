@@ -163,7 +163,6 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
           }
         }
       }
-
       "requestPermissionIfNecessary" -> {
         pangle.requestPermissionIfNecessary(context)
       }

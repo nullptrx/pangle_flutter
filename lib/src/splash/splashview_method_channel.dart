@@ -48,11 +48,8 @@ class MethodChannelSplashViewPlatform implements SplashViewPlatformController {
       case "onClick":
         _platformCallbacksHandler.onClick();
         break;
-      case "onSkip":
-        _platformCallbacksHandler.onSkip();
-        break;
-      case "onTimeOver":
-        _platformCallbacksHandler.onTimeOver();
+      case "onClose":
+        _platformCallbacksHandler.onClose();
         break;
       case "onError":
         int code = call.arguments['code'];

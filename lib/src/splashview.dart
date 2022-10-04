@@ -49,8 +49,7 @@ class SplashView extends StatefulWidget {
     this.onLoad,
     this.onShow,
     this.onClick,
-    this.onSkip,
-    this.onTimeOver,
+    this.onClose,
     this.onError,
   }) : super(key: key);
 
@@ -132,11 +131,8 @@ class SplashView extends StatefulWidget {
   /// 广告被点击
   final VoidCallback? onClick;
 
-  /// 跳过广告
-  final VoidCallback? onSkip;
-
-  /// 倒计时结束
-  final VoidCallback? onTimeOver;
+  /// 关闭广告
+  final VoidCallback? onClose;
 
   /// 获取广告失败
   final PangleMessageCallback? onError;
@@ -240,13 +236,8 @@ class _PlatformCallbacksHandler implements SplashViewPlatformCallbacksHandler {
   }
 
   @override
-  void onSkip() {
-    _widget.onSkip?.call();
-  }
-
-  @override
-  void onTimeOver() {
-    _widget.onTimeOver?.call();
+  void onClose() {
+    _widget.onClose?.call();
   }
 
   @override

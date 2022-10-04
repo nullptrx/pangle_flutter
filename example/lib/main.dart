@@ -28,7 +28,7 @@ import 'package:pangle_flutter_example/common/version.dart';
 
 import 'common/common.dart';
 import 'page/constant.dart';
-import 'page/native/custom_splash_page.dart';
+import 'page/express/custom_splash_page.dart';
 
 /// 使用本插件需要知道的几个类，基本覆盖了开始使用时需要用到的入口类
 ///

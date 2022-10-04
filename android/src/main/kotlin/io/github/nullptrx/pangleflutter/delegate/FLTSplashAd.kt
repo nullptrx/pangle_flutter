@@ -35,7 +35,7 @@ internal class FLTSplashAd(
 
   override fun onSplashRenderFail(ad: CSJSplashAd, error: CSJAdError) {
     handleSplashEnd()
-    invoke(-1, "timeout")
+    invoke(error.code, error.msg)
   }
 
   fun loadAd(ad: CSJSplashAd) {

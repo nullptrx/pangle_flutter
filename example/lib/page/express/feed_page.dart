@@ -32,11 +32,11 @@ import '../../../widget/loading.dart';
 import '../constant.dart';
 import '../empty_page.dart';
 
-class FeedExpressPage extends StatefulWidget {
-  const FeedExpressPage({Key? key}) : super(key: key);
+class FeedPage extends StatefulWidget {
+  const FeedPage({Key? key}) : super(key: key);
 
   @override
-  _FeedExpressPageState createState() => _FeedExpressPageState();
+  _FeedPageState createState() => _FeedPageState();
 }
 
 class Item {
@@ -51,7 +51,7 @@ class Item {
 //   _ItemKey(Object value) : super(value);
 // }
 
-class _FeedExpressPageState extends State<FeedExpressPage> {
+class _FeedPageState extends State<FeedPage> {
   final items = <Item>[];
   final feedIds = <String>[];
   final feedDialogIds = <String>[];

@@ -31,14 +31,14 @@ import '../../../common/common.dart';
 import '../constant.dart';
 import '../empty_page.dart';
 
-class BannerExpressPage extends StatefulWidget {
-  const BannerExpressPage({Key? key}) : super(key: key);
+class BannerPage extends StatefulWidget {
+  const BannerPage({Key? key}) : super(key: key);
 
   @override
-  _BannerExpressPageState createState() => _BannerExpressPageState();
+  _BannerPageState createState() => _BannerPageState();
 }
 
-class _BannerExpressPageState extends State<BannerExpressPage> {
+class _BannerPageState extends State<BannerPage> {
   final _bgColor =
       kThemeStatus == PangleTheme.light ? Colors.white : Colors.black;
   final rows = <Widget>[];

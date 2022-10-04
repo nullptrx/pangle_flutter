@@ -64,19 +64,10 @@ public final class PangleAdManager: NSObject {
     }
 
     public func loadSplashAd(_ args: [String: Any?], result: @escaping FlutterResult) {
-        let isExpress: Bool = args["isExpress"] as? Bool ?? false
-
-        if isExpress {
-            let task = FLTSplashExpressAdTask(args)
-            self.execTask(task)({ object in
-                result(object)
-            })
-        } else {
-            let task = FLTSplashAdTask(args)
-            self.execTask(task)({ object in
-                result(object)
-            })
-        }
+        let task = FLTSplashAdTask(args)
+        self.execTask(task)({ object in
+            result(object)
+        })
     }
 
     public func loadRewardVideoAd(_ args: [String: Any?], result: @escaping FlutterResult) {

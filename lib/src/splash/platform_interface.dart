@@ -66,9 +66,7 @@ abstract class SplashViewPlatformCallbacksHandler {
 
   void onClick();
 
-  void onSkip();
-
-  void onTimeOver();
+  void onClose();
 
   void onError(int code, String message);
 }

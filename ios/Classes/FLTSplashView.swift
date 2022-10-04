@@ -80,7 +80,7 @@ extension SplashView: BUSplashAdDelegate {
     }
     
     func splashAdViewControllerDidClose(_ splashAd: BUSplashAd) {
-        postMessage("onTimeOver")
+        postMessage("onClose")
     }
 
     private func postMessage(_ method: String, arguments: [String: Any?] = [:]) {

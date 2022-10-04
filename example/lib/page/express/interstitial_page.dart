@@ -27,15 +27,14 @@ import 'package:pangle_flutter/pangle_flutter.dart';
 
 import '../constant.dart';
 
-class InterstitialExpressPage extends StatefulWidget {
-  const InterstitialExpressPage({Key? key}) : super(key: key);
+class InterstitialPage extends StatefulWidget {
+  const InterstitialPage({Key? key}) : super(key: key);
 
   @override
-  _InterstitialExpressPageState createState() =>
-      _InterstitialExpressPageState();
+  _InterstitialPageState createState() => _InterstitialPageState();
 }
 
-class _InterstitialExpressPageState extends State<InterstitialExpressPage> {
+class _InterstitialPageState extends State<InterstitialPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

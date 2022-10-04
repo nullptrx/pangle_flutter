@@ -88,13 +88,8 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: loadNativeAd,
-                child: const Text('Native AD'),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
                 onPressed: loadExpressAd,
-                child: const Text('Express AD'),
+                child: const Text('ADs'),
               ),
               const SizedBox(height: 90),
             ],
@@ -157,8 +152,6 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
     bool confirm = await pangle.openGDPRPrivacy();
     debugPrint('GDPR Privacy: $confirm');
   }
-
-  void loadNativeAd();
 
   void loadExpressAd();
 }

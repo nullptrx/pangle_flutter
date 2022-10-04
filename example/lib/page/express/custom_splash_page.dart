@@ -80,14 +80,17 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                       slotId: kSplashId,
                       tolerateTimeout: 3,
                     ),
-                    android: const AndroidSplashConfig(
+                    android: AndroidSplashConfig(
+                      expressSize: PangleExpressSize(
+                        width: kPangleScreenWidth,
+                        height: kPangleScreenHeight - 100,
+                      ),
                       slotId: kSplashId,
                       tolerateTimeout: 3,
                     ),
                     onLoad: _handleAdStart,
-                    onTimeOver: _handleAdEnd,
+                    onClose: _handleAdEnd,
                     onClick: _handleAdEnd,
-                    onSkip: _handleAdEnd,
                     onError: (code, message) => _handleAdEnd(),
                   ),
                 ),
@@ -132,7 +135,7 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
   _handleAdEnd() {
     Navigator.of(context).pop();
     if (widget.isRoot) {
-      context.navigateTo(HomePage());
+      context.navigateTo(const HomePage());
     }
   }
 }

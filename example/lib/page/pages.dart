@@ -23,33 +23,37 @@
 import 'package:flutter/material.dart';
 
 import '../../common/ext.dart';
-import 'express/banner_express_page.dart';
-import 'express/feed_express_page.dart';
-import 'express/fullscreen_video_express_page.dart';
-import 'express/interstitial_express_page.dart';
-import 'express/rewarded_video_express_page.dart';
+import 'express/banner_page.dart';
+import 'express/custom_splash_page.dart';
+import 'express/feed_page.dart';
+import 'express/fullscreen_video_page.dart';
+import 'express/interstitial_page.dart';
+import 'express/rewarded_video_page.dart';
+import 'express/splash_page.dart';
 
-class ExpressPage extends StatefulWidget {
-  const ExpressPage({Key? key}) : super(key: key);
+class Pages extends StatefulWidget {
+  const Pages({Key? key}) : super(key: key);
 
   @override
-  _ExpressPageState createState() => _ExpressPageState();
+  _PagesState createState() => _PagesState();
 }
 
-class _ExpressPageState extends State<ExpressPage> {
+class _PagesState extends State<Pages> {
   final pages = {
-    'Rewarded Video Express AD': RewardedVideoExpressPage(),
-    'Banner Express AD': const BannerExpressPage(),
-    'Feed Express AD': const FeedExpressPage(),
-    'Interstitial Express AD': const InterstitialExpressPage(),
-    'FullScreenVideo Express AD': const FullscreenVideoExpressPage(),
+    'Custom Splash AD': const CustomSplashPage(isRoot: false),
+    'Splash AD': const SplashPage(),
+    'Rewarded Video AD': const RewardedVideoPage(),
+    'Banner AD': const BannerPage(),
+    'Feed AD': const FeedPage(),
+    'Interstitial AD': const InterstitialPage(),
+    'FullScreenVideo AD': const FullscreenVideoPage(),
   };
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Express Examples'),
+        title: const Text('Examples'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

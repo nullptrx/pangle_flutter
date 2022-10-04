@@ -27,15 +27,14 @@ import 'package:pangle_flutter/pangle_flutter.dart';
 
 import '../constant.dart';
 
-class RewardedVideoExpressPage extends StatefulWidget {
-  const RewardedVideoExpressPage({Key? key}) : super(key: key);
+class RewardedVideoPage extends StatefulWidget {
+  const RewardedVideoPage({Key? key}) : super(key: key);
 
   @override
-  _RewardedVideoExpressPageState createState() =>
-      _RewardedVideoExpressPageState();
+  _RewardedVideoPageState createState() => _RewardedVideoPageState();
 }
 
-class _RewardedVideoExpressPageState extends State<RewardedVideoExpressPage> {
+class _RewardedVideoPageState extends State<RewardedVideoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

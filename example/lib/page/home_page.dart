@@ -26,8 +26,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/ext.dart';
-import 'cn.dart';
 import 'home_page_provider.dart';
+import 'pages.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -38,13 +38,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with HomePageProviderStateMixin {
   @override
-  void loadNativeAd() {
-    context.navigateTo(NativePage());
-  }
-
-  @override
   void loadExpressAd() {
-    context.navigateTo(const ExpressPage());
+    context.navigateTo(const Pages());
   }
 
   @override

@@ -41,10 +41,10 @@ class FlutterSplashView(
       val tolerateTimeout = params["tolerateTimeout"] as Double?
       hideSkipButton = params["hideSkipButton"] as? Boolean ?: false
 
-      val imgArgs: Map<String, Int?> = params["imageSize"]?.asMap() ?: mapOf()
-      val w: Int = imgArgs["width"] ?: 1080
-      val h: Int = imgArgs["height"] ?: 1920
-      val imgSize = TTSize(w, h)
+      val imgArgs: Map<String, Double?> = params["expressSize"]?.asMap() ?: mapOf()
+      val w: Double = imgArgs["width"] ?: 1080.0
+      val h: Double = imgArgs["height"] ?: 1920.0
+      val imgSize = TTSize(w.toInt(), h.toInt())
       val adSlot = PangleAdSlotManager.getSplashAdSlot(
         slotId,
         imgSize,
@@ -110,7 +110,7 @@ class FlutterSplashView(
   }
 
   override fun onSplashAdClose(ad: CSJSplashAd?, type: Int) {
-    postMessage("onTimeOver")
+    postMessage("onClose")
   }
 
   private fun postMessage(method: String, arguments: Map<String, Any?> = mapOf()) {
