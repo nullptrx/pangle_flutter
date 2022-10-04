@@ -1,3 +1,8 @@
+## 1.9.0
+- Fix click through problem on iOS
+- Remove "updateTouchableBounds" & "updateRestrictedBounds"
+- Add "addTouchableBounds" & "clearTouchableBounds" (extra click areas)
+
 ## 1.8.0
 - Adapt pangle SDK 4.7+ (Android & iOS)
 - [SplashView] Remove "onSkip" & "onTimeOver", add "onClose"

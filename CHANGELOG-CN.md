@@ -1,3 +1,8 @@
+## 1.9.0
+- 修复iOS点击穿透问题
+- 移除updateTouchableBounds和updateRestrictedBounds
+- 新增addTouchableBounds和clearTouchableBounds方法(额外点击区域)
+
 ## 1.8.0
 - 适配穿山甲SDK 4.7+ (Android & iOS)
 - [SplashView] 移除onSkip、onTimeOver,新增onClose
