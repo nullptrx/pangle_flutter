@@ -23,6 +23,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pangle_flutter/src/platform_controller.dart';
 
 const kSplashViewType = 'nullptrx.github.io/pangle_splashview';
 
@@ -53,7 +54,7 @@ typedef SplashViewPlatformCreatedCallback = void Function(
 /// Extending this class (using `extends`) ensures that the subclass will get the default
 /// implementation, while platform implementations that `implements` this interface will be broken
 /// by newly added [SplashViewPlatformController] methods.
-abstract class SplashViewPlatformController {}
+abstract class SplashViewPlatformController implements PlatformController {}
 
 /// Interface for callbacks made by [SplashViewPlatformController].
 ///

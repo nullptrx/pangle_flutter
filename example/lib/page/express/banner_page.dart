@@ -120,9 +120,7 @@ class _BannerPageState extends State<BannerPage> {
             expressSize: PangleExpressSize(width: 600, height: 260),
           ),
           onBannerViewCreated: (BannerViewController controller) {
-            controller.updateTouchableBounds([]);
-            // controller.updateTouchableBounds([Rect.zero]);
-            // controller.updateRestrictedBounds([Rect.zero]);
+            controller.clearTouchableBounds();
           },
           onDislike: (message, enforce) {
             setState(() {

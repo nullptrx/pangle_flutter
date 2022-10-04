@@ -24,6 +24,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
+import '../platform_controller.dart';
+
 const kBannerViewType = 'nullptrx.github.io/pangle_bannerview';
 
 abstract class BannerViewPlatform {
@@ -53,13 +55,7 @@ typedef BannerViewPlatformCreatedCallback = void Function(
 /// Extending this class (using `extends`) ensures that the subclass will get the default
 /// implementation, while platform implementations that `implements` this interface will be broken
 /// by newly added [BannerViewPlatformController] methods.
-abstract class BannerViewPlatformController {
-  /// 更新可点击区域
-  Future<void> updateTouchableBounds(List<Rect> bounds);
-
-  /// 更新不可点击区域
-  Future<void> updateRestrictedBounds(List<Rect> bounds);
-}
+abstract class BannerViewPlatformController implements PlatformController {}
 
 /// Interface for callbacks made by [BannerViewPlatformController].
 ///

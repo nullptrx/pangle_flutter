@@ -69,7 +69,7 @@ class MethodChannelBannerViewPlatform implements BannerViewPlatformController {
   }
 
   @override
-  Future<void> updateTouchableBounds(List<Rect> bounds) async {
+  Future<void> addTouchableBounds(List<Rect> bounds) async {
     if (defaultTargetPlatform != TargetPlatform.iOS) {
       return;
     }
@@ -82,23 +82,11 @@ class MethodChannelBannerViewPlatform implements BannerViewPlatformController {
         'h': bound.height,
       });
     }
-    await _channel.invokeMethod('updateTouchableBounds', json);
+    await _channel.invokeMethod('addTouchableBounds', json);
   }
 
   @override
-  Future<void> updateRestrictedBounds(List<Rect> bounds) async {
-    if (defaultTargetPlatform != TargetPlatform.iOS) {
-      return;
-    }
-    final json = [];
-    for (final bound in bounds) {
-      json.add({
-        'x': bound.left,
-        'y': bound.top,
-        'w': bound.width,
-        'h': bound.height,
-      });
-    }
-    await _channel.invokeMethod('updateRestrictedBounds', json);
+  Future<void> clearTouchableBounds() async {
+    await _channel.invokeMethod('clearTouchableBounds');
   }
 }

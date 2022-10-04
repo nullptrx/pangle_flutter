@@ -263,10 +263,10 @@ Container(
       expressSize: PangleExpressSize(width: 600, height: 260),
     ),
     onBannerViewCreated: (BannerViewController controller){
-      // 传入Rect.zero屏蔽点击，传入[](默认就是[])允许点击
-      controller.updateTouchableBounds([Rect.zero]);
-      // 传入Rect.zero无影响
-      controller.updateRestrictedBounds([Rect.zero]);
+      // 传入[Rect.zero]与[]均为无额外点击区域
+      controller.addTouchableBounds([Rect.zero]);
+      // 清空额外点击区域
+      controller.clearTouchableBounds();
     },
     onClick: () {},
   ),
@@ -278,14 +278,10 @@ Container(
 ```dart
 // 因iOS的EXPRESS类型的广告内部使用WebView渲染，而WebView与FlutterView存在部分点击事件冲突，故提供该解决方案
 onBannerViewCreated: (BannerViewController controller){
-  // 禁止点击，传入一个Rect.zero即可
-  controller.updateTouchableBounds([Rect.zero]);
-  // 提供点击，传入空即可
-  controller.updateTouchableBounds([]);
-
-  // 额外不可点击区域（一般用于上面可点击范围上面，如可点击范围有一个悬浮按钮Widget）
-  controller.updateRestrictedBounds([Rect.zero]);
-
+  // 传入[Rect.zero]与[]均为无额外点击区域
+  controller.addTouchableBounds([Rect.zero]);
+  // 清空额外点击区域
+  controller.clearTouchableBounds();
 },
 ```
 
@@ -389,14 +385,15 @@ _initConstraintBounds(FeedViewController controller) {
     return;
   }
 
-  RenderBox bodyBox = _bodyKey.currentContext.findRenderObject();
-  final bodyBound = PangleHelper.fromRenderBox(bodyBox);
-  controller.updateTouchableBounds([bodyBound]);
-
   RenderBox otherBox = _otherKey.currentContext.findRenderObject();
   final otherBound = PangleHelper.fromRenderBox(otherBox);
-
-  controller.updateRestrictedBounds([otherBound]);
+  final targetBound = Rect.fromLTWH(
+    0,
+    otherBound.top,
+    kPangleScreenWidth - otherBound.width,
+    otherBound.height,
+  );
+  controller.addTouchableBound(targetBound);
 }
 
 

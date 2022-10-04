@@ -25,6 +25,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pangle_flutter/src/platform_controller.dart';
 
 import 'feed/feedview_android.dart';
 import 'feed/feedview_ios.dart';
@@ -176,13 +177,15 @@ class _FeedViewState extends State<FeedView>
 ///
 /// A [FeedViewController] instance can be obtained by setting the [FeedView.onFeedViewCreated]
 /// callback for a [FeedView] widget.
-class FeedViewController {
+class FeedViewController extends ViewController {
   FeedViewController._(
     this._widget,
     this._feedViewPlatformController,
     this._platformCallbacksHandler,
-  );
+  ) : super(_feedViewPlatformController);
 
+  // todo unused_field
+  // ignore: unused_field
   final FeedViewPlatformController _feedViewPlatformController;
 
   // todo unused_field
@@ -195,23 +198,6 @@ class FeedViewController {
 
   Future<void> _updateWidget(FeedView widget) async {
     _widget = widget;
-  }
-
-  /// 更新可点击区域，默认为空。
-  ///
-  /// 可点击区域表示Widget在屏幕任何位置可触发点击事件的区域
-  /// 当bounds为空时，则认为可点击范围为全屏。
-  /// 但是受[updateRestrictedBounds]影响，即当Touchable区域中如果包含Restricted区域，
-  /// Restricted区域内的点击事件会屏蔽掉。
-  Future<void> updateTouchableBounds(List<Rect> bounds) async {
-    await _feedViewPlatformController.updateTouchableBounds(bounds);
-  }
-
-  /// 更新不可点击区域
-  ///
-  /// 一般用于处理NativeView与PlatformView重叠时点击事件冲突的问题。
-  Future<void> updateRestrictedBounds(List<Rect> bounds) async {
-    await _feedViewPlatformController.updateRestrictedBounds(bounds);
   }
 }
 

@@ -25,6 +25,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pangle_flutter/src/platform_controller.dart';
 
 import 'config.dart';
 import 'config_android.dart';
@@ -191,12 +192,12 @@ class _SplashViewState extends State<SplashView>
 ///
 /// A [SplashViewController] instance can be obtained by setting the [SplashView.onSplashViewCreated]
 /// callback for a [SplashView] widget.
-class SplashViewController {
+class SplashViewController extends ViewController {
   SplashViewController._(
     this._widget,
     this._splashViewPlatformController,
     this._platformCallbacksHandler,
-  );
+  ) : super(_splashViewPlatformController);
 
   // todo unused_field
   // ignore: unused_field

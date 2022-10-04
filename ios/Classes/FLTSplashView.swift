@@ -33,7 +33,7 @@ public class FLTSplashView: NSObject, FlutterPlatformView {
     }
 
     deinit {
-        container.removeFromSuperview()
+        UIUtil.removeAllView(container)
     }
 }
 
@@ -88,7 +88,7 @@ extension SplashView: BUSplashAdDelegate {
     }
 }
 
-class SplashView: UIView {
+class SplashView: FLTView {
     private var splashAd: BUSplashAd? = nil
     private var mounted: Bool = false
     private var params: [String: Any?] = [:]
@@ -118,6 +118,11 @@ class SplashView: UIView {
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
 //        let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
         switch call.method {
+        case "addTouchableBounds":
+            let args: [[String: Double?]] = call.arguments as? [[String: Double?]] ?? [[:]]
+            addTouchableBounds(bounds: args)
+        case "clearTouchableBounds":
+            clearTouchableBounds()
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -154,9 +159,4 @@ class SplashView: UIView {
         self.splashAd = splashAd
     }
     
-    override func removeFromSuperview() {
-        super.removeFromSuperview()
-        self.splashAd?.removeSplashView()
-        self.splashAd = nil
-    }
 }

@@ -24,6 +24,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
+import '../platform_controller.dart';
+
 const kFeedViewType = 'nullptrx.github.io/pangle_feedview';
 
 abstract class FeedViewPlatform {
@@ -52,13 +54,7 @@ typedef FeedViewPlatformCreatedCallback = void Function(
 /// Extending this class (using `extends`) ensures that the subclass will get the default
 /// implementation, while platform implementations that `implements` this interface will be broken
 /// by newly added [FeedViewPlatformController] methods.
-abstract class FeedViewPlatformController {
-  /// 更新可点击区域
-  Future<void> updateTouchableBounds(List<Rect> bounds);
-
-  /// 更新不可点击区域
-  Future<void> updateRestrictedBounds(List<Rect> bounds);
-}
+abstract class FeedViewPlatformController implements PlatformController {}
 
 /// Interface for callbacks made by [FeedViewPlatformController].
 ///

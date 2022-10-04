@@ -32,6 +32,7 @@ import 'banner/platform_interface.dart';
 import 'config.dart';
 import 'config_android.dart';
 import 'config_ios.dart';
+import 'platform_controller.dart';
 import 'util.dart';
 
 /// Optional callback invoked when a web view is first created. [controller] is
@@ -195,13 +196,15 @@ class _BannerViewState extends State<BannerView>
 ///
 /// A [BannerViewController] instance can be obtained by setting the [BannerView.onBannerViewCreated]
 /// callback for a [BannerView] widget.
-class BannerViewController {
+class BannerViewController extends ViewController {
   BannerViewController._(
     this._widget,
     this._bannerViewPlatformController,
     this._platformCallbacksHandler,
-  );
+  ) : super(_bannerViewPlatformController);
 
+  // todo unused_field
+  // ignore: unused_field
   final BannerViewPlatformController _bannerViewPlatformController;
 
   // todo unused_field
@@ -214,23 +217,6 @@ class BannerViewController {
 
   Future<void> _updateWidget(BannerView widget) async {
     _widget = widget;
-  }
-
-  /// 更新可点击区域，默认为空。
-  ///
-  /// 可点击区域表示Widget在屏幕任何位置可触发点击事件的区域
-  /// 当bounds为空时，则认为可点击范围为全屏。
-  /// 但是受[updateRestrictedBounds]影响，即当Touchable区域中如果包含Restricted区域，
-  /// Restricted区域内的点击事件会屏蔽掉。
-  Future<void> updateTouchableBounds(List<Rect> bounds) async {
-    await _bannerViewPlatformController.updateTouchableBounds(bounds);
-  }
-
-  /// 更新不可点击区域
-  ///
-  /// 一般用于处理NativeView与PlatformView重叠时点击事件冲突的问题。
-  Future<void> updateRestrictedBounds(List<Rect> bounds) async {
-    await _bannerViewPlatformController.updateRestrictedBounds(bounds);
   }
 }
 

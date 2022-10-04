@@ -211,17 +211,16 @@ class _FeedPageState extends State<FeedPage> {
     if (!Platform.isIOS) {
       return;
     }
-
-    RenderBox bodyBox =
-        _bodyKey.currentContext!.findRenderObject() as RenderBox;
-    final bodyBound = PangleHelper.fromRenderBox(bodyBox);
-    controller.updateTouchableBounds([bodyBound]);
-
     RenderBox otherBox =
         _otherKey.currentContext!.findRenderObject() as RenderBox;
     final otherBound = PangleHelper.fromRenderBox(otherBox);
-
-    controller.updateRestrictedBounds([otherBound]);
+    final targetBound = Rect.fromLTWH(
+      0,
+      otherBound.top,
+      kPangleScreenWidth - otherBound.width,
+      otherBound.height,
+    );
+    controller.addTouchableBound(targetBound);
   }
 
   void _showFeedDialog() async {

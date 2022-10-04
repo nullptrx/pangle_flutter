@@ -20,6 +20,9 @@
  * SOFTWARE.
  */
 
+import 'dart:ui';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'platform_interface.dart';
@@ -57,5 +60,27 @@ class MethodChannelSplashViewPlatform implements SplashViewPlatformController {
         _platformCallbacksHandler.onError(code, message);
         break;
     }
+  }
+
+  @override
+  Future<void> addTouchableBounds(List<Rect> bounds) async {
+    if (defaultTargetPlatform != TargetPlatform.iOS) {
+      return;
+    }
+    final json = [];
+    for (final bound in bounds) {
+      json.add({
+        'x': bound.left,
+        'y': bound.top,
+        'w': bound.width,
+        'h': bound.height,
+      });
+    }
+    await _channel.invokeMethod('addTouchableBounds', json);
+  }
+
+  @override
+  Future<void> clearTouchableBounds() async {
+    await _channel.invokeMethod('clearTouchableBounds');
   }
 }
