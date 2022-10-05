@@ -162,7 +162,7 @@ dependencies:
 
 
 
-## 使用步骤
+## 使用说明
 
 ### 1. 初始化
 
@@ -196,7 +196,8 @@ await pangle.loadSplashAd(
 @override
 void initState() {
   super.initState();
-  SplashView.platform = AndroidSplashView(useHybridComposition: true);
+  // android 10以下对hybrid支持不太好
+  SplashView.platform = AndroidSplashView(useHybridComposition: isAndroidAbove10);
 }
 
 /// 同Widget类用法
@@ -238,7 +239,8 @@ pangle.loadRewardVideoAd(
 @override
 void initState() {
   super.initState();
-  BannerView.platform = AndroidBannerView(useHybridComposition: true);
+  // android 10以下对hybrid支持不太好
+  BannerView.platform = AndroidBannerView(useHybridComposition: isAndroidAbove10);
 }
 
 /// Banner通过PlatformView实现，使用方法同Widget
@@ -273,18 +275,6 @@ Container(
 ),
 ```
 
-- 控制可点击区域（默认可点击）
-
-```dart
-// 因iOS的EXPRESS类型的广告内部使用WebView渲染，而WebView与FlutterView存在部分点击事件冲突，故提供该解决方案
-onBannerViewCreated: (BannerViewController controller){
-  // 传入[Rect.zero]与[]均为无额外点击区域
-  controller.addTouchableBounds([Rect.zero]);
-  // 清空额外点击区域
-  controller.clearTouchableBounds();
-},
-```
-
 
 
 ### 5. 信息流广告
@@ -316,7 +306,8 @@ onBannerViewCreated: (BannerViewController controller){
 @override
 void initState() {
   super.initState();
-  FeedView.platform = AndroidFeedView(useHybridComposition: true);
+  // android 10以下对hybrid支持不太好
+  FeedView.platform = AndroidFeedView(useHybridComposition: isAndroidAbove10);
 }
 
 /// 使用方法
@@ -340,39 +331,19 @@ FeedView(
 )
 ```
 
-- 控制可点击区域（默认可点击）
+- 清除缓存
 
 ```dart
-// 因iOS的EXPRESS类型的广告内部使用WebView渲染，而WebView与FlutterView存在部分点击事件冲突，故提供该解决方案
-// 1. 可点击区域key
-final _bodyKey = GlobalKey();
-// 不可点击区域key
-final _otherKey = GlobalKey();
-// 2.FeedView移动区域
-Container(
-  key: _bodyKey,
-  child: ListView.builder(
-    itemCount: items.length,
-    itemBuilder: (context, index) {
-      return _buildItem(index);
-    },
-)),
-// 可能覆盖在FeedView上的button
-FloatingActionButton(
-  key: _otherKey,
-),
-// 3. 获取FeedViewController并限制点击范围
  AspectRatio(
    aspectRatio: 375 / 284.0,
    child: FeedView(
      id: item.feedId,
-     onFeedViewCreated: (controller) {
-       // 限制FeedView点击范围
-       _initConstraintBounds(controller);
-     },
      onDislike: (option) {
-       // 移除FeedView两部曲
+       // 1.移除FeedView两步
+       
+       // 可在dispose方法处移除所有(此处可选)
        pangle.removeFeedAd([item.feedId]);
+       // 移除界面上的显示
        setState(() {
          items.removeAt(index);
        });
@@ -380,26 +351,9 @@ FloatingActionButton(
    ),
  )
 
-_initConstraintBounds(FeedViewController controller) {
-  if (!Platform.isIOS) {
-    return;
-  }
-
-  RenderBox otherBox = _otherKey.currentContext.findRenderObject();
-  final otherBound = PangleHelper.fromRenderBox(otherBox);
-  final targetBound = Rect.fromLTWH(
-    0,
-    otherBound.top,
-    kPangleScreenWidth - otherBound.width,
-    otherBound.height,
-  );
-  controller.addTouchableBound(targetBound);
-}
-
-
-// 4.清除缓存
 // 可选，点击不喜欢即右上角叉时清除
 pangle.removeFeedAd([item.feedId]);
+
 // 必须
 @override
 void dispose() {
@@ -438,13 +392,57 @@ _removeFeedAd() async {
 print(jsonEncode(result));
 ```
 
-### 其他广告
+
+
+### 7. 点击穿透
+
+本方案适用于`SplashView`、`FeedView`、`BannerView`。
+
+当我们点击覆盖在广告View上方的Widget时，最优先响应该事件的View是用来渲染被原生广告遮挡的Widget layer 的FlutterOverlayView，而FlutterOverlayView在初始化时被禁用了用户交互响应`userInteractionEnabled=NO`，所以点击事件就会在广告View上被响应。因采用方案[Flutter原生广告优化](http://jackin.cn/2021/02/01/bytedance-ad-click-penetration-on-flutter.html)处理了点击穿透问题，广告可点击区域存在屏蔽过度的情况，故增加方法添加额外点击区域。
+
+- 添加可点击区域（此处使用FeedView作为范例）
+
+```dart
+// 1.广告不可点击区域key
+final _otherKey = GlobalKey();
+// 2.可能覆盖在FeedView上的button
+FloatingActionButton(
+  key: _otherKey,
+),
+// 3. 获取FeedViewController并添加点击范围
+ AspectRatio(
+   aspectRatio: 375 / 284.0,
+   child: FeedView(
+     id: item.feedId,
+     onFeedViewCreated: (controller) {
+       // 限制FeedView点击范围
+       _initConstraintBounds(controller);
+     },
+   ),
+ )
+
+_initConstraintBounds(FeedViewController controller) {
+  if (!Platform.isIOS) {
+    return;
+  }
+
+  RenderBox otherBox = _otherKey.currentContext.findRenderObject();
+  final otherBound = PangleHelper.fromRenderBox(otherBox);
+  final targetBound = Rect.fromLTWH(
+    0,
+    otherBound.top,
+    kPangleScreenWidth - otherBound.width,
+    otherBound.height,
+  );
+  controller.addTouchableBound(targetBound);
+}
+```
+
+
+
+### 8. 其他广告
 
 另外已实现全屏视频广告、新模板渲染插屏，使用方式大同小异。
-
-## 开发说明
-
-~~1. iOS信息流广告的点击事件需要传入`rootViewController`，使用的是`(UIApplication.shared.delegate?.window??.rootViewController)!`，暂未发现问题。~~
 
  
 
@@ -458,6 +456,7 @@ print(jsonEncode(result));
 ## 交流
 
 提交issue即可。
+
 
 
 ## 感谢赞助
