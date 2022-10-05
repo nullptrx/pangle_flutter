@@ -1,3 +1,6 @@
+## 1.9.1
+- Optimize README (Clickthrough)
+
 ## 1.9.0
 - Fix click through problem on iOS
 - Remove "updateTouchableBounds" & "updateRestrictedBounds"

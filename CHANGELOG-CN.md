@@ -1,3 +1,6 @@
+## 1.9.1
+- 优化文档 (点击穿透)
+
 ## 1.9.0
 - 修复iOS点击穿透问题
 - 移除updateTouchableBounds和updateRestrictedBounds
