@@ -61,7 +61,7 @@ class FLTView: UIView {
             let targetBound = CGRect(x: x!, y: y!, width: w!, height: h!)
             var contains = false
             for touchableBound in touchableBounds {
-                if CGRectEqualToRect(touchableBound, targetBound) {
+                if touchableBound.equalTo(targetBound) {
                     contains = true
                     break
                 }
