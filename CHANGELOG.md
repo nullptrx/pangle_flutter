@@ -1,3 +1,6 @@
+## 1.9.2
+- Fix [#87], deprecated method.
+
 ## 1.9.1
 - Optimize README (Clickthrough)
 
