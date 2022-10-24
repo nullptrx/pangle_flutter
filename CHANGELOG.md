@@ -1,3 +1,6 @@
+## 1.9.3
+- Fix analysis issues.
+
 ## 1.9.2
 - Fix [#87], deprecated method.
 
