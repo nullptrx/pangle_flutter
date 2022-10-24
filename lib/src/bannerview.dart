@@ -122,7 +122,7 @@ class BannerView extends StatefulWidget {
   }
 
   @override
-  _BannerViewState createState() => _BannerViewState();
+  BannerViewState createState() => BannerViewState();
 
   /// 广告被点击
   final VoidCallback? onClick;
@@ -143,7 +143,7 @@ class BannerView extends StatefulWidget {
   final PangleMessageCallback? onRenderFail;
 }
 
-class _BannerViewState extends State<BannerView>
+class BannerViewState extends State<BannerView>
     with AutomaticKeepAliveClientMixin {
   final Completer<BannerViewController> _controller =
       Completer<BannerViewController>();

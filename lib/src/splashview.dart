@@ -121,7 +121,7 @@ class SplashView extends StatefulWidget {
   }
 
   @override
-  _SplashViewState createState() => _SplashViewState();
+  SplashViewState createState() => SplashViewState();
 
   /// 广告已加载
   final VoidCallback? onLoad;
@@ -139,7 +139,7 @@ class SplashView extends StatefulWidget {
   final PangleMessageCallback? onError;
 }
 
-class _SplashViewState extends State<SplashView>
+class SplashViewState extends State<SplashView>
     with AutomaticKeepAliveClientMixin {
   final Completer<SplashViewController> _controller =
       Completer<SplashViewController>();

@@ -84,7 +84,7 @@ class _FeedPageState extends State<FeedPage> {
       bottomNavigationBar: BottomNavigationBar(
           onTap: (value) {
             Navigator.of(context).push(CupertinoPageRoute(
-              builder: (context) => EmptyPage(),
+              builder: (context) => const EmptyPage(),
             ));
           },
           items: const [
@@ -153,7 +153,7 @@ class _FeedPageState extends State<FeedPage> {
           items.removeAt(index);
         });
       },
-      child: Loading(),
+      child: const Loading(),
     );
   }
 

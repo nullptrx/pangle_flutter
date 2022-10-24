@@ -106,7 +106,7 @@ class FeedView extends StatefulWidget {
   }
 
   @override
-  _FeedViewState createState() => _FeedViewState();
+  FeedViewState createState() => FeedViewState();
 
   /// 广告被点击
   final VoidCallback? onClick;
@@ -124,8 +124,7 @@ class FeedView extends StatefulWidget {
   final PangleMessageCallback? onRenderFail;
 }
 
-class _FeedViewState extends State<FeedView>
-    with AutomaticKeepAliveClientMixin {
+class FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin {
   final Completer<FeedViewController> _controller =
       Completer<FeedViewController>();
 
