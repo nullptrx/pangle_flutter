@@ -1,7 +1,9 @@
 name: pangle_flutter
 description: A Flutter plugin that supports ByteDance Pangle SDK on Android and iOS. Such as Splash Ads, Rewarded Video Ads, etc.
-version: 1.9.2
-homepage: https://github.com/nullptrX/pangle_flutter
+homepage: https://github.com/nullptrx/pangle_flutter
+repository: https://github.com/nullptrx/pangle_flutter
+issue_tracker: https://github.com/nullptrx/pangle_flutter/issues
+version: 1.9.3
 
 environment:
   sdk: '>=2.16.2 <3.0.0'
@@ -12,9 +14,9 @@ dependencies:
     sdk: flutter
 
 dev_dependencies:
+  flutter_lints: ^2.0.1
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.1
 
 flutter:
   plugin:

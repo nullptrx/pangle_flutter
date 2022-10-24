@@ -4,12 +4,12 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'pangle_flutter'
-  s.version          = '1.9.2'
+  s.version          = '1.9.3'
   s.summary          = 'Flutter plugin for Pangle Ad SDK.'
   s.description      = <<-DESC
 Flutter plugin for Pangle Ad SDK.
                        DESC
-  s.homepage         = 'https://github.com/nullptrX/pangle_flutter'
+  s.homepage         = 'https://github.com/nullptrx/pangle_flutter'
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'nullptrX' => 'nullptrxxx@gmail.com' }
   s.source           = { :path => '.' }
@@ -26,7 +26,7 @@ Flutter plugin for Pangle Ad SDK.
   end
 
   s.subspec 'global' do |ss|
-    ss.ios.dependency 'Ads-Global', '~> 4.8'
+    ss.ios.dependency 'Ads-Global', '~> 4.7'
   end
 
   # Flutter.framework does not contain a i386 slice.
