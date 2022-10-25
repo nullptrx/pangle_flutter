@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-import 'dart:ui';
+import 'package:flutter/rendering.dart';
 
 /// Interface for talking to the view's platform implementation.
 ///
