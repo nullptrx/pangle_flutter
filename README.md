@@ -399,7 +399,7 @@ print(jsonEncode(result));
 
 本方案适用于`SplashView`、`FeedView`、`BannerView`。
 
-当我们点击覆盖在广告View上方的Widget时，最优先响应该事件的View是用来渲染被原生广告遮挡的Widget layer 的FlutterOverlayView，而FlutterOverlayView在初始化时被禁用了用户交互响应`userInteractionEnabled=NO`，所以点击事件就会在广告View上被响应。因采用方案[Flutter原生广告优化](http://jackin.cn/2021/02/01/bytedance-ad-click-penetration-on-flutter.html)处理了点击穿透问题，广告可点击区域存在屏蔽过度的情况，故增加方法添加额外点击区域。
+当我们点击覆盖在广告View上方的Widget时，最优先响应该事件的View是用来渲染被原生广告遮挡的Widget layer 的FlutterOverlayView，而FlutterOverlayView在初始化时被禁用了用户交互响应`userInteractionEnabled=NO`，所以点击事件就会在广告View上被响应。因采用方案[Flutter原生广告优化](https://jackin.cn/2021/02/01/bytedance-ad-click-penetration-on-flutter.html)处理了点击穿透问题，广告可点击区域存在屏蔽过度的情况，故增加方法添加额外点击区域。
 
 - 添加可点击区域（此处使用FeedView作为范例）
 

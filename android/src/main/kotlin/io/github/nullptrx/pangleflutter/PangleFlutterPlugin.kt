@@ -146,7 +146,7 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
-    activity ?: return
+    // activity ?: return
     val pangle = PangleAdManager.shared
     when (call.method) {
       "getDeviceInfo" -> {
