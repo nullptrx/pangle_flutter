@@ -19,8 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-import 'package:flutter/rendering.dart';
+import 'dart:ui' show Rect;
 
 /// Interface for talking to the view's platform implementation.
 ///
