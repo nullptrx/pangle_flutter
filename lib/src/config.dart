@@ -23,6 +23,6 @@
 abstract class Config {
   /// Convert config to json
   Map<String, dynamic> toJSON() {
-    return {};
+    return <String, dynamic>{};
   }
 }

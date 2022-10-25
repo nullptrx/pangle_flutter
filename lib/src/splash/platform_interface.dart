@@ -23,7 +23,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pangle_flutter/src/platform_controller.dart';
+
+import '../platform_controller.dart';
 
 const kSplashViewType = 'nullptrx.github.io/pangle_splashview';
 

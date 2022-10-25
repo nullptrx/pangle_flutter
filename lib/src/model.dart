@@ -53,7 +53,7 @@ class PangleAd {
         data = map["data"] == null ? [] : List<String>.from(map["data"]);
 
   Map<String, dynamic> toJson() {
-    return {
+    return <String, dynamic>{
       'code': code,
       'message': message,
       'count': count,
@@ -136,7 +136,7 @@ class PangleExpressSize {
         height = kPangleScreenHeight * heightPercent;
 
   Map<String, dynamic> toJson() {
-    return {
+    return <String, dynamic>{
       'width': width,
       'height': height,
     };
@@ -187,7 +187,7 @@ class PangleSize {
         height = kPangleScreenHeight * heightPercent;
 
   Map<String, dynamic> toJson() {
-    return {
+    return <String, dynamic>{
       'width': width,
       'height': height,
     };
@@ -228,7 +228,7 @@ class PangleResult {
   }
 
   Map<String, dynamic> toJson() {
-    var data = {
+    final data = <String, dynamic>{
       'code': code,
       'message': message,
     };

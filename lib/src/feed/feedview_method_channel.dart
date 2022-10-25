@@ -20,8 +20,9 @@
  * SOFTWARE.
  */
 
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'platform_interface.dart';
@@ -29,7 +30,7 @@ import 'platform_interface.dart';
 /// A [FeedViewPlatformController] that uses a method channel to control the feedview.
 class MethodChannelFeedViewPlatform implements FeedViewPlatformController {
   /// Constructs an instance that will listen for webviews broadcasting to the
-  /// given [id], using the given [WebViewPlatformCallbacksHandler].
+  /// given [id], using the given [FeedViewPlatformCallbacksHandler].
   MethodChannelFeedViewPlatform(int id, this._platformCallbacksHandler)
       : _channel = MethodChannel('${kFeedViewType}_$id') {
     _channel.setMethodCallHandler(_onMethodCall);
@@ -48,16 +49,16 @@ class MethodChannelFeedViewPlatform implements FeedViewPlatformController {
         _platformCallbacksHandler.onShow();
         break;
       case "onDislike":
-        String option = call.arguments['option'];
-        bool enforce = call.arguments['enforce'] ?? false;
+        final String option = call.arguments['option'];
+        final bool enforce = call.arguments['enforce'] ?? false;
         _platformCallbacksHandler.onDislike(option, enforce);
         break;
       case "onRenderSuccess":
         _platformCallbacksHandler.onRenderSuccess();
         break;
       case "onRenderFail":
-        int code = call.arguments['code'];
-        String message = call.arguments['message'];
+        final int code = call.arguments['code'];
+        final String message = call.arguments['message'];
         _platformCallbacksHandler.onRenderFail(code, message);
         break;
     }
@@ -68,7 +69,7 @@ class MethodChannelFeedViewPlatform implements FeedViewPlatformController {
     if (defaultTargetPlatform != TargetPlatform.iOS) {
       return;
     }
-    final json = [];
+    final json = <Map<String, double>>[];
     for (final bound in bounds) {
       json.add({
         'x': bound.left,
@@ -77,11 +78,11 @@ class MethodChannelFeedViewPlatform implements FeedViewPlatformController {
         'h': bound.height,
       });
     }
-    await _channel.invokeMethod('addTouchableBounds', json);
+    await _channel.invokeMethod<void>('addTouchableBounds', json);
   }
 
   @override
   Future<void> clearTouchableBounds() async {
-    await _channel.invokeMethod('clearTouchableBounds');
+    await _channel.invokeMethod<void>('clearTouchableBounds');
   }
 }

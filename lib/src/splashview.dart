@@ -25,11 +25,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pangle_flutter/src/platform_controller.dart';
 
 import 'config.dart';
 import 'config_android.dart';
 import 'config_ios.dart';
+import 'platform_controller.dart';
 import 'splash/platform_interface.dart';
 import 'splash/splashview_android.dart';
 import 'splash/splashview_ios.dart';

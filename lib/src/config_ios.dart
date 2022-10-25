@@ -47,7 +47,7 @@ class IOSConfig implements Config {
   /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
-    return {
+    return <String, dynamic>{
       'appId': appId,
       'logLevel': logLevel?.index,
       'coppa': coppa,
@@ -80,7 +80,7 @@ class IOSSplashConfig implements Config {
   /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
-    return {
+    return <String, dynamic>{
       'slotId': slotId,
       'tolerateTimeout': tolerateTimeout,
       'hideSkipButton': hideSkipButton,
@@ -122,7 +122,7 @@ class IOSRewardedVideoConfig implements Config {
   /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
-    return {
+    return <String, dynamic>{
       'slotId': slotId,
       'userId': userId,
       'rewardName': rewardName,
@@ -154,7 +154,7 @@ class IOSBannerConfig implements Config {
   /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
-    return {
+    return <String, dynamic>{
       'slotId': slotId,
       'expressSize': expressSize.toJson(),
       'interval': interval,
@@ -181,7 +181,7 @@ class IOSFeedConfig implements Config {
   /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
-    return {
+    return <String, dynamic>{
       'slotId': slotId,
       'count': count,
       'expressSize': expressSize.toJson(),
@@ -205,7 +205,7 @@ class IOSInterstitialConfig implements Config {
   /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
-    return {
+    return <String, dynamic>{
       'slotId': slotId,
       'expressSize': expressSize.toJson(),
     };
@@ -228,7 +228,7 @@ class IOSFullscreenVideoConfig implements Config {
   /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
-    return {
+    return <String, dynamic>{
       'slotId': slotId,
       'loadingType': loadingType.index,
     };

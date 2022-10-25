@@ -54,7 +54,7 @@ class AndroidConfig implements Config {
   /// [useTextureView] 可选参数，设置是否使用texture播放视频：true使用、false不使用。默认为false不使用（使用的是surface）
   ///   暂时修改为默认true 使用TextureView渲染视频
   /// [titleBarTheme] 可选参数，设置落地页主题，默认为light
-  /// TODO [keywords] 可选参数，设置用户画像的关键词列表 **不能超过为1000个字符**。须征得用户同意才可传入该参数
+  /// TODO (keywords) 可选参数，设置用户画像的关键词列表 **不能超过为1000个字符**。须征得用户同意才可传入该参数
   /// [isCanUseLocation] （仅国内）是否允许SDK主动使用地理位置信息。true可以获取，false禁止获取。默认为true
   /// [location] （仅国内）当isCanUseLocation=false时，可传入地理位置信息，穿山甲sdk使用您传入的地理位置信息
   /// [isCanUsePhoneState] （仅国内）是否允许SDK主动使用手机硬件参数，如：imei。true可以使用，false禁止使用。默认为true
@@ -84,7 +84,7 @@ class AndroidConfig implements Config {
   /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
-    return {
+    return <String, dynamic>{
       'appId': appId,
       'debug': debug,
       'allowShowNotify': allowShowNotify,
@@ -133,7 +133,7 @@ class AndroidSplashConfig implements Config {
   /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
-    return {
+    return <String, dynamic>{
       'slotId': slotId,
       'tolerateTimeout': tolerateTimeout,
       'hideSkipButton': hideSkipButton,
@@ -183,7 +183,7 @@ class AndroidRewardedVideoConfig implements Config {
     var expressSize = this.expressSize;
     expressSize ??= PangleExpressSize.aspectRatio9_16();
 
-    return {
+    return <String, dynamic>{
       'slotId': slotId,
       'userId': userId,
       'extra': extra,
@@ -219,7 +219,7 @@ class AndroidBannerConfig implements Config {
   /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
-    return {
+    return <String, dynamic>{
       'slotId': slotId,
       'isSupportDeepLink': isSupportDeepLink,
       'expressSize': expressSize.toJson(),
@@ -252,7 +252,7 @@ class AndroidNativeBannerConfig implements Config {
   /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
-    return {
+    return <String, dynamic>{
       'slotId': slotId,
       'isSupportDeepLink': isSupportDeepLink,
       'size': size.toJson(),
@@ -283,7 +283,7 @@ class AndroidFeedConfig implements Config {
   /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
-    return {
+    return <String, dynamic>{
       'slotId': slotId,
       'count': count,
       'isSupportDeepLink': isSupportDeepLink,
@@ -311,7 +311,7 @@ class AndroidInterstitialConfig implements Config {
   /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
-    return {
+    return <String, dynamic>{
       'slotId': slotId,
       'isSupportDeepLink': isSupportDeepLink,
       'expressSize': expressSize.toJson(),
@@ -346,7 +346,7 @@ class AndroidFullscreenVideoConfig implements Config {
   Map<String, dynamic> toJSON() {
     var expressSize = this.expressSize;
     expressSize ??= PangleExpressSize.aspectRatio9_16();
-    return {
+    return <String, dynamic>{
       'slotId': slotId,
       'isSupportDeepLink': isSupportDeepLink,
       'orientation': orientation.index,

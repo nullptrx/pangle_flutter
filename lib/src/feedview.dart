@@ -25,11 +25,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
-import 'package:pangle_flutter/src/platform_controller.dart';
 
 import 'feed/feedview_android.dart';
 import 'feed/feedview_ios.dart';
 import 'feed/platform_interface.dart';
+import 'platform_controller.dart';
 import 'util.dart';
 
 /// Optional callback invoked when a web view is first created. [controller] is
@@ -99,7 +99,7 @@ class FeedView extends StatefulWidget {
   }
 
   Map<String, dynamic> get config {
-    return {
+    return <String, dynamic>{
       'id': id,
       'isUserInteractionEnabled': false,
     };

@@ -36,12 +36,12 @@ class AndroidDeviceInfo {
 
   /// Serializes [ AndroidDeviceInfo ] to map.
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'sdkInt': sdkInt,
     };
   }
 
-  /// Deserializes from the map message received from [_kChannel].
+  /// Deserializes from the map message.
   static AndroidDeviceInfo fromMap(Map<String, dynamic> map) {
     return AndroidDeviceInfo._(
       sdkInt: map['sdkInt'],
@@ -63,12 +63,12 @@ class IOSDeviceInfo {
 
   /// Serializes [ AndroidDeviceInfo ] to map.
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'systemVersion': systemVersion,
     };
   }
 
-  /// Deserializes from the map message received from [_kChannel].
+  /// Deserializes from the map message.
   static IOSDeviceInfo fromMap(Map<String, dynamic> map) {
     return IOSDeviceInfo._(
       systemVersion: map['systemVersion'],

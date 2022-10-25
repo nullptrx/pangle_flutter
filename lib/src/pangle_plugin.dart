@@ -24,8 +24,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/services.dart';
-import 'package:pangle_flutter/src/build.dart';
 
+import 'build.dart';
 import 'config_android.dart';
 import 'config_ios.dart';
 import 'constant.dart';
@@ -46,23 +46,23 @@ class PanglePlugin {
   );
 
   PanglePlugin._() {
-    _methodChannel.setMethodCallHandler((call) => _handleMethod(call));
+    _methodChannel.setMethodCallHandler(_handleMethod);
   }
 
-  _handleMethod(MethodCall call) {}
+  Future<void> _handleMethod(MethodCall call) async {}
 
   /// 获取AndroidSDKVersion
   Future<AndroidDeviceInfo> getAndroidDeviceInfo() async {
-    Map<String, dynamic>? deviceInfo =
-        await _methodChannel.invokeMapMethod('getDeviceInfo');
+    final Map<String, dynamic>? deviceInfo =
+        await _methodChannel.invokeMapMethod<String, dynamic>('getDeviceInfo');
 
     return AndroidDeviceInfo.fromMap(deviceInfo!);
   }
 
   /// 获取SDK版本号
   Future<IOSDeviceInfo> getIOSDeviceInfo() async {
-    Map<String, dynamic>? deviceInfo =
-        await _methodChannel.invokeMapMethod('getDeviceInfo');
+    final Map<String, dynamic>? deviceInfo =
+        await _methodChannel.invokeMapMethod<String, dynamic>('getDeviceInfo');
 
     return IOSDeviceInfo.fromMap(deviceInfo!);
   }
@@ -75,7 +75,8 @@ class PanglePlugin {
   /// 获取当前主题类型
   /// 0：正常模式；1：夜间模式
   Future<PangleTheme> getThemeStatus() async {
-    int status = await _methodChannel.invokeMethod('getThemeStatus');
+    final int? status =
+        await _methodChannel.invokeMethod<int>('getThemeStatus');
     if (status == 1) {
       return PangleTheme.dark;
     }
@@ -85,8 +86,8 @@ class PanglePlugin {
   /// 设置主题类型
   /// [theme] 0：正常模式；1：夜间模式；默认为0；传非法值，按照0处理
   Future<PangleTheme> setThemeStatus(PangleTheme theme) async {
-    int status =
-        await _methodChannel.invokeMethod('setThemeStatus', theme.index);
+    final int? status =
+        await _methodChannel.invokeMethod<int>('setThemeStatus', theme.index);
     if (status == 1) {
       return PangleTheme.dark;
     }
@@ -109,7 +110,7 @@ class PanglePlugin {
   /// ```
   Future<void> requestPermissionIfNecessary() async {
     if (Platform.isAndroid) {
-      await _methodChannel.invokeMethod('requestPermissionIfNecessary');
+      await _methodChannel.invokeMethod<void>('requestPermissionIfNecessary');
     }
   }
 
@@ -117,7 +118,7 @@ class PanglePlugin {
   /// ```
   Future<void> showPrivacyProtection() async {
     if (Platform.isAndroid) {
-      await _methodChannel.invokeMethod('showPrivacyProtection');
+      await _methodChannel.invokeMethod<void>('showPrivacyProtection');
     }
   }
 
@@ -131,7 +132,7 @@ class PanglePlugin {
   /// Just works on iOS 14.0+.
   Future<PangleAuthorizationStatus?> requestTrackingAuthorization() async {
     if (Platform.isIOS) {
-      int? rawValue = await _methodChannel.invokeMethod(
+      final int? rawValue = await _methodChannel.invokeMethod(
         'requestTrackingAuthorization',
       );
       if (rawValue != null) {
@@ -146,7 +147,7 @@ class PanglePlugin {
   /// Just works on iOS 14.0+.
   Future<PangleAuthorizationStatus?> getTrackingAuthorizationStatus() async {
     if (Platform.isIOS) {
-      int? rawValue = await _methodChannel.invokeMethod(
+      final int? rawValue = await _methodChannel.invokeMethod(
         'getTrackingAuthorizationStatus',
       );
       if (rawValue != null) {
@@ -161,8 +162,9 @@ class PanglePlugin {
   /// 0：正常模式；1：夜间模式
   Future<bool> openGDPRPrivacy() async {
     if (Platform.isIOS) {
-      bool confirm = await _methodChannel.invokeMethod('openGDPRPrivacy');
-      return confirm;
+      final bool? confirm =
+          await _methodChannel.invokeMethod<bool>('openGDPRPrivacy');
+      return confirm ?? false;
     }
     return false;
   }
@@ -178,9 +180,15 @@ class PanglePlugin {
   }) async {
     Map<String, dynamic>? result;
     if (Platform.isIOS && iOS != null) {
-      result = await _methodChannel.invokeMapMethod('init', iOS.toJSON());
+      result = await _methodChannel.invokeMapMethod<String, dynamic>(
+        'init',
+        iOS.toJSON(),
+      );
     } else if (Platform.isAndroid && android != null) {
-      result = await _methodChannel.invokeMapMethod('init', android.toJSON());
+      result = await _methodChannel.invokeMapMethod<String, dynamic>(
+        'init',
+        android.toJSON(),
+      );
     }
     return PangleResult.fromJson(result);
   }
@@ -195,12 +203,12 @@ class PanglePlugin {
   }) async {
     Map<String, dynamic>? result;
     if (Platform.isIOS && iOS != null) {
-      result = await _methodChannel.invokeMapMethod(
+      result = await _methodChannel.invokeMapMethod<String, dynamic>(
         'loadSplashAd',
         iOS.toJSON(),
       );
     } else if (Platform.isAndroid && android != null) {
-      result = await _methodChannel.invokeMapMethod(
+      result = await _methodChannel.invokeMapMethod<String, dynamic>(
         'loadSplashAd',
         android.toJSON(),
       );
@@ -221,18 +229,18 @@ class PanglePlugin {
   }) async {
     final subscription = _eventChannel
         .receiveBroadcastStream(PangleEventType.rewardedVideo.index)
-        .listen((event) {
+        .listen((dynamic event) {
       callback?.call(event);
     });
     Map<String, dynamic>? result;
     try {
       if (Platform.isIOS && iOS != null) {
-        result = await _methodChannel.invokeMapMethod(
+        result = await _methodChannel.invokeMapMethod<String, dynamic>(
           'loadRewardedVideoAd',
           iOS.toJSON(),
         );
       } else if (Platform.isAndroid && android != null) {
-        result = await _methodChannel.invokeMapMethod(
+        result = await _methodChannel.invokeMapMethod<String, dynamic>(
           'loadRewardedVideoAd',
           android.toJSON(),
         );
@@ -254,12 +262,12 @@ class PanglePlugin {
   }) async {
     Map<dynamic, dynamic>? result;
     if (Platform.isIOS && iOS != null) {
-      result = await _methodChannel.invokeMapMethod(
+      result = await _methodChannel.invokeMapMethod<dynamic, dynamic>(
         'loadFeedAd',
         iOS.toJSON(),
       );
     } else if (Platform.isAndroid && android != null) {
-      result = await _methodChannel.invokeMapMethod(
+      result = await _methodChannel.invokeMapMethod<dynamic, dynamic>(
         'loadFeedAd',
         android.toJSON(),
       );
@@ -290,18 +298,18 @@ class PanglePlugin {
   }) async {
     final subscription = _eventChannel
         .receiveBroadcastStream(PangleEventType.interstitial.index)
-        .listen((event) {
+        .listen((dynamic event) {
       callback?.call(event);
     });
     Map<String, dynamic>? result;
     try {
       if (Platform.isIOS && iOS != null) {
-        result = await _methodChannel.invokeMapMethod(
+        result = await _methodChannel.invokeMapMethod<String, dynamic>(
           'loadInterstitialAd',
           iOS.toJSON(),
         );
       } else if (Platform.isAndroid && android != null) {
-        result = await _methodChannel.invokeMapMethod(
+        result = await _methodChannel.invokeMapMethod<String, dynamic>(
           'loadInterstitialAd',
           android.toJSON(),
         );
@@ -326,18 +334,18 @@ class PanglePlugin {
   }) async {
     final subscription = _eventChannel
         .receiveBroadcastStream(PangleEventType.fullscreen.index)
-        .listen((event) {
+        .listen((dynamic event) {
       callback?.call(event);
     });
     Map<String, dynamic>? result;
     try {
       if (Platform.isIOS && iOS != null) {
-        result = await _methodChannel.invokeMapMethod(
+        result = await _methodChannel.invokeMapMethod<String, dynamic>(
           'loadFullscreenVideoAd',
           iOS.toJSON(),
         );
       } else if (Platform.isAndroid && android != null) {
-        result = await _methodChannel.invokeMapMethod(
+        result = await _methodChannel.invokeMapMethod<String, dynamic>(
           'loadFullscreenVideoAd',
           android.toJSON(),
         );

@@ -20,8 +20,9 @@
  * SOFTWARE.
  */
 
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'platform_interface.dart';
@@ -29,7 +30,7 @@ import 'platform_interface.dart';
 /// A [SplashViewPlatformController] that uses a method channel to control the splashview.
 class MethodChannelSplashViewPlatform implements SplashViewPlatformController {
   /// Constructs an instance that will listen for webviews broadcasting to the
-  /// given [id], using the given [WebViewPlatformCallbacksHandler].
+  /// given [id], using the given [SplashViewPlatformCallbacksHandler].
   MethodChannelSplashViewPlatform(int id, this._platformCallbacksHandler)
       : _channel = MethodChannel('${kSplashViewType}_$id') {
     _channel.setMethodCallHandler(_onMethodCall);
@@ -54,8 +55,8 @@ class MethodChannelSplashViewPlatform implements SplashViewPlatformController {
         _platformCallbacksHandler.onClose();
         break;
       case "onError":
-        int code = call.arguments['code'];
-        String message = call.arguments['message'];
+        final int code = call.arguments['code'];
+        final String message = call.arguments['message'];
         _platformCallbacksHandler.onError(code, message);
         break;
     }
@@ -66,7 +67,7 @@ class MethodChannelSplashViewPlatform implements SplashViewPlatformController {
     if (defaultTargetPlatform != TargetPlatform.iOS) {
       return;
     }
-    final json = [];
+    final json = <Map<String, double>>[];
     for (final bound in bounds) {
       json.add({
         'x': bound.left,
@@ -75,11 +76,11 @@ class MethodChannelSplashViewPlatform implements SplashViewPlatformController {
         'h': bound.height,
       });
     }
-    await _channel.invokeMethod('addTouchableBounds', json);
+    await _channel.invokeMethod<void>('addTouchableBounds', json);
   }
 
   @override
   Future<void> clearTouchableBounds() async {
-    await _channel.invokeMethod('clearTouchableBounds');
+    await _channel.invokeMethod<void>('clearTouchableBounds');
   }
 }
