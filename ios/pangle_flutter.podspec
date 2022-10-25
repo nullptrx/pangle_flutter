@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'pangle_flutter'
-  s.version          = '1.9.6'
+  s.version          = '1.9.7'
   s.summary          = 'Flutter plugin for Pangle Ad SDK.'
   s.description      = <<-DESC
 Flutter plugin for Pangle Ad SDK.

@@ -1,4 +1,4 @@
-## 1.9.6
+## 1.9.7
 - Fix analysis issues.
 
 ## 1.9.2
