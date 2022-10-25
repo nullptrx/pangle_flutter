@@ -3,7 +3,7 @@ description: A Flutter plugin that supports ByteDance Pangle SDK on Android and 
 homepage: https://github.com/nullptrx/pangle_flutter
 repository: https://github.com/nullptrx/pangle_flutter
 issue_tracker: https://github.com/nullptrx/pangle_flutter/issues
-version: 1.9.3
+version: 1.9.4
 
 environment:
   sdk: '>=2.16.2 <3.0.0'

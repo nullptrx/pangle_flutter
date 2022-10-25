@@ -4,14 +4,14 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'pangle_flutter'
-  s.version          = '1.9.3'
+  s.version          = '1.9.4'
   s.summary          = 'Flutter plugin for Pangle Ad SDK.'
   s.description      = <<-DESC
 Flutter plugin for Pangle Ad SDK.
                        DESC
   s.homepage         = 'https://github.com/nullptrx/pangle_flutter'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'nullptrX' => 'nullptrxxx@gmail.com' }
+  s.author           = { 'nullptrX' => '19757745+nullptrx@users.noreply.github.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
