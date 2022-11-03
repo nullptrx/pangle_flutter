@@ -71,7 +71,7 @@ extension SplashView: BUSplashAdDelegate {
     }
     
     func splashAdLoadFail(_ splashAd: BUSplashAd, error: BUAdError?) {
-        postMessage("onError", arguments: ["code": error?.errorCode ?? -1, "message": error?.localizedDescription])
+        postMessage("onError", arguments: ["code": error?.userInfo["origin_error_code"] as? Int ?? 0, "message": error?.userInfo["NSLocalizedDescription"] as? String ?? ""])
     }
     
 
