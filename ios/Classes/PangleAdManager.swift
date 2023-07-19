@@ -36,30 +36,31 @@ public final class PangleAdManager: NSObject {
         }
     }
 
-    public func initialize(_ args: [String: Any?]) {
+    public func initialize(_ args: [String: Any?], _ result: @escaping FlutterResult) {
         let appId: String = args["appId"] as! String
         let logLevel: Int? = args["logLevel"] as? Int
-        let coppa: Int? = args["coppa"] as? Int
-        let gdpr: Int? = args["gdpr"] as? Int
         let idfa: String? = args["idfa"] as? String
+        
+        let config = BUAdSDKConfiguration.init()
         
         BUAdSDKManager.setAppID(appId)
 
+        config.appID = appId
         if logLevel != nil {
-            BUAdSDKManager.setLoglevel(BUAdSDKLogLevel(rawValue: logLevel!)!)
-        }
-        
-        if coppa != nil {
-            BUAdSDKManager.setCoppa(coppa!)
-        }
-        
-        if gdpr != nil {
-            BUAdSDKManager.setGDPR(gdpr!)
+            config.debugLog = logLevel == 0 ? 0 : 1
         }
         
         if idfa != nil {
-            BUAdSDKManager.setCustomIDFA(idfa)
+            config.customIdfa = idfa!
         }
+        
+        config.appLogoImage = UIImage(named: "AppIcon")
+        
+        BUAdSDKManager.start(asyncCompletionHandler: { success, error in
+            DispatchQueue.main.async {
+                result(["code": 0, "message": ""] as [String: Any])
+            }
+        })
         
     }
 
@@ -108,10 +109,11 @@ public final class PangleAdManager: NSObject {
 
     public func loadInterstitialAd(_ args: [String: Any?], result: @escaping FlutterResult) {
 
-        let task = FLTInterstitialExpressAdTask(args)
-        execTask(task)({ data in
-            result(data)
-        })
+//        let task = FLTInterstitialExpressAdTask(args)
+//        execTask(task)({ data in
+//            result(data)
+//        })
+        result(FlutterMethodNotImplemented)
     }
 
     public func loadFullscreenVideoAd(_ args: [String: Any?], result: @escaping FlutterResult) {

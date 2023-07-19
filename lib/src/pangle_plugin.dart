@@ -159,7 +159,6 @@ class PanglePlugin {
 
   /// 是否遵循隐私协议的选择框
   /// 也可自定义设置GDPR，用来标识本次广告是否遵循欧盟通用数据保护条例。
-  /// 0：正常模式；1：夜间模式
   Future<bool> openGDPRPrivacy() async {
     if (Platform.isIOS) {
       final bool? confirm =

@@ -43,11 +43,11 @@ internal final class FLTNativeExpressAdTask: FLTTaskProtocol {
         return { result in
             let delegate = FLTNativeExpressAdViewDelegate(success: { [weak self] data in
                 guard let self = self else { return }
-                result(self, ["code": 0, "count": data.count, "data": data])
+                result(self, ["code": 0, "count": data.count, "data": data] as [String : Any])
             }, fail: { [weak self] error in
                 guard let self = self else { return }
                 let e = error as NSError?
-                result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? "", "count": 0, "data": []])
+                result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? "", "count": 0, "data": [] as [Any]] as [String : Any])
             })
             
             self.manager.delegate = delegate

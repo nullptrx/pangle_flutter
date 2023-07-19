@@ -27,7 +27,6 @@ import 'express/banner_page.dart';
 import 'express/custom_splash_page.dart';
 import 'express/feed_page.dart';
 import 'express/fullscreen_video_page.dart';
-import 'express/interstitial_page.dart';
 import 'express/rewarded_video_page.dart';
 import 'express/splash_page.dart';
 
@@ -45,7 +44,6 @@ class _PagesState extends State<Pages> {
     'Rewarded Video AD': const RewardedVideoPage(),
     'Banner AD': const BannerPage(),
     'Feed AD': const FeedPage(),
-    'Interstitial AD': const InterstitialPage(),
     'FullScreenVideo AD': const FullscreenVideoPage(),
   };
 
