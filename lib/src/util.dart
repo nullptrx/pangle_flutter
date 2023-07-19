@@ -22,6 +22,10 @@
 
 import 'package:flutter/widgets.dart';
 
+import 'constant.dart';
+
+typedef PangleSplashCloseTypeCallback = Function(PangleSplashCloseType type);
+
 typedef PangleMessageCallback = Function(int code, String message);
 
 typedef PangleOptionCallback = Function(String message, bool enforce);

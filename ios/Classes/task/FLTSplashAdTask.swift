@@ -38,13 +38,13 @@ internal final class FLTSplashAdTask: FLTTaskProtocol {
 
     func execute() -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
         return { result in
-            let delegate = FLTSplashAd(success: { [weak self] msg in
+            let delegate = FLTSplashAd(success: { [weak self] msg, type in
                 guard let self = self else { return }
-                result(self, ["code": 0, "message": msg])
+                result(self, ["code": 0, "message": msg, "type": type] as [String:Any])
             }, fail: { [weak self] error in
                 guard let self = self else { return }
                 let e = error as NSError?
-                result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? ""])
+                result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? "", "type": 0] as [String:Any])
             })
 
             self.manager.delegate = delegate

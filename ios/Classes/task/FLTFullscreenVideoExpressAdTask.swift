@@ -34,7 +34,7 @@ internal final class FLTFullscreenVideoExpressAdTask: FLTTaskProtocol {
                     return
                 }
                 let e = error as NSError?
-                result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? ""])
+                result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? ""] as [String:Any])
             })
 
             self.manager.delegate = delegate

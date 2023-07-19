@@ -51,7 +51,7 @@ extension SplashView: BUSplashAdDelegate {
     }
     
     func splashAdDidClose(_ splashAd: BUSplashAd, closeType: BUSplashAdCloseType) {
-        
+        postMessage("onClose", arguments: ["type": closeType.rawValue])
     }
     
     func splashDidCloseOtherController(_ splashAd: BUSplashAd, interactionType: BUInteractionType) {
@@ -80,7 +80,7 @@ extension SplashView: BUSplashAdDelegate {
     }
     
     func splashAdViewControllerDidClose(_ splashAd: BUSplashAd) {
-        postMessage("onClose")
+        
     }
 
     private func postMessage(_ method: String, arguments: [String: Any?] = [:]) {

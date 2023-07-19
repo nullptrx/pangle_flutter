@@ -94,3 +94,10 @@ enum PangleTheme {
   light,
   dark,
 }
+
+enum PangleSplashCloseType {
+  unknown,
+  clickSkip,
+  countDownToZero,
+  clickAd,
+}

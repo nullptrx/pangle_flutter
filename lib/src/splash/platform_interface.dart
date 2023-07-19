@@ -24,6 +24,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
+import '../constant.dart';
 import '../platform_controller.dart';
 
 const kSplashViewType = 'nullptrx.github.io/pangle_splashview';
@@ -68,7 +69,7 @@ abstract class SplashViewPlatformCallbacksHandler {
 
   void onClick();
 
-  void onClose();
+  void onClose(PangleSplashCloseType type);
 
   void onError(int code, String message);
 }

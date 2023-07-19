@@ -23,6 +23,8 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'constant.dart';
+
 /// 信息流响应信息
 ///
 /// [code] 响应码，0成功，-1失败
@@ -205,16 +207,10 @@ class PangleResult {
   /// 一般是错误信息
   final String? message;
 
-  /// 适用于需要验证结果的广告，目前仅激励视频有返回
-  final bool? verify;
-
-  const PangleResult({this.code, this.message, this.verify});
+  const PangleResult({this.code, this.message});
 
   /// 是否成功
   bool get ok => code == 0;
-
-  /// 是否验证成功
-  bool get isVerify => verify == true;
 
   /// 解析插件返回的结果
   ///
@@ -225,7 +221,6 @@ class PangleResult {
     return PangleResult(
       code: json['code'],
       message: json['message'],
-      verify: json['verify'],
     );
   }
 
@@ -234,14 +229,80 @@ class PangleResult {
       'code': code,
       'message': message,
     };
-    if (verify != null) {
-      data['verify'] = verify;
-    }
     return data;
   }
 
   @override
   String toString() {
     return jsonEncode(this);
+  }
+}
+
+class PangleVerifyResult extends PangleResult {
+  /// 适用于需要验证结果的广告，目前仅激励视频有返回
+  final bool? verify;
+
+  const PangleVerifyResult({
+    required int code,
+    required String message,
+    this.verify,
+  }) : super(code: code, message: message);
+
+  /// 是否验证成功
+  bool get isVerify => verify == true;
+
+  /// 解析插件返回的结果
+  ///
+  factory PangleVerifyResult.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return const PangleVerifyResult(code: -1, message: 'unknown');
+    }
+    return PangleVerifyResult(
+      code: json['code'],
+      message: json['message'],
+      verify: json['verify'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = super.toJson();
+    if (verify != null) {
+      data['verify'] = verify;
+    }
+    return data;
+  }
+}
+
+class PangleSplashResult extends PangleResult {
+  /// 广告关闭类型
+  final PangleSplashCloseType type;
+
+  const PangleSplashResult({
+    required int code,
+    required String message,
+    required this.type,
+  }) : super(code: code, message: message);
+
+  /// 解析插件返回的结果
+  ///
+  factory PangleSplashResult.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return const PangleSplashResult(
+        code: -1,
+        message: 'unknown',
+        type: PangleSplashCloseType.unknown,
+      );
+    }
+    return PangleSplashResult(
+      code: json['code'],
+      message: json['message'],
+      type: PangleSplashCloseType.values[json['type'] ?? 0],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = super.toJson();
+    data['type'] = type.name;
+    return data;
   }
 }

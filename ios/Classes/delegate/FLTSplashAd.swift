@@ -10,7 +10,7 @@ import Foundation
 
 internal final class FLTSplashAd: NSObject, BUSplashAdDelegate {
     
-    typealias Success = (String) -> Void
+    typealias Success = (String, Int) -> Void
     typealias Fail = (Error?) -> Void
     
     let success: Success?
@@ -21,17 +21,17 @@ internal final class FLTSplashAd: NSObject, BUSplashAdDelegate {
         self.fail = fail
     }
     
-    public func splashAdDidClick(_ splashAd: BUSplashAd) {
-        self.success?("click")
-        splashAd.removeSplashView()
+    func splashAdDidClick(_ splashAd: BUSplashAd) {
     }
     
     public func splashAdDidClose(_ splashAd: BUSplashAd) {
-        self.success?("close")
-        splashAd.removeSplashView()
+        
     }
     
-    func splashAdDidClose(_ splashAd: BUSplashAd, closeType: BUSplashAdCloseType) {}
+    func splashAdDidClose(_ splashAd: BUSplashAd, closeType: BUSplashAdCloseType) {
+        self.success?("close", closeType.rawValue)
+        splashAd.removeSplashView()
+    }
     
     func splashAdLoadSuccess(_ splashAd: BUSplashAd) {}
     

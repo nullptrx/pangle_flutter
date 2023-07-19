@@ -29,6 +29,7 @@ import 'package:flutter/widgets.dart';
 import 'config.dart';
 import 'config_android.dart';
 import 'config_ios.dart';
+import 'constant.dart';
 import 'platform_controller.dart';
 import 'splash/platform_interface.dart';
 import 'splash/splashview_android.dart';
@@ -133,7 +134,7 @@ class SplashView extends StatefulWidget {
   final VoidCallback? onClick;
 
   /// 关闭广告
-  final VoidCallback? onClose;
+  final PangleSplashCloseTypeCallback? onClose;
 
   /// 获取广告失败
   final PangleMessageCallback? onError;
@@ -237,8 +238,8 @@ class _PlatformCallbacksHandler implements SplashViewPlatformCallbacksHandler {
   }
 
   @override
-  void onClose() {
-    _widget.onClose?.call();
+  void onClose(PangleSplashCloseType type) {
+    _widget.onClose?.call(type);
   }
 
   @override

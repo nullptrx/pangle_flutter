@@ -111,7 +111,7 @@ class FlutterSplashView(
   }
 
   override fun onSplashAdClose(ad: CSJSplashAd?, type: Int) {
-    postMessage("onClose")
+    postMessage("onClose", mapOf("type" to type))
   }
 
   private fun postMessage(method: String, arguments: Map<String, Any?> = mapOf()) {

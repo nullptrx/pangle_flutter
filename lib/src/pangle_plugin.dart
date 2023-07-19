@@ -177,7 +177,7 @@ class PanglePlugin {
   ///
   /// [iOS] config for iOS
   /// [android] config for Android
-  Future<PangleResult> loadSplashAd({
+  Future<PangleSplashResult> loadSplashAd({
     IOSSplashConfig? iOS,
     AndroidSplashConfig? android,
   }) async {
@@ -193,7 +193,7 @@ class PanglePlugin {
         android.toJSON(),
       );
     }
-    return PangleResult.fromJson(result);
+    return PangleSplashResult.fromJson(result);
   }
 
   /// Display video ad.
@@ -202,7 +202,7 @@ class PanglePlugin {
   /// [android] config for Android
   /// [callback] event callback
   /// return code & message
-  Future<PangleResult> loadRewardedVideoAd({
+  Future<PangleVerifyResult> loadRewardedVideoAd({
     IOSRewardedVideoConfig? iOS,
     AndroidRewardedVideoConfig? android,
     PangleEventCallback? callback,
@@ -228,7 +228,7 @@ class PanglePlugin {
     } finally {
       subscription.cancel();
     }
-    return PangleResult.fromJson(result);
+    return PangleVerifyResult.fromJson(result);
   }
 
   /// Request feed ad data.
@@ -271,6 +271,7 @@ class PanglePlugin {
   /// [android] config for Android
   /// [callback] event callback
   /// return loaded ad count.
+  @Deprecated("Use `loadFullscreenVideoAd` instead.")
   Future<PangleResult> loadInterstitialAd({
     IOSInterstitialConfig? iOS,
     AndroidInterstitialConfig? android,

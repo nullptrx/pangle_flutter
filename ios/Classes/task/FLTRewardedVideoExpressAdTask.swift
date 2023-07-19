@@ -44,13 +44,13 @@ internal final class FLTRewardedVideoExpressAdTask: FLTTaskProtocol {
                 guard let self = self else {
                     return
                 }
-                result(self, ["code": 0, "verify": verify])
+                result(self, ["code": 0, "verify": verify] as [String:Any])
             }, fail: { [weak self] error in
                 guard let self = self else {
                     return
                 }
                 let e = error as NSError?
-                result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? ""])
+                result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? ""] as [String:Any])
             })
 
             manager.delegate = delegate

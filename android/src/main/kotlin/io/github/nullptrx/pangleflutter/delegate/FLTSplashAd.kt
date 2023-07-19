@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.fragment.app.FragmentActivity
 import com.bytedance.sdk.openadsdk.CSJAdError
 import com.bytedance.sdk.openadsdk.CSJSplashAd
+import com.bytedance.sdk.openadsdk.CSJSplashCloseType
 import com.bytedance.sdk.openadsdk.TTAdNative
 import io.github.nullptrx.pangleflutter.common.kBlock
 import io.github.nullptrx.pangleflutter.dialog.NativeSplashDialog
@@ -26,7 +27,7 @@ internal class FLTSplashAd(
     handleSplashEnd()
     val msg = error.msg
     val code = error.code
-    invoke(code, msg)
+    invoke(code, message = msg)
   }
 
   override fun onSplashRenderSuccess(ad: CSJSplashAd) {
@@ -35,7 +36,7 @@ internal class FLTSplashAd(
 
   override fun onSplashRenderFail(ad: CSJSplashAd, error: CSJAdError) {
     handleSplashEnd()
-    invoke(error.code, error.msg)
+    invoke(error.code, message = error.msg)
   }
 
   fun loadAd(ad: CSJSplashAd) {
@@ -52,13 +53,11 @@ internal class FLTSplashAd(
       }
 
       override fun onSplashAdClick(ad: CSJSplashAd?) {
-        handleSplashEnd()
-        invoke(0, "click")
       }
 
       override fun onSplashAdClose(ad: CSJSplashAd?, type: Int) {
         handleSplashEnd()
-        invoke(0, "close")
+        invoke(0, type)
       }
 
     })
@@ -81,13 +80,14 @@ internal class FLTSplashAd(
   }
 
 
-  fun invoke(code: Int = 0, message: String = "") {
+  fun invoke(code: Int = 0, type: Int = 0, message: String = "") {
     if (result == kBlock) {
       return
     }
     result.apply {
       val params = mutableMapOf<String, Any>()
       params["code"] = code
+      params["type"] = type
       params["message"] = message
       invoke(params)
       result = kBlock

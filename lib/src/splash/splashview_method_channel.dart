@@ -19,11 +19,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import 'dart:ui' show Rect;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import '../constant.dart';
 import 'platform_interface.dart';
 
 /// A [SplashViewPlatformController] that uses a method channel to control the splashview.
@@ -51,7 +51,8 @@ class MethodChannelSplashViewPlatform implements SplashViewPlatformController {
         _platformCallbacksHandler.onClick();
         break;
       case "onClose":
-        _platformCallbacksHandler.onClose();
+        final int type = call.arguments['type'] ?? 0;
+        _platformCallbacksHandler.onClose(PangleSplashCloseType.values[type]);
         break;
       case "onError":
         final int code = call.arguments['code'];

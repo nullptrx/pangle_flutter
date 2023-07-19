@@ -90,9 +90,15 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                       tolerateTimeout: 3,
                     ),
                     onLoad: _handleAdStart,
-                    onClose: _handleAdEnd,
+                    onClose: (type) {
+                      debugPrint(type.name);
+                      _handleAdEnd();
+                    },
                     onClick: _handleAdEnd,
-                    onError: (code, message) => _handleAdEnd(),
+                    onError: (code, message) {
+                      debugPrint("code: $code, message: $message");
+                      _handleAdEnd();
+                    },
                   ),
                 ),
                 const Divider(height: 1),
