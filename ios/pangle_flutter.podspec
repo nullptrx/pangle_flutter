@@ -20,7 +20,7 @@ Flutter plugin for Pangle Ad SDK.
   s.static_framework = true
 
   # https://cocoapods.org/
-  ss.ios.dependency 'Ads-CN', '~> 5.1'
+  s.ios.dependency 'Ads-CN', '~> 5.1'
 
   #s.default_subspec   = 'cn'
   #s.subspec 'cn' do |ss|
