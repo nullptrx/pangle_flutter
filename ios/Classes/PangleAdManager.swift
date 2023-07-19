@@ -197,13 +197,13 @@ extension PangleAdManager {
                     ad.didReceiveSuccess = { verify in
                         data.removeFirst()
                         self.rewardedVideoAdData[slotId] = data
-                        result(["code": 0, "verify": verify])
+                        result(["code": 0, "verify": verify] as [String:Any])
                     }
                     ad.didReceiveFail = { error in
                         data.removeFirst()
                         self.rewardedVideoAdData[slotId] = data
                         let e = error as NSError?
-                        result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""])
+                        result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""] as [String:Any])
                     }
                     let vc = AppUtil.getVC()
                     ad.show(fromRootViewController: vc)
@@ -241,7 +241,7 @@ extension PangleAdManager {
                         data.removeFirst()
                         self.fullscreenVideoAdData[slotId] = data
                         let e = error as NSError?
-                        result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""])
+                        result(["code": e?.code ?? -1, "message": e?.localizedDescription ?? ""] as [String:Any])
                     }
                     let vc = AppUtil.getVC()
                     ad.show(fromRootViewController: vc)
@@ -253,10 +253,4 @@ extension PangleAdManager {
         }
     }
     
-    public func openGDPRPrivacy(result: @escaping (Bool) -> Void)  {
-        let vc = AppUtil.getVC()
-        BUAdSDKManager.openGDPRPrivacy(fromRootViewController: vc) { confirm in
-            result(confirm)
-        }
-    }
 }
