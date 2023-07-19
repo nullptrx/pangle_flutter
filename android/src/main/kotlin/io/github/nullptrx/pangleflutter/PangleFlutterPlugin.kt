@@ -17,7 +17,6 @@ import io.github.nullptrx.pangleflutter.common.PangleLoadingType
 import io.github.nullptrx.pangleflutter.common.PangleOrientation
 import io.github.nullptrx.pangleflutter.common.TTSize
 import io.github.nullptrx.pangleflutter.common.TTSizeF
-import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialAd
 import io.github.nullptrx.pangleflutter.delegate.FLTSplashAd
 import io.github.nullptrx.pangleflutter.util.asMap
 import io.github.nullptrx.pangleflutter.view.BannerViewFactory
@@ -216,19 +215,20 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
       }
 
       "loadInterstitialAd" -> {
-        val slotId = call.argument<String>("slotId")!!
-        val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
-        val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
-        val w: Float = expressArgs.getValue("width").toFloat()
-        val h: Float = expressArgs.getValue("height").toFloat()
-        val expressSize = TTSizeF(w, h)
-
-        val adSlot = PangleAdSlotManager.getInterstitialAdSlot(
-          slotId, expressSize, isSupportDeepLink
-        )
-        pangle.loadInteractionAd(adSlot, FLTInterstitialAd(activity) {
-          result.success(it)
-        })
+        // val slotId = call.argument<String>("slotId")!!
+        // val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+        // val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
+        // val w: Float = expressArgs.getValue("width").toFloat()
+        // val h: Float = expressArgs.getValue("height").toFloat()
+        // val expressSize = TTSizeF(w, h)
+        //
+        // val adSlot = PangleAdSlotManager.getInterstitialAdSlot(
+        //   slotId, expressSize, isSupportDeepLink
+        // )
+        // pangle.loadInteractionAd(adSlot, FLTInterstitialAd(activity) {
+        //   result.success(it)
+        // })
+        result.notImplemented()
       }
 
       "loadFullscreenVideoAd" -> {
