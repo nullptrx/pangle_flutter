@@ -100,9 +100,9 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                   alignment: Alignment.center,
                   color: Colors.white,
                   height: 100,
-                  child: Row(
+                  child: const Row(
                     mainAxisSize: MainAxisSize.min,
-                    children: const [
+                    children: [
                       FlutterLogo(size: 60),
                       SizedBox(width: 20),
                       Text(

@@ -129,7 +129,7 @@ class _FeedPageState extends State<FeedPage> {
         color: _bgColor,
         alignment: Alignment.center,
         child: AspectRatio(
-          aspectRatio: 375 / 284.0,
+          aspectRatio: 375 / 120.0,
           child: FeedView(
             id: item.feedId,
             onFeedViewCreated: (controller) {
@@ -159,8 +159,8 @@ class _FeedPageState extends State<FeedPage> {
 
   /// 加载广告
   _loadFeedAd({bool isRefresh = true}) async {
-    // var expressSize = PangleExpressSize(width: 375, height: 284);
-    var expressSize = PangleExpressSize.aspectRatio(375 / 284);
+    var expressSize = PangleExpressSize(width: 375, height: 120);
+    // var expressSize = PangleExpressSize.aspectRatio(375 / 120);
     PangleAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedConfig(
         slotId: kFeedExpressId,

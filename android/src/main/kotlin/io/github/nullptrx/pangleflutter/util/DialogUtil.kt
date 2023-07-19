@@ -10,6 +10,7 @@ import android.view.Window
 import android.view.WindowManager
 import io.github.nullptrx.pangleflutter.R
 
+@Suppress("DEPRECATION")
 object DialogUtil {
 
 

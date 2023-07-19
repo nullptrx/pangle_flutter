@@ -2,14 +2,14 @@ group 'io.github.nullptrx.pangleflutter'
 version '1.9.7'
 
 buildscript {
-    ext.kotlin_version = '[1.3.40,1.6.10]'
+    ext.kotlin_version = '[1.3.40,1.8.0]'
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.2'
+        classpath 'com.android.tools.build:gradle:7.3.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -42,9 +42,7 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
     defaultConfig {
-        minSdkVersion 16
-        versionCode 193
-        versionName '1.9.3'
+        minSdkVersion 19
     }
     lintOptions {
         disable 'InvalidPackage'
@@ -63,7 +61,7 @@ android {
 }
 
 dependencies {
-    api 'com.pangle.cn:ads-sdk-pro:[4.8,4.9)'
+    api 'com.pangle.cn:ads-sdk-pro:[5.4,5.5)'
     implementation 'androidx.appcompat:appcompat:[1.3,1.4)'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

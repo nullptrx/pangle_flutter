@@ -135,6 +135,8 @@ class PangleExpressSize {
       : width = kPangleScreenHeight * heightPercent * aspectRatio,
         height = kPangleScreenHeight * heightPercent;
 
+  PangleExpressSize.wrap({required this.width}) : height = 0;
+
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       'width': width,

@@ -5,7 +5,6 @@ import android.content.Context
 import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import com.bytedance.sdk.openadsdk.TTAdConstant
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -13,13 +12,12 @@ import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
-import io.flutter.plugin.common.PluginRegistry
 import io.github.nullptrx.pangleflutter.common.PangleEventStreamHandler
 import io.github.nullptrx.pangleflutter.common.PangleLoadingType
 import io.github.nullptrx.pangleflutter.common.PangleOrientation
 import io.github.nullptrx.pangleflutter.common.TTSize
 import io.github.nullptrx.pangleflutter.common.TTSizeF
-import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialExpressAd
+import io.github.nullptrx.pangleflutter.delegate.FLTInterstitialAd
 import io.github.nullptrx.pangleflutter.delegate.FLTSplashAd
 import io.github.nullptrx.pangleflutter.util.asMap
 import io.github.nullptrx.pangleflutter.view.BannerViewFactory
@@ -35,53 +33,15 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
     val kMethodChannelName = "nullptrx.github.io/pangle"
     val kEventChannelName = "nullptrx.github.io/pangle_event"
 
-    @JvmStatic
-    fun registerWith(registrar: PluginRegistry.Registrar) {
-
-      PangleFlutterPlugin().apply {
-
-        val messenger = registrar.messenger()
-        val activity = registrar.activity()!!
-        this.activity = activity
-        this.context = registrar.context().applicationContext
-
-        methodChannel = MethodChannel(messenger, kMethodChannelName)
-        methodChannel?.setMethodCallHandler(this)
-        eventChannel = EventChannel(messenger, kEventChannelName)
-        eventChannel?.setStreamHandler(PangleEventStreamHandler())
-
-        bannerViewFactory = BannerViewFactory(messenger)
-        registrar.platformViewRegistry().registerViewFactory(
-          "nullptrx.github.io/pangle_bannerview", bannerViewFactory
-        )
-        feedViewFactory = FeedViewFactory(messenger)
-        registrar.platformViewRegistry().registerViewFactory(
-          "nullptrx.github.io/pangle_feedview", feedViewFactory
-        )
-
-        val splashViewFactory = SplashViewFactory(messenger)
-        registrar.platformViewRegistry().registerViewFactory(
-          "nullptrx.github.io/pangle_splashview", splashViewFactory
-        )
-
-        val nativeBannerViewFactory = NativeBannerViewFactory(messenger)
-        registrar.platformViewRegistry().registerViewFactory(
-          "nullptrx.github.io/pangle_nativebannerview", nativeBannerViewFactory
-        )
-
-        feedViewFactory.attachActivity(activity)
-        bannerViewFactory.attachActivity(activity)
-
-      }
-    }
   }
 
-  private var methodChannel: MethodChannel? = null
-  private var eventChannel: EventChannel? = null
+  private lateinit var methodChannel: MethodChannel
+  private lateinit var eventChannel: EventChannel
   private lateinit var activity: Activity
   private lateinit var context: Context
   private lateinit var bannerViewFactory: BannerViewFactory
   private lateinit var feedViewFactory: FeedViewFactory
+  private lateinit var nativeBannerViewFactory: NativeBannerViewFactory
   private val handler = Handler(Looper.getMainLooper())
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
@@ -94,16 +54,19 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
     activity = binding.activity
     feedViewFactory.attachActivity(binding.activity)
     bannerViewFactory.attachActivity(binding.activity)
+    nativeBannerViewFactory.attachActivity(binding.activity)
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
     feedViewFactory.detachActivity()
     bannerViewFactory.detachActivity()
+    nativeBannerViewFactory.detachActivity()
   }
 
   override fun onDetachedFromActivity() {
     feedViewFactory.detachActivity()
     bannerViewFactory.detachActivity()
+    nativeBannerViewFactory.detachActivity()
   }
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -111,10 +74,10 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
     context = binding.applicationContext
 
     methodChannel = MethodChannel(binding.binaryMessenger, kMethodChannelName)
-    methodChannel?.setMethodCallHandler(this)
+    methodChannel.setMethodCallHandler(this)
 
     eventChannel = EventChannel(binding.binaryMessenger, kEventChannelName)
-    eventChannel?.setStreamHandler(PangleEventStreamHandler())
+    eventChannel.setStreamHandler(PangleEventStreamHandler())
 
     bannerViewFactory = BannerViewFactory(binding.binaryMessenger)
     binding.platformViewRegistry.registerViewFactory(
@@ -130,19 +93,17 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
       "nullptrx.github.io/pangle_splashview", splashViewFactory
     )
 
-    val nativeBannerViewFactory = NativeBannerViewFactory(binding.binaryMessenger)
+    nativeBannerViewFactory = NativeBannerViewFactory(binding.binaryMessenger)
     binding.platformViewRegistry.registerViewFactory(
       "nullptrx.github.io/pangle_nativebannerview", nativeBannerViewFactory
     )
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-    methodChannel?.setMethodCallHandler(null)
-    methodChannel = null
+    methodChannel.setMethodCallHandler(null)
 
-    eventChannel?.setStreamHandler(null)
+    eventChannel.setStreamHandler(null)
     PangleEventStreamHandler.clear()
-    eventChannel = null
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -152,10 +113,12 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
       "getDeviceInfo" -> {
         result.success(mapOf("sdkInt" to Build.VERSION.SDK_INT))
       }
+
       "getSdkVersion" -> {
         val version = pangle.getSdkVersion()
         result.success(version)
       }
+
       "init" -> {
         pangle.initialize(activity, call.arguments.asMap() ?: mapOf()) {
           handler.post {
@@ -163,9 +126,11 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
           }
         }
       }
+
       "requestPermissionIfNecessary" -> {
         pangle.requestPermissionIfNecessary(context)
       }
+
       "loadSplashAd" -> {
         val slotId =
           call.argument<String>("slotId")!! // val isExpress = call.argument<Boolean>("isExpress") ?: false
@@ -180,6 +145,7 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
           result.success(it)
         }, tolerateTimeout)
       }
+
       "loadRewardedVideoAd" -> {
 
         val loadingTypeIndex = call.argument<Int>("loadingType") ?: 0
@@ -236,6 +202,7 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
         }
 
       }
+
       "removeFeedAd" -> {
         val feedIds = call.arguments<List<String>>()!!
         var count = 0
@@ -259,7 +226,7 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
         val adSlot = PangleAdSlotManager.getInterstitialAdSlot(
           slotId, expressSize, isSupportDeepLink
         )
-        pangle.loadInteractionExpressAd(adSlot, FLTInterstitialExpressAd(activity) {
+        pangle.loadInteractionAd(adSlot, FLTInterstitialAd(activity) {
           result.success(it)
         })
       }
@@ -286,12 +253,14 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
         }
 
       }
+
       "setThemeStatus" -> {
         var theme: Int = call.arguments()!!
         pangle.setThemeStatus(theme)
         theme = pangle.getThemeStatus()
         result.success(theme)
       }
+
       "getThemeStatus" -> {
         val theme = pangle.getThemeStatus()
         result.success(theme)

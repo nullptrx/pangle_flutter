@@ -23,7 +23,6 @@ IOSConfig({
 /// [appId] 必选参数，设置应用的AppId
 /// [debug] 测试阶段打开，可以通过日志排查问题，上线时去除该调用，默认false
 /// [allowShowNotify] 是否允许sdk展示通知栏提示
-/// [allowShowPageWhenScreenLock] 是否在锁屏场景支持展示广告落地页
 /// [supportMultiProcess] 可选参数，设置是否支持多进程：true支持、false不支持。默认为false不支持
 /// [directDownloadNetworkType] 可选参数，允许直接下载的网络状态集合，默认仅WiFi
 /// [isPaidApp] 可选参数，设置是否为计费用户：true计费用户、false非计费用户。默认为false非计费用户。须征得用户同意才可传入该参数
@@ -33,7 +32,6 @@ AndroidConfig({
   @required this.appId,
   this.debug,
   this.allowShowNotify,
-  this.allowShowPageWhenScreenLock,
   this.supportMultiProcess,
   this.directDownloadNetworkType = AndroidDirectDownloadNetworkType.kWiFi /// 多个值，用 & 连接
   this.isPaidApp,

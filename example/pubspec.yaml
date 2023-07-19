@@ -6,7 +6,7 @@ description: Demonstrates how to use the pangle_flutter plugin.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 environment:
-  sdk: '>=2.16.2 <3.0.0'
+  sdk: '>=3.0.5 <4.0.0'
 
 dependencies:
   flutter:
@@ -24,7 +24,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.3
   # permission_handler: ^5.0.1+1
-  sprintf: ^6.0.0
+  sprintf: ^7.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,8 @@
+@file:Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
+
 package io.github.nullptrx.pangleflutter.dialog
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.app.DialogFragment
 import android.app.FragmentManager
@@ -31,7 +34,7 @@ class NativeSplashDialog : DialogFragment() {
     inflater: LayoutInflater,
     container: ViewGroup?,
     savedInstanceState: Bundle?
-  ): View? {
+  ): View {
     return layoutView
   }
 
@@ -39,6 +42,7 @@ class NativeSplashDialog : DialogFragment() {
   override fun onSaveInstanceState(outState: Bundle?) {
   }
 
+  @SuppressLint("PrivateApi")
   fun show(manager: FragmentManager, view: View) {
     layoutView = view
     try {

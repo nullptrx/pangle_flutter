@@ -59,13 +59,11 @@ class _InterstitialPageState extends State<InterstitialPage> {
     final width = kPangleScreenWidth - 30;
     final height = width / 1.667;
 
-    final result = await pangle.loadInterstitialAd(
-      iOS: IOSInterstitialConfig(
+    final result = await pangle.loadFullscreenVideoAd(
+      iOS: const IOSFullscreenVideoConfig(
         slotId: kInterstitialExpressId,
-        // 该宽高为你申请的广告位宽高，请根据实际情况赋值
-        expressSize: PangleExpressSize(width: width, height: height),
       ),
-      android: AndroidInterstitialConfig(
+      android: AndroidFullscreenVideoConfig(
         slotId: kInterstitialExpressId,
         // 该宽高为你申请的广告位宽高，请根据实际情况赋值
         expressSize: PangleExpressSize.widthPercent(0.8, aspectRatio: 1.667),

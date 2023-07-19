@@ -30,7 +30,6 @@ class AndroidConfig implements Config {
   final bool? useTextureView;
   final AndroidTitleBarTheme titleBarTheme;
   final bool? allowShowNotify;
-  final bool? allowShowPageWhenScreenLock;
   final List<int> directDownloadNetworkType;
   final bool supportMultiProcess;
   final bool? isPaidApp;
@@ -47,7 +46,6 @@ class AndroidConfig implements Config {
   /// [appId] 必选参数，设置应用的AppId
   /// [debug] 测试阶段打开，可以通过日志排查问题，上线时去除该调用
   /// [allowShowNotify] 是否允许sdk展示通知栏提示
-  /// [allowShowPageWhenScreenLock] 是否在锁屏场景支持展示广告落地页
   /// [supportMultiProcess] 可选参数，设置是否支持多进程：true支持、false不支持。默认为false不支持
   /// [directDownloadNetworkType] （仅国内）可选参数，允许直接下载的网络状态集合
   /// [isPaidApp] 可选参数，设置是否为计费用户：true计费用户、false非计费用户。默认为false非计费用户。须征得用户同意才可传入该参数
@@ -66,7 +64,6 @@ class AndroidConfig implements Config {
     required this.appId,
     this.debug,
     this.allowShowNotify,
-    this.allowShowPageWhenScreenLock,
     this.supportMultiProcess = false,
     this.directDownloadNetworkType = const [],
     this.isPaidApp,
@@ -88,7 +85,6 @@ class AndroidConfig implements Config {
       'appId': appId,
       'debug': debug,
       'allowShowNotify': allowShowNotify,
-      'allowShowPageWhenScreenLock': allowShowPageWhenScreenLock,
       'supportMultiProcess': supportMultiProcess,
       'directDownloadNetworkType': directDownloadNetworkType,
       'paid': isPaidApp,
@@ -232,21 +228,16 @@ class AndroidNativeBannerConfig implements Config {
   final String slotId;
   final bool isSupportDeepLink;
   final PangleSize size;
-  final int? interval;
 
   /// The feed ad config for Android
   ///
   /// [slotId] required. The unique identifier of a banner ad.
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
   /// [size] ads size
-  /// [interval] The carousel interval, in seconds, is set in the range of 30~120s,
-  ///   and is passed during initialization. If it does not meet the requirements,
-  ///   it will not be in carousel ad.
   const AndroidNativeBannerConfig({
     required this.slotId,
     required this.size,
     this.isSupportDeepLink = true,
-    this.interval,
   });
 
   /// Convert config to json
@@ -256,7 +247,6 @@ class AndroidNativeBannerConfig implements Config {
       'slotId': slotId,
       'isSupportDeepLink': isSupportDeepLink,
       'size': size.toJson(),
-      'interval': interval,
     };
   }
 }

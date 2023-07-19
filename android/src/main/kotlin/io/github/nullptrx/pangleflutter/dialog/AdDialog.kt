@@ -20,34 +20,40 @@
  * SOFTWARE.
  */
 
-package io.github.nullptrx.pangleflutter.view
+package io.github.nullptrx.pangleflutter.dialog
 
-import android.app.Activity
+import android.app.Dialog
 import android.content.Context
-import io.flutter.plugin.common.BinaryMessenger
-import io.flutter.plugin.common.StandardMessageCodec
-import io.flutter.plugin.platform.PlatformView
-import io.flutter.plugin.platform.PlatformViewFactory
-import io.github.nullptrx.pangleflutter.util.asMap
-import java.lang.ref.WeakReference
+import android.os.Bundle
+import android.view.Gravity
+import android.view.View
+import android.view.ViewGroup
+import android.widget.FrameLayout
 
-class NativeBannerViewFactory(val messenger: BinaryMessenger) :
-  PlatformViewFactory(StandardMessageCodec.INSTANCE) {
-  private var activity: WeakReference<Activity>? = null
+class AdDialog(context: Context, private val view: View) : Dialog(context) {
 
-  override fun create(context: Context?, id: Int, args: Any?): PlatformView {
-    val params: Map<String, Any?> = args?.asMap() ?: mutableMapOf()
-    val act =
-      activity?.get() ?: throw IllegalStateException("Unable to get NativeBannerView instance")
-    return FlutterNativeBannerView(act, messenger, id, params)
+  val rootView: FrameLayout
+
+  init {
+    rootView = FrameLayout(context)
   }
 
-  fun attachActivity(activity: Activity) {
-    this.activity = WeakReference(activity)
-  }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-  fun detachActivity() {
-    this.activity?.clear()
-    this.activity = null
+    // 获取自定义的 ViewGroup
+
+
+    // 添加另一个 View 到 ViewGroup 中
+    rootView.addView(
+      view,
+      FrameLayout.LayoutParams(
+        ViewGroup.LayoutParams.WRAP_CONTENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT
+      ).apply { gravity = Gravity.CENTER }
+    )
+
+    // 设置 Dialog 的 View
+    setContentView(rootView)
   }
 }

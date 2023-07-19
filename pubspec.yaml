@@ -6,8 +6,8 @@ issue_tracker: https://github.com/nullptrx/pangle_flutter/issues
 version: 1.9.7
 
 environment:
-  sdk: '>=2.16.2 <3.0.0'
-  flutter: ">=2.5.0"
+  sdk: '>=3.0.5 <4.0.0'
+  flutter: ">=3.3.0"
 
 dependencies:
   flutter:

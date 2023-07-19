@@ -142,7 +142,6 @@ class PangleAdManager {
     val appId: String = args["appId"] as String
     val debug: Boolean? = args["debug"] as Boolean?
     val allowShowNotify: Boolean? = args["allowShowNotify"] as Boolean?
-    val allowShowPageWhenScreenLock: Boolean? = args["allowShowPageWhenScreenLock"] as Boolean?
     val supportMultiProcess: Boolean? = args["supportMultiProcess"] as Boolean?
     val useTextureView: Boolean? = args["useTextureView"] as Boolean?
     val directDownloadNetworkType =
@@ -196,9 +195,6 @@ class PangleAdManager {
 
       allowShowNotify?.also {
         allowShowNotify(it)
-      }
-      allowShowPageWhenScreenLock?.also {
-        allowShowPageWhenScreenLock(it)
       }
       directDownloadNetworkType?.also {
         directDownloadNetworkType(*it)
@@ -304,12 +300,8 @@ class PangleAdManager {
     ttAdNative?.loadBannerExpressAd(adSlot, FLTBannerExpressAd(result))
   }
 
-  fun loadInteractionExpressAd(adSlot: AdSlot, listener: TTAdNative.NativeExpressAdListener) {
-    ttAdNative?.loadInteractionExpressAd(adSlot, listener)
-  }
-
-  fun loadNativeExpressAd(adSlot: AdSlot, listener: TTAdNative.NativeExpressAdListener) {
-    ttAdNative?.loadNativeExpressAd(adSlot, listener)
+  fun loadInteractionAd(adSlot: AdSlot, listener: TTAdNative.NativeAdListener) {
+    ttAdNative?.loadNativeAd(adSlot, listener)
   }
 
   fun loadFullscreenVideoAd(
@@ -328,8 +320,8 @@ class PangleAdManager {
 
   }
 
-  fun loadBannerAd(adSlot: AdSlot, listener: TTAdNative.BannerAdListener) {
-    ttAdNative?.loadBannerAd(adSlot, listener)
+  fun loadBannerAd(adSlot: AdSlot, listener: TTAdNative.NativeAdListener) {
+    ttAdNative?.loadNativeAd(adSlot, listener)
   }
 
 }

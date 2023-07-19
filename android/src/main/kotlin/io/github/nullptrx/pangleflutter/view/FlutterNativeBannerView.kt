@@ -1,15 +1,40 @@
+/*
+ * Copyright (c) 2022 nullptrX
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 package io.github.nullptrx.pangleflutter.view
 
+import android.app.Activity
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import com.bytedance.sdk.openadsdk.TTAdConstant
 import com.bytedance.sdk.openadsdk.TTAdDislike
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTBannerAd
+import com.bytedance.sdk.openadsdk.TTNativeAd
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -20,27 +45,27 @@ import io.github.nullptrx.pangleflutter.common.TTSize
 import io.github.nullptrx.pangleflutter.util.asMap
 
 class FlutterNativeBannerView(
-  val context: Context, messenger: BinaryMessenger, val id: Int, params: Map<String, Any?>
-) : PlatformView, MethodChannel.MethodCallHandler, TTAdNative.BannerAdListener,
-  TTBannerAd.AdInteractionListener, TTAdDislike.DislikeInteractionCallback {
+  val activity: Activity, messenger: BinaryMessenger, val id: Int, params: Map<String, Any?>
+) : PlatformView, MethodChannel.MethodCallHandler, TTAdNative.NativeAdListener,
+  TTNativeAd.AdInteractionListener, TTAdDislike.DislikeInteractionCallback,
+  TTNativeAd.ExpressRenderListener {
 
   private val methodChannel: MethodChannel =
     MethodChannel(messenger, "nullptrx.github.io/pangle_nativebannerview_$id")
+  private val context: Context
   private val container: FrameLayout
-  private var interval: Int? = null
-  private var ttAdNative: TTBannerAd? = null
+  private var ttAdNative: TTNativeAd? = null
 
 
   init {
     methodChannel.setMethodCallHandler(this)
+    context = activity
     container = FrameLayout(context)
 
     val slotId = params["slotId"] as? String
     if (slotId != null) {
 
       val isSupportDeepLink = params["isSupportDeepLink"] as? Boolean ?: true
-      interval = params["interval"] as Int?
-
 
       val expressArgs: Map<String, Double> = params["size"]?.asMap() ?: mapOf()
       val w: Int = expressArgs.getValue("width").toInt()
@@ -65,29 +90,34 @@ class FlutterNativeBannerView(
     postMessage("onError", mapOf("message" to message, "code" to code))
   }
 
-  override fun onBannerAdLoad(ad: TTBannerAd) {
-    ttAdNative = ad //设置广告互动监听回调
-    ad.setBannerInteractionListener(this)
-
-    //在banner中显示网盟提供的dislike icon，有助于广告投放精准度提升
-    ad.setShowDislikeIcon(this) // 设置轮播的时间间隔  间隔在30s到120秒之间的值，不设置默认不轮播
-    interval?.also {
-      ad.setSlideIntervalTime(it)
+  override fun onNativeAdLoad(ads: MutableList<TTNativeAd>?) {
+    if (ads.isNullOrEmpty()) {
+      return
     }
+    val ad = ads[0]
+    ttAdNative = ad //设置广告互动监听回调
+    ad.setExpressRenderListener(this)
+    ad.setDislikeCallback(activity, this)
+
+    ad.registerViewForInteraction(container, ad.adView, this)
     container.removeAllViews()
     val params = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-    val bannerView = ad.bannerView
+    val bannerView = ad.adView
     container.addView(bannerView, params)
+    ad.render()
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
   }
 
-  override fun onAdClicked(view: View, type: Int) {
+  override fun onAdClicked(view: View?, ad: TTNativeAd?) {
     postMessage("onClick")
   }
 
-  override fun onAdShow(view: View, type: Int) {
+  override fun onAdCreativeClick(view: View?, ad: TTNativeAd?) {
+  }
+
+  override fun onAdShow(ad: TTNativeAd?) {
     postMessage("onShow")
   }
 
@@ -105,6 +135,10 @@ class FlutterNativeBannerView(
     Handler(Looper.getMainLooper()).post {
       methodChannel.invokeMethod(method, arguments)
     }
+  }
+
+  override fun onRenderSuccess(view: View?, width: Float, height: Float, isExpress: Boolean) {
+
   }
 }
 

@@ -20,18 +20,19 @@
  * SOFTWARE.
  */
 
-const kAppId = '5153502';
-const kSplashId = '887451293';
-const kRewardedVideoExpressId = '945940983';
+const kAppId = '5001121';
+const kSplashId = '888041257';
+const kRewardedVideoExpressId = '901121365';
 // 600x260
-const kBannerExpressId = '945940906';
+const kBannerExpressId = '901121148';
 // 375x284
-const kFeedExpressId = '945940981';
+const kFeedExpressId = '901121253'; // info
+// const kFeedExpressId = '901121134'; // video
 // 3x2
 // const kInterstitialExpressId = '945940989';
 // 1x1
-const kInterstitialExpressId = '945940988';
+const kInterstitialExpressId = '947793385';
 // 新模板渲染插屏
-const kFullscreenIdFull = '945999649';
+const kFullscreenIdFull = '901121375';
 // 全屏视频
-const kFullscreenVideoExpressId = '945940986';
+const kFullscreenVideoExpressId = '901121073';
