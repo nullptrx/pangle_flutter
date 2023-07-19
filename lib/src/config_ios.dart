@@ -27,20 +27,15 @@ import 'model.dart';
 class IOSConfig implements Config {
   final String appId;
   final PangleLogLevel? logLevel;
-  final int? coppa;
-  final int? gdpr;
   final String? idfa;
 
   /// Register the ad config for iOS
   ///
   /// [appId] the unique identifier of the App
   /// [logLevel] optional. default none
-  /// [coppa] optional. Coppa -1:defalut 0:adult 1:child
   const IOSConfig({
     required this.appId,
     this.logLevel,
-    this.coppa,
-    this.gdpr,
     this.idfa,
   });
 
@@ -50,8 +45,6 @@ class IOSConfig implements Config {
     return <String, dynamic>{
       'appId': appId,
       'logLevel': logLevel?.index,
-      'coppa': coppa,
-      'gdpr': gdpr,
       'idfa': idfa,
     };
   }

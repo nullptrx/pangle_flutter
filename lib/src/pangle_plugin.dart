@@ -114,14 +114,6 @@ class PanglePlugin {
     }
   }
 
-  /// 显示隐私保护协议弹窗（仅海外）
-  /// ```
-  Future<void> showPrivacyProtection() async {
-    if (Platform.isAndroid) {
-      await _methodChannel.invokeMethod<void>('showPrivacyProtection');
-    }
-  }
-
   /// Request user tracking authorization with a completion handler returning
   /// the user's authorization status.
   /// Users are able to grant or deny developers tracking privileges on a
@@ -155,17 +147,6 @@ class PanglePlugin {
       }
     }
     return null;
-  }
-
-  /// 是否遵循隐私协议的选择框
-  /// 也可自定义设置GDPR，用来标识本次广告是否遵循欧盟通用数据保护条例。
-  Future<bool> openGDPRPrivacy() async {
-    if (Platform.isIOS) {
-      final bool? confirm =
-          await _methodChannel.invokeMethod<bool>('openGDPRPrivacy');
-      return confirm ?? false;
-    }
-    return false;
   }
 
   /// Register the App key that’s already been applied before requesting an

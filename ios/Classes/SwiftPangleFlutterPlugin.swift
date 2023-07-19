@@ -50,8 +50,8 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
             result(BUAdSDKManager.sdkVersion)
         case "init":
             let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
-            instance.initialize(args)
-            result(["code": 0, "message": ""])
+            instance.initialize(args, result)
+            // result(["code": 0, "message": ""])
         case "getTrackingAuthorizationStatus":
             if #available(iOS 14.0, *) {
                 result(ATTrackingManager.trackingAuthorizationStatus.rawValue)

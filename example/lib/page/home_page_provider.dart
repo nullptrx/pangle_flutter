@@ -78,11 +78,6 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: openGDPRPrivacyOnIOS,
-                child: const Text('GDPR Privacy For iOS'),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
                 onPressed: changeTheme,
                 child: const Text('Change Theme'),
               ),
@@ -142,15 +137,6 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
       status = await pangle.requestTrackingAuthorization();
       debugPrint('requestTrackingAuthorization: $status');
     }
-  }
-
-  void showPrivacyProtectionOnAndroid() async {
-    await pangle.showPrivacyProtection();
-  }
-
-  void openGDPRPrivacyOnIOS() async {
-    bool confirm = await pangle.openGDPRPrivacy();
-    debugPrint('GDPR Privacy: $confirm');
   }
 
   void loadExpressAd();
