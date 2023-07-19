@@ -1,3 +1,10 @@
+## 2.0.0
+- Upgrade ads sdk to 5.0+.
+- Adaptation method for removing overseas sdk
+- Remove insertion ads implementation (according to the document has been taken over by fullscreen ads, need to change the original call method to `loadFullscreenVideoAd`)
+- loadBannerAd has been adapted to use NativeAd implementation.
+- Fixed and optimized the open screen ad implementation
+
 ## 1.9.7
 - Fix analysis issues.
 

@@ -84,8 +84,10 @@ class PangleLocation {
   }
 }
 
-final _kDevicePixelRatio = window.devicePixelRatio;
-final _kPhysicalSize = window.physicalSize;
+// PlatformDispatcher.instance.views.first.physicalSize
+// WidgetsBinding.instance.platformDispatcher.views.first.physicalSize
+final _kPhysicalSize = PlatformDispatcher.instance.views.first.physicalSize;
+final _kDevicePixelRatio = _kPhysicalSize.aspectRatio;
 
 final kPangleScreenWidth = _kPhysicalSize.width / _kDevicePixelRatio;
 final kPangleScreenHeight = _kPhysicalSize.height / _kDevicePixelRatio;
@@ -264,6 +266,7 @@ class PangleVerifyResult extends PangleResult {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final data = super.toJson();
     if (verify != null) {
@@ -300,6 +303,7 @@ class PangleSplashResult extends PangleResult {
     );
   }
 
+  @override
   Map<String, dynamic> toJson() {
     final data = super.toJson();
     data['type'] = type.name;
