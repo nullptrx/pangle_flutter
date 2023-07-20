@@ -29,6 +29,8 @@ import 'bannerview_method_channel.dart';
 import 'platform_interface.dart';
 
 class CupertinoBannerView implements BannerViewPlatform {
+  const CupertinoBannerView();
+
   @override
   Widget build({
     BuildContext? context,

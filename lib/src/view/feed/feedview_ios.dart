@@ -29,6 +29,8 @@ import 'feedview_method_channel.dart';
 import 'platform_interface.dart';
 
 class CupertinoFeedView implements FeedViewPlatform {
+  const CupertinoFeedView();
+
   @override
   Widget build({
     BuildContext? context,

@@ -85,10 +85,10 @@ class FeedView extends StatefulWidget {
     if (_platform == null) {
       switch (defaultTargetPlatform) {
         case TargetPlatform.android:
-          _platform = AndroidFeedView();
+          _platform = const AndroidFeedView();
           break;
         case TargetPlatform.iOS:
-          _platform = CupertinoFeedView();
+          _platform = const CupertinoFeedView();
           break;
         default:
           throw UnsupportedError(

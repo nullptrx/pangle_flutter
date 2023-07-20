@@ -92,10 +92,10 @@ class SplashView extends StatefulWidget {
     if (_platform == null) {
       switch (defaultTargetPlatform) {
         case TargetPlatform.android:
-          _platform = AndroidSplashView();
+          _platform = const AndroidSplashView();
           break;
         case TargetPlatform.iOS:
-          _platform = CupertinoSplashView();
+          _platform = const CupertinoSplashView();
           break;
         default:
           throw UnsupportedError(

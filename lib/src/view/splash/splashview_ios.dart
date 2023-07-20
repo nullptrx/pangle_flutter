@@ -29,6 +29,8 @@ import 'platform_interface.dart';
 import 'splashview_method_channel.dart';
 
 class CupertinoSplashView implements SplashViewPlatform {
+  const CupertinoSplashView();
+
   @override
   Widget build({
     BuildContext? context,

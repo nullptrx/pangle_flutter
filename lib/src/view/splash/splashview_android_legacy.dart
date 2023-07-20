@@ -26,8 +26,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import '../splashview.dart';
 import '../platform_controller.dart';
+import '../splashview.dart';
 import 'platform_interface.dart';
 import 'splashview_android.dart';
 import 'splashview_method_channel.dart';

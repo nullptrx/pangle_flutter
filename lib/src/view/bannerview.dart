@@ -92,10 +92,10 @@ class BannerView extends StatefulWidget {
     if (_platform == null) {
       switch (defaultTargetPlatform) {
         case TargetPlatform.android:
-          _platform = AndroidBannerView();
+          _platform = const AndroidBannerView();
           break;
         case TargetPlatform.iOS:
-          _platform = CupertinoBannerView();
+          _platform = const CupertinoBannerView();
           break;
         default:
           throw UnsupportedError(

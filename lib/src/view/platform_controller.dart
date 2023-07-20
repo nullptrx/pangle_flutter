@@ -19,7 +19,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import 'dart:ui' show Rect;
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
