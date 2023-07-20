@@ -1,3 +1,7 @@
+## 2.0.1
+
+- Optimize the use of Hybrid Composition
+
 ## 2.0.0
 - Upgrade ads sdk to 5.0+.
 - Adaptation method for removing overseas sdk
@@ -177,14 +181,6 @@
 
 * Adds `isUserInteractionEnabled` attribute for iOS config
 * Fix rewarded video & fullscreen video callback crashed on Android.
-
-```dart
-FeedView(
-  id: item.feedId,
-  /// disable touch
-  isUserInteractionEnabled: false,
-)
-```
 
 ## 0.4.1
 

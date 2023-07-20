@@ -1,3 +1,7 @@
+## 2.0.1
+
+- 优化Hybrid Composition的使用
+
 ## 2.0.0
 
 - 升级ads sdk到5.0+
@@ -179,14 +183,6 @@
 
 * iOS 配置增加 `isUserInteractionEnabled` 属性
 * 修复激励视频和全屏视频回调在安卓上崩溃
-
-```dart
-FeedView(
-  id: item.feedId,
-  /// disable touch
-  isUserInteractionEnabled: false,
-)
-```
 
 ## 0.4.1
 
