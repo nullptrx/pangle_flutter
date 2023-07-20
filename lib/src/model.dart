@@ -222,7 +222,7 @@ class PangleResult {
     }
     return PangleResult(
       code: json['code'],
-      message: json['message'],
+      message: json['message'] ?? '',
     );
   }
 
