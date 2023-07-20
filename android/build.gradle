@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.1'
+        classpath 'com.android.tools.build:gradle:8.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -36,6 +36,7 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
+    namespace 'io.github.nullptrx.pangleflutter'
     compileSdkVersion 31
 
     sourceSets {
