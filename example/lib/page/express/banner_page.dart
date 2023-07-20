@@ -47,8 +47,8 @@ class _BannerPageState extends State<BannerPage> {
   void initState() {
     super.initState();
     if (Platform.isAndroid) {
-      BannerView.platform = AndroidBannerView(
-        useHybridComposition: isAndroidAbove10,
+      BannerView.platform = SurfaceAndroidBannerView(
+        hybridComposition: false,
       );
     }
     initBanner();

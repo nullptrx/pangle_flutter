@@ -23,7 +23,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import '../constant.dart';
+import '../../constant.dart';
 import 'platform_interface.dart';
 
 /// A [SplashViewPlatformController] that uses a method channel to control the splashview.

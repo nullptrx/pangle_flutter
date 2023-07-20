@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 nullptrX
+ * Copyright (c) 2022 nullptrX
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
+import '../util.dart';
 import 'feed/feedview_android.dart';
 import 'feed/feedview_ios.dart';
 import 'feed/platform_interface.dart';
 import 'platform_controller.dart';
-import 'util.dart';
 
 /// Optional callback invoked when a web view is first created. [controller] is
 /// the [FeedViewController] for the created feed view.

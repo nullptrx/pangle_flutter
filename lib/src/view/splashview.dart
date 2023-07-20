@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 nullptrX
+ * Copyright (c) 2022 nullptrX
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,15 +26,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
-import 'config.dart';
-import 'config_android.dart';
-import 'config_ios.dart';
-import 'constant.dart';
+import '../config.dart';
+import '../config_android.dart';
+import '../config_ios.dart';
+import '../constant.dart';
+import '../util.dart';
 import 'platform_controller.dart';
 import 'splash/platform_interface.dart';
 import 'splash/splashview_android.dart';
 import 'splash/splashview_ios.dart';
-import 'util.dart';
 
 /// Optional callback invoked when a web view is first created. [controller] is
 /// the [SplashViewController] for the created splash view.

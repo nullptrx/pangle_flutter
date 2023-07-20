@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 nullptrX
+ * Copyright (c) 2022 nullptrX
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,6 +20,9 @@
  * SOFTWARE.
  */
 import 'dart:ui' show Rect;
+
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 
 /// Interface for talking to the view's platform implementation.
 ///
@@ -72,5 +75,31 @@ abstract class ViewController {
   /// 见[addTouchableBounds]
   Future<void> clearTouchableBounds() async {
     await _controller.clearTouchableBounds();
+  }
+}
+
+mixin class AndroidViewMixin {
+  AndroidViewController createView({
+    required String viewType,
+    required bool hybridComposition,
+    required Map<String, dynamic> creationParams,
+    required PlatformViewCreationParams params,
+  }) {
+    if (hybridComposition) {
+      return PlatformViewsService.initExpensiveAndroidView(
+        id: params.id,
+        viewType: viewType,
+        layoutDirection: TextDirection.ltr,
+        creationParams: creationParams,
+        creationParamsCodec: const StandardMessageCodec(),
+      );
+    }
+    return PlatformViewsService.initSurfaceAndroidView(
+      id: params.id,
+      viewType: viewType,
+      layoutDirection: TextDirection.ltr,
+      creationParams: creationParams,
+      creationParamsCodec: const StandardMessageCodec(),
+    );
   }
 }

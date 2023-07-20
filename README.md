@@ -154,12 +154,11 @@ await pangle.loadSplashAd(
 
 
 /// 自定义类型
-/// Hybrid Composition支持
+/// AndroidViewSurface支持
 @override
 void initState() {
   super.initState();
-  // android 10以下对hybrid支持不太好
-  SplashView.platform = AndroidSplashView(useHybridComposition: isAndroidAbove10);
+  SplashView.platform = SurfaceAndroidSplashView(hybridComposition: false);
 }
 
 /// 同Widget类用法
@@ -197,12 +196,11 @@ pangle.loadRewardVideoAd(
 基本覆盖了原生回调事件，现在点击右上角关闭[ x ]按钮，需要开发者手动移除，不再自动移除Item。
 
 ```dart
-/// Hybrid Composition支持
+/// AndroidViewSurface支持
 @override
 void initState() {
   super.initState();
-  // android 10以下对hybrid支持不太好
-  BannerView.platform = AndroidBannerView(useHybridComposition: isAndroidAbove10);
+  BannerView.platform = AndroidBannerView(hybridComposition: false);
 }
 
 /// Banner通过PlatformView实现，使用方法同Widget
@@ -264,12 +262,11 @@ Container(
 - 加载数据
 
 ```dart
-/// Hybrid Composition支持
+/// AndroidViewSurface支持
 @override
 void initState() {
   super.initState();
-  // android 10以下对hybrid支持不太好
-  FeedView.platform = AndroidFeedView(useHybridComposition: isAndroidAbove10);
+  FeedView.platform = AndroidFeedView(hybridComposition: false);
 }
 
 /// 使用方法
