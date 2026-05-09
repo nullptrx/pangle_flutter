@@ -28,10 +28,10 @@ import 'package:pangle_flutter/pangle_flutter.dart';
 import '../constant.dart';
 
 class InterstitialPage extends StatefulWidget {
-  const InterstitialPage({Key? key}) : super(key: key);
+  const InterstitialPage({super.key});
 
   @override
-  _InterstitialPageState createState() => _InterstitialPageState();
+  State<InterstitialPage> createState() => _InterstitialPageState();
 }
 
 class _InterstitialPageState extends State<InterstitialPage> {

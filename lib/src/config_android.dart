@@ -173,6 +173,26 @@ class AndroidRewardedVideoConfig implements Config {
     this.expressSize,
   });
 
+  AndroidRewardedVideoConfig copyWith({
+    String? slotId,
+    String? userId,
+    String? extra,
+    bool? isVertical,
+    bool? isSupportDeepLink,
+    PangleLoadingType? loadingType,
+    PangleExpressSize? expressSize,
+  }) {
+    return AndroidRewardedVideoConfig(
+      slotId: slotId ?? this.slotId,
+      userId: userId ?? this.userId,
+      extra: extra ?? this.extra,
+      isVertical: isVertical ?? this.isVertical,
+      isSupportDeepLink: isSupportDeepLink ?? this.isSupportDeepLink,
+      loadingType: loadingType ?? this.loadingType,
+      expressSize: expressSize ?? this.expressSize,
+    );
+  }
+
   /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
@@ -320,16 +340,32 @@ class AndroidFullscreenVideoConfig implements Config {
   ///
   /// [slotId] required. The unique identifier of a full screen video ad.
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-  /// [orientation] 设置期望视频播放的方向，默认[PangleOrientation.veritical]
+  /// [orientation] 设置期望视频播放的方向，默认[PangleOrientation.vertical]
   /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
   /// [expressSize] optional. 模板宽高
   const AndroidFullscreenVideoConfig({
     required this.slotId,
     this.isSupportDeepLink = true,
-    this.orientation = PangleOrientation.veritical,
+    this.orientation = PangleOrientation.vertical,
     this.loadingType = PangleLoadingType.normal,
     this.expressSize,
   });
+
+  AndroidFullscreenVideoConfig copyWith({
+    String? slotId,
+    bool? isSupportDeepLink,
+    PangleOrientation? orientation,
+    PangleLoadingType? loadingType,
+    PangleExpressSize? expressSize,
+  }) {
+    return AndroidFullscreenVideoConfig(
+      slotId: slotId ?? this.slotId,
+      isSupportDeepLink: isSupportDeepLink ?? this.isSupportDeepLink,
+      orientation: orientation ?? this.orientation,
+      loadingType: loadingType ?? this.loadingType,
+      expressSize: expressSize ?? this.expressSize,
+    );
+  }
 
   /// Convert config to json
   @override

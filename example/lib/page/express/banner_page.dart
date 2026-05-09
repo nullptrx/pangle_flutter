@@ -20,8 +20,6 @@
  * SOFTWARE.
  */
 
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
@@ -46,11 +44,6 @@ class _BannerPageState extends State<BannerPage> {
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) {
-      BannerView.platform = SurfaceAndroidBannerView(
-        hybridComposition: false,
-      );
-    }
     initBanner();
   }
 
@@ -83,33 +76,9 @@ class _BannerPageState extends State<BannerPage> {
   initBanner() {
     rows.clear();
     rows.addAll(<Widget>[
-      AspectRatio(
-        key: const BannerExpressKey(1),
-        aspectRatio: 600 / 260.0,
-        child: Container(
-          color: _bgColor,
-          child: BannerView(
-            iOS: IOSBannerConfig(
-              slotId: kBannerExpressId,
-              expressSize: PangleExpressSize(width: 600, height: 260),
-            ),
-            android: AndroidBannerConfig(
-              slotId: kBannerExpressId,
-              expressSize: PangleExpressSize(width: 600, height: 260),
-            ),
-            onDislike: (message, enforce) {
-              setState(() {
-                rows.removeWhere((element) =>
-                    (element.key as BannerExpressKey?)?.value == 1);
-              });
-            },
-          ),
-        ),
-      ),
       Container(
-        key: const BannerExpressKey(2),
+        key: const BannerExpressKey(1),
         color: _bgColor,
-        height: kPangleScreenWidth * 260 / 600,
         child: BannerView(
           iOS: IOSBannerConfig(
             slotId: kBannerExpressId,
@@ -118,6 +87,26 @@ class _BannerPageState extends State<BannerPage> {
           android: AndroidBannerConfig(
             slotId: kBannerExpressId,
             expressSize: PangleExpressSize(width: 600, height: 260),
+          ),
+          onDislike: (message, enforce) {
+            setState(() {
+              rows.removeWhere((element) =>
+                  (element.key as BannerExpressKey?)?.value == 1);
+            });
+          },
+        ),
+      ),
+      Container(
+        key: const BannerExpressKey(2),
+        color: _bgColor,
+        child: BannerView(
+          iOS: IOSBannerConfig(
+            slotId: kBannerExpressId,
+            expressSize: PangleExpressSize.aspectRatio16_9(),
+          ),
+          android: AndroidBannerConfig(
+            slotId: kBannerExpressId,
+            expressSize: PangleExpressSize.aspectRatio16_9(),
           ),
           onBannerViewCreated: (BannerViewController controller) {
             controller.clearTouchableBounds();
@@ -146,5 +135,5 @@ class _BannerPageState extends State<BannerPage> {
 }
 
 class BannerExpressKey extends GlobalObjectKey {
-  const BannerExpressKey(Object value) : super(value);
+  const BannerExpressKey(super.value);
 }

@@ -32,10 +32,10 @@ import 'express/rewarded_video_page.dart';
 import 'express/splash_page.dart';
 
 class Pages extends StatefulWidget {
-  const Pages({Key? key}) : super(key: key);
+  const Pages({super.key});
 
   @override
-  _PagesState createState() => _PagesState();
+  State<Pages> createState() => _PagesState();
 }
 
 class _PagesState extends State<Pages> {

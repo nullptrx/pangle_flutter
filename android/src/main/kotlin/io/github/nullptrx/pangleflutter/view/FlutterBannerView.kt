@@ -23,10 +23,11 @@ import io.github.nullptrx.pangleflutter.util.asMap
 class FlutterBannerView(
   val activity: Activity, messenger: BinaryMessenger, val id: Int, params: Map<String, Any?>
 ) : PlatformView, MethodChannel.MethodCallHandler, TTAdNative.NativeExpressAdListener,
-  TTNativeExpressAd.AdInteractionListener, TTAdDislike.DislikeInteractionCallback {
+  TTNativeExpressAd.ExpressAdInteractionListener, TTAdDislike.DislikeInteractionCallback {
 
   private val methodChannel: MethodChannel =
     MethodChannel(messenger, "nullptrx.github.io/pangle_bannerview_$id")
+  private val mainHandler = Handler(Looper.getMainLooper())
   private val container: FrameLayout
   private val context: Context
   private var interval: Int? = null
@@ -96,9 +97,6 @@ class FlutterBannerView(
   }
 
 
-  override fun onAdDismiss() {
-  }
-
   override fun onAdClicked(view: View, type: Int) {
     postMessage("onClick")
   }
@@ -127,7 +125,7 @@ class FlutterBannerView(
   }
 
   private fun postMessage(method: String, arguments: Map<String, Any?> = mapOf()) {
-    Handler(Looper.getMainLooper()).post {
+    mainHandler.post {
       methodChannel.invokeMethod(method, arguments)
     }
   }

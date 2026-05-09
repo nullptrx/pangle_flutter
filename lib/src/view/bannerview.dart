@@ -20,11 +20,11 @@
  * SOFTWARE.
  */
 
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
+
+import '../model.dart';
 
 import '../config.dart';
 import '../config_android.dart';
@@ -121,6 +121,17 @@ class BannerView extends StatefulWidget {
     return config;
   }
 
+  PangleExpressSize? get expressSize {
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.android:
+        return android?.expressSize;
+      case TargetPlatform.iOS:
+        return iOS?.expressSize;
+      default:
+        return null;
+    }
+  }
+
   @override
   BannerViewState createState() => BannerViewState();
 
@@ -145,9 +156,6 @@ class BannerView extends StatefulWidget {
 
 class BannerViewState extends State<BannerView>
     with AutomaticKeepAliveClientMixin {
-  final Completer<BannerViewController> _controller =
-      Completer<BannerViewController>();
-
   _PlatformCallbacksHandler? _platformCallbacksHandler;
 
   @override
@@ -156,13 +164,21 @@ class BannerViewState extends State<BannerView>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return BannerView.platform.build(
+    final view = BannerView.platform.build(
       context: context,
       creationParams: widget.config!.toJSON(),
       bannerViewPlatformCallbacksHandler: _platformCallbacksHandler!,
       onBannerViewPlatformCreated: _onWebViewPlatformCreated,
       gestureRecognizers: widget.gestureRecognizers,
     );
+    final size = widget.expressSize;
+    if (size != null && size.height > 0) {
+      return AspectRatio(
+        aspectRatio: size.width / size.height,
+        child: view,
+      );
+    }
+    return view;
   }
 
   @override
@@ -174,18 +190,14 @@ class BannerViewState extends State<BannerView>
   @override
   void didUpdateWidget(BannerView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _controller.future.then((BannerViewController controller) {
-      _platformCallbacksHandler!._widget = widget;
-      controller._updateWidget(widget);
-    });
+    _platformCallbacksHandler!._widget = widget;
   }
 
   void _onWebViewPlatformCreated(
     BannerViewPlatformController bannerViewPlatform,
   ) {
-    final BannerViewController controller = BannerViewController._(
-        widget, bannerViewPlatform, _platformCallbacksHandler);
-    _controller.complete(controller);
+    final BannerViewController controller =
+        BannerViewController._(bannerViewPlatform);
     if (widget.onBannerViewCreated != null) {
       widget.onBannerViewCreated!(controller);
     }
@@ -197,27 +209,8 @@ class BannerViewState extends State<BannerView>
 /// A [BannerViewController] instance can be obtained by setting the [BannerView.onBannerViewCreated]
 /// callback for a [BannerView] widget.
 class BannerViewController extends ViewController {
-  BannerViewController._(
-    this._widget,
-    this._bannerViewPlatformController,
-    this._platformCallbacksHandler,
-  ) : super(_bannerViewPlatformController);
-
-  // todo unused_field
-  // ignore: unused_field
-  final BannerViewPlatformController _bannerViewPlatformController;
-
-  // todo unused_field
-  // ignore: unused_field
-  final _PlatformCallbacksHandler? _platformCallbacksHandler;
-
-  // todo unused_field
-  // ignore: unused_field
-  BannerView _widget;
-
-  Future<void> _updateWidget(BannerView widget) async {
-    _widget = widget;
-  }
+  BannerViewController._(BannerViewPlatformController controller)
+      : super(controller);
 }
 
 class _PlatformCallbacksHandler implements BannerViewPlatformCallbacksHandler {

@@ -38,7 +38,7 @@ class MethodChannelFeedViewPlatform implements FeedViewPlatformController {
 
   final MethodChannel _channel;
 
-  Future<dynamic> _onMethodCall(MethodCall call) async {
+  Future<void> _onMethodCall(MethodCall call) async {
     switch (call.method) {
       case "onClick":
         _platformCallbacksHandler.onClick();

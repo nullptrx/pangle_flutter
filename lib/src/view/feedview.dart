@@ -20,12 +20,11 @@
  * SOFTWARE.
  */
 
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
+import '../model.dart';
 import '../util.dart';
 import 'feed/feedview_android.dart';
 import 'feed/feedview_ios.dart';
@@ -40,6 +39,7 @@ class FeedView extends StatefulWidget {
   const FeedView({
     Key? key,
     this.id,
+    this.expressSize,
     this.onFeedViewCreated,
     this.gestureRecognizers,
     this.onClick,
@@ -50,6 +50,10 @@ class FeedView extends StatefulWidget {
   }) : super(key: key);
 
   final String? id;
+
+  /// 与 [loadFeedAd] 时传入的 [PangleExpressSize] 保持一致，
+  /// FeedView 会自动按此比例约束自身尺寸（height > 0 时生效）。
+  final PangleExpressSize? expressSize;
 
   /// If not null invoked once the feed view is created.
   final FeedViewCreatedCallback? onFeedViewCreated;
@@ -125,9 +129,6 @@ class FeedView extends StatefulWidget {
 }
 
 class FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin {
-  final Completer<FeedViewController> _controller =
-      Completer<FeedViewController>();
-
   _PlatformCallbacksHandler? _platformCallbacksHandler;
 
   @override
@@ -136,13 +137,21 @@ class FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return FeedView.platform.build(
+    final view = FeedView.platform.build(
       context: context,
       creationParams: widget.config,
       feedViewPlatformCallbacksHandler: _platformCallbacksHandler!,
       onFeedViewPlatformCreated: _onWebViewPlatformCreated,
       gestureRecognizers: widget.gestureRecognizers,
     );
+    final size = widget.expressSize;
+    if (size != null && size.height > 0) {
+      return AspectRatio(
+        aspectRatio: size.width / size.height,
+        child: view,
+      );
+    }
+    return view;
   }
 
   @override
@@ -154,18 +163,14 @@ class FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin {
   @override
   void didUpdateWidget(FeedView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _controller.future.then((FeedViewController controller) {
-      _platformCallbacksHandler!._widget = widget;
-      controller._updateWidget(widget);
-    });
+    _platformCallbacksHandler!._widget = widget;
   }
 
   void _onWebViewPlatformCreated(
     FeedViewPlatformController feedViewPlatform,
   ) {
-    final FeedViewController controller = FeedViewController._(
-        widget, feedViewPlatform, _platformCallbacksHandler);
-    _controller.complete(controller);
+    final FeedViewController controller =
+        FeedViewController._(feedViewPlatform);
     if (widget.onFeedViewCreated != null) {
       widget.onFeedViewCreated!(controller);
     }
@@ -177,27 +182,8 @@ class FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin {
 /// A [FeedViewController] instance can be obtained by setting the [FeedView.onFeedViewCreated]
 /// callback for a [FeedView] widget.
 class FeedViewController extends ViewController {
-  FeedViewController._(
-    this._widget,
-    this._feedViewPlatformController,
-    this._platformCallbacksHandler,
-  ) : super(_feedViewPlatformController);
-
-  // todo unused_field
-  // ignore: unused_field
-  final FeedViewPlatformController _feedViewPlatformController;
-
-  // todo unused_field
-  // ignore: unused_field
-  final _PlatformCallbacksHandler? _platformCallbacksHandler;
-
-  // todo unused_field
-  // ignore: unused_field
-  FeedView _widget;
-
-  Future<void> _updateWidget(FeedView widget) async {
-    _widget = widget;
-  }
+  FeedViewController._(FeedViewPlatformController controller)
+      : super(controller);
 }
 
 class _PlatformCallbacksHandler implements FeedViewPlatformCallbacksHandler {

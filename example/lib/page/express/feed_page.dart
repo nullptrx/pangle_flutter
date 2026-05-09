@@ -33,10 +33,10 @@ import '../constant.dart';
 import '../empty_page.dart';
 
 class FeedPage extends StatefulWidget {
-  const FeedPage({Key? key}) : super(key: key);
+  const FeedPage({super.key});
 
   @override
-  _FeedPageState createState() => _FeedPageState();
+  State<FeedPage> createState() => _FeedPageState();
 }
 
 class Item {
@@ -58,10 +58,13 @@ class _FeedPageState extends State<FeedPage> {
 
   final _bodyKey = GlobalKey();
   final _otherKey = GlobalKey();
-  final _bgColor =
-      kThemeStatus == PangleTheme.light ? Colors.white : Colors.black;
+  final _bgColor = kThemeStatus == PangleTheme.light
+      ? Colors.white
+      : Colors.black;
 
   Completer<BannerViewController> controller = Completer();
+
+  PangleExpressSize? _feedExpressSize;
 
   @override
   void initState() {
@@ -78,38 +81,35 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Feed Express AD'),
-      ),
+      appBar: AppBar(title: const Text('Feed Express AD')),
       bottomNavigationBar: BottomNavigationBar(
-          onTap: (value) {
-            Navigator.of(context).push(CupertinoPageRoute(
-              builder: (context) => const EmptyPage(),
-            ));
-          },
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite),
-              label: 'Like',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite_border),
-              label: 'Dislike',
-            ),
-          ]),
+        onTap: (value) {
+          Navigator.of(
+            context,
+          ).push(CupertinoPageRoute(builder: (context) => const EmptyPage()));
+        },
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Like'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_border),
+            label: 'Dislike',
+          ),
+        ],
+      ),
       body: Container(
-          key: _bodyKey,
-          child: RefreshIndicator(
-            onRefresh: () async {
-              await _loadFeedAd();
+        key: _bodyKey,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            await _loadFeedAd();
+          },
+          child: ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (context, index) {
+              return _buildItem(index);
             },
-            child: ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                return _buildItem(index);
-              },
-            ),
-          )),
+          ),
+        ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         key: _otherKey,
@@ -128,20 +128,18 @@ class _FeedPageState extends State<FeedPage> {
       return Container(
         color: _bgColor,
         alignment: Alignment.center,
-        child: AspectRatio(
-          aspectRatio: 375 / 120.0,
-          child: FeedView(
-            id: item.feedId,
-            onFeedViewCreated: (controller) {
-              _initConstraintBounds(controller);
-            },
-            onDislike: (option, enforce) {
-              pangle.removeFeedAd([item.feedId]);
-              setState(() {
-                items.removeAt(index);
-              });
-            },
-          ),
+        child: FeedView(
+          id: item.feedId,
+          expressSize: _feedExpressSize,
+          onFeedViewCreated: (controller) {
+            _initConstraintBounds(controller);
+          },
+          onDislike: (option, enforce) {
+            pangle.removeFeedAd([item.feedId]);
+            setState(() {
+              items.removeAt(index);
+            });
+          },
         ),
       );
     }
@@ -159,7 +157,8 @@ class _FeedPageState extends State<FeedPage> {
 
   /// 加载广告
   _loadFeedAd({bool isRefresh = true}) async {
-    var expressSize = PangleExpressSize(width: 375, height: 120);
+    _feedExpressSize = PangleExpressSize(width: 375, height: 120);
+    var expressSize = _feedExpressSize!;
     // var expressSize = PangleExpressSize.aspectRatio(375 / 120);
     PangleAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedConfig(
@@ -225,13 +224,10 @@ class _FeedPageState extends State<FeedPage> {
 
   void _showFeedDialog() async {
     // Dialog默认insetPadding horizontal 40
-    final maxWidth = MediaQuery.of(context).size.width;
+    final maxWidth = MediaQuery.sizeOf(context).width;
     var width = maxWidth - 80;
     var height = width / (375 / 284);
-    var expressSize = PangleExpressSize(
-      width: width,
-      height: height,
-    );
+    var expressSize = PangleExpressSize(width: width, height: height);
     PangleAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedConfig(
         slotId: kFeedExpressId,
@@ -252,15 +248,14 @@ class _FeedPageState extends State<FeedPage> {
         ..clear()
         ..addAll(feedAd.data);
 
+      final dialogExpressSize = PangleExpressSize(width: width, height: height);
       showDialog(
         context: context,
         builder: (context) {
           return Dialog(
-            child: AspectRatio(
-              aspectRatio: 375 / 284,
-              child: FeedView(
-                id: feedDialogIds.first,
-              ),
+            child: FeedView(
+              id: feedDialogIds.first,
+              expressSize: dialogExpressSize,
             ),
           );
         },

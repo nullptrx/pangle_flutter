@@ -23,15 +23,6 @@ import 'dart:io';
 
 import 'package:pangle_flutter/pangle_flutter.dart';
 
-const kEnv = '''
-Android Studio Arctic Fox
-Xcode 12.5.1
-
-Flutter 3.0.2
-Dart 2.17.3
-Kotlin 1.5.30
-Swift 5.4.2
-''';
 const kDependencies = '''
 Pangle SDK %s
 ''';

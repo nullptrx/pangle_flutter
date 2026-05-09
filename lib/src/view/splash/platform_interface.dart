@@ -72,4 +72,6 @@ abstract class SplashViewPlatformCallbacksHandler {
   void onClose(PangleSplashCloseType type);
 
   void onError(int code, String message);
+
+  void onRenderFail(int code, String message);
 }

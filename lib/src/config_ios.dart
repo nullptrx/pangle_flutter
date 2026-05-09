@@ -112,6 +112,24 @@ class IOSRewardedVideoConfig implements Config {
     this.loadingType = PangleLoadingType.normal,
   });
 
+  IOSRewardedVideoConfig copyWith({
+    String? slotId,
+    String? userId,
+    String? rewardName,
+    int? rewardAmount,
+    String? extra,
+    PangleLoadingType? loadingType,
+  }) {
+    return IOSRewardedVideoConfig(
+      slotId: slotId ?? this.slotId,
+      userId: userId ?? this.userId,
+      rewardName: rewardName ?? this.rewardName,
+      rewardAmount: rewardAmount ?? this.rewardAmount,
+      extra: extra ?? this.extra,
+      loadingType: loadingType ?? this.loadingType,
+    );
+  }
+
   /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
@@ -217,6 +235,16 @@ class IOSFullscreenVideoConfig implements Config {
     required this.slotId,
     this.loadingType = PangleLoadingType.normal,
   });
+
+  IOSFullscreenVideoConfig copyWith({
+    String? slotId,
+    PangleLoadingType? loadingType,
+  }) {
+    return IOSFullscreenVideoConfig(
+      slotId: slotId ?? this.slotId,
+      loadingType: loadingType ?? this.loadingType,
+    );
+  }
 
   /// Convert config to json
   @override

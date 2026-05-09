@@ -84,10 +84,11 @@ class PangleLocation {
   }
 }
 
-// PlatformDispatcher.instance.views.first.physicalSize
-// WidgetsBinding.instance.platformDispatcher.views.first.physicalSize
+// 顶层 final 在 Dart 中本身即为懒加载，首次访问时才求值，
+// 确保在 Flutter 引擎完全初始化后才读取屏幕尺寸。
 final _kPhysicalSize = PlatformDispatcher.instance.views.first.physicalSize;
-final _kDevicePixelRatio = _kPhysicalSize.aspectRatio;
+final _kDevicePixelRatio =
+    PlatformDispatcher.instance.views.first.devicePixelRatio;
 
 final kPangleScreenWidth = _kPhysicalSize.width / _kDevicePixelRatio;
 final kPangleScreenHeight = _kPhysicalSize.height / _kDevicePixelRatio;
@@ -218,11 +219,11 @@ class PangleResult {
   ///
   factory PangleResult.fromJson(Map<String, dynamic>? json) {
     if (json == null) {
-      return const PangleResult(code: -1, message: 'unknown');
+      return const PangleResult(code: -1);
     }
     return PangleResult(
       code: json['code'],
-      message: json['message'] ?? '',
+      message: json['message'],
     );
   }
 
@@ -245,10 +246,10 @@ class PangleVerifyResult extends PangleResult {
   final bool? verify;
 
   const PangleVerifyResult({
-    required int code,
-    required String message,
+    required int super.code,
+    super.message,
     this.verify,
-  }) : super(code: code, message: message);
+  });
 
   /// 是否验证成功
   bool get isVerify => verify == true;
@@ -257,7 +258,7 @@ class PangleVerifyResult extends PangleResult {
   ///
   factory PangleVerifyResult.fromJson(Map<String, dynamic>? json) {
     if (json == null) {
-      return const PangleVerifyResult(code: -1, message: 'unknown');
+      return const PangleVerifyResult(code: -1);
     }
     return PangleVerifyResult(
       code: json['code'],
@@ -299,7 +300,8 @@ class PangleSplashResult extends PangleResult {
     return PangleSplashResult(
       code: json['code'],
       message: json['message'],
-      type: PangleSplashCloseType.values[json['type'] ?? 0],
+      type: PangleSplashCloseType.values.elementAtOrNull(json['type'] ?? 0) ??
+          PangleSplashCloseType.unknown,
     );
   }
 

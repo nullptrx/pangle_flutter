@@ -27,10 +27,10 @@ import io.github.nullptrx.pangleflutter.view.SplashViewFactory
 /** PangleFlutterPlugin */
 open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
   companion object {
-    val kDefaultBannerAdCount = 3
-    val kDefaultFeedAdCount = 3
-    val kMethodChannelName = "nullptrx.github.io/pangle"
-    val kEventChannelName = "nullptrx.github.io/pangle_event"
+    const val kDefaultBannerAdCount = 3
+    const val kDefaultFeedAdCount = 3
+    const val kMethodChannelName = "nullptrx.github.io/pangle"
+    const val kEventChannelName = "nullptrx.github.io/pangle_event"
 
   }
 
@@ -119,7 +119,7 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
       }
 
       "init" -> {
-        pangle.initialize(activity, call.arguments.asMap() ?: mapOf()) {
+        pangle.initialize(context, call.arguments.asMap() ?: mapOf()) {
           handler.post {
             result.success(it)
           }
@@ -140,15 +140,20 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
         val adSlot = PangleAdSlotManager.getSplashAdSlot(
           slotId, imgSize, isSupportDeepLink
         )
-        pangle.loadSplashAd(adSlot, FLTSplashAd(hideSkipButton, activity) {
-          result.success(it)
-        }, tolerateTimeout)
+        pangle.loadSplashAd(
+          adSlot,
+          FLTSplashAd(hideSkipButton, activity) { result.success(it) },
+          tolerateTimeout,
+          onNotInitialized = {
+            result.success(mapOf("code" to -1, "message" to "Pangle SDK not initialized", "type" to 0))
+          }
+        )
       }
 
       "loadRewardedVideoAd" -> {
 
         val loadingTypeIndex = call.argument<Int>("loadingType") ?: 0
-        val loadingType = PangleLoadingType.values()[loadingTypeIndex]
+        val loadingType = PangleLoadingType.entries.getOrNull(loadingTypeIndex) ?: PangleLoadingType.normal
 
         if (PangleLoadingType.preload == loadingType || PangleLoadingType.normal == loadingType) {
           val slotId = call.argument<String>("slotId")!!
@@ -166,6 +171,40 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
           loadRewardedVideoAdOnly(call, PangleLoadingType.preload_only, result)
         }
 
+      }
+
+      // ── 新 API：展示已缓存的激励视频广告 ──────────────────────────────────
+      "showRewardedVideoAd" -> {
+        val slotId = call.argument<String>("slotId")!!
+        val shown = pangle.showRewardedVideoAd(slotId, activity) {
+          result.success(it)
+        }
+        if (!shown) {
+          result.success(mapOf("code" to -1, "message" to "no cached ad"))
+        }
+      }
+
+      // ── 新 API：查询激励视频缓存是否可用 ──────────────────────────────────
+      "hasRewardedVideoAd" -> {
+        val slotId = call.argument<String>("slotId")!!
+        result.success(pangle.hasRewardedVideoAd(slotId))
+      }
+
+      // ── 新 API：展示已缓存的全屏视频广告 ──────────────────────────────────
+      "showFullscreenVideoAd" -> {
+        val slotId = call.argument<String>("slotId")!!
+        val shown = pangle.showFullScreenVideoAd(slotId, activity) {
+          result.success(it)
+        }
+        if (!shown) {
+          result.success(mapOf("code" to -1, "message" to "no cached ad"))
+        }
+      }
+
+      // ── 新 API：查询全屏视频缓存是否可用 ──────────────────────────────────
+      "hasFullscreenVideoAd" -> {
+        val slotId = call.argument<String>("slotId")!!
+        result.success(pangle.hasFullscreenVideoAd(slotId))
       }
 
       "loadBannerAd" -> {
@@ -234,7 +273,7 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
       "loadFullscreenVideoAd" -> {
 
         val loadingTypeIndex = call.argument<Int>("loadingType") ?: 0
-        val loadingType = PangleLoadingType.values()[loadingTypeIndex]
+        val loadingType = PangleLoadingType.entries.getOrNull(loadingTypeIndex) ?: PangleLoadingType.normal
 
         if (PangleLoadingType.preload == loadingType || PangleLoadingType.normal == loadingType) {
           val slotId = call.argument<String>("slotId")!!
@@ -304,8 +343,8 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
     call: MethodCall, loadingType: PangleLoadingType, result: MethodChannel.Result? = null
   ) {
     val slotId = call.argument<String>("slotId")!!
-    val orientationIndex = call.argument<Int>("orientation") ?: PangleOrientation.veritical.ordinal
-    val orientation = PangleOrientation.values()[orientationIndex]
+    val orientationIndex = call.argument<Int>("orientation") ?: PangleOrientation.vertical.ordinal
+    val orientation = PangleOrientation.entries.getOrNull(orientationIndex) ?: PangleOrientation.vertical
     val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
     val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
     val w: Float = expressArgs.getValue("width").toFloat()

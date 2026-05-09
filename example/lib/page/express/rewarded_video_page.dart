@@ -20,113 +20,147 @@
  * SOFTWARE.
  */
 
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 
 import '../constant.dart';
 
 class RewardedVideoPage extends StatefulWidget {
-  const RewardedVideoPage({Key? key}) : super(key: key);
+  const RewardedVideoPage({super.key});
 
   @override
-  _RewardedVideoPageState createState() => _RewardedVideoPageState();
+  State<RewardedVideoPage> createState() => _RewardedVideoPageState();
 }
 
 class _RewardedVideoPageState extends State<RewardedVideoPage> {
+  // ── 新 API 演示用 ────────────────────────────────────────────────────────
+  RewardedAd? _loadedAd;
+  String _status = '未加载';
+
+  @override
+  void initState() {
+    super.initState();
+    // 应用启动时配置 Pool，自动预加载
+    RewardedAdPool.instance.configure(
+      slotId: kRewardedVideoExpressId,
+      poolSize: 1,
+      iOS: const IOSRewardedVideoConfig(slotId: kRewardedVideoExpressId),
+      android: const AndroidRewardedVideoConfig(slotId: kRewardedVideoExpressId),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Rewarded Video Express AD'),
-      ),
+      appBar: AppBar(title: const Text('Rewarded Video Express AD')),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-          Center(
-            child: ElevatedButton(
-              onPressed: _onTapLoad,
-              child: const Text('Load'),
-            ),
+          Text('状态：$_status', style: Theme.of(context).textTheme.bodyMedium),
+          const Divider(),
+          // ── 新 API ────────────────────────────────────────────
+          Text('新 API（加载/展示分离）',
+              style: Theme.of(context).textTheme.titleSmall),
+          ElevatedButton(
+            onPressed: _onLoad,
+            child: const Text('① 加载广告'),
           ),
-          Center(
-            child: ElevatedButton(
-              onPressed: _onTapShow,
-              child: const Text('Show ad'),
-            ),
+          ElevatedButton(
+            onPressed: _loadedAd?.isLoaded == true ? _onShow : null,
+            child: const Text('② 展示广告（需先加载）'),
           ),
-          Center(
-            child: ElevatedButton(
-              onPressed: _onTapShowAndLoad,
-              child: const Text('Show ad and preload'),
-            ),
+          const Divider(),
+          // ── Pool 预加载 ────────────────────────────────────────
+          Text('Pool 预加载展示',
+              style: Theme.of(context).textTheme.titleSmall),
+          ElevatedButton(
+            onPressed: _onPoolShow,
+            child: const Text('Pool 展示（自动补充）'),
           ),
         ],
       ),
     );
   }
 
-  _onTapLoad() async {
-    final result = await pangle.loadRewardedVideoAd(
-      iOS: const IOSRewardedVideoConfig(
+  // ── 新 API：只加载，不展示 ──────────────────────────────────────────────
+
+  Future<void> _onLoad() async {
+    setState(() => _status = '加载中...');
+    try {
+      final ad = await RewardedAd.load(
         slotId: kRewardedVideoExpressId,
-        loadingType: PangleLoadingType.preloadOnly,
-      ),
-      android: const AndroidRewardedVideoConfig(
-        slotId: kRewardedVideoExpressId,
-        loadingType: PangleLoadingType.preloadOnly,
-      ),
-      callback: (event) {
-        debugPrint('rewarded_video: $event');
-      },
-    );
-    var data = jsonEncode(result);
-    debugPrint(data);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(data)),
-    );
+        iOS: const IOSRewardedVideoConfig(slotId: kRewardedVideoExpressId),
+        android: const AndroidRewardedVideoConfig(
+            slotId: kRewardedVideoExpressId),
+      );
+      setState(() {
+        _loadedAd = ad;
+        _status = '加载成功，可以展示';
+      });
+    } on AdLoadException catch (e) {
+      setState(() => _status = '加载失败：$e');
+    }
   }
 
-  _onTapShow() async {
-    final result = await pangle.loadRewardedVideoAd(
-      iOS: const IOSRewardedVideoConfig(
-        slotId: kRewardedVideoExpressId,
-        loadingType: PangleLoadingType.normal,
-      ),
-      android: const AndroidRewardedVideoConfig(
-        slotId: kRewardedVideoExpressId,
-        loadingType: PangleLoadingType.normal,
-      ),
-      callback: (event) {
-        debugPrint('rewarded_video: $event');
-      },
-    );
-    var data = jsonEncode(result);
-    debugPrint(data);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(data)),
-    );
+  // ── 新 API：展示已加载的广告 ────────────────────────────────────────────
+
+  Future<void> _onShow() async {
+    final ad = _loadedAd;
+    if (ad == null || !ad.isLoaded) return;
+
+    setState(() => _status = '展示中...');
+    try {
+      final result = await ad.show(
+        onEvent: (event) {
+          switch (event) {
+            case AdRewardEvent(:final verified):
+              debugPrint('奖励验证：$verified');
+              if (verified) _grantReward();
+            case AdClosedEvent():
+              debugPrint('广告已关闭');
+            case AdErrorEvent():
+              debugPrint('广告出错');
+            default:
+              debugPrint('事件：$event');
+          }
+        },
+      );
+      setState(() {
+        _loadedAd = null;
+        _status = '展示完毕，verify=${result.isVerify}';
+      });
+    } catch (e) {
+      setState(() => _status = '展示失败：$e');
+    }
   }
 
-  _onTapShowAndLoad() async {
-    final result = await pangle.loadRewardedVideoAd(
-      iOS: const IOSRewardedVideoConfig(
-        slotId: kRewardedVideoExpressId,
-        loadingType: PangleLoadingType.preload,
-      ),
-      android: const AndroidRewardedVideoConfig(
-        slotId: kRewardedVideoExpressId,
-        loadingType: PangleLoadingType.preload,
-      ),
-      callback: (event) {
-        debugPrint('rewarded_video: $event');
+  // ── Pool：直接展示，内部自动从缓存取 ───────────────────────────────────
+
+  Future<void> _onPoolShow() async {
+    final ready = await RewardedAdPool.instance.isReady(kRewardedVideoExpressId);
+    if (!ready) {
+      _showSnack('广告还没准备好，请稍后再试');
+      return;
+    }
+    setState(() => _status = '展示中（Pool）...');
+    final result = await RewardedAdPool.instance.show(
+      slotId: kRewardedVideoExpressId,
+      onEvent: (event) {
+        if (event case AdRewardEvent(:final verified) when verified) {
+          _grantReward();
+        }
       },
     );
-    var data = jsonEncode(result);
-    debugPrint(data);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(data)),
-    );
+    setState(() => _status = result != null ? '展示完毕' : '展示失败（缓存为空）');
+  }
+
+  void _grantReward() {
+    debugPrint('发放奖励 ✓');
+    _showSnack('奖励已发放！');
+  }
+
+  void _showSnack(String msg) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   }
 }

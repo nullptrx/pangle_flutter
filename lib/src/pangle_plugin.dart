@@ -128,13 +128,13 @@ class PanglePlugin {
         'requestTrackingAuthorization',
       );
       if (rawValue != null) {
-        return PangleAuthorizationStatus.values[rawValue];
+        return PangleAuthorizationStatus.values.elementAtOrNull(rawValue);
       }
     }
     return null;
   }
 
-  /// Returns information about your application’s tracking authorization status.
+  /// Returns information about your application's tracking authorization status.
   ///
   /// Just works on iOS 14.0+.
   Future<PangleAuthorizationStatus?> getTrackingAuthorizationStatus() async {
@@ -143,13 +143,13 @@ class PanglePlugin {
         'getTrackingAuthorizationStatus',
       );
       if (rawValue != null) {
-        return PangleAuthorizationStatus.values[rawValue];
+        return PangleAuthorizationStatus.values.elementAtOrNull(rawValue);
       }
     }
     return null;
   }
 
-  /// Register the App key that’s already been applied before requesting an
+  /// Register the App key that's already been applied before requesting an
   /// ad from TikTok Audience Network.
   ///
   /// [iOS] config for iOS
@@ -202,6 +202,9 @@ class PanglePlugin {
   /// [android] config for Android
   /// [callback] event callback
   /// return code & message
+  ///
+  /// 已废弃，请使用 [RewardedAd] 和 [RewardedAdPool] 代替。
+  @Deprecated('Use RewardedAd.load() / RewardedAdPool instead.')
   Future<PangleVerifyResult> loadRewardedVideoAd({
     IOSRewardedVideoConfig? iOS,
     AndroidRewardedVideoConfig? android,
@@ -308,6 +311,9 @@ class PanglePlugin {
   /// [android] config for Android
   /// [callback] event callback
   /// return code & message.
+  ///
+  /// 已废弃，请使用 [FullscreenAd] 和 [FullscreenAdPool] 代替。
+  @Deprecated('Use FullscreenAd.load() / FullscreenAdPool instead.')
   Future<PangleResult> loadFullscreenVideoAd({
     IOSFullscreenVideoConfig? iOS,
     AndroidFullscreenVideoConfig? android,
@@ -336,4 +342,151 @@ class PanglePlugin {
     }
     return PangleResult.fromJson(result);
   }
+
+  // ────────────────────────────────────────────────────────────────────────────
+  // 以下为内部方法，供 RewardedAd / FullscreenAd / AdPool 使用，不对外暴露
+  // ────────────────────────────────────────────────────────────────────────────
+
+  /// 仅加载激励视频广告到 native 缓存，不展示。
+  /// 内部使用，由 [RewardedAd] 调用。
+  Future<PangleVerifyResult> loadRewardedVideoAdOnly({
+    IOSRewardedVideoConfig? iOS,
+    AndroidRewardedVideoConfig? android,
+    PangleEventCallback? callback,
+  }) async {
+    final iosConfig = iOS?.copyWith(loadingType: PangleLoadingType.preloadOnly);
+    final androidConfig =
+        android?.copyWith(loadingType: PangleLoadingType.preloadOnly);
+
+    final subscription = _eventChannel
+        .receiveBroadcastStream(PangleEventType.rewardedVideo.index)
+        .listen((dynamic event) {
+      callback?.call(event);
+    });
+    Map<String, dynamic>? result;
+    try {
+      if (Platform.isIOS && iosConfig != null) {
+        result = await _methodChannel.invokeMapMethod<String, dynamic>(
+          'loadRewardedVideoAd',
+          iosConfig.toJSON(),
+        );
+      } else if (Platform.isAndroid && androidConfig != null) {
+        result = await _methodChannel.invokeMapMethod<String, dynamic>(
+          'loadRewardedVideoAd',
+          androidConfig.toJSON(),
+        );
+      }
+    } finally {
+      subscription.cancel();
+    }
+    return PangleVerifyResult.fromJson(result);
+  }
+
+  /// 展示 native 缓存中已加载的激励视频广告。
+  /// 内部使用，由 [RewardedAd] 调用。
+  Future<PangleVerifyResult> showRewardedVideoAd({
+    required String slotId,
+    PangleEventCallback? callback,
+  }) async {
+    final subscription = _eventChannel
+        .receiveBroadcastStream(PangleEventType.rewardedVideo.index)
+        .listen((dynamic event) {
+      callback?.call(event);
+    });
+    Map<String, dynamic>? result;
+    try {
+      result = await _methodChannel.invokeMapMethod<String, dynamic>(
+        'showRewardedVideoAd',
+        {'slotId': slotId},
+      );
+    } finally {
+      subscription.cancel();
+    }
+    return PangleVerifyResult.fromJson(result);
+  }
+
+  /// 查询 native 缓存中是否有可用（未过期）的激励视频广告。
+  /// 内部使用，由 [RewardedAdPool] 调用。
+  Future<bool> hasRewardedVideoAd(String slotId) async {
+    final bool? has = await _methodChannel.invokeMethod<bool>(
+      'hasRewardedVideoAd',
+      {'slotId': slotId},
+    );
+    return has ?? false;
+  }
+
+  /// 仅加载全屏视频广告到 native 缓存，不展示。
+  /// 内部使用，由 [FullscreenAd] 调用。
+  Future<PangleResult> loadFullscreenVideoAdOnly({
+    IOSFullscreenVideoConfig? iOS,
+    AndroidFullscreenVideoConfig? android,
+    PangleEventCallback? callback,
+  }) async {
+    final iosConfig = iOS?.copyWith(loadingType: PangleLoadingType.preloadOnly);
+    final androidConfig =
+        android?.copyWith(loadingType: PangleLoadingType.preloadOnly);
+
+    final subscription = _eventChannel
+        .receiveBroadcastStream(PangleEventType.fullscreen.index)
+        .listen((dynamic event) {
+      callback?.call(event);
+    });
+    Map<String, dynamic>? result;
+    try {
+      if (Platform.isIOS && iosConfig != null) {
+        result = await _methodChannel.invokeMapMethod<String, dynamic>(
+          'loadFullscreenVideoAd',
+          iosConfig.toJSON(),
+        );
+      } else if (Platform.isAndroid && androidConfig != null) {
+        result = await _methodChannel.invokeMapMethod<String, dynamic>(
+          'loadFullscreenVideoAd',
+          androidConfig.toJSON(),
+        );
+      }
+    } finally {
+      subscription.cancel();
+    }
+    return PangleResult.fromJson(result);
+  }
+
+  /// 展示 native 缓存中已加载的全屏视频广告。
+  /// 内部使用，由 [FullscreenAd] 调用。
+  Future<PangleResult> showFullscreenVideoAd({
+    required String slotId,
+    PangleEventCallback? callback,
+  }) async {
+    final subscription = _eventChannel
+        .receiveBroadcastStream(PangleEventType.fullscreen.index)
+        .listen((dynamic event) {
+      callback?.call(event);
+    });
+    Map<String, dynamic>? result;
+    try {
+      result = await _methodChannel.invokeMapMethod<String, dynamic>(
+        'showFullscreenVideoAd',
+        {'slotId': slotId},
+      );
+    } finally {
+      subscription.cancel();
+    }
+    return PangleResult.fromJson(result);
+  }
+
+  /// 查询 native 缓存中是否有可用（未过期）的全屏视频广告。
+  /// 内部使用，由 [FullscreenAdPool] 调用。
+  Future<bool> hasFullscreenVideoAd(String slotId) async {
+    final bool? has = await _methodChannel.invokeMethod<bool>(
+      'hasFullscreenVideoAd',
+      {'slotId': slotId},
+    );
+    return has ?? false;
+  }
+
+  /// EventChannel stream，供 Ad 对象订阅事件。
+  Stream<dynamic> rewardedVideoEventStream() =>
+      _eventChannel.receiveBroadcastStream(PangleEventType.rewardedVideo.index);
+
+  Stream<dynamic> fullscreenEventStream() =>
+      _eventChannel.receiveBroadcastStream(PangleEventType.fullscreen.index);
 }

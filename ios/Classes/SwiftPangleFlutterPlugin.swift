@@ -92,6 +92,39 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         case "loadFullscreenVideoAd":
             let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
             instance.loadFullscreenVideoAd(args, result: result)
+
+        // ── 新 API：展示已缓存的激励视频广告 ──────────────────────────────
+        case "showRewardedVideoAd":
+            let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
+            let shown = instance.showRewardedVideoAd(args)({ object in
+                result(object)
+            })
+            if !shown {
+                result(["code": -1, "message": "no cached ad"] as [String: Any])
+            }
+
+        // ── 新 API：查询激励视频缓存是否可用 ──────────────────────────────
+        case "hasRewardedVideoAd":
+            let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
+            let slotId = args["slotId"] as? String ?? ""
+            result(instance.hasRewardedVideoAd(slotId))
+
+        // ── 新 API：展示已缓存的全屏视频广告 ──────────────────────────────
+        case "showFullscreenVideoAd":
+            let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
+            let shown = instance.showFullScreenVideoAd(args)({ object in
+                result(object)
+            })
+            if !shown {
+                result(["code": -1, "message": "no cached ad"] as [String: Any])
+            }
+
+        // ── 新 API：查询全屏视频缓存是否可用 ──────────────────────────────
+        case "hasFullscreenVideoAd":
+            let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
+            let slotId = args["slotId"] as? String ?? ""
+            result(instance.hasFullscreenVideoAd(slotId))
+
         case "getThemeStatus":
             result(BUAdSDKManager.themeStatus().rawValue)
         case "setThemeStatus":

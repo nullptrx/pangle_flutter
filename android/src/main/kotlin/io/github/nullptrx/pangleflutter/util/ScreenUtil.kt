@@ -6,6 +6,8 @@ import android.content.Context
 import android.content.res.Resources
 import android.os.Build
 import android.view.View
+import android.view.WindowInsets
+import android.view.WindowInsetsController
 import android.view.WindowManager
 import io.github.nullptrx.pangleflutter.common.TTSize
 import io.github.nullptrx.pangleflutter.common.TTSizeF
@@ -47,26 +49,27 @@ object ScreenUtil {
     return height
   }
 
-  @Suppress("DEPRECATION")
-  @SuppressLint("ObsoleteSdkInt")
   fun hideBottomUIMenu(activity: Activity?) {
-    if (activity == null) {
-      return
-    }
+    activity ?: return
     try {
-      //隐藏虚拟按键，并且全屏
-      if (Build.VERSION.SDK_INT > 11 && Build.VERSION.SDK_INT < 19) { // lower api
-        val v = activity.window.decorView
-        v.systemUiVisibility = View.GONE
-      } else if (Build.VERSION.SDK_INT >= 19) {
-        //for new api versions.
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        // API 30+：使用 WindowInsetsController
+        activity.window.insetsController?.let { controller ->
+          controller.hide(WindowInsets.Type.navigationBars())
+          controller.systemBarsBehavior =
+            WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+        activity.window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+      } else {
+        // API 24-29
         val decorView = activity.window.decorView
+        @Suppress("DEPRECATION")
         val uiOptions = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
             or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-            //                    | View.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
             or View.SYSTEM_UI_FLAG_IMMERSIVE)
+        @Suppress("DEPRECATION")
         decorView.systemUiVisibility = uiOptions
         activity.window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
       }

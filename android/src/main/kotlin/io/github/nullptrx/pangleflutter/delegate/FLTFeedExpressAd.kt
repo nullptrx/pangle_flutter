@@ -10,7 +10,7 @@ import kotlin.collections.set
 class FLTFeedExpressAd(val size: TTSizeF, var result: (Any) -> Unit = {}) :
   TTAdNative.NativeExpressAdListener {
 
-  override fun onError(code: Int, message: String) {
+  override fun onError(code: Int, message: String?) {
     invoke(code, message)
   }
 

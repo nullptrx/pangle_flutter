@@ -2,7 +2,8 @@
 .atom/
 .idea/
 .vscode/
-
+.claude/
+.codex/
 .packages
 .pub/
 .dart_tool/
@@ -45,3 +46,5 @@ build/
 .project
 .classpath
 .settings
+
+template/

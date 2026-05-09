@@ -8,43 +8,40 @@
 import Foundation
 
 class AppUtil {
+    /// 返回当前可见的根视图控制器，使用 Scene-based API（iOS 13+）
     static func getVC() -> UIViewController {
-        let viewController = UIApplication.shared.windows.filter { (w) -> Bool in
-            w.isHidden == false
-        }.first?.rootViewController
-//        let viewController: UIViewController = (UIApplication.shared.delegate?.window??.rootViewController)!
-        return viewController!
+        let window = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+            .first(where: { !$0.isHidden })
+        guard let rootVC = window?.rootViewController else {
+            // 降级兜底：直接返回空 VC，避免崩溃
+            return UIViewController()
+        }
+        return rootVC
     }
-    
-//    static func getKeyWindowVC() -> UIViewController {
-//        return UIApplication.shared.keyWindow!.rootViewController
-//    }
 
     static func getCurrentVC() -> UIViewController? {
-        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-        let currentVC = self.getCurrentVC(from: rootViewController)
-        return currentVC
+        let rootViewController = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+            .first(where: { $0.isKeyWindow })?.rootViewController
+        return self.getCurrentVC(from: rootViewController)
     }
 
     static func getCurrentVC(from rootVC: UIViewController?) -> UIViewController? {
         var rootVC = rootVC
         var currentVC: UIViewController?
         if rootVC?.presentedViewController != nil {
-            // 视图是被presented出来的
             rootVC = rootVC?.presentedViewController
         }
         if rootVC is UITabBarController {
-            // 根视图为UITabBarController
             currentVC = self.getCurrentVC(from: (rootVC as? UITabBarController)?.selectedViewController)
         } else if rootVC is UINavigationController {
-            // 根视图为UINavigationController
             currentVC = self.getCurrentVC(from: (rootVC as? UINavigationController)?.visibleViewController)
         } else {
-            // 根视图为非导航类
             currentVC = rootVC
         }
-
         return currentVC
     }
-    
 }

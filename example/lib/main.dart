@@ -54,7 +54,7 @@ void main() async {
 
 /// 范例入口
 class PangleApp extends StatelessWidget {
-  const PangleApp({Key? key}) : super(key: key);
+  const PangleApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -73,18 +73,14 @@ class PangleApp extends StatelessWidget {
 /// [android] android平台配置参数
 Future<void> initPangle() async {
   PangleResult ret = await pangle.init(
-    iOS: const IOSConfig(
-      appId: kAppId,
-      logLevel: PangleLogLevel.debug,
-    ),
+    iOS: const IOSConfig(appId: kAppId, logLevel: PangleLogLevel.debug),
     android: const AndroidConfig(
-        appId: kAppId,
-        debug: false,
-        allowShowNotify: true,
-        useTextureView: true,
-        directDownloadNetworkType: [
-          AndroidDirectDownloadNetworkType.k2G,
-        ]),
+      appId: kAppId,
+      debug: true,
+      allowShowNotify: true,
+      useTextureView: true,
+      directDownloadNetworkType: [AndroidDirectDownloadNetworkType.k2G],
+    ),
   );
   debugPrint(ret.toString());
 }

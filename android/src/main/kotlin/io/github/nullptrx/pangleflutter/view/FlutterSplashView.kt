@@ -30,6 +30,7 @@ class FlutterSplashView(
 
   private val methodChannel: MethodChannel =
     MethodChannel(messenger, "nullptrx.github.io/pangle_splashview_$id")
+  private val mainHandler = Handler(Looper.getMainLooper())
   private val container: FrameLayout
   private var hideSkipButton = false
 
@@ -65,7 +66,7 @@ class FlutterSplashView(
   }
 
 
-  override fun onSplashLoadSuccess() {
+  override fun onSplashLoadSuccess(ad: CSJSplashAd) {
 
   }
 
@@ -92,7 +93,7 @@ class FlutterSplashView(
   }
 
   override fun onSplashRenderFail(ad: CSJSplashAd, error: CSJAdError) {
-    postMessage("onError", mapOf("message" to error.msg, "code" to error.code))
+    postMessage("onRenderFail", mapOf("message" to error.msg, "code" to error.code))
   }
 
   override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
@@ -115,7 +116,7 @@ class FlutterSplashView(
   }
 
   private fun postMessage(method: String, arguments: Map<String, Any?> = mapOf()) {
-    Handler(Looper.getMainLooper()).post {
+    mainHandler.post {
       methodChannel.invokeMethod(method, arguments)
     }
   }

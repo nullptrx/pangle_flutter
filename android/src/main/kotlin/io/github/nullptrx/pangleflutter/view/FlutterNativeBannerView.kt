@@ -33,7 +33,6 @@ import android.widget.FrameLayout
 import com.bytedance.sdk.openadsdk.TTAdConstant
 import com.bytedance.sdk.openadsdk.TTAdDislike
 import com.bytedance.sdk.openadsdk.TTAdNative
-import com.bytedance.sdk.openadsdk.TTBannerAd
 import com.bytedance.sdk.openadsdk.TTNativeAd
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
@@ -52,6 +51,7 @@ class FlutterNativeBannerView(
 
   private val methodChannel: MethodChannel =
     MethodChannel(messenger, "nullptrx.github.io/pangle_nativebannerview_$id")
+  private val mainHandler = Handler(Looper.getMainLooper())
   private val context: Context
   private val container: FrameLayout
   private var ttAdNative: TTNativeAd? = null
@@ -132,7 +132,7 @@ class FlutterNativeBannerView(
   }
 
   private fun postMessage(method: String, arguments: Map<String, Any?> = mapOf()) {
-    Handler(Looper.getMainLooper()).post {
+    mainHandler.post {
       methodChannel.invokeMethod(method, arguments)
     }
   }

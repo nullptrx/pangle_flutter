@@ -51,13 +51,6 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              const ListTile(
-                title: Text('Testing environment:'),
-                subtitle: Padding(
-                  padding: EdgeInsets.only(top: 8.0),
-                  child: Text(kEnv),
-                ),
-              ),
               ListTile(
                 title: const Text('Dependencies:'),
                 subtitle: Padding(

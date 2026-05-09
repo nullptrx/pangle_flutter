@@ -26,6 +26,9 @@ public class FLTFeedView: NSObject, FlutterPlatformView {
     
     deinit {
         UIUtil.removeAllView(container)
+        // Remove the cached ad entry so the backing BUNativeExpressAdView can be released.
+        // If the ad was already consumed (rendered), removeExpressAd returns false — that's fine.
+        PangleAdManager.shared.removeExpressAd(container.id)
     }
 }
 
@@ -72,8 +75,9 @@ class FeedView: FLTView {
             return
         }
         self.id = id
-        let ad = PangleAdManager.shared.getExpressAd(id)
-        guard let expressAd: BUNativeExpressAdView = ad else {
+        guard let expressAd = PangleAdManager.shared.getExpressAd(id) else {
+            // Ad was not found in the cache — notify Dart so it can show a placeholder or retry.
+            methodChannel?.invokeMethod("onRenderFail", arguments: ["code": -1, "message": "Ad not ready (id=\(id))"])
             return
         }
         expressAd.rootViewController = AppUtil.getVC()

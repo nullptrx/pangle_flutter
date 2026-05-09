@@ -28,6 +28,7 @@ class FlutterFeedView(
 
   private val methodChannel: MethodChannel =
     MethodChannel(messenger, "nullptrx.github.io/pangle_feedview_$id")
+  private val mainHandler = Handler(Looper.getMainLooper())
   private val container: FrameLayout
   private var ttadId: String = ""
 
@@ -46,10 +47,18 @@ class FlutterFeedView(
   override fun dispose() {
     methodChannel.setMethodCallHandler(null)
     container.removeAllViews()
+    // Destroy the native ad object when the Flutter view is disposed to avoid memory leaks.
+    PangleAdManager.shared.removeExpressAd(ttadId)
   }
 
   private fun loadAd(id: String) {
-    val expressAd = PangleAdManager.shared.getExpressAd(id) ?: return
+    val expressAd = PangleAdManager.shared.getExpressAd(id)
+    if (expressAd == null) {
+      // Ad was not found in cache — report the failure so Dart can handle it gracefully
+      // (e.g. show a placeholder or retry loading).
+      postMessage("onRenderFail", mapOf("code" to -1, "message" to "Ad not ready (id=$id)"))
+      return
+    }
     val expressAdView = expressAd.expressAdView
     if (expressAdView.parent != null) {
       (expressAdView.parent as ViewGroup).removeView(expressAdView)
@@ -97,7 +106,7 @@ class FlutterFeedView(
   }
 
   private fun postMessage(method: String, arguments: Map<String, Any?> = mapOf()) {
-    Handler(Looper.getMainLooper()).post {
+    mainHandler.post {
       methodChannel.invokeMethod(method, arguments)
     }
   }

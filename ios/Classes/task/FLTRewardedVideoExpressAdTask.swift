@@ -39,7 +39,8 @@ internal final class FLTRewardedVideoExpressAdTask: FLTTaskProtocol {
     }
 
     func execute(_ loadingType: LoadingType) -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
-        { [unowned self]result in
+        { [weak self] result in
+            guard let self = self else { return }
             let delegate = FLTRewardedVideoExpressAd(slotId, loadingType, success: { [weak self] verify in
                 guard let self = self else {
                     return
@@ -56,7 +57,7 @@ internal final class FLTRewardedVideoExpressAdTask: FLTTaskProtocol {
             manager.delegate = delegate
             self.delegate = delegate
 
-            manager.loadData()
+            manager.loadAdData()
         }
     }
 }

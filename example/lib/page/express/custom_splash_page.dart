@@ -31,10 +31,10 @@ import '../home_page.dart';
 class CustomSplashPage extends StatefulWidget {
   final bool isRoot;
 
-  const CustomSplashPage({Key? key, this.isRoot = true}) : super(key: key);
+  const CustomSplashPage({super.key, this.isRoot = true});
 
   @override
-  _CustomSplashPageState createState() => _CustomSplashPageState();
+  State<CustomSplashPage> createState() => _CustomSplashPageState();
 }
 
 class _CustomSplashPageState extends State<CustomSplashPage> {
@@ -43,19 +43,22 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setEnabledSystemUIMode(
-      SystemUiMode.immersiveSticky,
-      overlays: [],
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        systemNavigationBarColor: Colors.transparent,
+      ),
     );
   }
 
   @override
   void dispose() {
     super.dispose();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [
-      SystemUiOverlay.top,
-      SystemUiOverlay.bottom,
-    ]);
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: SystemUiOverlay.values,
+    );
   }
 
   @override
@@ -64,10 +67,9 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          const Center(
-            child: FlutterLogo(
-              size: 50,
-            ),
+          const Padding(
+            padding: EdgeInsets.only(bottom: 101),
+            child: Center(child: FlutterLogo(size: 50)),
           ),
           Offstage(
             offstage: !loaded,
@@ -86,7 +88,8 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                     android: AndroidSplashConfig(
                       expressSize: PangleExpressSize(
                         width: kPangleScreenWidth,
-                        height: kPangleScreenWidth * 1.778,
+                        // height: kPangleScreenWidth * 1.778,
+                        height: kPangleScreenHeight - 100,
                       ),
                       slotId: kSplashId,
                       tolerateTimeout: 3,
@@ -107,18 +110,17 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                 Container(
                   alignment: Alignment.center,
                   color: Colors.white,
+                  width: double.infinity,
                   height: 100,
                   child: const Row(
                     mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       FlutterLogo(size: 60),
                       SizedBox(width: 20),
                       Text(
                         'Pangle Flutter',
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.black,
-                        ),
+                        style: TextStyle(fontSize: 24, color: Colors.black),
                         // style: GoogleFonts.zcoolQingKeHuangYou(
                         //   fontSize: 24,
                         //   color: Colors.black,
@@ -126,7 +128,7 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
