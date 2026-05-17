@@ -143,17 +143,18 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
 
       "loadSplashAd" -> {
         val slotId =
-          call.argument<String>("slotId")!! // val isExpress = call.argument<Boolean>("isExpress") ?: false
+          call.argument<String>("slotId")!!
         val tolerateTimeout = call.argument<Double>("tolerateTimeout")
         val hideSkipButton = call.argument<Boolean>("hideSkipButton")
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+        val isHalfSize = call.argument<Boolean>("isHalfSize") ?: false
         val imgSize = TTSize(1080, 1920)
         val adSlot = PangleAdSlotManager.getSplashAdSlot(
           slotId, imgSize, isSupportDeepLink
         )
         pangle.loadSplashAd(
           adSlot,
-          FLTSplashAd(hideSkipButton, activity) { result.success(it) },
+          FLTSplashAd(hideSkipButton, isHalfSize, activity) { result.success(it) },
           tolerateTimeout,
           onNotInitialized = {
             result.success(mapOf("code" to -1, "message" to "Pangle SDK not initialized", "type" to 0))

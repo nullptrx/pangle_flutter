@@ -66,6 +66,7 @@ class AndroidSplashConfig implements Config {
   final bool isExpress;
   final bool isSupportDeepLink;
   final PangleExpressSize? expressSize;
+  final bool isHalfSize;
 
   const AndroidSplashConfig({
     required this.slotId,
@@ -74,6 +75,7 @@ class AndroidSplashConfig implements Config {
     this.isSupportDeepLink = true,
     this.isExpress = false,
     this.expressSize,
+    this.isHalfSize = false,
   });
 
   @override
@@ -85,6 +87,7 @@ class AndroidSplashConfig implements Config {
       'isSupportDeepLink': isSupportDeepLink,
       'isExpress': isExpress,
       'expressSize': expressSize?.toJson(),
+      'isHalfSize': isHalfSize,
     };
   }
 }

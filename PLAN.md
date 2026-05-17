@@ -243,7 +243,7 @@ MainActivity
 
 ---
 
-### Phase 2：Flutter Plugin Dart 层（接口定义 + 参数完整复刻）
+### ✅ Phase 2：Flutter Plugin Dart 层（接口定义 + 参数完整复刻）
 
 在 `lib/src/` 中重写/新增。每个配置类的字段必须与原生 demo 的 `AdSlot.Builder` / `BUAdSlot` / 广告对象初始化参数一一对应。
 
@@ -509,7 +509,7 @@ Future<PangleStreamAd> loadStreamAd({IOSStreamConfig? iOS, AndroidStreamConfig? 
 
 ---
 
-### Phase 3：Android Plugin 实现
+### ✅ Phase 3：Android Plugin 实现
 
 路径：`android/src/main/kotlin/io/github/nullptrx/pangleflutter/`
 
@@ -539,7 +539,7 @@ Future<PangleStreamAd> loadStreamAd({IOSStreamConfig? iOS, AndroidStreamConfig? 
 
 ---
 
-### Phase 4：iOS Plugin 实现
+### ✅ Phase 4：iOS Plugin 实现
 
 路径：`ios/Classes/`
 

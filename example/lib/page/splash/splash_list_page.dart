@@ -12,7 +12,7 @@ class SplashListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final items = [
       _SplashItem(label: '全屏开屏', androidId: kAndroidSplashFullId, iosId: kIOSSplashNormalId),
-      _SplashItem(label: '半全屏开屏', androidId: kAndroidSplashHalfId, iosId: kIOSSplashNormalId),
+      _SplashItem(label: '半全屏开屏', androidId: kAndroidSplashHalfId, iosId: kIOSSplashNormalId, isHalfSize: true),
       _SplashItem(label: '模板开屏', androidId: kAndroidSplashExpressId, iosId: kIOSSplashExpressId),
       _SplashItem(label: '横版模板开屏', androidId: kAndroidSplashLandscapeExpressId, iosId: kIOSSplashNormalId),
       _SplashItem(label: '横版开屏', androidId: kAndroidSplashLandscapeId, iosId: kIOSSplashNormalId),
@@ -41,10 +41,17 @@ class SplashListPage extends StatelessWidget {
 
   Future<void> _loadSplash(BuildContext context, _SplashItem item) async {
     final slotId = Platform.isIOS ? item.iosId : item.androidId;
+    // iOS 半全屏：adSize = 屏幕宽 × (屏幕高 - 100)，对应 iOS demo 的半屏高度
+    final iosExpressSize = item.isHalfSize
+        ? PangleExpressSize(
+            width: kPangleScreenWidth,
+            height: kPangleScreenHeight - 100,
+          )
+        : null;
     try {
       await pangle.loadSplashAd(
-        iOS: IOSSplashConfig(slotId: slotId),
-        android: AndroidSplashConfig(slotId: slotId),
+        iOS: IOSSplashConfig(slotId: slotId, expressSize: iosExpressSize),
+        android: AndroidSplashConfig(slotId: slotId, isHalfSize: item.isHalfSize),
       );
     } catch (e) {
       if (context.mounted) {
@@ -60,9 +67,11 @@ class _SplashItem {
   final String label;
   final String androidId;
   final String iosId;
+  final bool isHalfSize;
   const _SplashItem({
     required this.label,
     required this.androidId,
     required this.iosId,
+    this.isHalfSize = false,
   });
 }

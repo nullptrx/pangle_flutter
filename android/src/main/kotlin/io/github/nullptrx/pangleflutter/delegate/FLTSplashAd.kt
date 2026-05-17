@@ -1,6 +1,7 @@
 package io.github.nullptrx.pangleflutter.delegate
 
 import android.app.Activity
+import android.content.res.Resources
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -11,6 +12,7 @@ import io.github.nullptrx.pangleflutter.common.kBlock
 
 internal class FLTSplashAd(
   val hideSkipButton: Boolean?,
+  val isHalfSize: Boolean = false,
   var activity: Activity?,
   var result: (Any) -> Unit = {}
 ) : TTAdNative.CSJSplashAdListener {
@@ -60,10 +62,12 @@ internal class FLTSplashAd(
       act.runOnUiThread {
         val decorView = act.window.decorView as ViewGroup
         splashView.parent?.let { (it as? ViewGroup)?.removeView(splashView) }
-        val params = FrameLayout.LayoutParams(
-          FrameLayout.LayoutParams.MATCH_PARENT,
+        val heightPx = if (isHalfSize) {
+          (Resources.getSystem().displayMetrics.heightPixels * 4f / 5f).toInt()
+        } else {
           FrameLayout.LayoutParams.MATCH_PARENT
-        )
+        }
+        val params = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, heightPx)
         decorView.addView(splashView, params)
         overlayView = splashView
       }

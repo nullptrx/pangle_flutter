@@ -19,8 +19,16 @@ internal final class FLTSplashAdTask: FLTTaskProtocol {
         let slotId: String = args["slotId"] as! String
         let tolerateTimeout: Double? = args["tolerateTimeout"] as? Double
         let hideSkipButton: Bool? = args["hideSkipButton"] as? Bool
-        let frame = UIScreen.main.bounds
-        let splashAd = BUSplashAd(slotID: slotId, adSize: frame.size)
+        let screenSize = UIScreen.main.bounds.size
+        let adSize: CGSize
+        if let sizeMap = args["expressSize"] as? [String: Any],
+           let w = sizeMap["width"] as? Double, w > 0,
+           let h = sizeMap["height"] as? Double, h > 0 {
+            adSize = CGSize(width: w, height: h)
+        } else {
+            adSize = screenSize
+        }
+        let splashAd = BUSplashAd(slotID: slotId, adSize: adSize)
         if let tolerateTimeout = tolerateTimeout {
             splashAd.tolerateTimeout = tolerateTimeout
         }
