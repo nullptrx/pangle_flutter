@@ -216,8 +216,11 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
         val w: Float = expressArgs.getValue("width").toFloat()
         val h: Float = expressArgs.getValue("height").toFloat()
         val expressSize = TTSizeF(w, h)
+        val imgSize = call.argument<Map<String, Double>>("imgSize")?.let {
+          TTSize(it.getValue("width").toInt(), it.getValue("height").toInt())
+        }
         val adSlot = PangleAdSlotManager.getBannerAdSlot(
-          slotId, expressSize, count, isSupportDeepLink
+          slotId, expressSize, count, isSupportDeepLink, imgSize
         )
         pangle.loadBanner2ExpressAd(adSlot) {
           result.success(it)
@@ -232,8 +235,11 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
         val w: Float = expressArgs.getValue("width").toFloat()
         val h: Float = expressArgs.getValue("height").toFloat()
         val expressSize = TTSizeF(w, h)
+        val imgSize = call.argument<Map<String, Double>>("imgSize")?.let {
+          TTSize(it.getValue("width").toInt(), it.getValue("height").toInt())
+        }
         val adSlot = PangleAdSlotManager.getFeedAdSlot(
-          slotId, expressSize, count, isSupportDeepLink
+          slotId, expressSize, count, isSupportDeepLink, imgSize
         )
         pangle.loadFeedExpressAd(adSlot) {
           result.success(it)
@@ -254,20 +260,21 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
       }
 
       "loadInterstitialAd" -> {
-        // val slotId = call.argument<String>("slotId")!!
-        // val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
-        // val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
-        // val w: Float = expressArgs.getValue("width").toFloat()
-        // val h: Float = expressArgs.getValue("height").toFloat()
-        // val expressSize = TTSizeF(w, h)
-        //
-        // val adSlot = PangleAdSlotManager.getInterstitialAdSlot(
-        //   slotId, expressSize, isSupportDeepLink
-        // )
-        // pangle.loadInteractionAd(adSlot, FLTInterstitialAd(activity) {
-        //   result.success(it)
-        // })
-        result.notImplemented()
+        val slotId = call.argument<String>("slotId")!!
+        val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+        val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
+        val w: Float = expressArgs.getValue("width").toFloat()
+        val h: Float = expressArgs.getValue("height").toFloat()
+        val expressSize = TTSizeF(w, h)
+        val imgSize = call.argument<Map<String, Double>>("imgSize")?.let {
+          TTSize(it.getValue("width").toInt(), it.getValue("height").toInt())
+        }
+        val adSlot = PangleAdSlotManager.getInterstitialAdSlot(
+          slotId, expressSize, isSupportDeepLink, imgSize
+        )
+        pangle.loadNativeExpressAd(adSlot) {
+          result.success(it)
+        }
       }
 
       "loadFullscreenVideoAd" -> {

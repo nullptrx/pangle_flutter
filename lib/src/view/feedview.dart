@@ -37,7 +37,7 @@ typedef FeedViewCreatedCallback = void Function(FeedViewController controller);
 
 class FeedView extends StatefulWidget {
   const FeedView({
-    Key? key,
+    super.key,
     this.id,
     this.expressSize,
     this.onFeedViewCreated,
@@ -47,7 +47,7 @@ class FeedView extends StatefulWidget {
     this.onDislike,
     this.onRenderSuccess,
     this.onRenderFail,
-  }) : super(key: key);
+  });
 
   final String? id;
 
@@ -121,8 +121,9 @@ class FeedView extends StatefulWidget {
   /// 点击了关闭按钮（不喜欢）
   final PangleOptionCallback? onDislike;
 
-  /// 渲染广告成功
-  final VoidCallback? onRenderSuccess;
+  /// 渲染广告成功，参数为实际渲染尺寸（逻辑像素）。
+  /// 使用优选模板（expressSize.height == 0）时可据此调整外部容器。
+  final void Function(double width, double height)? onRenderSuccess;
 
   /// 渲染广告失败
   final PangleMessageCallback? onRenderFail;
@@ -182,8 +183,7 @@ class FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin {
 /// A [FeedViewController] instance can be obtained by setting the [FeedView.onFeedViewCreated]
 /// callback for a [FeedView] widget.
 class FeedViewController extends ViewController {
-  FeedViewController._(FeedViewPlatformController controller)
-      : super(controller);
+  FeedViewController._(FeedViewPlatformController super.controller);
 }
 
 class _PlatformCallbacksHandler implements FeedViewPlatformCallbacksHandler {
@@ -207,8 +207,8 @@ class _PlatformCallbacksHandler implements FeedViewPlatformCallbacksHandler {
   }
 
   @override
-  void onRenderSuccess() {
-    _widget.onRenderSuccess?.call();
+  void onRenderSuccess(double width, double height) {
+    _widget.onRenderSuccess?.call(width, height);
   }
 
   @override

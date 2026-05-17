@@ -27,11 +27,11 @@ const kRewardedVideoExpressId = '901121365';
 const kBannerExpressId = '901121148';
 // 375x284
 const kFeedExpressId = '901121253'; // info
-// const kFeedExpressId = '901121134'; // video
+const kFeedVideoExpressId = '901121134'; // video
 // 3x2
-// const kInterstitialExpressId = '945940989';
+const kInterstitialExpress3x2Id = '945940989';
 // 1x1
-const kInterstitialExpressId = '947793385';
+const kInterstitialExpress1x1Id = '947793385';
 // 新模板渲染插屏
 const kFullscreenIdFull = '901121375';
 // 全屏视频

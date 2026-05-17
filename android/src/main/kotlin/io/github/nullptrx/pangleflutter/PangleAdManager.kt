@@ -19,7 +19,6 @@ import io.github.nullptrx.pangleflutter.common.ERROR_CODE_NO_ACTIVITY
 import io.github.nullptrx.pangleflutter.common.ERROR_MSG_NO_ACTIVITY
 import io.github.nullptrx.pangleflutter.common.PangleLoadingType
 import io.github.nullptrx.pangleflutter.common.PangleTitleBarTheme
-import io.github.nullptrx.pangleflutter.common.TTSizeF
 import io.github.nullptrx.pangleflutter.delegate.FLTBannerExpressAd
 import io.github.nullptrx.pangleflutter.delegate.FLTFeedExpressAd
 import io.github.nullptrx.pangleflutter.delegate.FLTFullScreenVideoAd
@@ -402,9 +401,14 @@ class PangleAdManager {
   }
 
 
+  /** 信息流模板广告（Feed Express Ad），对应 Dart 侧 loadFeedAd */
   fun loadFeedExpressAd(adSlot: AdSlot, result: (Any) -> Unit) {
-    val size = TTSizeF(adSlot.expressViewAcceptedWidth, adSlot.expressViewAcceptedHeight)
-    ttAdNative?.loadNativeExpressAd(adSlot, FLTFeedExpressAd(size, result))
+    ttAdNative?.loadNativeExpressAd(adSlot, FLTFeedExpressAd(result))
+  }
+
+  /** 插屏模板广告（Native Express Interstitial Ad），对应 Dart 侧 loadInterstitialAd */
+  fun loadNativeExpressAd(adSlot: AdSlot, result: (Any) -> Unit) {
+    ttAdNative?.loadNativeExpressAd(adSlot, FLTFeedExpressAd(result))
   }
 
   fun loadBannerExpressAd(adSlot: AdSlot, listener: TTAdNative.NativeExpressAdListener) {

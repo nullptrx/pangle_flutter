@@ -25,6 +25,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 
+import '../pangle_flutter.dart' show RewardedAd, RewardedAdPool, FullscreenAd, FullscreenAdPool;
 import 'build.dart';
 import 'config_android.dart';
 import 'config_ios.dart';

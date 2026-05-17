@@ -24,11 +24,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
-import '../model.dart';
-
 import '../config.dart';
 import '../config_android.dart';
 import '../config_ios.dart';
+import '../model.dart';
 import '../util.dart';
 import 'banner/bannerview_android.dart';
 import 'banner/bannerview_ios.dart';
@@ -42,7 +41,7 @@ typedef BannerViewCreatedCallback = void Function(
 
 class BannerView extends StatefulWidget {
   const BannerView({
-    Key? key,
+    super.key,
     this.iOS,
     this.android,
     this.onBannerViewCreated,
@@ -53,7 +52,7 @@ class BannerView extends StatefulWidget {
     this.onError,
     this.onRenderSuccess,
     this.onRenderFail,
-  }) : super(key: key);
+  });
 
   final IOSBannerConfig? iOS;
   final AndroidBannerConfig? android;
@@ -209,8 +208,7 @@ class BannerViewState extends State<BannerView>
 /// A [BannerViewController] instance can be obtained by setting the [BannerView.onBannerViewCreated]
 /// callback for a [BannerView] widget.
 class BannerViewController extends ViewController {
-  BannerViewController._(BannerViewPlatformController controller)
-      : super(controller);
+  BannerViewController._(BannerViewPlatformController super.controller);
 }
 
 class _PlatformCallbacksHandler implements BannerViewPlatformCallbacksHandler {

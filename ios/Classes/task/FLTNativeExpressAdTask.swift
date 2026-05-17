@@ -29,11 +29,20 @@ internal final class FLTNativeExpressAdTask: FLTTaskProtocol {
         }
         let count = args["count"] as? Int ?? Constant.kDefaultFeedAdCount
         let adSize = CGSize(width: width, height: height)
-        
+
         let slot = BUAdSlot()
         slot.id = slotId
         slot.adType = .feed
         slot.position = .feed
+        // 可选：原生广告图片期望尺寸，对应 Android 侧的 setImageAcceptedSize。
+        // 仅需模板+原生两种样式切换时设置，纯模板场景可不传。
+        if let imgArgs = args["imgSize"] as? [String: Double],
+           let imgW = imgArgs["width"], let imgH = imgArgs["height"] {
+            let buSize = BUSize()
+            buSize.imageWidth = Int(imgW)
+            buSize.imageHeight = Int(imgH)
+            slot.imgSize = buSize
+        }
 
         let nad = BUNativeExpressAdManager(slot: slot, adSize: adSize)
         nad.adSize = adSize

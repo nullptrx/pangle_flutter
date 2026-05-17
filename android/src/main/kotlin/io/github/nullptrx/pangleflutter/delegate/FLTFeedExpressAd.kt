@@ -3,11 +3,10 @@ package io.github.nullptrx.pangleflutter.delegate
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd
 import io.github.nullptrx.pangleflutter.PangleAdManager
-import io.github.nullptrx.pangleflutter.common.TTSizeF
 import io.github.nullptrx.pangleflutter.common.kBlock
 import kotlin.collections.set
 
-class FLTFeedExpressAd(val size: TTSizeF, var result: (Any) -> Unit = {}) :
+class FLTFeedExpressAd(var result: (Any) -> Unit = {}) :
   TTAdNative.NativeExpressAdListener {
 
   override fun onError(code: Int, message: String?) {

@@ -41,7 +41,13 @@ internal final class FLTNativeExpressAdViewDelegate: NSObject, BUNativeExpressAd
     }
 
     func nativeExpressAdViewRenderSuccess(_ nativeExpressAdView: BUNativeExpressAdView) {
-        postMessage(nativeExpressAdView, "onRenderSuccess")
+        // BUNativeExpressAdView auto-resizes after rendering; read the updated frame size.
+        // iOS points == Flutter logical pixels, so no unit conversion needed.
+        let size = nativeExpressAdView.frame.size
+        postMessage(nativeExpressAdView, "onRenderSuccess", arguments: [
+            "width": Double(size.width),
+            "height": Double(size.height)
+        ])
     }
 
     public func nativeExpressAdView(_ nativeExpressAdView: BUNativeExpressAdView, dislikeWithReason filterWords: [BUDislikeWords]) {

@@ -74,7 +74,7 @@ class _PagesState extends State<Pages> {
     );
   }
 
-  _onTapItem(String title) {
+  void _onTapItem(String title) {
     context.navigateTo(pages[title]);
   }
 }

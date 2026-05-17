@@ -65,7 +65,9 @@ abstract class FeedViewPlatformCallbacksHandler {
 
   void onShow();
 
-  void onRenderSuccess();
+  /// 渲染成功，[width] / [height] 为实际渲染尺寸（逻辑像素，dp）。
+  /// 使用优选模板（height=0 请求）时，据此更新 Flutter 容器高度。
+  void onRenderSuccess(double width, double height);
 
   void onRenderFail(int code, String message);
 

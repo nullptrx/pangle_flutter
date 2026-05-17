@@ -217,19 +217,23 @@ class AndroidBannerConfig implements Config {
   final PangleExpressSize expressSize;
   final int? interval;
 
-  /// The feed ad config for Android
+  /// 原生广告图片期望尺寸（dp）。
+  /// 仅在需要同时支持模板与原生两种样式切换时传入，纯模板场景可不传。
+  final PangleSize? imgSize;
+
+  /// The banner ad config for Android
   ///
   /// [slotId] required. The unique identifier of a banner ad.
   /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-  /// [expressSize] optional. 模板宽高
-  /// [interval] The carousel interval, in seconds, is set in the range of 30~120s,
-  ///   and is passed during initialization. If it does not meet the requirements,
-  ///   it will not be in carousel ad.
+  /// [expressSize] required. 模板宽高
+  /// [interval] optional. The carousel interval, in seconds, is set in the range of 30~120s.
+  /// [imgSize] optional. 原生广告图片尺寸；需模板+原生切换时传入，纯模板可省略。
   const AndroidBannerConfig({
     required this.slotId,
     required this.expressSize,
     this.isSupportDeepLink = true,
     this.interval,
+    this.imgSize,
   });
 
   /// Convert config to json
@@ -240,6 +244,7 @@ class AndroidBannerConfig implements Config {
       'isSupportDeepLink': isSupportDeepLink,
       'expressSize': expressSize.toJson(),
       'interval': interval,
+      'imgSize': imgSize?.toJson(),
     };
   }
 }
@@ -277,17 +282,23 @@ class AndroidFeedConfig implements Config {
   final bool isSupportDeepLink;
   final PangleExpressSize expressSize;
 
+  /// 原生广告图片期望尺寸（dp）。
+  /// 仅在需要同时支持模板与原生两种样式切换时传入，纯模板场景可不传。
+  final PangleSize? imgSize;
+
   /// The feed ad config for Android
   ///
   /// [slotId] required. The unique identifier of a feed ad.
   /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
   /// [isSupportDeepLink] optional. Whether to support deeplink.
-  /// [expressSize] 期望信息流广告宽高
+  /// [expressSize] required. 期望信息流广告宽高，需与后台广告位模板比例一致。
+  /// [imgSize] optional. 原生广告图片尺寸；需模板+原生切换时传入，纯模板可省略。
   const AndroidFeedConfig({
     required this.slotId,
     required this.expressSize,
     this.count,
     this.isSupportDeepLink = true,
+    this.imgSize,
   });
 
   /// Convert config to json
@@ -298,6 +309,7 @@ class AndroidFeedConfig implements Config {
       'count': count,
       'isSupportDeepLink': isSupportDeepLink,
       'expressSize': expressSize.toJson(),
+      'imgSize': imgSize?.toJson(),
     };
   }
 }

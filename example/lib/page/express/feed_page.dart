@@ -156,20 +156,18 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   /// 加载广告
-  _loadFeedAd({bool isRefresh = true}) async {
-    _feedExpressSize = PangleExpressSize(width: 375, height: 120);
+  Future<void> _loadFeedAd({bool isRefresh = true}) async {
+    _feedExpressSize = PangleExpressSize(width: 350, height: 350);
     var expressSize = _feedExpressSize!;
-    // var expressSize = PangleExpressSize.aspectRatio(375 / 120);
     PangleAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedConfig(
         slotId: kFeedExpressId,
         expressSize: expressSize,
-        // slotId: kFeedId,
       ),
       android: AndroidFeedConfig(
         slotId: kFeedExpressId,
         expressSize: expressSize,
-        // slotId: kFeedId,
+        imgSize: PangleSize(width: 640, height: 320)
       ),
     );
     final data = <Item>[];
@@ -200,13 +198,13 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   /// 移除广告
-  _removeFeedAd() async {
+  Future<void> _removeFeedAd() async {
     int? count = await pangle.removeFeedAd(feedIds);
     await pangle.removeFeedAd(feedDialogIds);
     debugPrint('Feed Ad Removed: $count');
   }
 
-  _initConstraintBounds(FeedViewController controller) {
+  void _initConstraintBounds(FeedViewController controller) {
     if (!Platform.isIOS) {
       return;
     }
@@ -223,21 +221,19 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   void _showFeedDialog() async {
-    // Dialog默认insetPadding horizontal 40
+    // Dialog 默认 insetPadding horizontal 40
     final maxWidth = MediaQuery.sizeOf(context).width;
-    var width = maxWidth - 80;
-    var height = width / (375 / 284);
-    var expressSize = PangleExpressSize(width: width, height: height);
+    final width = maxWidth - 80;
+    final height = width / (375 / 284);
+    final expressSize = PangleExpressSize(width: width, height: height);
     PangleAd feedAd = await pangle.loadFeedAd(
       iOS: IOSFeedConfig(
         slotId: kFeedExpressId,
         expressSize: expressSize,
-        // slotId: kFeedId,
       ),
       android: AndroidFeedConfig(
         slotId: kFeedExpressId,
         expressSize: expressSize,
-        // slotId: kFeedId,
       ),
     );
     if (feedAd.count > 0) {
@@ -248,14 +244,13 @@ class _FeedPageState extends State<FeedPage> {
         ..clear()
         ..addAll(feedAd.data);
 
-      final dialogExpressSize = PangleExpressSize(width: width, height: height);
       showDialog(
         context: context,
         builder: (context) {
           return Dialog(
             child: FeedView(
               id: feedDialogIds.first,
-              expressSize: dialogExpressSize,
+              expressSize: expressSize,
             ),
           );
         },

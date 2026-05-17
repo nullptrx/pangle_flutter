@@ -23,14 +23,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
-import 'package:pangle_flutter_example/common/version.dart';
 
 import '../../../common/common.dart';
 import '../constant.dart';
 import '../empty_page.dart';
 
 class BannerPage extends StatefulWidget {
-  const BannerPage({Key? key}) : super(key: key);
+  const BannerPage({super.key});
 
   @override
   _BannerPageState createState() => _BannerPageState();
@@ -73,7 +72,7 @@ class _BannerPageState extends State<BannerPage> {
     );
   }
 
-  initBanner() {
+  void initBanner() {
     rows.clear();
     rows.addAll(<Widget>[
       Container(

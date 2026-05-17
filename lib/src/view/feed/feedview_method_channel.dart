@@ -52,7 +52,11 @@ class MethodChannelFeedViewPlatform implements FeedViewPlatformController {
         _platformCallbacksHandler.onDislike(option, enforce);
         break;
       case "onRenderSuccess":
-        _platformCallbacksHandler.onRenderSuccess();
+        final width =
+            (call.arguments?['width'] as num?)?.toDouble() ?? 0.0;
+        final height =
+            (call.arguments?['height'] as num?)?.toDouble() ?? 0.0;
+        _platformCallbacksHandler.onRenderSuccess(width, height);
         break;
       case "onRenderFail":
         final int code = call.arguments['code'];

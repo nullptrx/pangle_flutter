@@ -137,13 +137,13 @@ class _CustomSplashPageState extends State<CustomSplashPage> {
     );
   }
 
-  _handleAdStart() {
+  void _handleAdStart() {
     setState(() {
       loaded = true;
     });
   }
 
-  _handleAdEnd() {
+  void _handleAdEnd() {
     Navigator.of(context).pop();
     if (widget.isRoot) {
       context.navigateTo(const HomePage());

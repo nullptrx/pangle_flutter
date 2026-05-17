@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-library pangle_flutter;
+library;
 
 export 'src/ad/ad_event.dart';
 export 'src/ad/ad_state.dart';

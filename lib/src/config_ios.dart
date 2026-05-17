@@ -178,15 +178,21 @@ class IOSFeedConfig implements Config {
   final int? count;
   final PangleExpressSize expressSize;
 
+  /// 原生广告图片期望尺寸，对应 BUAdSlot.imgSize。
+  /// 仅在需要同时支持模板与原生两种样式切换时传入，纯模板场景可不传。
+  final PangleSize? imgSize;
+
   /// The feed ad config for iOS
   ///
   /// [slotId] required. The unique identifier of a feed ad.
   /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
-  /// [expressSize] optional. 模板宽高.
+  /// [expressSize] required. 模板宽高，需与后台广告位模板比例一致。
+  /// [imgSize] optional. 原生广告图片尺寸；需模板+原生切换时传入，纯模板可省略。
   const IOSFeedConfig({
     required this.slotId,
     required this.expressSize,
     this.count,
+    this.imgSize,
   });
 
   /// Convert config to json
@@ -196,6 +202,7 @@ class IOSFeedConfig implements Config {
       'slotId': slotId,
       'count': count,
       'expressSize': expressSize.toJson(),
+      'imgSize': imgSize?.toJson(),
     };
   }
 }

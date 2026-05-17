@@ -41,7 +41,7 @@ typedef SplashViewCreatedCallback = void Function(
 
 class SplashView extends StatefulWidget {
   const SplashView({
-    Key? key,
+    super.key,
     this.iOS,
     this.android,
     this.onSplashViewCreated,
@@ -52,7 +52,7 @@ class SplashView extends StatefulWidget {
     this.onClose,
     this.onError,
     this.onRenderFail,
-  }) : super(key: key);
+  });
 
   final IOSSplashConfig? iOS;
   final AndroidSplashConfig? android;
@@ -189,8 +189,7 @@ class SplashViewState extends State<SplashView>
 /// A [SplashViewController] instance can be obtained by setting the [SplashView.onSplashViewCreated]
 /// callback for a [SplashView] widget.
 class SplashViewController extends ViewController {
-  SplashViewController._(SplashViewPlatformController controller)
-      : super(controller);
+  SplashViewController._(SplashViewPlatformController super.controller);
 }
 
 class _PlatformCallbacksHandler implements SplashViewPlatformCallbacksHandler {

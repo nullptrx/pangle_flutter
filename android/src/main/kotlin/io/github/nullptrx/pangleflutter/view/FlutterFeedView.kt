@@ -88,7 +88,8 @@ class FlutterFeedView(
   }
 
   override fun onRenderSuccess(view: View, width: Float, height: Float) {
-    postMessage("onRenderSuccess")
+    // width / height are in dp — matching Flutter's logical pixel unit directly.
+    postMessage("onRenderSuccess", mapOf("width" to width, "height" to height))
   }
 
   override fun onRenderFail(view: View?, message: String?, code: Int) {

@@ -23,7 +23,6 @@ import '../config_ios.dart';
 import '../model.dart';
 import '../pangle_plugin.dart';
 import 'ad_event.dart';
-import 'ad_state.dart';
 
 /// 激励视频广告预加载池配置
 class _RewardedSlotConfig {
