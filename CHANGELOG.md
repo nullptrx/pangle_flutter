@@ -5,6 +5,86 @@ English | [中文](CHANGELOG_CN.md)
 ## 3.0.0
 
 ### New Features
+
+#### Draw Ad (Vertical Full-Screen Video)
+
+TikTok-style vertically scrollable video ads. Load a batch of IDs, then display each one inside a full-screen `PageView`.
+
+```dart
+// 1. Load
+final PangleDrawAd drawAd = await pangle.loadDrawAd(
+  iOS: IOSDrawConfig(slotId: kDrawId, adCount: 3),
+  android: AndroidDrawConfig(slotId: kDrawId, adCount: 2),
+);
+
+// 2. Display — embed in a full-screen PageView
+DrawView(
+  id: drawAd.data.first,
+  onClick: () {},
+  onShow: () {},
+  onRenderFail: (code, msg) {},
+)
+
+// 3. Clean up
+await pangle.removeDrawAd(drawAd.data);
+```
+
+#### Stream Ad (Custom Player)
+
+Returns video URL + metadata for use with your own video player. No SDK-rendered view required.
+
+```dart
+final PangleStreamAd streamAd = await pangle.loadStreamAd(
+  iOS: IOSStreamConfig(slotId: kStreamId),
+  android: AndroidStreamConfig(slotId: kStreamId),
+);
+for (final StreamAdItem item in streamAd.data) {
+  // item.videoUrl, item.title, item.imageUrl, item.videoDuration, etc.
+}
+```
+
+#### EcMall Ad (Shopping / Native Ad)
+
+Commerce-integrated native ad rendered as a platform view. Must be wrapped in a size-constraining widget.
+
+```dart
+SizedBox(
+  width: 600,
+  height: 257,
+  child: EcMallView(
+    slotId: kEcMallId,
+    width: 600,
+    height: 257,
+    onClick: () {},
+    onError: (code, msg) {},
+  ),
+)
+```
+
+#### Feed Icon Ad
+
+Icon-sized feed ad for compact grid or list layouts. Rendered with the standard `FeedView` widget.
+
+```dart
+final PangleAd iconAd = await pangle.loadFeedIconAd(
+  android: AndroidFeedIconConfig(slotId: kFeedIconId),
+);
+FeedView(id: iconAd.data.first)
+```
+
+#### Half-Screen Splash (Android)
+
+Show a splash ad occupying ~4/5 of the screen height instead of full-screen. Android only.
+
+```dart
+await pangle.loadSplashAd(
+  android: AndroidSplashConfig(slotId: kSplashId, isHalfSize: true),
+  iOS: IOSSplashConfig(slotId: kSplashId),
+);
+```
+
+---
+
 - **[Dart]** `BannerView` and `FeedView` now apply `AspectRatio` internally based on `expressSize` (when `height > 0`). No need to wrap them in an external `AspectRatio` or manually set a matching container height. `FeedView` accepts a new optional `expressSize` parameter — pass the same value used in `loadFeedAd`.
 
 ### Bug Fixes
@@ -25,7 +105,7 @@ English | [中文](CHANGELOG_CN.md)
 - **[Android]** Added `const` modifier to package-level constants in `PangleFlutterPlugin`
 
 ### Performance
-- **[Android]** Cached `Handler(Looper.getMainLooper())` as a class field in view classes (`FlutterBannerView`, `FlutterFeedView`, `FlutterSplashView`, `FlutterNativeBannerView`) instead of allocating a new instance per call
+- **[Android]** Cached `Handler(Looper.getMainLooper())` as a class field in view classes (`FlutterBannerView`, `FlutterFeedView`, `FlutterSplashView`, `FlutterEcMallView`) instead of allocating a new instance per call
 - **[Dart]** Changed top-level screen dimension variables (`kPangleScreenWidth`, `kPangleScreenHeight`) to `late final` to defer initialization until first access
 
 ### New Features

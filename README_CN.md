@@ -37,6 +37,11 @@
   - [6. 信息流广告](#6-信息流广告)
   - [7. 插屏广告](#7-插屏广告)
   - [8. 可点击区域（iOS）](#8-可点击区域ios)
+  - [9. Draw 竖版视频广告](#9-draw-竖版视频广告)
+  - [10. Stream 自定义播放广告](#10-stream-自定义播放广告)
+  - [11. EcMall 电商广告](#11-ecmall-电商广告)
+  - [12. 信息流图标广告](#12-信息流图标广告)
+  - [13. 半全屏开屏广告（Android）](#13-半全屏开屏广告android)
 - [贡献](#贡献)
 - [赞助](#赞助)
 
@@ -387,6 +392,98 @@ _initTouchableBounds(BannerViewController controller) {
     buttonBound.height,
   ));
 }
+```
+
+---
+
+### 9. Draw 竖版视频广告
+
+类似 TikTok 的竖向滑动全屏视频广告。批量加载 ID 后，在全屏 `PageView` 中逐一展示。
+
+```dart
+// 加载
+final PangleDrawAd drawAd = await pangle.loadDrawAd(
+  iOS: IOSDrawConfig(slotId: kDrawId, adCount: 3),
+  android: AndroidDrawConfig(slotId: kDrawId, adCount: 2),
+);
+
+// 展示
+PageView.builder(
+  scrollDirection: Axis.vertical,
+  itemCount: drawAd.data.length,
+  itemBuilder: (context, i) => DrawView(
+    id: drawAd.data[i],
+    onClick: () {},
+    onRenderFail: (code, msg) {},
+  ),
+);
+
+// 释放
+await pangle.removeDrawAd(drawAd.data);
+```
+
+---
+
+### 10. Stream 自定义播放广告
+
+返回视频 URL 及元数据，供自定义播放器使用，无需 SDK 渲染视图。
+
+```dart
+final PangleStreamAd streamAd = await pangle.loadStreamAd(
+  iOS: IOSStreamConfig(slotId: kStreamId),
+  android: AndroidStreamConfig(slotId: kStreamId, imgSize: PangleSize(width: 640, height: 320)),
+);
+for (final StreamAdItem item in streamAd.data) {
+  // 使用 item.videoUrl 传入自定义播放器
+  // item.title, item.imageUrl, item.videoDuration, item.description
+}
+```
+
+---
+
+### 11. EcMall 电商广告
+
+以 PlatformView 形式渲染的电商原生广告，需包裹在有尺寸约束的 Widget 中。
+
+```dart
+SizedBox(
+  width: 600,
+  height: 257,
+  child: EcMallView(
+    slotId: kEcMallId,
+    width: 600,
+    height: 257,
+    onClick: () {},
+    onShow: () {},
+    onError: (code, msg) {},
+  ),
+)
+```
+
+---
+
+### 12. 信息流图标广告
+
+适用于紧凑型列表或网格布局的图标尺寸广告，使用标准 `FeedView` 渲染。
+
+```dart
+final PangleAd iconAd = await pangle.loadFeedIconAd(
+  android: AndroidFeedIconConfig(slotId: kFeedIconId, expressViewWidth: 160),
+);
+FeedView(id: iconAd.data.first)
+```
+
+---
+
+### 13. 半全屏开屏广告（Android）
+
+展示占屏幕约 4/5 高度的开屏广告，而非完整全屏。仅 Android 支持。
+
+```dart
+await pangle.loadSplashAd(
+  android: AndroidSplashConfig(slotId: kSplashId, isHalfSize: true),
+  iOS: IOSSplashConfig(slotId: kSplashId),
+);
 ```
 
 ---

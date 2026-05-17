@@ -66,6 +66,7 @@ IOSSplashConfig({
 /// [isSupportDeepLink] Optional. Enable deep-link support. Default: true.
 /// [isExpress]        Optional. Use template rendering (express). Default: false.
 /// [expressSize]      Optional. Template ad size (width × height).
+/// [isHalfSize]       Optional. Show a half-screen splash (~4/5 screen height) instead of full-screen. Android only. Default: false.
 AndroidSplashConfig({
   required this.slotId,
   this.tolerateTimeout,
@@ -73,6 +74,7 @@ AndroidSplashConfig({
   this.isSupportDeepLink = true,
   this.isExpress = false,
   this.expressSize,
+  this.isHalfSize = false,
 });
 ```
 
@@ -473,5 +475,159 @@ AndroidFullscreenVideoConfig({
   this.orientation = PangleOrientation.vertical,
   this.loadingType = PangleLoadingType.normal,
   this.expressSize,
+});
+```
+
+---
+
+### Draw Ad
+
+```dart
+/// iOS draw ad config
+///
+/// [slotId]      Required. The ad slot identifier.
+/// [expressSize] Optional. Template ad size. Defaults to full-screen bounds.
+/// [adCount]     Optional. Number of ads to load. Default: 3.
+IOSDrawConfig({
+  required this.slotId,
+  this.expressSize,
+  this.adCount = 3,
+});
+
+/// Android draw ad config
+///
+/// [slotId]            Required. The ad slot identifier.
+/// [expressSize]       Optional. Template ad size. Defaults to full-screen (MATCH_PARENT).
+/// [adCount]           Optional. Number of ads to load. Default: 2.
+/// [isSupportDeepLink] Optional. Enable deep-link support. Default: true.
+AndroidDrawConfig({
+  required this.slotId,
+  this.expressSize,
+  this.adCount = 2,
+  this.isSupportDeepLink = true,
+});
+```
+
+---
+
+### Stream Ad
+
+```dart
+/// iOS stream ad config
+///
+/// [slotId]   Required. The ad slot identifier.
+/// [adCount]  Optional. Number of ads to load. Default: 1.
+IOSStreamConfig({
+  required this.slotId,
+  this.adCount = 1,
+});
+
+/// Android stream ad config
+///
+/// [slotId]            Required. The ad slot identifier.
+/// [imgSize]           Optional. Cover image size hint (width × height). Recommended: PangleSize(width: 640, height: 320).
+/// [adCount]           Optional. Number of ads to load. Default: 1.
+/// [isSupportDeepLink] Optional. Enable deep-link support. Default: true.
+AndroidStreamConfig({
+  required this.slotId,
+  this.imgSize,
+  this.adCount = 1,
+  this.isSupportDeepLink = true,
+});
+```
+
+---
+
+### Feed Icon Ad
+
+```dart
+/// Android feed icon ad config
+///
+/// [slotId]            Required. The ad slot identifier.
+/// [adCount]           Optional. Number of ads to load. Default: 1.
+/// [expressViewWidth]  Optional. Icon width in logical pixels. Default: 160.
+/// [isSupportDeepLink] Optional. Enable deep-link support. Default: true.
+AndroidFeedIconConfig({
+  required this.slotId,
+  this.adCount = 1,
+  this.expressViewWidth = 160,
+  this.isSupportDeepLink = true,
+});
+```
+
+---
+
+### Draw 广告配置
+
+```dart
+/// iOS Draw 广告配置
+///
+/// [slotId]      必填。广告位 ID。
+/// [expressSize] 可选。模板渲染尺寸，默认全屏。
+/// [adCount]     可选。加载广告数量。默认 3。
+IOSDrawConfig({
+  required this.slotId,
+  this.expressSize,
+  this.adCount = 3,
+});
+
+/// Android Draw 广告配置
+///
+/// [slotId]            必填。广告位 ID。
+/// [expressSize]       可选。模板渲染尺寸，默认全屏（MATCH_PARENT）。
+/// [adCount]           可选。加载广告数量。默认 2。
+/// [isSupportDeepLink] 可选。是否支持 DeepLink。默认 true。
+AndroidDrawConfig({
+  required this.slotId,
+  this.expressSize,
+  this.adCount = 2,
+  this.isSupportDeepLink = true,
+});
+```
+
+---
+
+### Stream 广告配置
+
+```dart
+/// iOS Stream 广告配置
+///
+/// [slotId]   必填。广告位 ID。
+/// [adCount]  可选。加载广告数量。默认 1。
+IOSStreamConfig({
+  required this.slotId,
+  this.adCount = 1,
+});
+
+/// Android Stream 广告配置
+///
+/// [slotId]            必填。广告位 ID。
+/// [imgSize]           可选。封面图片尺寸（宽 × 高）。推荐：PangleSize(width: 640, height: 320)。
+/// [adCount]           可选。加载广告数量。默认 1。
+/// [isSupportDeepLink] 可选。是否支持 DeepLink。默认 true。
+AndroidStreamConfig({
+  required this.slotId,
+  this.imgSize,
+  this.adCount = 1,
+  this.isSupportDeepLink = true,
+});
+```
+
+---
+
+### 信息流图标广告配置
+
+```dart
+/// Android 信息流图标广告配置
+///
+/// [slotId]            必填。广告位 ID。
+/// [adCount]           可选。加载广告数量。默认 1。
+/// [expressViewWidth]  可选。图标宽度（逻辑像素）。默认 160。
+/// [isSupportDeepLink] 可选。是否支持 DeepLink。默认 true。
+AndroidFeedIconConfig({
+  required this.slotId,
+  this.adCount = 1,
+  this.expressViewWidth = 160,
+  this.isSupportDeepLink = true,
 });
 ```

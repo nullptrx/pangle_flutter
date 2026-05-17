@@ -5,6 +5,86 @@
 ## 3.0.0
 
 ### 新功能
+
+#### Draw 竖版全屏视频广告
+
+类似 TikTok 的竖向滑动全屏视频广告。批量加载 ID 后，在全屏 `PageView` 中逐一展示。
+
+```dart
+// 1. 加载
+final PangleDrawAd drawAd = await pangle.loadDrawAd(
+  iOS: IOSDrawConfig(slotId: kDrawId, adCount: 3),
+  android: AndroidDrawConfig(slotId: kDrawId, adCount: 2),
+);
+
+// 2. 展示 — 嵌入全屏 PageView
+DrawView(
+  id: drawAd.data.first,
+  onClick: () {},
+  onShow: () {},
+  onRenderFail: (code, msg) {},
+)
+
+// 3. 释放
+await pangle.removeDrawAd(drawAd.data);
+```
+
+#### Stream 自定义播放广告
+
+返回视频 URL 及元数据，供自定义播放器使用，无需 SDK 渲染视图。
+
+```dart
+final PangleStreamAd streamAd = await pangle.loadStreamAd(
+  iOS: IOSStreamConfig(slotId: kStreamId),
+  android: AndroidStreamConfig(slotId: kStreamId),
+);
+for (final StreamAdItem item in streamAd.data) {
+  // item.videoUrl, item.title, item.imageUrl, item.videoDuration 等
+}
+```
+
+#### EcMall 电商原生广告
+
+以 PlatformView 形式渲染的电商原生广告，需包裹在有尺寸约束的 Widget 中。
+
+```dart
+SizedBox(
+  width: 600,
+  height: 257,
+  child: EcMallView(
+    slotId: kEcMallId,
+    width: 600,
+    height: 257,
+    onClick: () {},
+    onError: (code, msg) {},
+  ),
+)
+```
+
+#### 信息流图标广告
+
+适用于紧凑型列表或网格布局的图标尺寸广告，使用标准 `FeedView` 渲染。
+
+```dart
+final PangleAd iconAd = await pangle.loadFeedIconAd(
+  android: AndroidFeedIconConfig(slotId: kFeedIconId),
+);
+FeedView(id: iconAd.data.first)
+```
+
+#### 半全屏开屏广告（Android）
+
+展示占屏幕约 4/5 高度的开屏广告，而非完整全屏。仅 Android 支持。
+
+```dart
+await pangle.loadSplashAd(
+  android: AndroidSplashConfig(slotId: kSplashId, isHalfSize: true),
+  iOS: IOSSplashConfig(slotId: kSplashId),
+);
+```
+
+---
+
 - **[Dart]** `BannerView` 和 `FeedView` 现在根据 `expressSize` 在内部自动应用 `AspectRatio`（`height > 0` 时生效），无需在外层手动套 `AspectRatio` 或指定匹配高度。`FeedView` 新增可选参数 `expressSize`，传入与 `loadFeedAd` 相同的值即可。
 
 ### Bug 修复
@@ -25,7 +105,7 @@
 - **[Android]** `PangleFlutterPlugin` 中的包级常量添加 `const` 修饰符
 
 ### 性能优化
-- **[Android]** `FlutterBannerView`、`FlutterFeedView`、`FlutterSplashView`、`FlutterNativeBannerView` 中将 `Handler(Looper.getMainLooper())` 改为类字段缓存，避免每次调用重复创建对象
+- **[Android]** `FlutterBannerView`、`FlutterFeedView`、`FlutterSplashView`、`FlutterEcMallView` 中将 `Handler(Looper.getMainLooper())` 改为类字段缓存，避免每次调用重复创建对象
 - **[Dart]** 顶层屏幕尺寸变量（`kPangleScreenWidth`、`kPangleScreenHeight`）改为 `late final`，延迟到首次访问时才初始化
 
 ### 新功能

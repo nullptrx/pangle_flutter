@@ -37,6 +37,11 @@ English | [中文](README_CN.md)
   - [6. Feed Ad](#6-feed-ad)
   - [7. Interstitial Ad](#7-interstitial-ad)
   - [8. Touchable Bounds (iOS)](#8-touchable-bounds-ios)
+  - [9. Draw Ad](#9-draw-ad)
+  - [10. Stream Ad](#10-stream-ad)
+  - [11. EcMall Ad](#11-ecmall-ad)
+  - [12. Feed Icon Ad](#12-feed-icon-ad)
+  - [13. Half-Screen Splash (Android)](#13-half-screen-splash-android)
 - [Contributing](#contributing)
 - [Sponsors](#sponsors)
 
@@ -387,6 +392,98 @@ _initTouchableBounds(BannerViewController controller) {
     buttonBound.height,
   ));
 }
+```
+
+---
+
+### 9. Draw Ad
+
+TikTok-style vertical full-screen video ads. Load a batch of IDs, then embed `DrawView` inside a full-screen `PageView` for swipeable playback.
+
+```dart
+// Load
+final PangleDrawAd drawAd = await pangle.loadDrawAd(
+  iOS: IOSDrawConfig(slotId: kDrawId, adCount: 3),
+  android: AndroidDrawConfig(slotId: kDrawId, adCount: 2),
+);
+
+// Display
+PageView.builder(
+  scrollDirection: Axis.vertical,
+  itemCount: drawAd.data.length,
+  itemBuilder: (context, i) => DrawView(
+    id: drawAd.data[i],
+    onClick: () {},
+    onRenderFail: (code, msg) {},
+  ),
+);
+
+// Clean up
+await pangle.removeDrawAd(drawAd.data);
+```
+
+---
+
+### 10. Stream Ad
+
+Returns video metadata for your own custom player — no SDK-rendered view required.
+
+```dart
+final PangleStreamAd streamAd = await pangle.loadStreamAd(
+  iOS: IOSStreamConfig(slotId: kStreamId),
+  android: AndroidStreamConfig(slotId: kStreamId, imgSize: PangleSize(width: 640, height: 320)),
+);
+for (final StreamAdItem item in streamAd.data) {
+  // Use item.videoUrl with your video player
+  // item.title, item.imageUrl, item.videoDuration, item.description
+}
+```
+
+---
+
+### 11. EcMall Ad
+
+Commerce-integrated native ad rendered as a platform view. Must be wrapped in a size-constraining widget.
+
+```dart
+SizedBox(
+  width: 600,
+  height: 257,
+  child: EcMallView(
+    slotId: kEcMallId,
+    width: 600,
+    height: 257,
+    onClick: () {},
+    onShow: () {},
+    onError: (code, msg) {},
+  ),
+)
+```
+
+---
+
+### 12. Feed Icon Ad
+
+Icon-sized feed ad for compact grid or list layouts. Use the standard `FeedView` widget to render.
+
+```dart
+final PangleAd iconAd = await pangle.loadFeedIconAd(
+  android: AndroidFeedIconConfig(slotId: kFeedIconId, expressViewWidth: 160),
+);
+FeedView(id: iconAd.data.first)
+```
+
+---
+
+### 13. Half-Screen Splash (Android)
+
+Show a splash ad occupying ~4/5 of the screen height instead of full-screen. Android only.
+
+```dart
+await pangle.loadSplashAd(
+  android: AndroidSplashConfig(slotId: kSplashId, isHalfSize: true),
+  iOS: IOSSplashConfig(slotId: kSplashId),
+);
 ```
 
 ---
