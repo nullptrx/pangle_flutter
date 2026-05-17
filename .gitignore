@@ -59,7 +59,8 @@ captures/
 .project
 .classpath
 .settings/
-
+.claude
+.codex
 # Generated and local-only project files
 examples/all_plugins/pubspec.yaml
 template/
