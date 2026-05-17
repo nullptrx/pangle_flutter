@@ -32,6 +32,7 @@ const kAndroidInterstitialFullPortraitId = '947747681';
 
 // Banner
 const kAndroidBannerExpressId = '901121148';
+const kAndroidNativeBannerId = '901121423';
 
 // 信息流
 const kAndroidFeedExpressId = '901121253';
