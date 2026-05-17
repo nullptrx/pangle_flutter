@@ -28,7 +28,7 @@ import 'package:pangle_flutter_example/common/version.dart';
 
 import 'common/common.dart';
 import 'page/constant.dart';
-import 'page/express/custom_splash_page.dart';
+import 'page/home_page.dart';
 
 /// 使用本插件需要知道的几个类，基本覆盖了开始使用时需要用到的入口类
 ///
@@ -60,7 +60,7 @@ class PangleApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       ///
-      home: const CustomSplashPage(isRoot: true),
+      home: const HomePage(),
       theme: kThemeData,
     );
   }
@@ -73,9 +73,9 @@ class PangleApp extends StatelessWidget {
 /// [android] android平台配置参数
 Future<void> initPangle() async {
   PangleResult ret = await pangle.init(
-    iOS: const IOSConfig(appId: kAppId, logLevel: PangleLogLevel.debug),
+    iOS: const IOSConfig(appId: kIOSAppId, logLevel: PangleLogLevel.debug),
     android: const AndroidConfig(
-      appId: kAppId,
+      appId: kAndroidAppId,
       debug: true,
       allowShowNotify: true,
       useTextureView: true,

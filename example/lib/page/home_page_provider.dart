@@ -1,136 +1,115 @@
-/*
- * Copyright (c) 2021 nullptrX
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
-import 'package:sprintf/sprintf.dart';
 
-import '../common/common.dart';
-import '../common/version.dart';
+import '../common/ext.dart';
+import 'banner/banner_list_page.dart';
+import 'draw/draw_list_page.dart';
+import 'feed/feed_list_page.dart';
+import 'fullscreen/fullscreen_list_page.dart';
+import 'reward/reward_list_page.dart';
+import 'splash/splash_list_page.dart';
+import 'stream/stream_page.dart';
+import 'waterfall/waterfall_page.dart';
 
 mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
-  String? _denpendencies;
-  PangleTheme _theme = PangleTheme.light;
+  String? _sdkVersion;
 
   @override
   void initState() {
     super.initState();
-    loadTheme();
-    _initDependencies();
+    _loadSdkVersion();
   }
 
   @override
   Widget build(BuildContext context) {
+    final menuItems = <_MenuItem>[
+      _MenuItem(title: '信息流广告', subtitle: 'Feed Ads', page: const FeedListPage()),
+      _MenuItem(title: 'Draw 竖版视频', subtitle: 'Draw Video Ads', page: const DrawListPage()),
+      _MenuItem(title: 'Banner 广告', subtitle: 'Banner Ads', page: const BannerListPage()),
+      _MenuItem(title: '开屏广告', subtitle: 'Splash Ads', page: const SplashListPage()),
+      _MenuItem(title: '激励视频', subtitle: 'Rewarded Video Ads', page: const RewardListPage()),
+      _MenuItem(title: '全屏视频/新插屏', subtitle: 'Fullscreen & Interstitial Ads', page: const FullscreenListPage()),
+      _MenuItem(title: '流媒体自定义播放', subtitle: 'Stream Custom Player', page: const StreamPage()),
+      _MenuItem(title: '瀑布流', subtitle: 'Waterfall Ads', page: const WaterfallPage()),
+    ];
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pangle Flutter Examples'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ListTile(
-                title: const Text('Dependencies:'),
-                subtitle: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(_denpendencies ?? ''),
-                ),
-              ),
-              ListTile(
-                title: const Text('Theme: '),
-                subtitle: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text('$_theme'),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: requestPermissions,
-                child: const Text('Request Permissions'),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: changeTheme,
-                child: const Text('Change Theme'),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: loadExpressAd,
-                child: const Text('ADs'),
-              ),
-              const SizedBox(height: 90),
-            ],
+        title: const Text('Pangle Flutter Demo'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.security),
+            tooltip: '请求权限',
+            onPressed: requestPermissions,
           ),
-        ),
+        ],
+      ),
+      body: Column(
+        children: [
+          if (_sdkVersion != null)
+            Container(
+              width: double.infinity,
+              color: Colors.grey[100],
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Text(
+                'SDK Version: $_sdkVersion',
+                style: const TextStyle(fontSize: 12, color: Colors.grey),
+              ),
+            ),
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.all(8),
+              separatorBuilder: (_, i) => const Divider(height: 1),
+              itemCount: menuItems.length,
+              itemBuilder: (context, index) {
+                final item = menuItems[index];
+                return ListTile(
+                  title: Text(item.title),
+                  subtitle: Text(item.subtitle),
+                  trailing: const Icon(Icons.navigate_next),
+                  onTap: () => context.navigateTo(item.page),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  void _initDependencies() async {
-    final sdkVersion = await pangle.getSdkVersion();
-    final text = sprintf(kDependencies, [sdkVersion]).toString();
-    setState(() {
-      _denpendencies = text;
-    });
+  Future<void> _loadSdkVersion() async {
+    try {
+      final version = await pangle.getSdkVersion();
+      if (mounted) setState(() => _sdkVersion = version);
+    } catch (_) {}
   }
 
-  void requestPermissions();
-
-  void requestPermissionsOnAndroid() async {
-    // await [Permission.location, Permission.phone, Permission.storage].request();
-
-    await pangle.requestPermissionIfNecessary();
-  }
-
-  void loadTheme() async {
-    var theme = await pangle.getThemeStatus();
-    kThemeStatus = theme;
-    setState(() {
-      _theme = theme;
-    });
-  }
-
-  void changeTheme() async {
-    var theme = await pangle.getThemeStatus();
-    var tmpTheme =
-        theme == PangleTheme.light ? PangleTheme.dark : PangleTheme.light;
-    var newTheme = await pangle.setThemeStatus(tmpTheme);
-
-    kThemeStatus = newTheme;
-    setState(() {
-      _theme = newTheme;
-    });
-  }
-
-  void requestPermissionsOnIOS() async {
-    var status = await pangle.getTrackingAuthorizationStatus();
-    debugPrint('trackingAuthorizationStatus: $status');
-    if (status == PangleAuthorizationStatus.notDetermined) {
-      status = await pangle.requestTrackingAuthorization();
-      debugPrint('requestTrackingAuthorization: $status');
+  void requestPermissions() {
+    if (Platform.isIOS) {
+      _requestPermissionsOnIOS();
+    } else {
+      _requestPermissionsOnAndroid();
     }
   }
 
-  void loadExpressAd();
+  void _requestPermissionsOnAndroid() {
+    pangle.requestPermissionIfNecessary();
+  }
+
+  void _requestPermissionsOnIOS() async {
+    var status = await pangle.getTrackingAuthorizationStatus();
+    if (status == PangleAuthorizationStatus.notDetermined) {
+      await pangle.requestTrackingAuthorization();
+    }
+  }
+}
+
+class _MenuItem {
+  final String title;
+  final String subtitle;
+  final Widget page;
+
+  const _MenuItem({required this.title, required this.subtitle, required this.page});
 }
