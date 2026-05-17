@@ -3,7 +3,30 @@
     "allow": [
       "Bash(flutter --version)",
       "Bash(flutter pub *)",
-      "Bash(flutter build *)"
+      "Bash(flutter build *)",
+      "Bash(flutter analyze *)",
+      "Bash(git add *)",
+      "Bash(git commit -m 'docs: 标记 Phase 1 完成，更新 PLAN.md 和 memory *)",
+      "Bash(dart analyze *)",
+      "Bash(git commit -m ' *)",
+      "Bash(find /Users/su/.gradle /Users/su/Library/Android -path \"*/pangle*\" -name \"*.jar\" 2>/dev/null | head -5)",
+      "Bash(flutter sdk-path *)",
+      "Bash(flutter --version --machine)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d.get\\('flutterRoot',''\\)\\)\")",
+      "Bash(grep -r \"FlutterSceneDelegate\" /Users/su/fvm/versions/stable/ 2>/dev/null | head -10; find /Users/su/fvm/versions/stable/ -name \"*.h\" | xargs grep -l \"SceneDelegate\" 2>/dev/null | head -5)",
+      "Bash(pod install *)",
+      "Bash(xcrun simctl *)",
+      "Bash(flutter run *)",
+      "Bash(open -a Simulator)",
+      "Bash(flutter devices *)",
+      "Bash(xcodebuild -project /Users/su/repo/workspace/nullptrx/pangle_flutter/example/ios/Runner.xcworkspace -scheme Runner -showBuildSettings)",
+      "Bash(xcodebuild -workspace /Users/su/repo/workspace/nullptrx/pangle_flutter/example/ios/Runner.xcworkspace -scheme Runner -showBuildSettings)",
+      "Bash(xcodebuild -workspace /Users/su/repo/workspace/nullptrx/pangle_flutter/example/ios/Runner.xcworkspace -scheme Runner -list)",
+      "Bash(xcodebuild -workspace /Users/su/repo/workspace/nullptrx/pangle_flutter/example/ios/Runner.xcworkspace -scheme Runner -destination 'platform=iOS Simulator,name=iPhone 16,OS=18.0' -showBuildSettings)",
+      "Bash(xcodebuild -workspace /Users/su/repo/workspace/nullptrx/pangle_flutter/example/ios/Runner.xcworkspace -scheme Runner -showdestinations)",
+      "Bash(xcodebuild -version)",
+      "Read(//Applications/Xcode.app/Contents/Developer/Platforms/**)",
+      "Bash(xargs cat)"
     ]
   }
 }

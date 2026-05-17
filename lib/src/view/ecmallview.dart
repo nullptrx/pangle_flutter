@@ -5,17 +5,15 @@ import 'package:flutter/widgets.dart';
 
 import '../util.dart';
 
-const _kNativeBannerViewType = 'nullptrx.github.io/pangle_nativebannerview';
+const _kEcMallViewType = 'nullptrx.github.io/pangle_ecmallview';
 
-typedef NativeBannerViewCreatedCallback = void Function(
-    MethodChannel controller);
-
-class NativeBannerView extends StatefulWidget {
-  const NativeBannerView({
+class EcMallView extends StatefulWidget {
+  const EcMallView({
     super.key,
     required this.slotId,
     required this.width,
     required this.height,
+    this.userData,
     this.gestureRecognizers,
     this.onClick,
     this.onShow,
@@ -26,6 +24,10 @@ class NativeBannerView extends StatefulWidget {
   final String slotId;
   final double width;
   final double height;
+
+  /// 可选，Android 专用，JSON 字符串，传递给 setUserData（奖励金币等配置）
+  final String? userData;
+
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
 
   final VoidCallback? onClick;
@@ -34,10 +36,10 @@ class NativeBannerView extends StatefulWidget {
   final PangleMessageCallback? onError;
 
   @override
-  State<NativeBannerView> createState() => _NativeBannerViewState();
+  State<EcMallView> createState() => _EcMallViewState();
 }
 
-class _NativeBannerViewState extends State<NativeBannerView>
+class _EcMallViewState extends State<EcMallView>
     with AutomaticKeepAliveClientMixin {
   MethodChannel? _channel;
 
@@ -46,12 +48,14 @@ class _NativeBannerViewState extends State<NativeBannerView>
 
   Map<String, dynamic> get _creationParams => {
         'slotId': widget.slotId,
-        'size': {'width': widget.width, 'height': widget.height},
+        'width': widget.width,
+        'height': widget.height,
+        if (widget.userData != null) 'userData': widget.userData,
       };
 
   void _onPlatformViewCreated(int id) {
-    final channel = MethodChannel(
-        'nullptrx.github.io/pangle_nativebannerview_$id');
+    final channel =
+        MethodChannel('nullptrx.github.io/pangle_ecmallview_$id');
     channel.setMethodCallHandler(_handleMethodCall);
     _channel = channel;
   }
@@ -83,7 +87,7 @@ class _NativeBannerViewState extends State<NativeBannerView>
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return AndroidView(
-          viewType: _kNativeBannerViewType,
+          viewType: _kEcMallViewType,
           onPlatformViewCreated: _onPlatformViewCreated,
           creationParams: _creationParams,
           gestureRecognizers: widget.gestureRecognizers,
@@ -92,7 +96,7 @@ class _NativeBannerViewState extends State<NativeBannerView>
         );
       case TargetPlatform.iOS:
         return UiKitView(
-          viewType: _kNativeBannerViewType,
+          viewType: _kEcMallViewType,
           onPlatformViewCreated: _onPlatformViewCreated,
           creationParams: _creationParams,
           gestureRecognizers: widget.gestureRecognizers,
@@ -101,7 +105,7 @@ class _NativeBannerViewState extends State<NativeBannerView>
         );
       default:
         throw UnsupportedError(
-            'NativeBannerView is not supported on $defaultTargetPlatform');
+            'EcMallView is not supported on $defaultTargetPlatform');
     }
   }
 

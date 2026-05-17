@@ -25,6 +25,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
 import '../model.dart';
+import '../pangle_plugin.dart';
 import '../util.dart';
 import 'feed/feedview_android.dart';
 import 'feed/feedview_ios.dart';
@@ -96,17 +97,15 @@ class FeedView extends StatefulWidget {
           break;
         default:
           throw UnsupportedError(
-              "Trying to use the default feedview implementation for $defaultTargetPlatform but there isn't a default one");
+            "Trying to use the default feedview implementation for $defaultTargetPlatform but there isn't a default one",
+          );
       }
     }
     return _platform!;
   }
 
   Map<String, dynamic> get config {
-    return <String, dynamic>{
-      'id': id,
-      'isUserInteractionEnabled': false,
-    };
+    return <String, dynamic>{'id': id, 'isUserInteractionEnabled': false};
   }
 
   @override
@@ -131,6 +130,8 @@ class FeedView extends StatefulWidget {
 
 class FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin {
   _PlatformCallbacksHandler? _platformCallbacksHandler;
+  // Actual rendered height received from onRenderSuccess when height == 0.
+  double? _autoHeight;
 
   @override
   bool get wantKeepAlive => true;
@@ -147,9 +148,15 @@ class FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin {
     );
     final size = widget.expressSize;
     if (size != null && size.height > 0) {
-      return AspectRatio(
-        aspectRatio: size.width / size.height,
-        child: view,
+      return AspectRatio(aspectRatio: size.width / size.height, child: view);
+    }
+    if (size != null && size.height == 0) {
+      return Center(
+        child: SizedBox(
+          width: size.width,
+          height: _autoHeight ?? 1,
+          child: view,
+        ),
       );
     }
     return view;
@@ -159,6 +166,18 @@ class FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin {
   void initState() {
     super.initState();
     _platformCallbacksHandler = _PlatformCallbacksHandler(widget);
+    _platformCallbacksHandler!.onSizeChanged = (w, h) {
+      if (mounted && widget.expressSize?.height == 0) {
+        setState(() => _autoHeight = h);
+      }
+    };
+  }
+
+  @override
+  void dispose() {
+    final id = widget.id;
+    if (id != null) pangle.removeFeedAd([id]);
+    super.dispose();
   }
 
   @override
@@ -167,11 +186,10 @@ class FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin {
     _platformCallbacksHandler!._widget = widget;
   }
 
-  void _onWebViewPlatformCreated(
-    FeedViewPlatformController feedViewPlatform,
-  ) {
-    final FeedViewController controller =
-        FeedViewController._(feedViewPlatform);
+  void _onWebViewPlatformCreated(FeedViewPlatformController feedViewPlatform) {
+    final FeedViewController controller = FeedViewController._(
+      feedViewPlatform,
+    );
     if (widget.onFeedViewCreated != null) {
       widget.onFeedViewCreated!(controller);
     }
@@ -190,6 +208,7 @@ class _PlatformCallbacksHandler implements FeedViewPlatformCallbacksHandler {
   _PlatformCallbacksHandler(this._widget);
 
   FeedView _widget;
+  void Function(double width, double height)? onSizeChanged;
 
   @override
   void onClick() {
@@ -208,6 +227,7 @@ class _PlatformCallbacksHandler implements FeedViewPlatformCallbacksHandler {
 
   @override
   void onRenderSuccess(double width, double height) {
+    onSizeChanged?.call(width, height);
     _widget.onRenderSuccess?.call(width, height);
   }
 

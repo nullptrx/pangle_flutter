@@ -27,21 +27,23 @@ class _RewardPageState extends State<RewardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('状态：$_status'),
-          const SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: _onLoad,
-            child: const Text('① 加载广告'),
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: _loadedAd?.isLoaded == true ? _onShow : null,
-            child: const Text('② 展示广告（需先加载）'),
-          ),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('状态：$_status'),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _onLoad,
+              child: const Text('① 加载广告'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _loadedAd?.isLoaded == true ? _onShow : null,
+              child: const Text('② 展示广告（需先加载）'),
+            ),
+          ],
+        ),
       ),
     );
   }

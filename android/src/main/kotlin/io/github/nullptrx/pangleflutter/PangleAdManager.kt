@@ -54,6 +54,7 @@ class PangleAdManager {
 
     /** Hard cap on cached native express ads. Oldest entries are evicted (FIFO) when exceeded. */
     private const val EXPRESS_CACHE_MAX = 20
+    private const val NATIVE_FEED_CACHE_MAX = 20
   }
 
   // LinkedHashMap preserves insertion order, enabling O(1) FIFO eviction.
@@ -447,6 +448,10 @@ class PangleAdManager {
 
   fun loadBannerAd(adSlot: AdSlot, listener: TTAdNative.NativeAdListener) {
     ttAdNative?.loadNativeAd(adSlot, listener)
+  }
+
+  fun loadEcMallAd(adSlot: AdSlot, listener: TTAdNative.FeedAdListener) {
+    ttAdNative?.loadFeedAd(adSlot, listener)
   }
 
   /** Draw 竖版全屏模板广告，对应 Dart 侧 loadDrawAd */

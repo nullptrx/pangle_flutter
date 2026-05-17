@@ -37,6 +37,7 @@ class FeedView: FLTView {
 
     private var methodChannel: FlutterMethodChannel? = nil
     private var params: [String: Any?] = [:]
+    private weak var expressAdView: BUNativeExpressAdView?
    
 
     var id: String = ""
@@ -51,6 +52,11 @@ class FeedView: FLTView {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        centerExpressAdView()
     }
 
     deinit {
@@ -82,9 +88,21 @@ class FeedView: FLTView {
         }
         expressAd.rootViewController = AppUtil.getVC()
         expressAd.extraChannel = methodChannel
+        expressAdView = expressAd
 
         addSubview(expressAd)
+        centerExpressAdView()
 
         expressAd.render()
+    }
+
+    private func centerExpressAdView() {
+        guard let expressAdView else {
+            return
+        }
+        var frame = expressAdView.frame
+        frame.origin.x = max((bounds.width - frame.width) / 2, 0)
+        frame.origin.y = max((bounds.height - frame.height) / 2, 0)
+        expressAdView.frame = frame
     }
 }

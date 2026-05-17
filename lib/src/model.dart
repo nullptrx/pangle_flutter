@@ -101,14 +101,16 @@ class PangleExpressSize {
   /// 模板渲染时必填
   ///
   /// [width] 宽度，必选, 如果width超过屏幕，默认使用屏幕宽
-  /// [height] 高度，必选
+  /// [height] 高度，0 表示自适应高度
   PangleExpressSize({required double width, required double height})
       : assert(width > 0),
-        assert(height > 0),
+        assert(height >= 0),
         width = width > kPangleScreenWidth ? kPangleScreenWidth : width,
-        height = height > kPangleScreenWidth / width * height
-            ? kPangleScreenWidth / width * height
-            : height;
+        height = height == 0
+            ? 0
+            : height > kPangleScreenWidth / width * height
+                ? kPangleScreenWidth / width * height
+                : height;
 
   /// 模板渲染时必填
   ///

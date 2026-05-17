@@ -186,41 +186,6 @@ class AndroidBannerConfig implements Config {
   }
 }
 
-// 来自 Android demo NativeBannerActivity
-class AndroidNativeBannerConfig implements Config {
-  final String slotId;
-  final bool isSupportDeepLink;
-  // setImageAcceptedSize(600, 257)
-  final PangleSize imgSize;
-  // .supportRenderControl()
-  final bool supportRenderControl;
-  // setExpressViewAcceptedSize(350, 300) dp
-  final PangleExpressSize? expressSize;
-  // setAdCount(1)
-  final int adCount;
-
-  const AndroidNativeBannerConfig({
-    required this.slotId,
-    required this.imgSize,
-    this.isSupportDeepLink = true,
-    this.supportRenderControl = false,
-    this.expressSize,
-    this.adCount = 1,
-  });
-
-  @override
-  Map<String, dynamic> toJSON() {
-    return <String, dynamic>{
-      'slotId': slotId,
-      'isSupportDeepLink': isSupportDeepLink,
-      'imgSize': imgSize.toJson(),
-      'supportRenderControl': supportRenderControl,
-      'expressSize': expressSize?.toJson(),
-      'adCount': adCount,
-    };
-  }
-}
-
 class AndroidFeedConfig implements Config {
   final String slotId;
   final int? count;

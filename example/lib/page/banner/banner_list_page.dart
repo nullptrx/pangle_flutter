@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../common/ext.dart';
 import 'banner_page.dart';
-import 'native_banner_page.dart';
-
 class BannerListPage extends StatelessWidget {
   const BannerListPage({super.key});
 
@@ -38,12 +36,6 @@ class BannerListPage extends StatelessWidget {
                   height: s.height,
                 )),
               )),
-          const Divider(),
-          ListTile(
-            title: const Text('原生 Banner'),
-            trailing: const Icon(Icons.navigate_next),
-            onTap: () => context.navigateTo(const NativeBannerPage()),
-          ),
         ],
       ),
     );

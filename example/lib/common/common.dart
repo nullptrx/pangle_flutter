@@ -33,6 +33,7 @@ final kThemeData = ThemeData(
   ),
   appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xFFFF4081),
+    foregroundColor: Colors.white,
   ),
   primaryColor: const Color(0xFFFF4081),
   buttonTheme: ButtonThemeData(

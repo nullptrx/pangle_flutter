@@ -7,7 +7,7 @@
 
 import BUAdSDK
 
-internal final class FLTNativeExpressAdViewDelegate: NSObject, BUNativeExpressAdViewDelegate {
+internal final class FLTNativeExpressAdViewDelegate: NSObject, BUNativeExpressAdViewDelegate, BUCustomEventProtocol {
     typealias Success = ([String]) -> Void
     typealias Fail = (Error?) -> Void
 
@@ -43,6 +43,7 @@ internal final class FLTNativeExpressAdViewDelegate: NSObject, BUNativeExpressAd
     func nativeExpressAdViewRenderSuccess(_ nativeExpressAdView: BUNativeExpressAdView) {
         // BUNativeExpressAdView auto-resizes after rendering; read the updated frame size.
         // iOS points == Flutter logical pixels, so no unit conversion needed.
+        centerInSuperview(nativeExpressAdView)
         let size = nativeExpressAdView.frame.size
         postMessage(nativeExpressAdView, "onRenderSuccess", arguments: [
             "width": Double(size.width),
@@ -65,6 +66,16 @@ internal final class FLTNativeExpressAdViewDelegate: NSObject, BUNativeExpressAd
     private func postMessage(_ nativeExpressAdView: BUNativeExpressAdView, _ method: String, arguments: [String: Any?] = [:]) {
         let channel = nativeExpressAdView.extraChannel
         channel?.invokeMethod(method, arguments: arguments)
+    }
+
+    private func centerInSuperview(_ nativeExpressAdView: BUNativeExpressAdView) {
+        guard let superview = nativeExpressAdView.superview else {
+            return
+        }
+        var frame = nativeExpressAdView.frame
+        frame.origin.x = max((superview.bounds.width - frame.width) / 2, 0)
+        frame.origin.y = max((superview.bounds.height - frame.height) / 2, 0)
+        nativeExpressAdView.frame = frame
     }
 }
 

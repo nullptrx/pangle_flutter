@@ -21,8 +21,8 @@ import io.github.nullptrx.pangleflutter.delegate.FLTSplashAd
 import io.github.nullptrx.pangleflutter.util.asMap
 import io.github.nullptrx.pangleflutter.view.BannerViewFactory
 import io.github.nullptrx.pangleflutter.view.DrawViewFactory
+import io.github.nullptrx.pangleflutter.view.EcMallViewFactory
 import io.github.nullptrx.pangleflutter.view.FeedViewFactory
-import io.github.nullptrx.pangleflutter.view.NativeBannerViewFactory
 import io.github.nullptrx.pangleflutter.view.SplashViewFactory
 
 /** PangleFlutterPlugin */
@@ -42,7 +42,7 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
   private lateinit var bannerViewFactory: BannerViewFactory
   private lateinit var feedViewFactory: FeedViewFactory
   private lateinit var drawViewFactory: DrawViewFactory
-  private lateinit var nativeBannerViewFactory: NativeBannerViewFactory
+  private lateinit var ecMallViewFactory: EcMallViewFactory
   private val handler = Handler(Looper.getMainLooper())
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
@@ -50,6 +50,7 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
     feedViewFactory.attachActivity(binding.activity)
     drawViewFactory.attachActivity(binding.activity)
     bannerViewFactory.attachActivity(binding.activity)
+    ecMallViewFactory.attachActivity(binding.activity)
   }
 
   override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
@@ -57,21 +58,21 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
     feedViewFactory.attachActivity(binding.activity)
     drawViewFactory.attachActivity(binding.activity)
     bannerViewFactory.attachActivity(binding.activity)
-    nativeBannerViewFactory.attachActivity(binding.activity)
+    ecMallViewFactory.attachActivity(binding.activity)
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
     feedViewFactory.detachActivity()
     drawViewFactory.detachActivity()
     bannerViewFactory.detachActivity()
-    nativeBannerViewFactory.detachActivity()
+    ecMallViewFactory.detachActivity()
   }
 
   override fun onDetachedFromActivity() {
     feedViewFactory.detachActivity()
     drawViewFactory.detachActivity()
     bannerViewFactory.detachActivity()
-    nativeBannerViewFactory.detachActivity()
+    ecMallViewFactory.detachActivity()
   }
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -103,9 +104,9 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
       "nullptrx.github.io/pangle_splashview", splashViewFactory
     )
 
-    nativeBannerViewFactory = NativeBannerViewFactory(binding.binaryMessenger)
+    ecMallViewFactory = EcMallViewFactory(binding.binaryMessenger)
     binding.platformViewRegistry.registerViewFactory(
-      "nullptrx.github.io/pangle_nativebannerview", nativeBannerViewFactory
+      "nullptrx.github.io/pangle_ecmallview", ecMallViewFactory
     )
   }
 

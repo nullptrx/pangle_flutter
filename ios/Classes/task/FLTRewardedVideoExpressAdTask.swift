@@ -57,7 +57,7 @@ internal final class FLTRewardedVideoExpressAdTask: FLTTaskProtocol {
             manager.delegate = delegate
             self.delegate = delegate
 
-            manager.loadAdData()
+            manager.loadData()
         }
     }
 }

@@ -10,7 +10,7 @@ import 'feed/feed_list_page.dart';
 import 'fullscreen/fullscreen_list_page.dart';
 import 'reward/reward_list_page.dart';
 import 'splash/splash_list_page.dart';
-import 'stream/stream_page.dart';
+import 'stream/preroll_page.dart';
 import 'waterfall/waterfall_page.dart';
 
 mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
@@ -31,7 +31,7 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
       _MenuItem(title: '开屏广告', subtitle: 'Splash Ads', page: const SplashListPage()),
       _MenuItem(title: '激励视频', subtitle: 'Rewarded Video Ads', page: const RewardListPage()),
       _MenuItem(title: '全屏视频/新插屏', subtitle: 'Fullscreen & Interstitial Ads', page: const FullscreenListPage()),
-      _MenuItem(title: '流媒体自定义播放', subtitle: 'Stream Custom Player', page: const StreamPage()),
+      _MenuItem(title: '贴片广告', subtitle: 'Pre-roll Ad', page: const StreamPage()),
       _MenuItem(title: '瀑布流', subtitle: 'Waterfall Ads', page: const WaterfallPage()),
     ];
 

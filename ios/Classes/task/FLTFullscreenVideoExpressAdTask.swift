@@ -41,7 +41,7 @@ internal final class FLTFullscreenVideoExpressAdTask: FLTTaskProtocol {
             self.manager.delegate = delegate
             self.delegate = delegate
 
-            self.manager.loadAdData()
+            self.manager.loadData()
         }
     }
 }

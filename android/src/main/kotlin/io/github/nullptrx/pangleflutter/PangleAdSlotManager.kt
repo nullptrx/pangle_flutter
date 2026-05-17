@@ -236,29 +236,20 @@ object PangleAdSlotManager {
     }.build()
   }
 
-  /**
-   * 原生 Banner 广告 AdSlot（非模板，纯原生渲染）
-   *
-   * @param slotId          必选，广告位 CodeId
-   * @param size            必选，期望图片尺寸（px）
-   * @param count           必选，请求广告数量
-   * @param isSupportDeepLink 可选，是否支持 DeepLink，默认 true
-   */
-  fun getNativeBannerAdSlot(
+  fun getEcMallAdSlot(
     slotId: String,
-    size: TTSize,
-    count: Int,
-    isSupportDeepLink: Boolean,
+    expressViewWidth: Float,
+    expressViewHeight: Float,
+    userData: String?,
   ): AdSlot {
     return AdSlot.Builder().apply {
-      // 必选：广告位 ID
       setCodeId(slotId)
-      // 必选：期望图片宽高（px），原生广告不走模板渲染，直接指定素材尺寸
-      setImageAcceptedSize(size.width, size.height)
-      // 必选：请求广告数量
-      setAdCount(count)
-      // 可选：是否支持 DeepLink
-      setSupportDeepLink(isSupportDeepLink)
+      setAdCount(1)
+      supportIconStyle()
+      if (userData != null) setUserData(userData)
+      setExpressViewAcceptedSize(expressViewWidth, expressViewHeight)
+      setSupportDeepLink(true)
     }.build()
   }
+
 }

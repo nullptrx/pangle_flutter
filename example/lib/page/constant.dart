@@ -32,7 +32,6 @@ const kAndroidInterstitialFullPortraitId = '947747681';
 
 // Banner
 const kAndroidBannerExpressId = '901121148';
-const kAndroidNativeBannerId = '901121423';
 
 // 信息流
 const kAndroidFeedExpressId = '901121253';
@@ -43,6 +42,9 @@ const kAndroidDrawExpressId = '901121041';
 
 // Stream 自定义播放
 const kAndroidStreamId = '945593053';
+
+// 电商 Mall
+const kAndroidEcMallId = '960072674';
 
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -67,7 +69,6 @@ const kIOSInterstitialHalfId = '947877457';
 
 // Banner
 const kIOSBannerExpressId = '900546269';
-const kIOSBannerNativeId = '900546687';
 
 // 信息流
 const kIOSFeedExpressId = '945113159';
@@ -80,3 +81,6 @@ const kIOSDrawNativeId = '900546588';
 
 // Stream 自定义播放
 const kIOSStreamId = '900546910';
+
+// 电商 Mall
+const kIOSEcMallId = '960119237';

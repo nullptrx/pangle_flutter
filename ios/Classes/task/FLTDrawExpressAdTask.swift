@@ -32,7 +32,7 @@ internal final class FLTDrawExpressAdTask: FLTTaskProtocol {
 
         let slot = BUAdSlot()
         slot.id = slotId
-        slot.AdType = .drawVideo
+        slot.adType = .drawVideo
         slot.position = .feed
 
         let nad = BUNativeExpressAdManager(slot: slot, adSize: expressSize)

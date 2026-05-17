@@ -55,7 +55,7 @@ internal final class FLTSplashAdTask: FLTTaskProtocol {
             self.delegate = delegate
 
             // 只调用 loadAdData()，showSplashView 在 splashAdLoadSuccess 回调中执行
-            self.manager.loadAdData()
+            self.manager.loadData()
         }
     }
 }

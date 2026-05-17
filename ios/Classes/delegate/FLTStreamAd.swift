@@ -22,7 +22,7 @@ internal final class FLTStreamAdDelegate: NSObject, BUNativeAdsManagerDelegate, 
         self.failHandler = fail
     }
 
-    func nativeAdsManagerSuccessToLoad(_ adsManager: BUNativeAdsManager, nativeAds: [BUNativeAd]?) {
+    func nativeAdsManagerSuccess(toLoad adsManager: BUNativeAdsManager, nativeAds: [BUNativeAd]?) {
         manager = nil
         successHandler?(nativeAds ?? [])
         onComplete?(self)

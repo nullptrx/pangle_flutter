@@ -174,13 +174,13 @@ public final class PangleAdManager: NSObject {
 
         let slot = BUAdSlot()
         slot.id = slotId
-        slot.AdType = .feed
+        slot.adType = .feed
         if let imgArgs = args["imgSize"] as? [String: Double],
            let w = imgArgs["width"], let h = imgArgs["height"]
         {
             let buSize = BUSize()
-            buSize.imageWidth = Int(w)
-            buSize.imageHeight = Int(h)
+            buSize.width = Int(w)
+            buSize.height = Int(h)
             slot.imgSize = buSize
         }
 
@@ -190,15 +190,15 @@ public final class PangleAdManager: NSObject {
             success: { ads in
                 let data: [[String: Any?]] = ads.map { ad in
                     let meta = ad.data
-                    let imageUrl = meta?.imageAry?.first?.imageUrl
+                    let imageUrl = meta?.imageAry?.first?.imageURL
                     return [
                         "id": String(ad.hash),
                         "imageMode": meta?.imageMode.rawValue ?? 0,
                         "videoUrl": meta?.videoUrl,
                         "videoDuration": Double(meta?.videoDuration ?? 0),
                         "imageUrl": imageUrl,
-                        "title": meta?.AdTitle,
-                        "description": meta?.AdDescription,
+                        "title": meta?.adTitle,
+                        "description": meta?.adDescription,
                     ]
                 }
                 result(["code": 0, "message": "", "count": data.count, "data": data] as [String: Any])

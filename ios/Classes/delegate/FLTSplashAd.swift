@@ -68,7 +68,7 @@ internal final class FLTSplashAd: NSObject, BUSplashAdDelegate {
         
     }
     
-    func splashVideoAdDidPlayFinish(_ splashAd: BUSplashAd, didFailWithError error: Error) {
+    func splashVideoAdDidPlayFinish(_ splashAd: BUSplashAd, didFailWithError error: Error?) {
         
     }
 }

@@ -39,8 +39,8 @@ internal final class FLTNativeExpressAdTask: FLTTaskProtocol {
         if let imgArgs = args["imgSize"] as? [String: Double],
            let imgW = imgArgs["width"], let imgH = imgArgs["height"] {
             let buSize = BUSize()
-            buSize.imageWidth = Int(imgW)
-            buSize.imageHeight = Int(imgH)
+            buSize.width = Int(imgW)
+            buSize.height = Int(imgH)
             slot.imgSize = buSize
         }
 

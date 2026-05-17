@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 
@@ -23,7 +21,8 @@ class _Item {
 
 class _FeedPageState extends State<FeedPage> {
   final _items = <_Item>[];
-  final _feedIds = <String>[];
+  bool _isLoading = false;
+  String? _errorMsg;
 
   @override
   void initState() {
@@ -32,22 +31,36 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   @override
-  void dispose() {
-    pangle.removeFeedAd(_feedIds);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('模板信息流广告')),
-      body: RefreshIndicator(
+    Widget body;
+    if (_isLoading) {
+      body = const Center(child: CircularProgressIndicator());
+    } else if (_errorMsg != null) {
+      body = Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(_errorMsg!, style: const TextStyle(color: Colors.red), textAlign: TextAlign.center),
+              const SizedBox(height: 16),
+              ElevatedButton(onPressed: _loadFeedAd, child: const Text('重试')),
+            ],
+          ),
+        ),
+      );
+    } else {
+      body = RefreshIndicator(
         onRefresh: _loadFeedAd,
         child: ListView.builder(
           itemCount: _items.length,
           itemBuilder: (context, index) => _buildItem(index),
         ),
-      ),
+      );
+    }
+    return Scaffold(
+      appBar: AppBar(title: const Text('模板信息流广告')),
+      body: body,
     );
   }
 
@@ -57,10 +70,7 @@ class _FeedPageState extends State<FeedPage> {
       return FeedView(
         id: item.feedId,
         expressSize: PangleExpressSize(width: 350, height: 0),
-        onDislike: (_, i) {
-          pangle.removeFeedAd([item.feedId]);
-          setState(() => _items.removeAt(index));
-        },
+        onDislike: (_, i) => setState(() => _items.removeAt(index)),
       );
     }
     return GestureDetector(
@@ -70,34 +80,42 @@ class _FeedPageState extends State<FeedPage> {
   }
 
   Future<void> _loadFeedAd() async {
-    final expressSize = PangleExpressSize(width: 350, height: 0);
-    final feedAd = await pangle.loadFeedAd(
-      iOS: IOSFeedConfig(
-        slotId: kIOSFeedExpressId,
-        expressSize: expressSize,
-      ),
-      android: AndroidFeedConfig(
-        slotId: kAndroidFeedExpressId,
-        expressSize: expressSize,
-        imgSize: PangleSize(width: 640, height: 320),
-      ),
-    );
-    final data = <_Item>[];
-    for (var i = 0; i < 20; i++) {
-      data.add(_Item(id: i.toString()));
-    }
-    final positions = [5, 10, 15];
-    for (var i = 0; i < feedAd.count; i++) {
-      final pos = positions.removeAt(0);
-      final adItem = _Item(isAd: true, feedId: feedAd.data[i]);
-      data.insert(pos, adItem);
-      _feedIds.add(adItem.feedId);
-    }
     setState(() {
-      _items
-        ..clear()
-        ..addAll(data);
+      _isLoading = true;
+      _errorMsg = null;
     });
+    try {
+      final expressSize = PangleExpressSize(width: 350, height: 0);
+      final feedAd = await pangle.loadFeedAd(
+        iOS: IOSFeedConfig(
+          slotId: kIOSFeedExpressId,
+          expressSize: expressSize,
+        ),
+        android: AndroidFeedConfig(
+          slotId: kAndroidFeedExpressId,
+          expressSize: expressSize,
+          imgSize: PangleSize(width: 640, height: 320),
+        ),
+      );
+      final data = <_Item>[];
+      for (var i = 0; i < 20; i++) {
+        data.add(_Item(id: i.toString()));
+      }
+      final positions = [5, 10, 15];
+      for (var i = 0; i < feedAd.count && i < positions.length; i++) {
+        data.insert(positions[i], _Item(isAd: true, feedId: feedAd.data[i]));
+      }
+      if (mounted) {
+        setState(() => _items
+          ..clear()
+          ..addAll(data));
+      }
+    } catch (e) {
+      debugPrint('FeedPage loadFeedAd error: $e');
+      if (mounted) setState(() => _errorMsg = e.toString());
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 }
 
@@ -112,7 +130,8 @@ class FeedVideoPage extends StatefulWidget {
 
 class _FeedVideoPageState extends State<FeedVideoPage> {
   final _items = <_Item>[];
-  final _feedIds = <String>[];
+  bool _isLoading = false;
+  String? _errorMsg;
 
   @override
   void initState() {
@@ -121,22 +140,36 @@ class _FeedVideoPageState extends State<FeedVideoPage> {
   }
 
   @override
-  void dispose() {
-    pangle.removeFeedAd(_feedIds);
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('模板信息流视频广告')),
-      body: RefreshIndicator(
+    Widget body;
+    if (_isLoading) {
+      body = const Center(child: CircularProgressIndicator());
+    } else if (_errorMsg != null) {
+      body = Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(_errorMsg!, style: const TextStyle(color: Colors.red), textAlign: TextAlign.center),
+              const SizedBox(height: 16),
+              ElevatedButton(onPressed: _loadFeedAd, child: const Text('重试')),
+            ],
+          ),
+        ),
+      );
+    } else {
+      body = RefreshIndicator(
         onRefresh: _loadFeedAd,
         child: ListView.builder(
           itemCount: _items.length,
           itemBuilder: (context, index) => _buildItem(index),
         ),
-      ),
+      );
+    }
+    return Scaffold(
+      appBar: AppBar(title: const Text('模板信息流视频广告')),
+      body: body,
     );
   }
 
@@ -146,10 +179,7 @@ class _FeedVideoPageState extends State<FeedVideoPage> {
       return FeedView(
         id: item.feedId,
         expressSize: PangleExpressSize.aspectRatio16_9(),
-        onDislike: (_, i) {
-          pangle.removeFeedAd([item.feedId]);
-          setState(() => _items.removeAt(index));
-        },
+        onDislike: (_, i) => setState(() => _items.removeAt(index)),
       );
     }
     return GestureDetector(
@@ -159,34 +189,41 @@ class _FeedVideoPageState extends State<FeedVideoPage> {
   }
 
   Future<void> _loadFeedAd() async {
-    final expressSize = PangleExpressSize.aspectRatio16_9();
-    final iosSlotId = Platform.isIOS ? kIOSFeedVideoId : kIOSFeedExpressId;
-    final feedAd = await pangle.loadFeedAd(
-      iOS: IOSFeedConfig(
-        slotId: iosSlotId,
-        expressSize: expressSize,
-      ),
-      android: AndroidFeedConfig(
-        slotId: kAndroidFeedVideoExpressId,
-        expressSize: expressSize,
-        imgSize: PangleSize(width: 640, height: 360),
-      ),
-    );
-    final data = <_Item>[];
-    for (var i = 0; i < 20; i++) {
-      data.add(_Item(id: i.toString()));
-    }
-    final positions = [5, 10, 15];
-    for (var i = 0; i < feedAd.count; i++) {
-      final pos = positions.removeAt(0);
-      final adItem = _Item(isAd: true, feedId: feedAd.data[i]);
-      data.insert(pos, adItem);
-      _feedIds.add(adItem.feedId);
-    }
     setState(() {
-      _items
-        ..clear()
-        ..addAll(data);
+      _isLoading = true;
+      _errorMsg = null;
     });
+    try {
+      final expressSize = PangleExpressSize.aspectRatio16_9();
+      final feedAd = await pangle.loadFeedAd(
+        iOS: IOSFeedConfig(
+          slotId: kIOSFeedVideoId,
+          expressSize: expressSize,
+        ),
+        android: AndroidFeedConfig(
+          slotId: kAndroidFeedVideoExpressId,
+          expressSize: expressSize,
+          imgSize: PangleSize(width: 640, height: 360),
+        ),
+      );
+      final data = <_Item>[];
+      for (var i = 0; i < 20; i++) {
+        data.add(_Item(id: i.toString()));
+      }
+      final positions = [5, 10, 15];
+      for (var i = 0; i < feedAd.count && i < positions.length; i++) {
+        data.insert(positions[i], _Item(isAd: true, feedId: feedAd.data[i]));
+      }
+      if (mounted) {
+        setState(() => _items
+          ..clear()
+          ..addAll(data));
+      }
+    } catch (e) {
+      debugPrint('FeedVideoPage loadFeedAd error: $e');
+      if (mounted) setState(() => _errorMsg = e.toString());
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 }

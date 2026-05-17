@@ -36,8 +36,9 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         let splashViewFactory = SplashViewFactory(messenger: registrar.messenger())
         registrar.register(splashViewFactory, withId: "nullptrx.github.io/pangle_splashview")
 
-        let nativeBannerViewFactory = NativeBannerViewFactory(messenger: registrar.messenger())
-        registrar.register(nativeBannerViewFactory, withId: "nullptrx.github.io/pangle_nativebannerview")
+        let ecMallViewFactory = EcMallViewFactory(messenger: registrar.messenger())
+        registrar.register(ecMallViewFactory, withId: "nullptrx.github.io/pangle_ecmallview")
+
     }
 
     private let methodChannel: FlutterMethodChannel
