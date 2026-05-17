@@ -11,6 +11,7 @@ import com.bytedance.sdk.openadsdk.TTAdManager
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTAdSdk
 import com.bytedance.sdk.openadsdk.TTCustomController
+import com.bytedance.sdk.openadsdk.TTFeedAd
 import com.bytedance.sdk.openadsdk.TTFullScreenVideoAd
 import com.bytedance.sdk.openadsdk.TTLocation
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd
@@ -446,6 +447,41 @@ class PangleAdManager {
 
   fun loadBannerAd(adSlot: AdSlot, listener: TTAdNative.NativeAdListener) {
     ttAdNative?.loadNativeAd(adSlot, listener)
+  }
+
+  /** Draw 竖版全屏模板广告，对应 Dart 侧 loadDrawAd */
+  fun loadDrawExpressAd(adSlot: AdSlot, result: (Any) -> Unit) {
+    ttAdNative?.loadExpressDrawFeedAd(adSlot, FLTFeedExpressAd(result))
+  }
+
+  /** Stream 自定义播放器广告，对应 Dart 侧 loadStreamAd */
+  fun loadStreamAd(adSlot: AdSlot, result: (Any) -> Unit) {
+    ttAdNative?.loadStream(adSlot, object : TTAdNative.FeedAdListener {
+      override fun onError(code: Int, message: String?) {
+        result(mapOf("code" to code, "message" to (message ?: ""), "count" to 0, "data" to emptyList<Any>()))
+      }
+
+      override fun onFeedAdLoad(ads: MutableList<TTFeedAd>?) {
+        if (ads.isNullOrEmpty()) {
+          result(mapOf("code" to -1, "message" to "no ads loaded", "count" to 0, "data" to emptyList<Any>()))
+          return
+        }
+        val data = ads.map { ad ->
+          val videoUrl = runCatching { ad.customVideo?.videoUrl }.getOrNull()
+          val imageUrl = runCatching { ad.imageList?.firstOrNull()?.imageUrl }.getOrNull()
+          mapOf(
+            "id" to ad.hashCode().toString(),
+            "imageMode" to ad.imageMode,
+            "videoUrl" to videoUrl,
+            "videoDuration" to runCatching { ad.videoDuration }.getOrNull(),
+            "imageUrl" to imageUrl,
+            "title" to runCatching { ad.title }.getOrNull(),
+            "description" to runCatching { ad.description }.getOrNull(),
+          )
+        }
+        result(mapOf("code" to 0, "message" to "", "count" to ads.size, "data" to data))
+      }
+    })
   }
 
 }

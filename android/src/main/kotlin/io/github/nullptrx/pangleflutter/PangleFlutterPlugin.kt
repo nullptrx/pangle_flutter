@@ -20,6 +20,7 @@ import io.github.nullptrx.pangleflutter.common.TTSizeF
 import io.github.nullptrx.pangleflutter.delegate.FLTSplashAd
 import io.github.nullptrx.pangleflutter.util.asMap
 import io.github.nullptrx.pangleflutter.view.BannerViewFactory
+import io.github.nullptrx.pangleflutter.view.DrawViewFactory
 import io.github.nullptrx.pangleflutter.view.FeedViewFactory
 import io.github.nullptrx.pangleflutter.view.NativeBannerViewFactory
 import io.github.nullptrx.pangleflutter.view.SplashViewFactory
@@ -40,30 +41,35 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
   private lateinit var context: Context
   private lateinit var bannerViewFactory: BannerViewFactory
   private lateinit var feedViewFactory: FeedViewFactory
+  private lateinit var drawViewFactory: DrawViewFactory
   private lateinit var nativeBannerViewFactory: NativeBannerViewFactory
   private val handler = Handler(Looper.getMainLooper())
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activity = binding.activity
     feedViewFactory.attachActivity(binding.activity)
+    drawViewFactory.attachActivity(binding.activity)
     bannerViewFactory.attachActivity(binding.activity)
   }
 
   override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
     activity = binding.activity
     feedViewFactory.attachActivity(binding.activity)
+    drawViewFactory.attachActivity(binding.activity)
     bannerViewFactory.attachActivity(binding.activity)
     nativeBannerViewFactory.attachActivity(binding.activity)
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
     feedViewFactory.detachActivity()
+    drawViewFactory.detachActivity()
     bannerViewFactory.detachActivity()
     nativeBannerViewFactory.detachActivity()
   }
 
   override fun onDetachedFromActivity() {
     feedViewFactory.detachActivity()
+    drawViewFactory.detachActivity()
     bannerViewFactory.detachActivity()
     nativeBannerViewFactory.detachActivity()
   }
@@ -85,6 +91,11 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
     feedViewFactory = FeedViewFactory(binding.binaryMessenger)
     binding.platformViewRegistry.registerViewFactory(
       "nullptrx.github.io/pangle_feedview", feedViewFactory
+    )
+
+    drawViewFactory = DrawViewFactory(binding.binaryMessenger)
+    binding.platformViewRegistry.registerViewFactory(
+      "nullptrx.github.io/pangle_drawview", drawViewFactory
     )
 
     val splashViewFactory = SplashViewFactory(binding.binaryMessenger)
@@ -257,6 +268,44 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
           }
         }
         result.success(count)
+      }
+
+      "loadDrawAd" -> {
+        val slotId = call.argument<String>("slotId")!!
+        val count = call.argument<Int>("adCount") ?: 2
+        val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+        val expressSize = call.argument<Map<String, Double>>("expressSize")?.let {
+          TTSizeF(it.getValue("width").toFloat(), it.getValue("height").toFloat())
+        }
+        val adSlot = PangleAdSlotManager.getDrawAdSlot(slotId, expressSize, count, isSupportDeepLink)
+        pangle.loadDrawExpressAd(adSlot) {
+          result.success(it)
+        }
+      }
+
+      "removeDrawAd" -> {
+        val drawIds = call.arguments<List<String>>()!!
+        var count = 0
+        for (drawId in drawIds) {
+          val success = PangleAdManager.shared.removeExpressAd(drawId)
+          if (success) {
+            count++
+          }
+        }
+        result.success(count)
+      }
+
+      "loadStreamAd" -> {
+        val slotId = call.argument<String>("slotId")!!
+        val count = call.argument<Int>("adCount") ?: 1
+        val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+        val imgSize = call.argument<Map<String, Double>>("imgSize")?.let {
+          TTSize(it.getValue("width").toInt(), it.getValue("height").toInt())
+        }
+        val adSlot = PangleAdSlotManager.getStreamAdSlot(slotId, imgSize, count, isSupportDeepLink)
+        pangle.loadStreamAd(adSlot) {
+          result.success(it)
+        }
       }
 
       "loadInterstitialAd" -> {

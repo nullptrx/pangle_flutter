@@ -5,6 +5,7 @@ import com.bytedance.sdk.openadsdk.TTAdConstant
 import io.github.nullptrx.pangleflutter.common.PangleOrientation
 import io.github.nullptrx.pangleflutter.common.TTSize
 import io.github.nullptrx.pangleflutter.common.TTSizeF
+import io.github.nullptrx.pangleflutter.util.ScreenUtil
 import io.github.nullptrx.pangleflutter.util.dp
 
 object PangleAdSlotManager {
@@ -186,6 +187,52 @@ object PangleAdSlotManager {
       setSupportDeepLink(isSupportDeepLink)
       // 可选：期望视频播放方向（TTAdConstant.VERTICAL / HORIZONTAL）
       setOrientation(orientation.ordinal)
+    }.build()
+  }
+
+  /**
+   * Draw 竖版全屏模板广告 AdSlot
+   *
+   * @param slotId            必选，广告位 CodeId
+   * @param expressSize       可选，模板视图期望宽高（dp）；null 时使用屏幕尺寸
+   * @param count             必选，请求广告数量（1~3）
+   * @param isSupportDeepLink 可选，是否支持 DeepLink，默认 true
+   */
+  fun getDrawAdSlot(
+    slotId: String,
+    expressSize: TTSizeF?,
+    count: Int,
+    isSupportDeepLink: Boolean,
+  ): AdSlot {
+    val size = expressSize ?: ScreenUtil.getScreenSizeDp()
+    return AdSlot.Builder().apply {
+      setCodeId(slotId)
+      setExpressViewAcceptedSize(size.width, size.height)
+      setAdCount(count)
+      setSupportDeepLink(isSupportDeepLink)
+    }.build()
+  }
+
+  /**
+   * Stream 自定义播放器广告 AdSlot
+   *
+   * @param slotId            必选，广告位 CodeId
+   * @param imgSize           可选，期望图片尺寸（px）；null 时默认 640×320
+   * @param count             必选，请求广告数量（1~3）
+   * @param isSupportDeepLink 可选，是否支持 DeepLink，默认 true
+   */
+  fun getStreamAdSlot(
+    slotId: String,
+    imgSize: TTSize?,
+    count: Int,
+    isSupportDeepLink: Boolean,
+  ): AdSlot {
+    val size = imgSize ?: TTSize(640, 320)
+    return AdSlot.Builder().apply {
+      setCodeId(slotId)
+      setImageAcceptedSize(size.width, size.height)
+      setAdCount(count)
+      setSupportDeepLink(isSupportDeepLink)
     }.build()
   }
 
