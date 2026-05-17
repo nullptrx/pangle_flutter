@@ -1,4 +1,4 @@
----
+]---
 name: pangle_flutter 开发进度
 description: 各模块当前完成状态，agent 继续开发时先读这里确认起点
 type: project
@@ -6,7 +6,7 @@ originSessionId: 11d20578-102e-4724-a014-b46b77d8be86
 ---
 ## 当前状态（2026-05-17）
 
-所有代码工作在 worktree `frosty-cori-2c16ab`，分支 `claude/frosty-cori-2c16ab`。
+当前工作分支：`develop`（已完成 Phase 1，commit `c153865d`）
 
 ---
 
@@ -14,16 +14,16 @@ originSessionId: 11d20578-102e-4724-a014-b46b77d8be86
 
 | 模块 | 状态 | 说明 |
 |------|------|------|
-| `constant.dart` 更新 | ⬜ 未开始 | 补充所有 Android/iOS 广告位 ID |
-| 首页重构（8入口） | ⬜ 未开始 | 对齐 MainActivity |
-| 开屏广告页（9种变体） | ⬜ 未开始 | SplashListPage |
-| 激励视频页（横/竖 + 加载/展示分离） | ⬜ 未开始 | RewardListPage + RewardPage |
-| 全屏视频+新插屏页（4种） | ⬜ 未开始 | FullscreenListPage |
-| Banner 页（原生+模板多尺寸） | ⬜ 未开始 | BannerListPage |
-| 信息流页（列表+图标+Mall） | ⬜ 未开始 | FeedListPage |
-| Draw 竖版视频页 | ⬜ 未开始 | DrawListPage + DrawPage |
-| Stream 自定义播放器页 | ⬜ 未开始 | StreamPage |
-| 瀑布流页 | ⬜ 未开始 | WaterfallPage |
+| `constant.dart` 更新 | ✅ 已完成 | 补充所有 Android/iOS 广告位 ID |
+| 首页重构（8入口） | ✅ 已完成 | 对齐 MainActivity，SDK 版本显示 |
+| 开屏广告页（9种变体） | ✅ 已完成 | SplashListPage |
+| 激励视频页（横/竖 + 加载/展示分离） | ✅ 已完成 | RewardListPage + RewardPage |
+| 全屏视频+新插屏页（8种） | ✅ 已完成 | FullscreenListPage + FullscreenPage |
+| Banner 页（原生占位+模板多尺寸） | ✅ 已完成 | BannerListPage + BannerPage |
+| 信息流页（列表/视频+图标Mall占位） | ✅ 已完成 | FeedListPage + FeedPage |
+| Draw 竖版视频页 | ✅ 已完成 | DrawListPage 占位（Phase 3 实现） |
+| Stream 自定义播放器页 | ✅ 已完成 | StreamPage 占位（Phase 3 实现） |
+| 瀑布流页 | ✅ 已完成 | WaterfallPage（FeedView + GridView）|
 
 ## Phase 2：Flutter Plugin Dart 层
 

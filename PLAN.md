@@ -159,29 +159,29 @@ MainActivity
 
 ## 实现计划（按模块顺序）
 
-### Phase 1：Flutter Example（UI层，用接口占位）
+### ✅ Phase 1：Flutter Example（UI层，用接口占位）
 
-#### 1.1 常量文件 `example/lib/page/constant.dart` 更新
+#### ✅ 1.1 常量文件 `example/lib/page/constant.dart` 更新
 
 补充所有 Android/iOS 广告位 ID 常量：
 - Android: 所有上表中的 ID
 - iOS: 所有上表中的 ID
 - AppId: Android `5001121`, iOS `5000546`
 
-#### 1.2 首页 `home_page.dart` 重构
+#### ✅ 1.2 首页 `home_page.dart` 重构
 
 对齐 Android `MainActivity`，改为：
 - 显示 SDK 版本
 - 8 个入口按钮（信息流/Draw/Banner/开屏/激励视频/全屏视频+插屏/流媒体/瀑布流）
 
-#### 1.3 开屏广告页 `page/splash/splash_list_page.dart`
+#### ✅ 1.3 开屏广告页 `page/splash/splash_list_page.dart`
 
 对齐 `SplashMainActivity`，9 个子入口，每个传入不同的 slotId + 参数。
 调用 `pangle.loadSplashAd()`（现有接口已有）。
 
 **新增 Widget**：`SplashView` 的 `isHalfSize` 参数支持（Android 独有）。
 
-#### 1.4 激励视频页 `page/reward/reward_list_page.dart`
+#### ✅ 1.4 激励视频页 `page/reward/reward_list_page.dart`
 
 对齐 `RewardActivity` + `RewardVideoActivity`：
 - 加载横屏/竖屏广告（两个按钮）
@@ -190,7 +190,7 @@ MainActivity
 
 调用接口：`pangle.loadRewardedVideoAd()`（现有）
 
-#### 1.5 全屏视频 + 新插屏页 `page/fullscreen/fullscreen_list_page.dart`
+#### ✅ 1.5 全屏视频 + 新插屏页 `page/fullscreen/fullscreen_list_page.dart`
 
 对齐 `FullScreenActivity` + `NewInteractionActivity` + `FullScreenVideoActivity`：
 - 全屏视频（横/竖）
@@ -201,7 +201,7 @@ MainActivity
 
 调用接口：`pangle.loadFullscreenVideoAd()`（现有）
 
-#### 1.6 Banner 广告页 `page/banner/banner_list_page.dart`
+#### ✅ 1.6 Banner 广告页 `page/banner/banner_list_page.dart`
 
 对齐 `BannerActivity`：
 - 原生 Banner（`NativeBannerView` Widget）
@@ -209,7 +209,7 @@ MainActivity
 
 **新增接口**（需要 plugin 实现）：`pangle.loadNativeBannerAd()` → 返回 id，配合 `NativeBannerView`。
 
-#### 1.7 信息流广告页 `page/feed/feed_list_page.dart`
+#### ✅ 1.7 信息流广告页 `page/feed/feed_list_page.dart`
 
 对齐 `FeedActivity`：
 - 模板渲染信息流（单条，`FeedView`）——现有
@@ -219,7 +219,7 @@ MainActivity
 
 原生信息流（非模板）对 Flutter 不适用（需自定义渲染），**暂不实现**，在 UI 上注明。
 
-#### 1.8 Draw 竖版视频页 `page/draw/draw_list_page.dart`
+#### ✅ 1.8 Draw 竖版视频页 `page/draw/draw_list_page.dart`
 
 对齐 `DrawActivity`：
 - 模板 Draw 视频（`DrawView` / `FeedView` 竖版展示，全屏 PageView）
@@ -227,7 +227,7 @@ MainActivity
 **新增接口**：`pangle.loadDrawAd()` 返回 id 列表，配合 `DrawView` Widget。
 **新增 Widget**：`DrawView`（全屏竖版滑动，类 TikTok 样式）。
 
-#### 1.9 流媒体自定义播放器页 `page/stream/stream_page.dart`
+#### ✅ 1.9 流媒体自定义播放器页 `page/stream/stream_page.dart`
 
 对齐 `StreamCustomPlayerActivity`：
 - 加载 Stream 广告（codeId: 945593053 / iOS: 900546910）
@@ -235,7 +235,7 @@ MainActivity
 
 **新增接口**：`pangle.loadStreamAd()` → 返回视频 URL + 素材信息。
 
-#### 1.10 瀑布流页 `page/waterfall/waterfall_page.dart`
+#### ✅ 1.10 瀑布流页 `page/waterfall/waterfall_page.dart`
 
 对齐 `NativeWaterfallActivity`：
 - 模板渲染信息流，以 GridView 双列瀑布流展示
