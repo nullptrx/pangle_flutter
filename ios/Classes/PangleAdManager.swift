@@ -155,12 +155,65 @@ public final class PangleAdManager: NSObject {
     }
 
     public func loadInterstitialAd(_ args: [String: Any?], result: @escaping FlutterResult) {
-
-//        let task = FLTInterstitialExpressAdTask(args)
-//        execTask(task)({ data in
-//            result(data)
-//        })
         result(FlutterMethodNotImplemented)
+    }
+
+    public func loadDrawAd(_ args: [String: Any?], result: @escaping FlutterResult) {
+        let task = FLTDrawExpressAdTask(args)
+        execTask(task)({ data in
+            result(data)
+        })
+    }
+
+    public func loadStreamAd(_ args: [String: Any?], result: @escaping FlutterResult) {
+        guard let slotId = args["slotId"] as? String, !slotId.isEmpty else {
+            result(["code": -1, "message": "slotId missing", "count": 0, "data": []] as [String: Any])
+            return
+        }
+        let count = args["adCount"] as? Int ?? 1
+
+        let slot = BUAdSlot()
+        slot.id = slotId
+        slot.AdType = .feed
+        if let imgArgs = args["imgSize"] as? [String: Double],
+           let w = imgArgs["width"], let h = imgArgs["height"]
+        {
+            let buSize = BUSize()
+            buSize.imageWidth = Int(w)
+            buSize.imageHeight = Int(h)
+            slot.imgSize = buSize
+        }
+
+        let manager = BUNativeAdsManager(slot: slot)
+        let delegate = FLTStreamAdDelegate(
+            manager: manager,
+            success: { ads in
+                let data: [[String: Any?]] = ads.map { ad in
+                    let meta = ad.data
+                    let imageUrl = meta?.imageAry?.first?.imageUrl
+                    return [
+                        "id": String(ad.hash),
+                        "imageMode": meta?.imageMode.rawValue ?? 0,
+                        "videoUrl": meta?.videoUrl,
+                        "videoDuration": Double(meta?.videoDuration ?? 0),
+                        "imageUrl": imageUrl,
+                        "title": meta?.AdTitle,
+                        "description": meta?.AdDescription,
+                    ]
+                }
+                result(["code": 0, "message": "", "count": data.count, "data": data] as [String: Any])
+            },
+            fail: { error in
+                let e = error as NSError?
+                result(["code": e?.code ?? -1, "message": error?.localizedDescription ?? "", "count": 0, "data": []] as [String: Any])
+            }
+        )
+        delegate.onComplete = { [weak self] d in
+            self?.adQueue.async { self?.taskList.removeAll(where: { $0 === d }) }
+        }
+        manager.delegate = delegate
+        adQueue.async { self.taskList.append(delegate) }
+        manager.loadAdData(withCount: count)
     }
 
     public func loadFullscreenVideoAd(_ args: [String: Any?], result: @escaping FlutterResult) {

@@ -30,6 +30,9 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         let feedViewFactory = FeedViewFactory(messenger: registrar.messenger())
         registrar.register(feedViewFactory, withId: "nullptrx.github.io/pangle_feedview")
 
+        let drawViewFactory = DrawViewFactory(messenger: registrar.messenger())
+        registrar.register(drawViewFactory, withId: "nullptrx.github.io/pangle_drawview")
+
         let splashViewFactory = SplashViewFactory(messenger: registrar.messenger())
         registrar.register(splashViewFactory, withId: "nullptrx.github.io/pangle_splashview")
     }
@@ -86,6 +89,20 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
                 }
             }
             result(count)
+        case "loadDrawAd":
+            let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
+            instance.loadDrawAd(args, result: result)
+        case "removeDrawAd":
+            let args: [String] = call.arguments as? [String] ?? []
+            var count = 0
+            for arg in args {
+                let success = instance.removeExpressAd(arg)
+                if success { count += 1 }
+            }
+            result(count)
+        case "loadStreamAd":
+            let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
+            instance.loadStreamAd(args, result: result)
         case "loadInterstitialAd":
             let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
             instance.loadInterstitialAd(args, result: result)
