@@ -197,44 +197,6 @@ class PanglePlugin {
     return PangleSplashResult.fromJson(result);
   }
 
-  /// Display video ad.
-  ///
-  /// [iOS] config for iOS
-  /// [android] config for Android
-  /// [callback] event callback
-  /// return code & message
-  ///
-  /// 已废弃，请使用 [RewardedAd] 和 [RewardedAdPool] 代替。
-  @Deprecated('Use RewardedAd.load() / RewardedAdPool instead.')
-  Future<PangleVerifyResult> loadRewardedVideoAd({
-    IOSRewardedVideoConfig? iOS,
-    AndroidRewardedVideoConfig? android,
-    PangleEventCallback? callback,
-  }) async {
-    final subscription = _eventChannel
-        .receiveBroadcastStream(PangleEventType.rewardedVideo.index)
-        .listen((dynamic event) {
-      callback?.call(event);
-    });
-    Map<String, dynamic>? result;
-    try {
-      if (Platform.isIOS && iOS != null) {
-        result = await _methodChannel.invokeMapMethod<String, dynamic>(
-          'loadRewardedVideoAd',
-          iOS.toJSON(),
-        );
-      } else if (Platform.isAndroid && android != null) {
-        result = await _methodChannel.invokeMapMethod<String, dynamic>(
-          'loadRewardedVideoAd',
-          android.toJSON(),
-        );
-      }
-    } finally {
-      subscription.cancel();
-    }
-    return PangleVerifyResult.fromJson(result);
-  }
-
   /// Request feed ad data.
   ///
   /// [iOS] config for iOS
@@ -269,79 +231,85 @@ class PanglePlugin {
     return await _methodChannel.invokeMethod('removeFeedAd', ids);
   }
 
-  /// Request interstitial ad data.
+  /// Request feed icon-style ad data (NativeExpressIconActivity).
   ///
-  /// [iOS] config for iOS
-  /// [android] config for Android
-  /// [callback] event callback
-  /// return loaded ad count.
-  @Deprecated("Use `loadFullscreenVideoAd` instead.")
-  Future<PangleResult> loadInterstitialAd({
-    IOSInterstitialConfig? iOS,
-    AndroidInterstitialConfig? android,
-    PangleEventCallback? callback,
+  /// Uses the same channel as loadFeedAd but passes supportIconStyle=true.
+  Future<PangleAd> loadFeedIconAd({
+    IOSFeedConfig? iOS,
+    AndroidFeedIconConfig? android,
   }) async {
-    final subscription = _eventChannel
-        .receiveBroadcastStream(PangleEventType.interstitial.index)
-        .listen((dynamic event) {
-      callback?.call(event);
-    });
-    Map<String, dynamic>? result;
-    try {
-      if (Platform.isIOS && iOS != null) {
-        result = await _methodChannel.invokeMapMethod<String, dynamic>(
-          'loadInterstitialAd',
-          iOS.toJSON(),
-        );
-      } else if (Platform.isAndroid && android != null) {
-        result = await _methodChannel.invokeMapMethod<String, dynamic>(
-          'loadInterstitialAd',
-          android.toJSON(),
-        );
-      }
-    } finally {
-      subscription.cancel();
+    Map<dynamic, dynamic>? result;
+    if (Platform.isIOS && iOS != null) {
+      result = await _methodChannel.invokeMapMethod<dynamic, dynamic>(
+        'loadFeedAd',
+        iOS.toJSON(),
+      );
+    } else if (Platform.isAndroid && android != null) {
+      result = await _methodChannel.invokeMapMethod<dynamic, dynamic>(
+        'loadFeedAd',
+        android.toJSON(),
+      );
     }
-    return PangleResult.fromJson(result);
+    if (result == null) {
+      return PangleAd.empty();
+    }
+    return PangleAd.fromJsonMap(result);
   }
 
-  /// Request full screen video ad data.
+  /// Request Draw (vertical full-screen video) ad data.
   ///
-  /// 全屏视频广告，新模板渲染插屏
-  /// [iOS] config for iOS
-  /// [android] config for Android
-  /// [callback] event callback
-  /// return code & message.
-  ///
-  /// 已废弃，请使用 [FullscreenAd] 和 [FullscreenAdPool] 代替。
-  @Deprecated('Use FullscreenAd.load() / FullscreenAdPool instead.')
-  Future<PangleResult> loadFullscreenVideoAd({
-    IOSFullscreenVideoConfig? iOS,
-    AndroidFullscreenVideoConfig? android,
-    PangleEventCallback? callback,
+  /// Returns a list of draw ad IDs. Pass each ID to [DrawView].
+  Future<PangleDrawAd> loadDrawAd({
+    IOSDrawConfig? iOS,
+    AndroidDrawConfig? android,
   }) async {
-    final subscription = _eventChannel
-        .receiveBroadcastStream(PangleEventType.fullscreen.index)
-        .listen((dynamic event) {
-      callback?.call(event);
-    });
-    Map<String, dynamic>? result;
-    try {
-      if (Platform.isIOS && iOS != null) {
-        result = await _methodChannel.invokeMapMethod<String, dynamic>(
-          'loadFullscreenVideoAd',
-          iOS.toJSON(),
-        );
-      } else if (Platform.isAndroid && android != null) {
-        result = await _methodChannel.invokeMapMethod<String, dynamic>(
-          'loadFullscreenVideoAd',
-          android.toJSON(),
-        );
-      }
-    } finally {
-      subscription.cancel();
+    Map<dynamic, dynamic>? result;
+    if (Platform.isIOS && iOS != null) {
+      result = await _methodChannel.invokeMapMethod<dynamic, dynamic>(
+        'loadDrawAd',
+        iOS.toJSON(),
+      );
+    } else if (Platform.isAndroid && android != null) {
+      result = await _methodChannel.invokeMapMethod<dynamic, dynamic>(
+        'loadDrawAd',
+        android.toJSON(),
+      );
     }
-    return PangleResult.fromJson(result);
+    if (result == null) {
+      return PangleDrawAd.empty();
+    }
+    return PangleDrawAd.fromJsonMap(result);
+  }
+
+  /// Remove draw ad references.
+  /// [ids] draw id list, see [loadDrawAd]
+  Future<int?> removeDrawAd(List<String> ids) async {
+    return await _methodChannel.invokeMethod('removeDrawAd', ids);
+  }
+
+  /// Request stream (custom player) ad data.
+  ///
+  /// Returns [PangleStreamAd] containing video URL and metadata.
+  Future<PangleStreamAd> loadStreamAd({
+    IOSStreamConfig? iOS,
+    AndroidStreamConfig? android,
+  }) async {
+    Map<dynamic, dynamic>? result;
+    if (Platform.isIOS && iOS != null) {
+      result = await _methodChannel.invokeMapMethod<dynamic, dynamic>(
+        'loadStreamAd',
+        iOS.toJSON(),
+      );
+    } else if (Platform.isAndroid && android != null) {
+      result = await _methodChannel.invokeMapMethod<dynamic, dynamic>(
+        'loadStreamAd',
+        android.toJSON(),
+      );
+    }
+    if (result == null) {
+      return PangleStreamAd.empty();
+    }
+    return PangleStreamAd.fromJsonMap(result);
   }
 
   // ────────────────────────────────────────────────────────────────────────────

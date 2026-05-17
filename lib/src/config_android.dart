@@ -1,25 +1,3 @@
-/*
- * Copyright (c) 2021 nullptrX
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 import 'config.dart';
 import 'constant.dart';
 import 'model.dart';
@@ -41,25 +19,6 @@ class AndroidConfig implements Config {
   final bool? isCanUseWriteExternal;
   final String? devOaid;
 
-  /// Register the ad config for Android
-  ///
-  /// [appId] 必选参数，设置应用的AppId
-  /// [debug] 测试阶段打开，可以通过日志排查问题，上线时去除该调用
-  /// [allowShowNotify] 是否允许sdk展示通知栏提示
-  /// [supportMultiProcess] 可选参数，设置是否支持多进程：true支持、false不支持。默认为false不支持
-  /// [directDownloadNetworkType] （仅国内）可选参数，允许直接下载的网络状态集合
-  /// [isPaidApp] 可选参数，设置是否为计费用户：true计费用户、false非计费用户。默认为false非计费用户。须征得用户同意才可传入该参数
-  /// [useTextureView] 可选参数，设置是否使用texture播放视频：true使用、false不使用。默认为false不使用（使用的是surface）
-  ///   暂时修改为默认true 使用TextureView渲染视频
-  /// [titleBarTheme] 可选参数，设置落地页主题，默认为light
-  /// TODO (keywords) 可选参数，设置用户画像的关键词列表 **不能超过为1000个字符**。须征得用户同意才可传入该参数
-  /// [isCanUseLocation] （仅国内）是否允许SDK主动使用地理位置信息。true可以获取，false禁止获取。默认为true
-  /// [location] （仅国内）当isCanUseLocation=false时，可传入地理位置信息，穿山甲sdk使用您传入的地理位置信息
-  /// [isCanUsePhoneState] （仅国内）是否允许SDK主动使用手机硬件参数，如：imei。true可以使用，false禁止使用。默认为true
-  /// [devImei] （仅国内）当isCanUsePhoneState=false时，可传入imei信息，穿山甲sdk使用您传入的imei信息
-  /// [isCanUseWifiState] （仅国内）是否允许SDK主动使用ACCESS_WIFI_STATE权限。true可以使用，false禁止使用。默认为true
-  /// [isCanUseWriteExternal] （仅国内）是否允许SDK主动使用WRITE_EXTERNAL_STORAGE权限。true可以使用，false禁止使用。默认为true
-  /// [devOaid] （仅国内）开发者可以传入oaid
   const AndroidConfig({
     required this.appId,
     this.debug,
@@ -78,7 +37,6 @@ class AndroidConfig implements Config {
     this.devOaid,
   });
 
-  /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
     return <String, dynamic>{
@@ -109,14 +67,6 @@ class AndroidSplashConfig implements Config {
   final bool isSupportDeepLink;
   final PangleExpressSize? expressSize;
 
-  /// The splash ad config for Android
-  ///
-  /// [slotId] The unique identifier of splash ad.
-  /// [tolerateTimeout] optional. Maximum allowable load timeout, default 3s, unit s.
-  /// [hideSkipButton] optional. Whether hide skip button, default NO. If you hide the skip button, you need to customize the countdown.
-  /// [isSupportDeepLink] optional. Whether to support deeplink. Default true.
-  /// [isExpress] 开屏广告无模板渲染，默认false
-  /// [expressSize] optional. 模板宽高
   const AndroidSplashConfig({
     required this.slotId,
     this.tolerateTimeout,
@@ -126,7 +76,6 @@ class AndroidSplashConfig implements Config {
     this.expressSize,
   });
 
-  /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
     return <String, dynamic>{
@@ -148,21 +97,10 @@ class AndroidRewardedVideoConfig implements Config {
   final bool isSupportDeepLink;
   final PangleLoadingType? loadingType;
   final PangleExpressSize? expressSize;
+  // 来自 Android demo RewardVideoActivity：setRewardAmount / setRewardName
+  final int? rewardAmount;
+  final String? rewardName;
 
-  /// The rewarded video ad config for Android
-  ///
-  /// [slotId] The unique identifier of rewarded video ad.
-  /// [userId] required.
-  //   Third-party game user_id identity.
-  //   Mainly used in the reward issuance, it is the callback pass-through parameter from server-to-server.
-  //   It is the unique identifier of each user.
-  //   In the non-server callback mode, it will also be pass-through when the video is finished playing.
-  //   Only the string can be passed in this case, not nil.
-  /// [extra] optional. serialized string.
-  /// [isVertical] optional. Whether video is vertical orientation. Vertical, if true. Otherwise, horizontal.
-  /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-  /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
-  /// [expressSize] optional. 模板宽高
   const AndroidRewardedVideoConfig({
     required this.slotId,
     this.userId,
@@ -171,6 +109,8 @@ class AndroidRewardedVideoConfig implements Config {
     this.isSupportDeepLink = true,
     this.loadingType,
     this.expressSize,
+    this.rewardAmount,
+    this.rewardName,
   });
 
   AndroidRewardedVideoConfig copyWith({
@@ -181,6 +121,8 @@ class AndroidRewardedVideoConfig implements Config {
     bool? isSupportDeepLink,
     PangleLoadingType? loadingType,
     PangleExpressSize? expressSize,
+    int? rewardAmount,
+    String? rewardName,
   }) {
     return AndroidRewardedVideoConfig(
       slotId: slotId ?? this.slotId,
@@ -190,10 +132,11 @@ class AndroidRewardedVideoConfig implements Config {
       isSupportDeepLink: isSupportDeepLink ?? this.isSupportDeepLink,
       loadingType: loadingType ?? this.loadingType,
       expressSize: expressSize ?? this.expressSize,
+      rewardAmount: rewardAmount ?? this.rewardAmount,
+      rewardName: rewardName ?? this.rewardName,
     );
   }
 
-  /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
     var expressSize = this.expressSize;
@@ -207,6 +150,8 @@ class AndroidRewardedVideoConfig implements Config {
       'isSupportDeepLink': isSupportDeepLink,
       'loadingType': loadingType?.index,
       'expressSize': expressSize.toJson(),
+      'rewardAmount': rewardAmount,
+      'rewardName': rewardName,
     };
   }
 }
@@ -216,18 +161,8 @@ class AndroidBannerConfig implements Config {
   final bool isSupportDeepLink;
   final PangleExpressSize expressSize;
   final int? interval;
-
-  /// 原生广告图片期望尺寸（dp）。
-  /// 仅在需要同时支持模板与原生两种样式切换时传入，纯模板场景可不传。
   final PangleSize? imgSize;
 
-  /// The banner ad config for Android
-  ///
-  /// [slotId] required. The unique identifier of a banner ad.
-  /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-  /// [expressSize] required. 模板宽高
-  /// [interval] optional. The carousel interval, in seconds, is set in the range of 30~120s.
-  /// [imgSize] optional. 原生广告图片尺寸；需模板+原生切换时传入，纯模板可省略。
   const AndroidBannerConfig({
     required this.slotId,
     required this.expressSize,
@@ -236,7 +171,6 @@ class AndroidBannerConfig implements Config {
     this.imgSize,
   });
 
-  /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
     return <String, dynamic>{
@@ -249,29 +183,37 @@ class AndroidBannerConfig implements Config {
   }
 }
 
+// 来自 Android demo NativeBannerActivity
 class AndroidNativeBannerConfig implements Config {
   final String slotId;
   final bool isSupportDeepLink;
-  final PangleSize size;
+  // setImageAcceptedSize(600, 257)
+  final PangleSize imgSize;
+  // .supportRenderControl()
+  final bool supportRenderControl;
+  // setExpressViewAcceptedSize(350, 300) dp
+  final PangleExpressSize? expressSize;
+  // setAdCount(1)
+  final int adCount;
 
-  /// The feed ad config for Android
-  ///
-  /// [slotId] required. The unique identifier of a banner ad.
-  /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-  /// [size] ads size
   const AndroidNativeBannerConfig({
     required this.slotId,
-    required this.size,
+    required this.imgSize,
     this.isSupportDeepLink = true,
+    this.supportRenderControl = false,
+    this.expressSize,
+    this.adCount = 1,
   });
 
-  /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
     return <String, dynamic>{
       'slotId': slotId,
       'isSupportDeepLink': isSupportDeepLink,
-      'size': size.toJson(),
+      'imgSize': imgSize.toJson(),
+      'supportRenderControl': supportRenderControl,
+      'expressSize': expressSize?.toJson(),
+      'adCount': adCount,
     };
   }
 }
@@ -281,18 +223,8 @@ class AndroidFeedConfig implements Config {
   final int? count;
   final bool isSupportDeepLink;
   final PangleExpressSize expressSize;
-
-  /// 原生广告图片期望尺寸（dp）。
-  /// 仅在需要同时支持模板与原生两种样式切换时传入，纯模板场景可不传。
   final PangleSize? imgSize;
 
-  /// The feed ad config for Android
-  ///
-  /// [slotId] required. The unique identifier of a feed ad.
-  /// [count] It is recommended to request no more than 3 ads. The maximum is 10. default 3
-  /// [isSupportDeepLink] optional. Whether to support deeplink.
-  /// [expressSize] required. 期望信息流广告宽高，需与后台广告位模板比例一致。
-  /// [imgSize] optional. 原生广告图片尺寸；需模板+原生切换时传入，纯模板可省略。
   const AndroidFeedConfig({
     required this.slotId,
     required this.expressSize,
@@ -301,7 +233,6 @@ class AndroidFeedConfig implements Config {
     this.imgSize,
   });
 
-  /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
     return <String, dynamic>{
@@ -314,29 +245,30 @@ class AndroidFeedConfig implements Config {
   }
 }
 
-class AndroidInterstitialConfig implements Config {
+// 来自 Android demo NativeExpressIconActivity：.supportIconStyle()
+class AndroidFeedIconConfig implements Config {
   final String slotId;
+  // setAdCount(1)
+  final int adCount;
+  // setExpressViewAcceptedSize(160, 0)
+  final double expressViewWidth;
   final bool isSupportDeepLink;
-  final PangleExpressSize expressSize;
 
-  /// The interstitial ad config for Android
-  ///
-  /// [slotId] required. The unique identifier of a interstitial ad.
-  /// [isSupportDeepLink] optional. Whether to support deep link. default true.
-  /// [expressSize] optional. 模板宽高
-  const AndroidInterstitialConfig({
+  const AndroidFeedIconConfig({
     required this.slotId,
-    required this.expressSize,
+    this.adCount = 1,
+    this.expressViewWidth = 160,
     this.isSupportDeepLink = true,
   });
 
-  /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
     return <String, dynamic>{
       'slotId': slotId,
+      'adCount': adCount,
+      'expressSize': {'width': expressViewWidth, 'height': 0.0},
+      'supportIconStyle': true,
       'isSupportDeepLink': isSupportDeepLink,
-      'expressSize': expressSize.toJson(),
     };
   }
 }
@@ -348,13 +280,6 @@ class AndroidFullscreenVideoConfig implements Config {
   final PangleLoadingType loadingType;
   final PangleExpressSize? expressSize;
 
-  /// The full screen video ad config for Android
-  ///
-  /// [slotId] required. The unique identifier of a full screen video ad.
-  /// [isSupportDeepLink] optional. Whether to support deeplink. default true.
-  /// [orientation] 设置期望视频播放的方向，默认[PangleOrientation.vertical]
-  /// [loadingType] optional. 加载广告的类型，默认[PangleLoadingType.normal]
-  /// [expressSize] optional. 模板宽高
   const AndroidFullscreenVideoConfig({
     required this.slotId,
     this.isSupportDeepLink = true,
@@ -379,7 +304,6 @@ class AndroidFullscreenVideoConfig implements Config {
     );
   }
 
-  /// Convert config to json
   @override
   Map<String, dynamic> toJSON() {
     var expressSize = this.expressSize;
@@ -390,6 +314,60 @@ class AndroidFullscreenVideoConfig implements Config {
       'orientation': orientation.index,
       'loadingType': loadingType.index,
       'expressSize': expressSize.toJson(),
+    };
+  }
+}
+
+// 来自 Android demo DrawNativeExpressVideoActivity
+class AndroidDrawConfig implements Config {
+  final String slotId;
+  // setExpressViewAcceptedSize，默认全屏
+  final PangleExpressSize? expressSize;
+  // setAdCount(2)
+  final int adCount;
+  final bool isSupportDeepLink;
+
+  const AndroidDrawConfig({
+    required this.slotId,
+    this.expressSize,
+    this.adCount = 2,
+    this.isSupportDeepLink = true,
+  });
+
+  @override
+  Map<String, dynamic> toJSON() {
+    return <String, dynamic>{
+      'slotId': slotId,
+      'expressSize': expressSize?.toJson(),
+      'adCount': adCount,
+      'isSupportDeepLink': isSupportDeepLink,
+    };
+  }
+}
+
+// 来自 Android demo StreamCustomPlayerActivity
+class AndroidStreamConfig implements Config {
+  final String slotId;
+  // setImageAcceptedSize(640, 320)
+  final PangleSize? imgSize;
+  // setAdCount(1)
+  final int adCount;
+  final bool isSupportDeepLink;
+
+  const AndroidStreamConfig({
+    required this.slotId,
+    this.imgSize,
+    this.adCount = 1,
+    this.isSupportDeepLink = true,
+  });
+
+  @override
+  Map<String, dynamic> toJSON() {
+    return <String, dynamic>{
+      'slotId': slotId,
+      'imgSize': imgSize?.toJson(),
+      'adCount': adCount,
+      'isSupportDeepLink': isSupportDeepLink,
     };
   }
 }

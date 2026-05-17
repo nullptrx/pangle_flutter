@@ -38,6 +38,8 @@ export 'src/size.dart';
 export 'src/util.dart';
 export 'src/view/banner/bannerview_android.dart';
 export 'src/view/bannerview.dart';
+export 'src/view/draw/drawview_android.dart';
+export 'src/view/drawview.dart';
 export 'src/view/feed/feedview_android.dart';
 export 'src/view/feedview.dart';
 export 'src/view/splash/splashview_android.dart';

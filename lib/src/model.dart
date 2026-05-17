@@ -277,6 +277,74 @@ class PangleVerifyResult extends PangleResult {
   }
 }
 
+/// Draw 竖版视频广告响应（同 PangleAd 结构，type-safe 隔离）
+class PangleDrawAd {
+  final int code;
+  final String? message;
+  final int count;
+  final List<String> data;
+
+  bool get ok => code == 0;
+
+  PangleDrawAd.empty()
+      : code = -1,
+        message = '',
+        count = 0,
+        data = [];
+
+  PangleDrawAd.fromJsonMap(Map<dynamic, dynamic> map)
+      : code = map['code'],
+        message = map['message'],
+        count = map['count'],
+        data = map['data'] == null ? [] : List<String>.from(map['data']);
+}
+
+/// Stream 自定义播放广告素材
+class StreamAdItem {
+  final String id;
+  final int imageMode;
+  final String? videoUrl;
+  final double videoDuration;
+  final String? imageUrl;
+  final String? title;
+  final String? description;
+
+  StreamAdItem.fromJsonMap(Map<dynamic, dynamic> map)
+      : id = map['id'] ?? '',
+        imageMode = map['imageMode'] ?? 0,
+        videoUrl = map['videoUrl'],
+        videoDuration = (map['videoDuration'] ?? 0).toDouble(),
+        imageUrl = map['imageUrl'],
+        title = map['title'],
+        description = map['description'];
+}
+
+/// Stream 广告响应
+class PangleStreamAd {
+  final int code;
+  final String? message;
+  final int count;
+  final List<StreamAdItem> data;
+
+  bool get ok => code == 0;
+
+  PangleStreamAd.empty()
+      : code = -1,
+        message = '',
+        count = 0,
+        data = [];
+
+  PangleStreamAd.fromJsonMap(Map<dynamic, dynamic> map)
+      : code = map['code'],
+        message = map['message'],
+        count = map['count'],
+        data = map['data'] == null
+            ? []
+            : List<Map<dynamic, dynamic>>.from(map['data'])
+                .map(StreamAdItem.fromJsonMap)
+                .toList();
+}
+
 class PangleSplashResult extends PangleResult {
   /// 广告关闭类型
   final PangleSplashCloseType type;
