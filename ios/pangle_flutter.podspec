@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'pangle_flutter'
-  s.version          = '3.0.0-beta.1'
+  s.version          = '3.0.0'
   s.summary          = 'Flutter plugin for Pangle Ad SDK.'
   s.description      = <<-DESC
 Flutter plugin for Pangle Ad SDK.
@@ -20,7 +20,7 @@ Flutter plugin for Pangle Ad SDK.
   s.static_framework = true
 
   # https://cocoapods.org/
-  s.ios.dependency 'Ads-CN', '~> 7.4'
+  s.ios.dependency 'Ads-CN', '~> 7.0'
 
   #s.default_subspec   = 'cn'
   #s.subspec 'cn' do |ss|

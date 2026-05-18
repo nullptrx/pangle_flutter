@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "io.github.nullptrx.pangleflutter"
-version = "3.0.0-beta.1"
+version = "3.0.0"
 
 rootProject.allprojects {
   repositories {
@@ -47,6 +47,6 @@ android {
 }
 
 dependencies {
-  api("com.pangle.cn:ads-sdk-pro:[7.4,7.5)")
+  api("com.pangle.cn:ads-sdk-pro:[7.0,8.0)")
   implementation("androidx.appcompat:appcompat:[1.7,1.8)")
 }

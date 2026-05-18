@@ -1,5 +1,22 @@
-build
+# Build artifacts
+build/
+coverage/
+
+# Development tools
+.claude/
+.codegraph/
+.idea/
+.github/
+.travis.yml
+.DS_Store
+
+# Tests
+test/
+
+# Planning / internal docs
+CLAUDE.md
+skills/
+
+# Legacy
 android/keep
 TODO.md
-coverage
-test
