@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'pangle_flutter'
-  s.version          = '2.0.1'
+  s.version          = '3.0.0'
   s.summary          = 'Flutter plugin for Pangle Ad SDK.'
   s.description      = <<-DESC
 Flutter plugin for Pangle Ad SDK.
@@ -15,22 +15,23 @@ Flutter plugin for Pangle Ad SDK.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
-  s.platform = :ios, '9.0'
+  s.platform = :ios, '13.0'
 
   s.static_framework = true
 
   # https://cocoapods.org/
-  s.ios.dependency 'Ads-CN', '~> 5.1'
+  s.ios.dependency 'Ads-CN', '~> 7.0'
 
   #s.default_subspec   = 'cn'
   #s.subspec 'cn' do |ss|
-  #  ss.ios.dependency 'Ads-CN', '~> 5.0'
+  #  ss.ios.dependency 'Ads-CN', '~> 7.4'
   #end
   #s.subspec 'global' do |ss|
-  #  ss.ios.dependency 'Ads-Global', '~> 5.0'
+  #  ss.ios.dependency 'Ads-Global', '~> 7.4'
   #end
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }
-  s.swift_version = '5.0'
+  s.swift_version = '5.9'
+  s.resource_bundles = {'pangle_flutter_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
 end

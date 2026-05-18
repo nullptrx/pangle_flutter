@@ -25,22 +25,17 @@ import 'package:pangle_flutter/pangle_flutter.dart';
 
 var kThemeStatus = PangleTheme.light;
 
-const _textTheme = TextTheme(
-  button: TextStyle(
-    color: Colors.white,
-  ),
-);
-
 final kThemeData = ThemeData(
   colorScheme: ColorScheme.fromSwatch(
     accentColor: const Color(0xFFFF4081),
-    primaryColorDark: const Color(0xFFFF4081),
+  ).copyWith(
+    secondary: const Color(0xFFFF4081),
   ),
   appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xFFFF4081),
+    foregroundColor: Colors.white,
   ),
   primaryColor: const Color(0xFFFF4081),
-  primaryTextTheme: _textTheme,
   buttonTheme: ButtonThemeData(
     highlightColor: Colors.redAccent[400],
     buttonColor: const Color(0xFFFF4081),
@@ -49,10 +44,8 @@ final kThemeData = ThemeData(
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      onPrimary: Colors.white,
-      primary: const Color(0xFFFF4081),
-      // minimumSize: Size(88, 36),
-      // padding: EdgeInsets.symmetric(horizontal: 16),
+      foregroundColor: Colors.white,
+      backgroundColor: const Color(0xFFFF4081),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(32)),
     ),
   ),

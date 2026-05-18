@@ -1,3 +1,224 @@
+English | [中文](CHANGELOG_CN.md)
+
+---
+
+## 3.0.0
+
+### New Features
+
+#### Draw Ad (Vertical Full-Screen Video)
+
+TikTok-style vertically scrollable video ads. Load a batch of IDs, then display each one inside a full-screen `PageView`.
+
+```dart
+// 1. Load
+final PangleDrawAd drawAd = await pangle.loadDrawAd(
+  iOS: IOSDrawConfig(slotId: kDrawId, adCount: 3),
+  android: AndroidDrawConfig(slotId: kDrawId, adCount: 2),
+);
+
+// 2. Display — embed in a full-screen PageView
+DrawView(
+  id: drawAd.data.first,
+  onClick: () {},
+  onShow: () {},
+  onRenderFail: (code, msg) {},
+)
+
+// 3. Clean up
+await pangle.removeDrawAd(drawAd.data);
+```
+
+#### Stream Ad (Custom Player)
+
+Returns video URL + metadata for use with your own video player. No SDK-rendered view required.
+
+```dart
+final PangleStreamAd streamAd = await pangle.loadStreamAd(
+  iOS: IOSStreamConfig(slotId: kStreamId),
+  android: AndroidStreamConfig(slotId: kStreamId),
+);
+for (final StreamAdItem item in streamAd.data) {
+  // item.videoUrl, item.title, item.imageUrl, item.videoDuration, etc.
+}
+```
+
+#### EcMall Ad (Shopping / Native Ad)
+
+Commerce-integrated native ad rendered as a platform view. Must be wrapped in a size-constraining widget.
+
+```dart
+SizedBox(
+  width: 600,
+  height: 257,
+  child: EcMallView(
+    slotId: kEcMallId,
+    width: 600,
+    height: 257,
+    onClick: () {},
+    onError: (code, msg) {},
+  ),
+)
+```
+
+#### Feed Icon Ad
+
+Icon-sized feed ad for compact grid or list layouts. Rendered with the standard `FeedView` widget.
+
+```dart
+final PangleAd iconAd = await pangle.loadFeedIconAd(
+  android: AndroidFeedIconConfig(slotId: kFeedIconId),
+);
+FeedView(id: iconAd.data.first)
+```
+
+#### Half-Screen Splash (Android)
+
+Show a splash ad occupying ~4/5 of the screen height instead of full-screen. Android only.
+
+```dart
+await pangle.loadSplashAd(
+  android: AndroidSplashConfig(slotId: kSplashId, isHalfSize: true),
+  iOS: IOSSplashConfig(slotId: kSplashId),
+);
+```
+
+---
+
+- **[Dart]** `BannerView` and `FeedView` now apply `AspectRatio` internally based on `expressSize` (when `height > 0`). No need to wrap them in an external `AspectRatio` or manually set a matching container height. `FeedView` accepts a new optional `expressSize` parameter — pass the same value used in `loadFeedAd`.
+
+### Bug Fixes
+- **[Android]** SDK is now initialised with `applicationContext` instead of the activity context, eliminating a class of context-leak issues on process restart. Splash ad no longer requires a `FragmentActivity` host — any `Activity` works.
+- **[iOS]** Fixed critical bug: interstitial event sink was incorrectly mapped to the fullscreen sink in `PangleEventStreamHandler`, causing interstitial callbacks to be silently dropped
+- **[iOS]** Fixed dead `initWithMessenger` static method in `FeedViewFactory` that returned a `BannerViewFactory` instance instead of `FeedViewFactory`
+- **[iOS]** Fixed double force-unwrap (`!!`) when resolving the key window in `FLTView`
+
+### Safety & Stability
+- **[iOS]** Replaced `[unowned self]` captures with `[weak self]` + `guard let self` in all async closures (`PangleAdManager`, `FLTRewardedVideoExpressAdTask`, `FLTFullscreenVideoExpressAdTask`) to prevent potential crashes on deallocation
+- **[iOS]** Replaced force casts (`as!`, `!`) with safe `guard let` optional binding throughout (`FLTNativeExpressAdTask`, `FLTBannerView`, `FLTBannerView.loadExpressAd`)
+
+### API Modernization
+- **[iOS]** Replaced deprecated `UIApplication.shared.windows` / `keyWindow` with the `connectedScenes`-based approach, compatible with multi-window and scene-based UIKit
+- **[iOS]** Updated `swift_version` from `5.0` to `5.9` in the podspec
+- **[Android]** Replaced deprecated `.values()[index]` enum access with `.entries.getOrNull(index)` with a safe default fallback (`PangleLoadingType`, `PangleOrientation`, `PangleTitleBarTheme`)
+- **[Android]** Replaced deprecated `systemUiVisibility` with `WindowInsetsController` on API 30+; kept a backward-compatible path for API 24–29
+- **[Android]** Added `const` modifier to package-level constants in `PangleFlutterPlugin`
+
+### Performance
+- **[Android]** Cached `Handler(Looper.getMainLooper())` as a class field in view classes (`FlutterBannerView`, `FlutterFeedView`, `FlutterSplashView`, `FlutterEcMallView`) instead of allocating a new instance per call
+- **[Dart]** Changed top-level screen dimension variables (`kPangleScreenWidth`, `kPangleScreenHeight`) to `late final` to defer initialization until first access
+
+### New Features
+
+#### Ad Load / Show Separation — `RewardedAd` & `FullscreenAd`
+
+Rewarded and fullscreen video ads now have dedicated wrapper objects that cleanly separate loading from showing. `load()` is a static factory that resolves only on success and throws `AdLoadException` on failure — no more checking `result.code` manually.
+
+```dart
+try {
+  final ad = await RewardedAd.load(
+    slotId: 'your_slot_id',
+    iOS: const IOSRewardedVideoConfig(slotId: 'xxx'),
+    android: AndroidRewardedVideoConfig(slotId: 'xxx'),
+  );
+  // Reaching here guarantees load succeeded
+  final result = await ad.show(
+    onEvent: (event) {
+      if (event case AdRewardEvent(:final verified) when verified) {
+        grantReward();
+      }
+    },
+  );
+} on AdLoadException catch (e) {
+  debugPrint('load failed: $e');
+}
+```
+
+`FullscreenAd` follows the same pattern with `FullscreenAd.load()` / `ad.show()`.
+
+#### Preload Pools — `RewardedAdPool` & `FullscreenAdPool`
+
+Singleton pool managers handle preloading, caching, and auto-refill after each show.
+
+```dart
+// Configure once at startup
+await RewardedAdPool.instance.configure(
+  slotId: 'your_slot_id',
+  poolSize: 2,           // keep 2 ads ready
+  autoRefill: true,      // reload after each show
+  iOS: const IOSRewardedVideoConfig(slotId: 'xxx'),
+  android: AndroidRewardedVideoConfig(slotId: 'xxx'),
+);
+
+if (await RewardedAdPool.instance.isReady('your_slot_id')) {
+  await RewardedAdPool.instance.show(
+    slotId: 'your_slot_id',
+    onEvent: (event) { ... },
+  );
+}
+```
+
+#### Type-safe Ad Events — `PangleAdEvent` sealed class
+
+All native event strings are now mapped to a sealed class hierarchy, enabling exhaustive `switch` matching:
+
+```dart
+switch (event) {
+  case AdRewardEvent(:final verified): ...
+  case AdClosedEvent():               ...
+  case AdErrorEvent():                ...
+  default:                            ...
+}
+```
+
+Available subtypes: `AdLoadedEvent`, `AdCachedEvent`, `AdShownEvent`, `AdSkippedEvent`, `AdClickedEvent`, `AdCompletedEvent`, `AdClosedEvent`, `AdErrorEvent`, `AdRenderFailedEvent`, `AdRenderSuccessEvent`, `AdRewardEvent`, `AdUnknownEvent`.
+
+#### Native: `show` and `has` methods
+
+- **[Android/iOS]** Added `showRewardedVideoAd(slotId)` and `showFullscreenVideoAd(slotId)` method channel calls — show a cached ad without triggering a new load.
+- **[Android/iOS]** Added `hasRewardedVideoAd(slotId)` and `hasFullscreenVideoAd(slotId)` — query whether a non-expired cached ad is available.
+- **[Android]** `PangleAdManager`: added `hasRewardedVideoAd()` and `hasFullscreenVideoAd()` with the same expiration check as `showRewardedVideoAd()`.
+- **[iOS]** `PangleAdManager`: added `hasRewardedVideoAd(_:)` and `hasFullscreenVideoAd(_:)` protected by `adQueue.sync`.
+
+#### SplashView
+- **[iOS/Android/Dart]** Differentiated `SplashView` error callbacks: `onRenderFail` (render failure) and `onError` (load failure) — consistent with the existing `BannerView` pattern
+- **[SplashView]** Added `onRenderFail` callback parameter to the `SplashView` widget
+
+### Deprecations
+
+- `pangle.loadRewardedVideoAd()` — use `RewardedAd.load()` / `RewardedAdPool` instead.
+- `pangle.loadFullscreenVideoAd()` — use `FullscreenAd.load()` / `FullscreenAdPool` instead.
+- `PangleLoadingType` — now an internal implementation detail; do not reference in application code.
+
+### Improvements
+- **[Dart]** `IOSRewardedVideoConfig`, `IOSFullscreenVideoConfig`, `AndroidRewardedVideoConfig`, `AndroidFullscreenVideoConfig` — added `copyWith()` methods.
+- **[iOS]** Simplified `FLTView.hitTest`: removed the fragile `FlutterOverlayView` class-name detection (a no-op since Flutter 3+ switched to TLHC rendering). `touchableBounds` now directly restricts which areas of the native ad view receive touch events.
+- **[iOS]** Cleaned up `UIUtil`: removed `isOverlay`, `findTargetView`, and `findTargetOverlayView` (dead code in Flutter 3+ TLHC mode)
+- **[Android]** `SurfaceAndroidBannerView`, `SurfaceAndroidFeedView`, `SurfaceAndroidSplashView`: removed the `hybridComposition` parameter; all three now exclusively use TLHC (`initSurfaceAndroidView`). The Hybrid Composition path (`initExpensiveAndroidView`) has been removed. `AndroidViewMixin.createView` simplified accordingly.
+
+### Code Cleanup
+- **[Android]** Removed deprecated `NativeSplashDialog` implementation; splash dialog now exclusively uses the AndroidX-based `SupportSplashDialog`
+- **[Android]** Removed dead code branches for API level < 24 (below `minSdk`)
+- **[Android]** Removed redundant `get() = field` getter from `ttAdNative` in `PangleAdManager`
+
+### Dart / Flutter Modernization
+- **[Dart]** Fixed `Future<dynamic>` return type on internal method-call handlers in `feedview_method_channel.dart` and `bannerview_method_channel.dart` → `Future<void>`
+- **[Dart]** Added explicit `void` return type to the three public typedefs (`PangleSplashCloseTypeCallback`, `PangleMessageCallback`, `PangleOptionCallback`) in `util.dart`
+- **[Dart]** **Breaking:** Renamed `PangleOrientation.veritical` → `PangleOrientation.vertical` (typo fix). Update any usages accordingly. Kotlin-side `PangleOrientation.veritical` renamed to `PangleOrientation.vertical` as well; ordinal values are unchanged.
+- **[Dart]** Replaced unsafe `List.values[index]` enum lookups with `.elementAtOrNull()` + safe default in `splashview_method_channel.dart`, `model.dart`, and `pangle_plugin.dart`
+- **[Dart]** Removed dead fields (`_bannerViewPlatformController`, `_feedViewPlatformController`, `_splashViewPlatformController`, `_platformCallbacksHandler`, `_widget`) and the no-op `_updateWidget` method from `BannerViewController`, `FeedViewController`, and `SplashViewController`; removed unused `dart:async` import from all three view files
+- **[Example]** Updated `MediaQuery.of(context).size.width` → `MediaQuery.sizeOf(context).width` in `feed_page.dart`
+
+### Ad Loading & Caching
+- **[Android]** `FlutterFeedView` now fires `onRenderFail(code=-1)` to Dart when the requested ad is not found in the cache, instead of silently showing a blank view
+- **[Android]** `FlutterFeedView.dispose()` now calls `removeExpressAd()` to properly destroy the backing `TTNativeExpressAd` and prevent memory leaks when the Flutter widget is removed
+- **[iOS]** `FLTFeedView.deinit` now calls `PangleAdManager.shared.removeExpressAd()` to release the cached `BUNativeExpressAdView` when the platform view is destroyed
+- **[iOS]** `FeedView.loadExpressAd()` now fires `onRenderFail(code=-1)` to Dart when the ad is not found in the cache (mirrors the Android behavior above)
+- **[iOS]** Added `CachedVideoAd` wrapper struct with a 30-minute TTL for rewarded and fullscreen video ad caches in `PangleAdManager`. Expired entries are purged before each show attempt, aligning iOS behavior with Android's SDK-provided `expirationTimestamp` check
+- **[iOS]** `removeExpressAd()` — removed force-unwrap (`key!`), added `@discardableResult`
+
+---
+
 ## 2.0.1
 
 - Optimize the use of Hybrid Composition

@@ -20,24 +20,18 @@
  * SOFTWARE.
  */
 
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 /// Interface for talking to the view's platform implementation.
 ///
-/// An instance implementing this interface is passed to the `onXXXViewPlatformCreated` callback that is
-/// passed to [XXXViewPlatformBuilder#onXXXViewPlatformCreated].
-///
-/// Platform implementations that live in a separate package should extend this class rather than
-/// implement it as pangle_flutter does not consider newly added methods to be breaking changes.
-/// Extending this class (using `extends`) ensures that the subclass will get the default
-/// implementation, while platform implementations that `implements` this interface will be broken
-/// by newly added [PlatformController] methods.
+/// Platform implementations that live in a separate package should extend this
+/// class rather than implement it, so that newly added methods have default
+/// implementations and do not break existing subclasses.
 abstract class PlatformController {
-  /// 添加可点击区域列表
+  /// Adds touchable-bounds entries (iOS only).
   Future<void> addTouchableBounds(List<Rect> bounds);
 
-  /// 清除可点击区域
+  /// Clears all touchable-bounds entries (iOS only).
   Future<void> clearTouchableBounds();
 }
 
@@ -46,59 +40,30 @@ abstract class ViewController {
 
   const ViewController(this._controller);
 
-  /// 为广告添加可点击区域集合（仅iOS）。
+  /// Restricts which areas of the native ad view receive touch events (iOS only).
   ///
-  /// 点击穿透问题已处理，此处为添加额外的可点击区域
-  /// 如果广告区域上有悬浮按钮之类的控件，FlutterOverlayView会以屏宽和控件的高度来创建视图
-  /// ，导致部分区域广告不可点击。
-  /// 假设屏宽300，控件的Rect(0, 0, 100, 100), 此时FlutterOverlayView的Rect(0, 0,
-  /// 300, 100), 即是Rect(100, 0, 300, 100) 此区域被影响导致广告不可点击。
+  /// When the list is non-empty, only touches within the declared rectangles
+  /// are forwarded to the native view; all other touches pass through to Flutter
+  /// widgets underneath.
   ///
-  /// 当bounds为空时，默认为FlutterOverlayView覆盖区域广告不可点击。
-  /// 当bounds不为空时，则优先于FlutterOverlayView覆盖区域判断是否可以点击。
+  /// When the list is empty (the default), all touches reach the native view normally.
   ///
-  /// 重复添加相同区域，不影响整体
+  /// Adding a duplicate rectangle has no effect.
   Future<void> addTouchableBounds(List<Rect> bounds) async {
     await _controller.addTouchableBounds(bounds);
   }
 
-  /// 添加可点击区域
+  /// Adds a single touchable-bounds entry (iOS only).
   ///
-  /// 见[addTouchableBounds]
+  /// See [addTouchableBounds].
   Future<void> addTouchableBound(Rect bound) async {
     await _controller.addTouchableBounds([bound]);
   }
 
-  /// 清空可点击区域
+  /// Clears all touchable-bounds entries (iOS only).
   ///
-  /// 见[addTouchableBounds]
+  /// See [addTouchableBounds].
   Future<void> clearTouchableBounds() async {
     await _controller.clearTouchableBounds();
-  }
-}
-
-mixin class AndroidViewMixin {
-  AndroidViewController createView({
-    required String viewType,
-    required bool hybridComposition,
-    required Map<String, dynamic> creationParams,
-    required PlatformViewCreationParams params,
-  }) {
-    if (hybridComposition) {
-      return PlatformViewsService.initExpensiveAndroidView(
-        id: params.id,
-        viewType: viewType,
-        layoutDirection: TextDirection.ltr,
-        creationParams: creationParams,
-        creationParamsCodec: const StandardMessageCodec(),
-      );
-    }
-    return PlatformViewsService.initSurfaceAndroidView(
-      id: params.id,
-      viewType: viewType,
-      layoutDirection: TextDirection.ltr,
-      creationParams: creationParams,
-      creationParamsCodec: const StandardMessageCodec(),
-    );
   }
 }

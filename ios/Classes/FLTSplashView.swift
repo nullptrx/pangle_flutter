@@ -39,11 +39,17 @@ public class FLTSplashView: NSObject, FlutterPlatformView {
 
 extension SplashView: BUSplashAdDelegate {
     func splashAdRenderSuccess(_ splashAd: BUSplashAd) {
-        
+        if let splashView = splashAd.splashView {
+            for sub in self.subviews {
+                sub.removeFromSuperview()
+            }
+            splashView.frame = self.bounds
+            self.addSubview(splashView)
+        }
     }
-    
+
     func splashAdRenderFail(_ splashAd: BUSplashAd, error: BUAdError?) {
-        
+        postMessage("onRenderFail", arguments: ["code": error?.errorCode ?? -1, "message": error?.localizedDescription])
     }
     
     func splashAdWillShow(_ splashAd: BUSplashAd) {
@@ -58,7 +64,7 @@ extension SplashView: BUSplashAdDelegate {
         
     }
     
-    func splashVideoAdDidPlayFinish(_ splashAd: BUSplashAd, didFailWithError error: Error) {
+    func splashVideoAdDidPlayFinish(_ splashAd: BUSplashAd, didFailWithError error: Error?) {
         
     }
     
@@ -137,24 +143,16 @@ class SplashView: FLTView {
         let tolerateTimeout: Double? = params["tolerateTimeout"] as? Double
         let hideSkipButton: Bool? = params["hideSkipButton"] as? Bool
 
-        // BUSplashAdView(slotID: slotId, frame: frame)
-        let slot = BUAdSlot()
-        slot.id = slotId
-        let splashAd = BUSplashAd.init(slotID: slotId, adSize: frame.size)
-        // let splashAdView = BUSplashAdView(slotID: slotId, frame: frame)
-//        splashAd.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
-        let vc = AppUtil.getVC()
-        vc.view.addSubview(splashAd.splashView!)
-        
-        if tolerateTimeout != nil {
-            splashAd.tolerateTimeout = tolerateTimeout!
+        let splashAd = BUSplashAd(slotID: slotId, adSize: frame.size)
+
+        if let tolerateTimeout = tolerateTimeout {
+            splashAd.tolerateTimeout = tolerateTimeout
         }
-        if hideSkipButton != nil {
-            splashAd.hideSkipButton = hideSkipButton!
+        if let hideSkipButton = hideSkipButton {
+            splashAd.hideSkipButton = hideSkipButton
         }
         splashAd.delegate = self
 
-        addSubview(splashAd.splashView!)
         splashAd.loadData()
         self.splashAd = splashAd
     }

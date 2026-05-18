@@ -30,8 +30,15 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
         let feedViewFactory = FeedViewFactory(messenger: registrar.messenger())
         registrar.register(feedViewFactory, withId: "nullptrx.github.io/pangle_feedview")
 
+        let drawViewFactory = DrawViewFactory(messenger: registrar.messenger())
+        registrar.register(drawViewFactory, withId: "nullptrx.github.io/pangle_drawview")
+
         let splashViewFactory = SplashViewFactory(messenger: registrar.messenger())
         registrar.register(splashViewFactory, withId: "nullptrx.github.io/pangle_splashview")
+
+        let ecMallViewFactory = EcMallViewFactory(messenger: registrar.messenger())
+        registrar.register(ecMallViewFactory, withId: "nullptrx.github.io/pangle_ecmallview")
+
     }
 
     private let methodChannel: FlutterMethodChannel
@@ -86,12 +93,59 @@ public class SwiftPangleFlutterPlugin: NSObject, FlutterPlugin {
                 }
             }
             result(count)
+        case "loadDrawAd":
+            let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
+            instance.loadDrawAd(args, result: result)
+        case "removeDrawAd":
+            let args: [String] = call.arguments as? [String] ?? []
+            var count = 0
+            for arg in args {
+                let success = instance.removeExpressAd(arg)
+                if success { count += 1 }
+            }
+            result(count)
+        case "loadStreamAd":
+            let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
+            instance.loadStreamAd(args, result: result)
         case "loadInterstitialAd":
             let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
             instance.loadInterstitialAd(args, result: result)
         case "loadFullscreenVideoAd":
             let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
             instance.loadFullscreenVideoAd(args, result: result)
+
+        // ── 新 API：展示已缓存的激励视频广告 ──────────────────────────────
+        case "showRewardedVideoAd":
+            let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
+            let shown = instance.showRewardedVideoAd(args)({ object in
+                result(object)
+            })
+            if !shown {
+                result(["code": -1, "message": "no cached ad"] as [String: Any])
+            }
+
+        // ── 新 API：查询激励视频缓存是否可用 ──────────────────────────────
+        case "hasRewardedVideoAd":
+            let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
+            let slotId = args["slotId"] as? String ?? ""
+            result(instance.hasRewardedVideoAd(slotId))
+
+        // ── 新 API：展示已缓存的全屏视频广告 ──────────────────────────────
+        case "showFullscreenVideoAd":
+            let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
+            let shown = instance.showFullScreenVideoAd(args)({ object in
+                result(object)
+            })
+            if !shown {
+                result(["code": -1, "message": "no cached ad"] as [String: Any])
+            }
+
+        // ── 新 API：查询全屏视频缓存是否可用 ──────────────────────────────
+        case "hasFullscreenVideoAd":
+            let args: [String: Any?] = call.arguments as? [String: Any?] ?? [:]
+            let slotId = args["slotId"] as? String ?? ""
+            result(instance.hasFullscreenVideoAd(slotId))
+
         case "getThemeStatus":
             result(BUAdSDKManager.themeStatus().rawValue)
         case "setThemeStatus":

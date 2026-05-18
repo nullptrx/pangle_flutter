@@ -26,7 +26,7 @@ class PangleEventStreamHandler : EventChannel.StreamHandler {
   }
 
   override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
-    for (type in PangleEventType.values()) {
+    for (type in PangleEventType.entries) {
       if (type.ordinal == arguments) {
         eventSinks[type] = events
         break
@@ -35,7 +35,7 @@ class PangleEventStreamHandler : EventChannel.StreamHandler {
   }
 
   override fun onCancel(arguments: Any?) {
-    for (type in PangleEventType.values()) {
+    for (type in PangleEventType.entries) {
       if (type.ordinal == arguments) {
         eventSinks.remove(type)
         break

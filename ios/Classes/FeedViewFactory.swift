@@ -8,11 +8,6 @@
 import Flutter
 
 public class FeedViewFactory: NSObject, FlutterPlatformViewFactory {
-    public static func initWithMessenger(with messenger: FlutterBinaryMessenger) -> BannerViewFactory {
-        let instance = BannerViewFactory(messenger: messenger)
-        return instance
-    }
-
     private var messenger: FlutterBinaryMessenger
 
     init(messenger: FlutterBinaryMessenger) {

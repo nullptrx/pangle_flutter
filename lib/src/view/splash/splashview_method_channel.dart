@@ -52,12 +52,20 @@ class MethodChannelSplashViewPlatform implements SplashViewPlatformController {
         break;
       case "onClose":
         final int type = call.arguments['type'] ?? 0;
-        _platformCallbacksHandler.onClose(PangleSplashCloseType.values[type]);
+        _platformCallbacksHandler.onClose(
+          PangleSplashCloseType.values.elementAtOrNull(type) ??
+              PangleSplashCloseType.unknown,
+        );
         break;
       case "onError":
         final int code = call.arguments['code'];
         final String message = call.arguments['message'];
         _platformCallbacksHandler.onError(code, message);
+        break;
+      case "onRenderFail":
+        final int code = call.arguments['code'];
+        final String message = call.arguments['message'];
+        _platformCallbacksHandler.onRenderFail(code, message);
         break;
     }
   }

@@ -1,47 +1,66 @@
+# macOS and editor temp files
 .DS_Store
-.atom/
-.idea/
-.vscode/
+*.swp
+*.swo
+*.tmp
+*.temp
+*.log
 
+# Hidden local/tool directories.
+# Keep repository metadata that is intentionally versioned.
+.*/
+!.github/
+!.github/**
+
+# Dart and Flutter
+.dart_tool/
 .packages
 .pub/
-.dart_tool/
+.pub-cache/
+.flutter-plugins
+.flutter-plugins-dependencies
 pubspec.lock
+build/
+coverage/
+generated_plugin_registrant.dart
+GeneratedPluginRegistrant.*
 flutter_export_environment.sh
 
-examples/all_plugins/pubspec.yaml
-
+# Flutter iOS artifacts
 Podfile
 Podfile.lock
 Pods/
 .symlinks/
 **/Flutter/App.framework/
-**/Flutter/ephemeral/
 **/Flutter/Flutter.framework/
+**/Flutter/Flutter.podspec
 **/Flutter/Generated.xcconfig
+**/Flutter/ephemeral/
 **/Flutter/flutter_assets/
-
+**/Flutter/flutter_export_environment.sh
 ServiceDefinitions.json
 xcuserdata/
 **/DerivedData/
 
+# Flutter Android artifacts
 local.properties
 keystore.properties
 .gradle/
 gradlew
 gradlew.bat
 gradle-wrapper.jar
-.flutter-plugins-dependencies
+captures/
 *.iml
 
-generated_plugin_registrant.dart
-GeneratedPluginRegistrant.h
-GeneratedPluginRegistrant.m
-GeneratedPluginRegistrant.java
-GeneratedPluginRegistrant.swift
-build/
-.flutter-plugins
-
+# IDE and project metadata
+.atom/
+.idea/
+.vscode/
 .project
 .classpath
-.settings
+.settings/
+.claude
+.codex
+# Generated and local-only project files
+examples/all_plugins/pubspec.yaml
+template/

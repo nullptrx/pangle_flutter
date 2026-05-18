@@ -19,25 +19,29 @@ internal final class FLTSplashAdTask: FLTTaskProtocol {
         let slotId: String = args["slotId"] as! String
         let tolerateTimeout: Double? = args["tolerateTimeout"] as? Double
         let hideSkipButton: Bool? = args["hideSkipButton"] as? Bool
-        let frame = UIScreen.main.bounds
-        // BUSplashAdView(slotID: slotId, frame: frame)
-        let slot = BUAdSlot.init()
-        slot.id = slotId
-        let splashAd = BUSplashAd.init(slot: slot, adSize: frame.size)
-        if tolerateTimeout != nil {
-            splashAd.tolerateTimeout = tolerateTimeout!
+        let screenSize = UIScreen.main.bounds.size
+        let adSize: CGSize
+        if let sizeMap = args["expressSize"] as? [String: Any],
+           let w = sizeMap["width"] as? Double, w > 0,
+           let h = sizeMap["height"] as? Double, h > 0 {
+            adSize = CGSize(width: w, height: h)
+        } else {
+            adSize = screenSize
         }
-        if hideSkipButton != nil {
-            splashAd.hideSkipButton = hideSkipButton!
+        let splashAd = BUSplashAd(slotID: slotId, adSize: adSize)
+        if let tolerateTimeout = tolerateTimeout {
+            splashAd.tolerateTimeout = tolerateTimeout
         }
-        let vc = AppUtil.getVC()
-        vc.view.addSubview(splashAd.splashView!)
-        
+        if let hideSkipButton = hideSkipButton {
+            splashAd.hideSkipButton = hideSkipButton
+        }
+
         self.init(splashAd)
     }
 
     func execute() -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
         return { result in
+            let vc = AppUtil.getVC()
             let delegate = FLTSplashAd(success: { [weak self] msg, type in
                 guard let self = self else { return }
                 result(self, ["code": 0, "message": msg, "type": type] as [String:Any])
@@ -45,11 +49,12 @@ internal final class FLTSplashAdTask: FLTTaskProtocol {
                 guard let self = self else { return }
                 let e = error as NSError?
                 result(self, ["code": e?.code ?? -1, "message": error?.localizedDescription ?? "", "type": 0] as [String:Any])
-            })
+            }, rootViewController: vc)
 
             self.manager.delegate = delegate
             self.delegate = delegate
 
+            // 只调用 loadAdData()，showSplashView 在 splashAdLoadSuccess 回调中执行
             self.manager.loadData()
         }
     }

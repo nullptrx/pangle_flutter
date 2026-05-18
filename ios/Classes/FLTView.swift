@@ -12,38 +12,22 @@ class FLTView: UIView {
     private var touchableBounds: [CGRect] = []
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        if !self.isUserInteractionEnabled || self.isHidden || self.alpha < 0.01 {
-            // interaction disable
-            // hidden
-            // nearly invisble
+        guard isUserInteractionEnabled, !isHidden, alpha >= 0.01 else {
             return nil
         }
-        let windowPoint = self.convert(point, to: UIApplication.shared.delegate?.window!!)
-        //找到点击落点所在的Overlay
-        let targetView = UIUtil.findTargetView(self)
-        let targetOverlayView = UIUtil.findTargetOverlayView(self, windowPoint)
-        //判断Overlay符合与广告相交、重合，则返回nil实现事件拦截
-        if UIUtil.isOverlay(targetView, targetOverlayView) {
-            // 高级功能：自定义可点击区域（例如：虽然OverlayView覆盖了广告View, 但OverlayView该区域并没有可点击控件，此时可将事件传递下去）
-            var touchable = false
-            if touchableBounds.isEmpty {
-                touchable = false
-            }
-            for bound in touchableBounds {
-                if bound.contains(windowPoint) {
-                    touchable = true
-                    break
-                }
-            }
-            if touchable {
-                return super.hitTest(point, with: event)
-            }
-                    
-            return nil
-        } else {
-              return super.hitTest(point, with: event)
+        // touchableBounds: 限制广告 View 的可点击区域。
+        // 若设置了该列表，仅列表内的区域可接收点击事件，其余区域点击穿透给 Flutter 层。
+        // 注：FlutterOverlayView 检测方案已在 Flutter 3+ TLHC 渲染模式下失效，已移除。
+        if !touchableBounds.isEmpty {
+            let keyWindow = UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }
+                .first(where: { $0.isKeyWindow })
+            let windowPoint = self.convert(point, to: keyWindow)
+            let isTouchable = touchableBounds.contains { $0.contains(windowPoint) }
+            return isTouchable ? super.hitTest(point, with: event) : nil
         }
-        
+        return super.hitTest(point, with: event)
     }
     
     

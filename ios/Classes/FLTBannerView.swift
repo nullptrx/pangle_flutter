@@ -95,34 +95,26 @@ class BannerView: FLTView {
     }
 
     private func loadExpressAd() {
-        let slotId = params["slotId"] as? String
-        guard slotId != nil else {
+        guard let slotId = params["slotId"] as? String,
+              let expressArgs = params["expressSize"] as? [String: Double],
+              let width = expressArgs["width"],
+              let height = expressArgs["height"] else {
             return
         }
         let interval: Int? = params["interval"] as? Int
-
         let isUserInteractionEnabled = params["isUserInteractionEnabled"] as? Bool ?? true
-
         self.isUserInteractionEnabled = isUserInteractionEnabled
-        let viewWidth: Double
-        let viewHeight: Double
 
         let vc = AppUtil.getVC()
-        let expressArgs: [String: Double] = params["expressSize"] as! [String: Double]
-        let width = expressArgs["width"]!
-        let height = expressArgs["height"]!
         let adSize = CGSize(width: width, height: height)
-
-        viewWidth = width
-        viewHeight = height
-
         let bannerAdView: BUNativeExpressBannerView
-        bannerAdView = interval == nil ? BUNativeExpressBannerView(slotID: slotId!, rootViewController: vc, adSize: adSize) : BUNativeExpressBannerView(slotID: slotId!, rootViewController: vc, adSize: adSize, interval: interval!)
-
-        bannerAdView.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
-        bannerAdView.center = CGPoint(x: viewWidth / 2, y: viewHeight / 2)
+        if let interval = interval {
+            bannerAdView = BUNativeExpressBannerView(slotID: slotId, rootViewController: vc, adSize: adSize, interval: interval)
+        } else {
+            bannerAdView = BUNativeExpressBannerView(slotID: slotId, rootViewController: vc, adSize: adSize)
+        }
+        bannerAdView.frame = CGRect(x: 0, y: 0, width: width, height: height)
         addSubview(bannerAdView)
-
         bannerAdView.delegate = self
         bannerAdView.loadAdData()
     }

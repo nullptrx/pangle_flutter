@@ -5,23 +5,25 @@ import androidx.annotation.MainThread
 import com.bytedance.sdk.openadsdk.TTAdNative
 import com.bytedance.sdk.openadsdk.TTFullScreenVideoAd
 import io.github.nullptrx.pangleflutter.PangleAdManager
+import io.github.nullptrx.pangleflutter.common.ERROR_CODE_NO_ACTIVITY
+import io.github.nullptrx.pangleflutter.common.ERROR_MSG_NO_ACTIVITY
 import io.github.nullptrx.pangleflutter.common.PangleEventStreamHandler
 import io.github.nullptrx.pangleflutter.common.PangleLoadingType
 import io.github.nullptrx.pangleflutter.common.kBlock
+import java.lang.ref.WeakReference
 
 
 class FLTFullScreenVideoAd(
   var slotId: String,
-  var target: Activity?,
-  val loadingType: PangleLoadingType,
+  target: Activity,           // WeakReference — prevents leaking the Activity while
+  val loadingType: PangleLoadingType, // the ad loads asynchronously over the network.
   var result: (Any) -> Unit = {}
 ) : TTAdNative.FullScreenVideoAdListener {
+  private val targetRef = WeakReference(target)
   private var ttVideoAd: TTFullScreenVideoAd? = null
 
   /**
    * 广告加载完成的回调，接入方可以在这个回调中进行渲染
-   *
-   * @param ad 全屏视频广告接口
    */
   @MainThread
   override fun onFullScreenVideoAdLoad(ad: TTFullScreenVideoAd?) {
@@ -32,26 +34,24 @@ class FLTFullScreenVideoAd(
         invoke(0)
       }
     } else {
-      target?.also {
-        ttVideoAd = ad
-        ttVideoAd?.setFullScreenVideoAdInteractionListener(FullScreenVideoAdInteractionImpl(result))
-        ttVideoAd?.showFullScreenVideoAd(it)
+      val activity = targetRef.get() ?: run {
+        invoke(ERROR_CODE_NO_ACTIVITY, ERROR_MSG_NO_ACTIVITY)
+        return
       }
+      ttVideoAd = ad
+      ttVideoAd?.setFullScreenVideoAdInteractionListener(FullScreenVideoAdInteractionImpl(result))
+      ttVideoAd?.showFullScreenVideoAd(activity)
     }
   }
 
   /**
    * 加载失败回调
-   *
-   * @param code
-   * @param message
    */
   @MainThread
   override fun onError(code: Int, message: String?) {
     PangleEventStreamHandler.fullscreen("error")
     invoke(code, message)
   }
-
 
   @Deprecated("已过时")
   override fun onFullScreenVideoCached() {
@@ -71,12 +71,11 @@ class FLTFullScreenVideoAd(
     result.apply {
       val args = mutableMapOf<String, Any?>()
       args["code"] = code
-      message?.also {
-        args["message"] = it
-      }
+      message?.also { args["message"] = it }
       invoke(args)
       result = kBlock
     }
+    targetRef.clear()
   }
 }
 

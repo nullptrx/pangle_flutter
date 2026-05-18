@@ -1,27 +1,31 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pangle_flutter/pangle_flutter.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('nullptrx.github.io/pangle');
-
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  setUp(() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(
-      channel,
-      (MethodCall methodCall) async {
-        return '42';
-      },
-    );
-  });
+  group('MethodChannel smoke', () {
+    const channel = MethodChannel('nullptrx.github.io/pangle');
 
-  tearDown(() {
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(channel, null);
-  });
+    setUp(() {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (MethodCall call) async {
+        return switch (call.method) {
+          'getSdkVersion' => '5.4.0.0',
+          _ => null,
+        };
+      });
+    });
 
-  test('getSdkVersion', () async {
+    tearDown(() {
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, null);
+    });
 
+    test('getSdkVersion returns a version string', () async {
+      final version = await pangle.getSdkVersion();
+      expect(version, isNotNull);
+    });
   });
 }

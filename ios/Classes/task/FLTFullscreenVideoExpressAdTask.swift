@@ -23,7 +23,8 @@ internal final class FLTFullscreenVideoExpressAdTask: FLTTaskProtocol {
     }
 
     func execute(_ loadingType: LoadingType) -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void {
-        { result in
+        { [weak self] result in
+            guard let self = self else { return }
             let delegate = FLTFullscreenVideoExpressAd(self.slotId, loadingType: loadingType, success: { [weak self] () in
                 guard let self = self else {
                     return

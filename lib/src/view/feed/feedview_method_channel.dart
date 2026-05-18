@@ -38,7 +38,7 @@ class MethodChannelFeedViewPlatform implements FeedViewPlatformController {
 
   final MethodChannel _channel;
 
-  Future<dynamic> _onMethodCall(MethodCall call) async {
+  Future<void> _onMethodCall(MethodCall call) async {
     switch (call.method) {
       case "onClick":
         _platformCallbacksHandler.onClick();
@@ -52,7 +52,11 @@ class MethodChannelFeedViewPlatform implements FeedViewPlatformController {
         _platformCallbacksHandler.onDislike(option, enforce);
         break;
       case "onRenderSuccess":
-        _platformCallbacksHandler.onRenderSuccess();
+        final width =
+            (call.arguments?['width'] as num?)?.toDouble() ?? 0.0;
+        final height =
+            (call.arguments?['height'] as num?)?.toDouble() ?? 0.0;
+        _platformCallbacksHandler.onRenderSuccess(width, height);
         break;
       case "onRenderFail":
         final int code = call.arguments['code'];

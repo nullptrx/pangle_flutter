@@ -20,12 +20,12 @@
  * SOFTWARE.
  */
 
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
 
+import '../model.dart';
+import '../pangle_plugin.dart';
 import '../util.dart';
 import 'feed/feedview_android.dart';
 import 'feed/feedview_ios.dart';
@@ -38,8 +38,9 @@ typedef FeedViewCreatedCallback = void Function(FeedViewController controller);
 
 class FeedView extends StatefulWidget {
   const FeedView({
-    Key? key,
+    super.key,
     this.id,
+    this.expressSize,
     this.onFeedViewCreated,
     this.gestureRecognizers,
     this.onClick,
@@ -47,9 +48,13 @@ class FeedView extends StatefulWidget {
     this.onDislike,
     this.onRenderSuccess,
     this.onRenderFail,
-  }) : super(key: key);
+  });
 
   final String? id;
+
+  /// 与 [loadFeedAd] 时传入的 [PangleExpressSize] 保持一致，
+  /// FeedView 会自动按此比例约束自身尺寸（height > 0 时生效）。
+  final PangleExpressSize? expressSize;
 
   /// If not null invoked once the feed view is created.
   final FeedViewCreatedCallback? onFeedViewCreated;
@@ -92,17 +97,15 @@ class FeedView extends StatefulWidget {
           break;
         default:
           throw UnsupportedError(
-              "Trying to use the default feedview implementation for $defaultTargetPlatform but there isn't a default one");
+            "Trying to use the default feedview implementation for $defaultTargetPlatform but there isn't a default one",
+          );
       }
     }
     return _platform!;
   }
 
   Map<String, dynamic> get config {
-    return <String, dynamic>{
-      'id': id,
-      'isUserInteractionEnabled': false,
-    };
+    return <String, dynamic>{'id': id, 'isUserInteractionEnabled': false};
   }
 
   @override
@@ -117,18 +120,18 @@ class FeedView extends StatefulWidget {
   /// 点击了关闭按钮（不喜欢）
   final PangleOptionCallback? onDislike;
 
-  /// 渲染广告成功
-  final VoidCallback? onRenderSuccess;
+  /// 渲染广告成功，参数为实际渲染尺寸（逻辑像素）。
+  /// 使用优选模板（expressSize.height == 0）时可据此调整外部容器。
+  final void Function(double width, double height)? onRenderSuccess;
 
   /// 渲染广告失败
   final PangleMessageCallback? onRenderFail;
 }
 
 class FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin {
-  final Completer<FeedViewController> _controller =
-      Completer<FeedViewController>();
-
   _PlatformCallbacksHandler? _platformCallbacksHandler;
+  // Actual rendered height received from onRenderSuccess when height == 0.
+  double? _autoHeight;
 
   @override
   bool get wantKeepAlive => true;
@@ -136,36 +139,57 @@ class FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return FeedView.platform.build(
+    final view = FeedView.platform.build(
       context: context,
       creationParams: widget.config,
       feedViewPlatformCallbacksHandler: _platformCallbacksHandler!,
       onFeedViewPlatformCreated: _onWebViewPlatformCreated,
       gestureRecognizers: widget.gestureRecognizers,
     );
+    final size = widget.expressSize;
+    if (size != null && size.height > 0) {
+      return AspectRatio(aspectRatio: size.width / size.height, child: view);
+    }
+    if (size != null && size.height == 0) {
+      return Center(
+        child: SizedBox(
+          width: size.width,
+          height: _autoHeight ?? 1,
+          child: view,
+        ),
+      );
+    }
+    return view;
   }
 
   @override
   void initState() {
     super.initState();
     _platformCallbacksHandler = _PlatformCallbacksHandler(widget);
+    _platformCallbacksHandler!.onSizeChanged = (w, h) {
+      if (mounted && widget.expressSize?.height == 0) {
+        setState(() => _autoHeight = h);
+      }
+    };
+  }
+
+  @override
+  void dispose() {
+    final id = widget.id;
+    if (id != null) pangle.removeFeedAd([id]);
+    super.dispose();
   }
 
   @override
   void didUpdateWidget(FeedView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _controller.future.then((FeedViewController controller) {
-      _platformCallbacksHandler!._widget = widget;
-      controller._updateWidget(widget);
-    });
+    _platformCallbacksHandler!._widget = widget;
   }
 
-  void _onWebViewPlatformCreated(
-    FeedViewPlatformController feedViewPlatform,
-  ) {
+  void _onWebViewPlatformCreated(FeedViewPlatformController feedViewPlatform) {
     final FeedViewController controller = FeedViewController._(
-        widget, feedViewPlatform, _platformCallbacksHandler);
-    _controller.complete(controller);
+      feedViewPlatform,
+    );
     if (widget.onFeedViewCreated != null) {
       widget.onFeedViewCreated!(controller);
     }
@@ -177,33 +201,14 @@ class FeedViewState extends State<FeedView> with AutomaticKeepAliveClientMixin {
 /// A [FeedViewController] instance can be obtained by setting the [FeedView.onFeedViewCreated]
 /// callback for a [FeedView] widget.
 class FeedViewController extends ViewController {
-  FeedViewController._(
-    this._widget,
-    this._feedViewPlatformController,
-    this._platformCallbacksHandler,
-  ) : super(_feedViewPlatformController);
-
-  // todo unused_field
-  // ignore: unused_field
-  final FeedViewPlatformController _feedViewPlatformController;
-
-  // todo unused_field
-  // ignore: unused_field
-  final _PlatformCallbacksHandler? _platformCallbacksHandler;
-
-  // todo unused_field
-  // ignore: unused_field
-  FeedView _widget;
-
-  Future<void> _updateWidget(FeedView widget) async {
-    _widget = widget;
-  }
+  FeedViewController._(FeedViewPlatformController super.controller);
 }
 
 class _PlatformCallbacksHandler implements FeedViewPlatformCallbacksHandler {
   _PlatformCallbacksHandler(this._widget);
 
   FeedView _widget;
+  void Function(double width, double height)? onSizeChanged;
 
   @override
   void onClick() {
@@ -221,8 +226,9 @@ class _PlatformCallbacksHandler implements FeedViewPlatformCallbacksHandler {
   }
 
   @override
-  void onRenderSuccess() {
-    _widget.onRenderSuccess?.call();
+  void onRenderSuccess(double width, double height) {
+    onSizeChanged?.call(width, height);
+    _widget.onRenderSuccess?.call(width, height);
   }
 
   @override

@@ -11,7 +11,7 @@ public final class PangleEventStreamHandler: NSObject, FlutterStreamHandler {
     private static var eventSinks: [PangleEventType: FlutterEventSink] = [:]
 
     public static func interstitial(_ event: String = "unknown") {
-        guard let eventSink = eventSinks[.fullscreen]  else { return }
+        guard let eventSink = eventSinks[.interstitial]  else { return }
         eventSink(event)
     }
 

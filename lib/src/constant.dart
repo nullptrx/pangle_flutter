@@ -79,7 +79,7 @@ enum PangleLoadingType {
 enum PangleOrientation {
   // ignore: unused_field
   _,
-  veritical,
+  vertical,
   horizontal,
 }
 

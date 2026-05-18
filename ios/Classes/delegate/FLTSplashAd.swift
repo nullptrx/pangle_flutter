@@ -9,16 +9,18 @@ import BUAdSDK
 import Foundation
 
 internal final class FLTSplashAd: NSObject, BUSplashAdDelegate {
-    
+
     typealias Success = (String, Int) -> Void
     typealias Fail = (Error?) -> Void
-    
+
     let success: Success?
     let fail: Fail?
-    
-    init(success: Success?, fail: Fail?) {
+    weak var rootViewController: UIViewController?
+
+    init(success: Success?, fail: Fail?, rootViewController: UIViewController?) {
         self.success = success
         self.fail = fail
+        self.rootViewController = rootViewController
     }
     
     func splashAdDidClick(_ splashAd: BUSplashAd) {
@@ -33,7 +35,12 @@ internal final class FLTSplashAd: NSObject, BUSplashAdDelegate {
         splashAd.removeSplashView()
     }
     
-    func splashAdLoadSuccess(_ splashAd: BUSplashAd) {}
+    func splashAdLoadSuccess(_ splashAd: BUSplashAd) {
+        // 新版 SDK 7.x 要求在加载成功后再调用 showSplashView
+        if let vc = rootViewController {
+            splashAd.showSplashView(inRootViewController: vc)
+        }
+    }
     
     func splashAdLoadFail(_ splashAd: BUSplashAd, error: BUAdError?) {
         self.fail?(error)
@@ -61,7 +68,7 @@ internal final class FLTSplashAd: NSObject, BUSplashAdDelegate {
         
     }
     
-    func splashVideoAdDidPlayFinish(_ splashAd: BUSplashAd, didFailWithError error: Error) {
+    func splashVideoAdDidPlayFinish(_ splashAd: BUSplashAd, didFailWithError error: Error?) {
         
     }
 }

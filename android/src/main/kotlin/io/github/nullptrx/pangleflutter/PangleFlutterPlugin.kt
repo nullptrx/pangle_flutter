@@ -20,17 +20,18 @@ import io.github.nullptrx.pangleflutter.common.TTSizeF
 import io.github.nullptrx.pangleflutter.delegate.FLTSplashAd
 import io.github.nullptrx.pangleflutter.util.asMap
 import io.github.nullptrx.pangleflutter.view.BannerViewFactory
+import io.github.nullptrx.pangleflutter.view.DrawViewFactory
+import io.github.nullptrx.pangleflutter.view.EcMallViewFactory
 import io.github.nullptrx.pangleflutter.view.FeedViewFactory
-import io.github.nullptrx.pangleflutter.view.NativeBannerViewFactory
 import io.github.nullptrx.pangleflutter.view.SplashViewFactory
 
 /** PangleFlutterPlugin */
 open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
   companion object {
-    val kDefaultBannerAdCount = 3
-    val kDefaultFeedAdCount = 3
-    val kMethodChannelName = "nullptrx.github.io/pangle"
-    val kEventChannelName = "nullptrx.github.io/pangle_event"
+    const val kDefaultBannerAdCount = 3
+    const val kDefaultFeedAdCount = 3
+    const val kMethodChannelName = "nullptrx.github.io/pangle"
+    const val kEventChannelName = "nullptrx.github.io/pangle_event"
 
   }
 
@@ -40,32 +41,38 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
   private lateinit var context: Context
   private lateinit var bannerViewFactory: BannerViewFactory
   private lateinit var feedViewFactory: FeedViewFactory
-  private lateinit var nativeBannerViewFactory: NativeBannerViewFactory
+  private lateinit var drawViewFactory: DrawViewFactory
+  private lateinit var ecMallViewFactory: EcMallViewFactory
   private val handler = Handler(Looper.getMainLooper())
 
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activity = binding.activity
     feedViewFactory.attachActivity(binding.activity)
+    drawViewFactory.attachActivity(binding.activity)
     bannerViewFactory.attachActivity(binding.activity)
+    ecMallViewFactory.attachActivity(binding.activity)
   }
 
   override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
     activity = binding.activity
     feedViewFactory.attachActivity(binding.activity)
+    drawViewFactory.attachActivity(binding.activity)
     bannerViewFactory.attachActivity(binding.activity)
-    nativeBannerViewFactory.attachActivity(binding.activity)
+    ecMallViewFactory.attachActivity(binding.activity)
   }
 
   override fun onDetachedFromActivityForConfigChanges() {
     feedViewFactory.detachActivity()
+    drawViewFactory.detachActivity()
     bannerViewFactory.detachActivity()
-    nativeBannerViewFactory.detachActivity()
+    ecMallViewFactory.detachActivity()
   }
 
   override fun onDetachedFromActivity() {
     feedViewFactory.detachActivity()
+    drawViewFactory.detachActivity()
     bannerViewFactory.detachActivity()
-    nativeBannerViewFactory.detachActivity()
+    ecMallViewFactory.detachActivity()
   }
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -87,14 +94,19 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
       "nullptrx.github.io/pangle_feedview", feedViewFactory
     )
 
+    drawViewFactory = DrawViewFactory(binding.binaryMessenger)
+    binding.platformViewRegistry.registerViewFactory(
+      "nullptrx.github.io/pangle_drawview", drawViewFactory
+    )
+
     val splashViewFactory = SplashViewFactory(binding.binaryMessenger)
     binding.platformViewRegistry.registerViewFactory(
       "nullptrx.github.io/pangle_splashview", splashViewFactory
     )
 
-    nativeBannerViewFactory = NativeBannerViewFactory(binding.binaryMessenger)
+    ecMallViewFactory = EcMallViewFactory(binding.binaryMessenger)
     binding.platformViewRegistry.registerViewFactory(
-      "nullptrx.github.io/pangle_nativebannerview", nativeBannerViewFactory
+      "nullptrx.github.io/pangle_ecmallview", ecMallViewFactory
     )
   }
 
@@ -119,7 +131,7 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
       }
 
       "init" -> {
-        pangle.initialize(activity, call.arguments.asMap() ?: mapOf()) {
+        pangle.initialize(context, call.arguments.asMap() ?: mapOf()) {
           handler.post {
             result.success(it)
           }
@@ -132,23 +144,29 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
 
       "loadSplashAd" -> {
         val slotId =
-          call.argument<String>("slotId")!! // val isExpress = call.argument<Boolean>("isExpress") ?: false
+          call.argument<String>("slotId")!!
         val tolerateTimeout = call.argument<Double>("tolerateTimeout")
         val hideSkipButton = call.argument<Boolean>("hideSkipButton")
         val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+        val isHalfSize = call.argument<Boolean>("isHalfSize") ?: false
         val imgSize = TTSize(1080, 1920)
         val adSlot = PangleAdSlotManager.getSplashAdSlot(
           slotId, imgSize, isSupportDeepLink
         )
-        pangle.loadSplashAd(adSlot, FLTSplashAd(hideSkipButton, activity) {
-          result.success(it)
-        }, tolerateTimeout)
+        pangle.loadSplashAd(
+          adSlot,
+          FLTSplashAd(hideSkipButton, isHalfSize, activity) { result.success(it) },
+          tolerateTimeout,
+          onNotInitialized = {
+            result.success(mapOf("code" to -1, "message" to "Pangle SDK not initialized", "type" to 0))
+          }
+        )
       }
 
       "loadRewardedVideoAd" -> {
 
         val loadingTypeIndex = call.argument<Int>("loadingType") ?: 0
-        val loadingType = PangleLoadingType.values()[loadingTypeIndex]
+        val loadingType = PangleLoadingType.entries.getOrNull(loadingTypeIndex) ?: PangleLoadingType.normal
 
         if (PangleLoadingType.preload == loadingType || PangleLoadingType.normal == loadingType) {
           val slotId = call.argument<String>("slotId")!!
@@ -168,6 +186,40 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
 
       }
 
+      // ── 新 API：展示已缓存的激励视频广告 ──────────────────────────────────
+      "showRewardedVideoAd" -> {
+        val slotId = call.argument<String>("slotId")!!
+        val shown = pangle.showRewardedVideoAd(slotId, activity) {
+          result.success(it)
+        }
+        if (!shown) {
+          result.success(mapOf("code" to -1, "message" to "no cached ad"))
+        }
+      }
+
+      // ── 新 API：查询激励视频缓存是否可用 ──────────────────────────────────
+      "hasRewardedVideoAd" -> {
+        val slotId = call.argument<String>("slotId")!!
+        result.success(pangle.hasRewardedVideoAd(slotId))
+      }
+
+      // ── 新 API：展示已缓存的全屏视频广告 ──────────────────────────────────
+      "showFullscreenVideoAd" -> {
+        val slotId = call.argument<String>("slotId")!!
+        val shown = pangle.showFullScreenVideoAd(slotId, activity) {
+          result.success(it)
+        }
+        if (!shown) {
+          result.success(mapOf("code" to -1, "message" to "no cached ad"))
+        }
+      }
+
+      // ── 新 API：查询全屏视频缓存是否可用 ──────────────────────────────────
+      "hasFullscreenVideoAd" -> {
+        val slotId = call.argument<String>("slotId")!!
+        result.success(pangle.hasFullscreenVideoAd(slotId))
+      }
+
       "loadBannerAd" -> {
         val slotId = call.argument<String>("slotId")!!
         val count = call.argument<Int>("count") ?: kDefaultBannerAdCount
@@ -177,8 +229,11 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
         val w: Float = expressArgs.getValue("width").toFloat()
         val h: Float = expressArgs.getValue("height").toFloat()
         val expressSize = TTSizeF(w, h)
+        val imgSize = call.argument<Map<String, Double>>("imgSize")?.let {
+          TTSize(it.getValue("width").toInt(), it.getValue("height").toInt())
+        }
         val adSlot = PangleAdSlotManager.getBannerAdSlot(
-          slotId, expressSize, count, isSupportDeepLink
+          slotId, expressSize, count, isSupportDeepLink, imgSize
         )
         pangle.loadBanner2ExpressAd(adSlot) {
           result.success(it)
@@ -193,8 +248,11 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
         val w: Float = expressArgs.getValue("width").toFloat()
         val h: Float = expressArgs.getValue("height").toFloat()
         val expressSize = TTSizeF(w, h)
+        val imgSize = call.argument<Map<String, Double>>("imgSize")?.let {
+          TTSize(it.getValue("width").toInt(), it.getValue("height").toInt())
+        }
         val adSlot = PangleAdSlotManager.getFeedAdSlot(
-          slotId, expressSize, count, isSupportDeepLink
+          slotId, expressSize, count, isSupportDeepLink, imgSize
         )
         pangle.loadFeedExpressAd(adSlot) {
           result.success(it)
@@ -214,27 +272,66 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
         result.success(count)
       }
 
+      "loadDrawAd" -> {
+        val slotId = call.argument<String>("slotId")!!
+        val count = call.argument<Int>("adCount") ?: 2
+        val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+        val expressSize = call.argument<Map<String, Double>>("expressSize")?.let {
+          TTSizeF(it.getValue("width").toFloat(), it.getValue("height").toFloat())
+        }
+        val adSlot = PangleAdSlotManager.getDrawAdSlot(slotId, expressSize, count, isSupportDeepLink)
+        pangle.loadDrawExpressAd(adSlot) {
+          result.success(it)
+        }
+      }
+
+      "removeDrawAd" -> {
+        val drawIds = call.arguments<List<String>>()!!
+        var count = 0
+        for (drawId in drawIds) {
+          val success = PangleAdManager.shared.removeExpressAd(drawId)
+          if (success) {
+            count++
+          }
+        }
+        result.success(count)
+      }
+
+      "loadStreamAd" -> {
+        val slotId = call.argument<String>("slotId")!!
+        val count = call.argument<Int>("adCount") ?: 1
+        val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+        val imgSize = call.argument<Map<String, Double>>("imgSize")?.let {
+          TTSize(it.getValue("width").toInt(), it.getValue("height").toInt())
+        }
+        val adSlot = PangleAdSlotManager.getStreamAdSlot(slotId, imgSize, count, isSupportDeepLink)
+        pangle.loadStreamAd(adSlot) {
+          result.success(it)
+        }
+      }
+
       "loadInterstitialAd" -> {
-        // val slotId = call.argument<String>("slotId")!!
-        // val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
-        // val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
-        // val w: Float = expressArgs.getValue("width").toFloat()
-        // val h: Float = expressArgs.getValue("height").toFloat()
-        // val expressSize = TTSizeF(w, h)
-        //
-        // val adSlot = PangleAdSlotManager.getInterstitialAdSlot(
-        //   slotId, expressSize, isSupportDeepLink
-        // )
-        // pangle.loadInteractionAd(adSlot, FLTInterstitialAd(activity) {
-        //   result.success(it)
-        // })
-        result.notImplemented()
+        val slotId = call.argument<String>("slotId")!!
+        val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
+        val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
+        val w: Float = expressArgs.getValue("width").toFloat()
+        val h: Float = expressArgs.getValue("height").toFloat()
+        val expressSize = TTSizeF(w, h)
+        val imgSize = call.argument<Map<String, Double>>("imgSize")?.let {
+          TTSize(it.getValue("width").toInt(), it.getValue("height").toInt())
+        }
+        val adSlot = PangleAdSlotManager.getInterstitialAdSlot(
+          slotId, expressSize, isSupportDeepLink, imgSize
+        )
+        pangle.loadNativeExpressAd(adSlot) {
+          result.success(it)
+        }
       }
 
       "loadFullscreenVideoAd" -> {
 
         val loadingTypeIndex = call.argument<Int>("loadingType") ?: 0
-        val loadingType = PangleLoadingType.values()[loadingTypeIndex]
+        val loadingType = PangleLoadingType.entries.getOrNull(loadingTypeIndex) ?: PangleLoadingType.normal
 
         if (PangleLoadingType.preload == loadingType || PangleLoadingType.normal == loadingType) {
           val slotId = call.argument<String>("slotId")!!
@@ -304,8 +401,8 @@ open class PangleFlutterPlugin : FlutterPlugin, MethodCallHandler, ActivityAware
     call: MethodCall, loadingType: PangleLoadingType, result: MethodChannel.Result? = null
   ) {
     val slotId = call.argument<String>("slotId")!!
-    val orientationIndex = call.argument<Int>("orientation") ?: PangleOrientation.veritical.ordinal
-    val orientation = PangleOrientation.values()[orientationIndex]
+    val orientationIndex = call.argument<Int>("orientation") ?: PangleOrientation.vertical.ordinal
+    val orientation = PangleOrientation.entries.getOrNull(orientationIndex) ?: PangleOrientation.vertical
     val isSupportDeepLink = call.argument<Boolean>("isSupportDeepLink") ?: true
     val expressArgs = call.argument<Map<String, Double>>("expressSize") ?: mapOf()
     val w: Float = expressArgs.getValue("width").toFloat()

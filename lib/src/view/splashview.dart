@@ -20,8 +20,6 @@
  * SOFTWARE.
  */
 
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/widgets.dart';
@@ -43,7 +41,7 @@ typedef SplashViewCreatedCallback = void Function(
 
 class SplashView extends StatefulWidget {
   const SplashView({
-    Key? key,
+    super.key,
     this.iOS,
     this.android,
     this.onSplashViewCreated,
@@ -53,7 +51,8 @@ class SplashView extends StatefulWidget {
     this.onClick,
     this.onClose,
     this.onError,
-  }) : super(key: key);
+    this.onRenderFail,
+  });
 
   final IOSSplashConfig? iOS;
   final AndroidSplashConfig? android;
@@ -138,13 +137,13 @@ class SplashView extends StatefulWidget {
 
   /// 获取广告失败
   final PangleMessageCallback? onError;
+
+  /// 广告渲染失败
+  final PangleMessageCallback? onRenderFail;
 }
 
 class SplashViewState extends State<SplashView>
     with AutomaticKeepAliveClientMixin {
-  final Completer<SplashViewController> _controller =
-      Completer<SplashViewController>();
-
   _PlatformCallbacksHandler? _platformCallbacksHandler;
 
   @override
@@ -171,18 +170,14 @@ class SplashViewState extends State<SplashView>
   @override
   void didUpdateWidget(SplashView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _controller.future.then((SplashViewController controller) {
-      _platformCallbacksHandler!._widget = widget;
-      controller._updateWidget(widget);
-    });
+    _platformCallbacksHandler!._widget = widget;
   }
 
   void _onWebViewPlatformCreated(
     SplashViewPlatformController splashViewPlatform,
   ) {
-    final SplashViewController controller = SplashViewController._(
-        widget, splashViewPlatform, _platformCallbacksHandler);
-    _controller.complete(controller);
+    final SplashViewController controller =
+        SplashViewController._(splashViewPlatform);
     if (widget.onSplashViewCreated != null) {
       widget.onSplashViewCreated!(controller);
     }
@@ -194,27 +189,7 @@ class SplashViewState extends State<SplashView>
 /// A [SplashViewController] instance can be obtained by setting the [SplashView.onSplashViewCreated]
 /// callback for a [SplashView] widget.
 class SplashViewController extends ViewController {
-  SplashViewController._(
-    this._widget,
-    this._splashViewPlatformController,
-    this._platformCallbacksHandler,
-  ) : super(_splashViewPlatformController);
-
-  // todo unused_field
-  // ignore: unused_field
-  final SplashViewPlatformController _splashViewPlatformController;
-
-  // todo unused_field
-  // ignore: unused_field
-  final _PlatformCallbacksHandler? _platformCallbacksHandler;
-
-  // todo unused_field
-  // ignore: unused_field
-  SplashView _widget;
-
-  Future<void> _updateWidget(SplashView widget) async {
-    _widget = widget;
-  }
+  SplashViewController._(SplashViewPlatformController super.controller);
 }
 
 class _PlatformCallbacksHandler implements SplashViewPlatformCallbacksHandler {
@@ -245,5 +220,10 @@ class _PlatformCallbacksHandler implements SplashViewPlatformCallbacksHandler {
   @override
   void onError(int code, String message) {
     _widget.onError?.call(code, message);
+  }
+
+  @override
+  void onRenderFail(int code, String message) {
+    _widget.onRenderFail?.call(code, message);
   }
 }

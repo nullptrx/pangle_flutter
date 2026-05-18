@@ -84,10 +84,11 @@ class PangleLocation {
   }
 }
 
-// PlatformDispatcher.instance.views.first.physicalSize
-// WidgetsBinding.instance.platformDispatcher.views.first.physicalSize
+// 顶层 final 在 Dart 中本身即为懒加载，首次访问时才求值，
+// 确保在 Flutter 引擎完全初始化后才读取屏幕尺寸。
 final _kPhysicalSize = PlatformDispatcher.instance.views.first.physicalSize;
-final _kDevicePixelRatio = _kPhysicalSize.aspectRatio;
+final _kDevicePixelRatio =
+    PlatformDispatcher.instance.views.first.devicePixelRatio;
 
 final kPangleScreenWidth = _kPhysicalSize.width / _kDevicePixelRatio;
 final kPangleScreenHeight = _kPhysicalSize.height / _kDevicePixelRatio;
@@ -100,14 +101,16 @@ class PangleExpressSize {
   /// 模板渲染时必填
   ///
   /// [width] 宽度，必选, 如果width超过屏幕，默认使用屏幕宽
-  /// [height] 高度，必选
+  /// [height] 高度，0 表示自适应高度
   PangleExpressSize({required double width, required double height})
       : assert(width > 0),
-        assert(height > 0),
+        assert(height >= 0),
         width = width > kPangleScreenWidth ? kPangleScreenWidth : width,
-        height = height > kPangleScreenWidth / width * height
-            ? kPangleScreenWidth / width * height
-            : height;
+        height = height == 0
+            ? 0
+            : height > kPangleScreenWidth / width * height
+                ? kPangleScreenWidth / width * height
+                : height;
 
   /// 模板渲染时必填
   ///
@@ -218,11 +221,11 @@ class PangleResult {
   ///
   factory PangleResult.fromJson(Map<String, dynamic>? json) {
     if (json == null) {
-      return const PangleResult(code: -1, message: 'unknown');
+      return const PangleResult(code: -1);
     }
     return PangleResult(
       code: json['code'],
-      message: json['message'] ?? '',
+      message: json['message'],
     );
   }
 
@@ -245,10 +248,10 @@ class PangleVerifyResult extends PangleResult {
   final bool? verify;
 
   const PangleVerifyResult({
-    required int code,
-    required String message,
+    required int super.code,
+    super.message,
     this.verify,
-  }) : super(code: code, message: message);
+  });
 
   /// 是否验证成功
   bool get isVerify => verify == true;
@@ -257,7 +260,7 @@ class PangleVerifyResult extends PangleResult {
   ///
   factory PangleVerifyResult.fromJson(Map<String, dynamic>? json) {
     if (json == null) {
-      return const PangleVerifyResult(code: -1, message: 'unknown');
+      return const PangleVerifyResult(code: -1);
     }
     return PangleVerifyResult(
       code: json['code'],
@@ -274,6 +277,74 @@ class PangleVerifyResult extends PangleResult {
     }
     return data;
   }
+}
+
+/// Draw 竖版视频广告响应（同 PangleAd 结构，type-safe 隔离）
+class PangleDrawAd {
+  final int code;
+  final String? message;
+  final int count;
+  final List<String> data;
+
+  bool get ok => code == 0;
+
+  PangleDrawAd.empty()
+      : code = -1,
+        message = '',
+        count = 0,
+        data = [];
+
+  PangleDrawAd.fromJsonMap(Map<dynamic, dynamic> map)
+      : code = map['code'],
+        message = map['message'],
+        count = map['count'],
+        data = map['data'] == null ? [] : List<String>.from(map['data']);
+}
+
+/// Stream 自定义播放广告素材
+class StreamAdItem {
+  final String id;
+  final int imageMode;
+  final String? videoUrl;
+  final double videoDuration;
+  final String? imageUrl;
+  final String? title;
+  final String? description;
+
+  StreamAdItem.fromJsonMap(Map<dynamic, dynamic> map)
+      : id = map['id'] ?? '',
+        imageMode = map['imageMode'] ?? 0,
+        videoUrl = map['videoUrl'],
+        videoDuration = (map['videoDuration'] ?? 0).toDouble(),
+        imageUrl = map['imageUrl'],
+        title = map['title'],
+        description = map['description'];
+}
+
+/// Stream 广告响应
+class PangleStreamAd {
+  final int code;
+  final String? message;
+  final int count;
+  final List<StreamAdItem> data;
+
+  bool get ok => code == 0;
+
+  PangleStreamAd.empty()
+      : code = -1,
+        message = '',
+        count = 0,
+        data = [];
+
+  PangleStreamAd.fromJsonMap(Map<dynamic, dynamic> map)
+      : code = map['code'],
+        message = map['message'],
+        count = map['count'],
+        data = map['data'] == null
+            ? []
+            : List<Map<dynamic, dynamic>>.from(map['data'])
+                .map(StreamAdItem.fromJsonMap)
+                .toList();
 }
 
 class PangleSplashResult extends PangleResult {
@@ -299,7 +370,8 @@ class PangleSplashResult extends PangleResult {
     return PangleSplashResult(
       code: json['code'],
       message: json['message'],
-      type: PangleSplashCloseType.values[json['type'] ?? 0],
+      type: PangleSplashCloseType.values.elementAtOrNull(json['type'] ?? 0) ??
+          PangleSplashCloseType.unknown,
     );
   }
 
