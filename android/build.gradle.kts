@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "io.github.nullptrx.pangleflutter"
-version = "2.0.1"
+version = "3.0.0-beta.1"
 
 rootProject.allprojects {
   repositories {
