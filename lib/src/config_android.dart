@@ -18,6 +18,7 @@ class AndroidConfig implements Config {
   final bool? isCanUseWifiState;
   final bool? isCanUseWriteExternal;
   final String? devOaid;
+  final bool? useMediation;
 
   const AndroidConfig({
     required this.appId,
@@ -35,6 +36,7 @@ class AndroidConfig implements Config {
     this.isCanUseWifiState,
     this.isCanUseWriteExternal,
     this.devOaid,
+    this.useMediation,
   });
 
   @override
@@ -55,6 +57,7 @@ class AndroidConfig implements Config {
       'isCanUseWifiState': isCanUseWifiState,
       'isCanUseWriteExternal': isCanUseWriteExternal,
       'devOaid': devOaid,
+      'useMediation': useMediation,
     };
   }
 }

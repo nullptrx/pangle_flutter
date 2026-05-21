@@ -51,4 +51,6 @@ flutter {
 
 dependencies {
     implementation("androidx.core:core-ktx:1.10.1")
+    implementation("androidx.appcompat:appcompat:[1.7,1.8)")
+    debugImplementation("com.pangle_beta.cn:mediation-test-tools:[7.0,8.0)")
 }

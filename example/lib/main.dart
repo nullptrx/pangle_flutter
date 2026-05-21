@@ -20,32 +20,14 @@
  * SOFTWARE.
  */
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:pangle_flutter/pangle_flutter.dart';
 import 'package:pangle_flutter_example/common/version.dart';
 
 import 'common/common.dart';
-import 'page/constant.dart';
-import 'page/home_page.dart';
+import 'page/setup_page.dart';
 
-/// 使用本插件需要知道的几个类，基本覆盖了开始使用时需要用到的入口类
-///
-/// [pangle] 加载广告的核心工具类
-/// [PangleHelper] 辅助加载广告使用的帮助类
-/// [PangleExpressSize] 模板类广告请求宽高设置
-///
-/// [PangleResult] 普通加载广告返回的结果
-///
-/// [SplashView] 开屏广告Widget
-///
-/// [PangleAd] 信息流加载获得的数据源
-/// [FeedView] 信息流广告Widget
-///
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initPangle();
   await initVersion();
   runApp(const PangleApp());
 }
@@ -57,28 +39,8 @@ class PangleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      ///
-      home: const HomePage(),
+      home: const SetupPage(),
       theme: kThemeData,
     );
   }
-}
-
-/// 初始化广告sdk
-///
-/// 工具类根据平台不同会有不同的配置
-/// [iOS] iOS平台配置参数
-/// [android] android平台配置参数
-Future<void> initPangle() async {
-  PangleResult ret = await pangle.init(
-    iOS: const IOSConfig(appId: kIOSAppId, logLevel: PangleLogLevel.debug),
-    android: const AndroidConfig(
-      appId: kAndroidAppId,
-      debug: true,
-      allowShowNotify: true,
-      useTextureView: true,
-      directDownloadNetworkType: [AndroidDirectDownloadNetworkType.k2G],
-    ),
-  );
-  debugPrint(ret.toString());
 }

@@ -106,7 +106,7 @@ dependencies:
 
 See [SETUP.md](SETUP.md) for Android manifest changes and iOS Info.plist / CocoaPods configuration.
 
-**iOS note:** This plugin uses the `Ads-CN` pod by default. If your app targets Chinese traffic no extra configuration is needed.
+**iOS note:** This plugin depends on `Ads-CN-Beta/BUAdSDK` and `Ads-CN-Beta/CSJMediation`. These are the beta/mediation variants of the Pangle iOS SDK.
 
 **Pure Objective-C projects (iOS):** Create an empty Swift file in your project and select *Create Bridging Header* when prompted. This is required for Swift-based plugins to work.
 
@@ -127,6 +127,12 @@ WidgetsFlutterBinding.ensureInitialized();
 await pangle.init(
   iOS: IOSConfig(appId: kAppId),
   android: AndroidConfig(appId: kAppId),
+);
+
+// To enable GroMore mediation:
+await pangle.init(
+  iOS: IOSConfig(appId: kAppId, useMediation: true),
+  android: AndroidConfig(appId: kAppId, useMediation: true),
 );
 ```
 

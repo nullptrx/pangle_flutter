@@ -106,7 +106,7 @@ dependencies:
 
 Android Manifest 修改及 iOS Info.plist / CocoaPods 配置请参见 [SETUP.md](SETUP.md)。
 
-**iOS 说明：** 本插件默认依赖 `Ads-CN` pod，面向国内流量无需额外配置。
+**iOS 说明：** 本插件依赖 `Ads-CN-Beta/BUAdSDK` 和 `Ads-CN-Beta/CSJMediation`，即穿山甲 iOS SDK 的 Beta/聚合版本。
 
 **纯 OC 项目（iOS）：** 在项目中创建任意一个 Swift 文件，根据 Xcode 提示选择 *Create Bridging Header*，否则 Swift 插件无法正常工作。
 
@@ -127,6 +127,12 @@ WidgetsFlutterBinding.ensureInitialized();
 await pangle.init(
   iOS: IOSConfig(appId: kAppId),
   android: AndroidConfig(appId: kAppId),
+);
+
+// 启用 GroMore 聚合：
+await pangle.init(
+  iOS: IOSConfig(appId: kAppId, useMediation: true),
+  android: AndroidConfig(appId: kAppId, useMediation: true),
 );
 ```
 

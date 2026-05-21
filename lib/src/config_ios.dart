@@ -6,11 +6,13 @@ class IOSConfig implements Config {
   final String appId;
   final PangleLogLevel? logLevel;
   final String? idfa;
+  final bool? useMediation;
 
   const IOSConfig({
     required this.appId,
     this.logLevel,
     this.idfa,
+    this.useMediation,
   });
 
   @override
@@ -19,6 +21,7 @@ class IOSConfig implements Config {
       'appId': appId,
       'logLevel': logLevel?.index,
       'idfa': idfa,
+      'useMediation': useMediation,
     };
   }
 }

@@ -97,6 +97,9 @@ public final class PangleAdManager: NSObject {
         }
 
         config.appLogoImage = UIImage(named: "AppIcon")
+        if let useMediation = args["useMediation"] as? Bool {
+            config.useMediation = useMediation
+        }
 
         BUAdSDKManager.start(asyncCompletionHandler: { success, error in
             DispatchQueue.main.async {

@@ -244,6 +244,7 @@ class PangleAdManager {
     }
 
     val appId: String = args["appId"] as String
+    val useMediation: Boolean? = args["useMediation"] as Boolean?
     val debug: Boolean? = args["debug"] as Boolean?
     val allowShowNotify: Boolean? = args["allowShowNotify"] as Boolean?
     val supportMultiProcess: Boolean? = args["supportMultiProcess"] as Boolean?
@@ -305,6 +306,10 @@ class PangleAdManager {
 
       paid?.also {
         paid(it)
+      }
+
+      useMediation?.also {
+        useMediation(it)
       }
 
       //      httpStack(OKHttpStack())

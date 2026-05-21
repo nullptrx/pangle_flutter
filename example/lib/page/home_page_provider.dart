@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pangle_flutter/pangle_flutter.dart';
 
 import '../common/ext.dart';
@@ -15,16 +17,23 @@ import 'waterfall/waterfall_page.dart';
 
 mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
   String? _sdkVersion;
+  PangleTheme _themeStatus = PangleTheme.light;
 
   @override
   void initState() {
     super.initState();
     _loadSdkVersion();
+    _loadThemeStatus();
   }
 
   @override
   Widget build(BuildContext context) {
     final menuItems = <_MenuItem>[
+      _MenuItem(
+        title: 'SDK 主题',
+        subtitle: _themeStatus == PangleTheme.dark ? '当前：夜间模式 Dark' : '当前：日间模式 Light',
+        onTap: _showThemePicker,
+      ),
       _MenuItem(title: '信息流广告', subtitle: 'Feed Ads', page: const FeedListPage()),
       _MenuItem(title: 'Draw 竖版视频', subtitle: 'Draw Video Ads', page: const DrawListPage()),
       _MenuItem(title: 'Banner 广告', subtitle: 'Banner Ads', page: const BannerListPage()),
@@ -39,6 +48,12 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
       appBar: AppBar(
         title: const Text('Pangle Flutter Demo'),
         actions: [
+          if (kDebugMode)
+            IconButton(
+              icon: const Icon(Icons.bug_report),
+              tooltip: '测试工具',
+              onPressed: _showTestSuite,
+            ),
           IconButton(
             icon: const Icon(Icons.security),
             tooltip: '请求权限',
@@ -69,7 +84,7 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
                   title: Text(item.title),
                   subtitle: Text(item.subtitle),
                   trailing: const Icon(Icons.navigate_next),
-                  onTap: () => context.navigateTo(item.page),
+                  onTap: item.onTap ?? () => context.navigateTo(item.page!),
                 );
               },
             ),
@@ -77,6 +92,47 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
         ],
       ),
     );
+  }
+
+  static const _testToolsChannel = MethodChannel('pangle_test_tools');
+
+  Future<void> _showTestSuite() async {
+    try {
+      await _testToolsChannel.invokeMethod('showTestSuite');
+    } catch (e) {
+      debugPrint('showTestSuite error: $e');
+    }
+  }
+
+  Future<void> _loadThemeStatus() async {
+    try {
+      final status = await pangle.getThemeStatus();
+      if (mounted) setState(() => _themeStatus = status);
+    } catch (_) {}
+  }
+
+  Future<void> _showThemePicker() async {
+    final picked = await showDialog<PangleTheme>(
+      context: context,
+      builder: (ctx) => SimpleDialog(
+        title: const Text('选择 SDK 主题'),
+        children: [
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(ctx, PangleTheme.light),
+            child: const Text('日间模式 Light'),
+          ),
+          SimpleDialogOption(
+            onPressed: () => Navigator.pop(ctx, PangleTheme.dark),
+            child: const Text('夜间模式 Dark'),
+          ),
+        ],
+      ),
+    );
+    if (picked == null) return;
+    try {
+      final result = await pangle.setThemeStatus(picked);
+      if (mounted) setState(() => _themeStatus = result);
+    } catch (_) {}
   }
 
   Future<void> _loadSdkVersion() async {
@@ -109,7 +165,9 @@ mixin HomePageProviderStateMixin<T extends StatefulWidget> on State<T> {
 class _MenuItem {
   final String title;
   final String subtitle;
-  final Widget page;
+  final Widget? page;
+  final VoidCallback? onTap;
 
-  const _MenuItem({required this.title, required this.subtitle, required this.page});
+  const _MenuItem({required this.title, required this.subtitle, this.page, this.onTap})
+      : assert(page != null || onTap != null, '_MenuItem requires either page or onTap');
 }

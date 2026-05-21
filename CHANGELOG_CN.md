@@ -2,6 +2,32 @@
 
 ---
 
+## 3.0.1
+
+### 新功能
+
+- **聚合（Mediation）支持**：`IOSConfig` 和 `AndroidConfig` 均新增 `useMediation` 参数。设为 `true` 可启用穿山甲 GroMore 聚合功能。
+
+```dart
+await pangle.init(
+  iOS: const IOSConfig(appId: kIOSAppId, useMediation: true),
+  android: const AndroidConfig(appId: kAndroidAppId, useMediation: true),
+);
+```
+
+### SDK 依赖更新
+
+- **iOS**：从 `Ads-CN ~> 7.0` 切换为 `Ads-CN-Beta/BUAdSDK ~> 7.0` + `Ads-CN-Beta/CSJMediation ~> 7.0`
+- **Android**：从 `com.pangle.cn:ads-sdk-pro` 切换为 `com.pangle_beta.cn:mediation-sdk`
+
+### Example 示例工程
+
+- **测量测试工具**：iOS 和 Android 均接入 `BUAdTestMeasurementManager`，Debug 包点击 🐛 按钮可唤起穿山甲测试页面。
+- **主题切换**：首页第一项新增 SDK 主题切换（日间 / 夜间）入口。
+- **初始化页面**：SDK 初始化逻辑迁移至独立的 `SetupPage`，进入主菜单前完成初始化。
+
+---
+
 ## 3.0.0
 
 ### 新功能

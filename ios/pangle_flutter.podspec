@@ -20,15 +20,8 @@ Flutter plugin for Pangle Ad SDK.
   s.static_framework = true
 
   # https://cocoapods.org/
-  s.ios.dependency 'Ads-CN', '~> 7.0'
-
-  #s.default_subspec   = 'cn'
-  #s.subspec 'cn' do |ss|
-  #  ss.ios.dependency 'Ads-CN', '~> 7.4'
-  #end
-  #s.subspec 'global' do |ss|
-  #  ss.ios.dependency 'Ads-Global', '~> 7.4'
-  #end
+  s.ios.dependency 'Ads-CN-Beta/BUAdSDK', '~> 7.0'
+  s.ios.dependency 'Ads-CN-Beta/CSJMediation', '~> 7.0'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }

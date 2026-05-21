@@ -2,6 +2,32 @@ English | [中文](CHANGELOG_CN.md)
 
 ---
 
+## 3.0.1
+
+### New Features
+
+- **Mediation support** (`useMediation`): added `useMediation` parameter to both `IOSConfig` and `AndroidConfig`. Set to `true` to enable Pangle's GroMore mediation layer.
+
+```dart
+await pangle.init(
+  iOS: const IOSConfig(appId: kIOSAppId, useMediation: true),
+  android: const AndroidConfig(appId: kAndroidAppId, useMediation: true),
+);
+```
+
+### SDK Dependency Updates
+
+- **iOS**: switched from `Ads-CN ~> 7.0` to `Ads-CN-Beta/BUAdSDK ~> 7.0` + `Ads-CN-Beta/CSJMediation ~> 7.0`
+- **Android**: switched from `com.pangle.cn:ads-sdk-pro` to `com.pangle_beta.cn:mediation-sdk`
+
+### Example App
+
+- **Test Measurement Suite**: integrated `BUAdTestMeasurementManager` on both iOS and Android. Tap the 🐛 button (debug builds only) to launch the Pangle test panel.
+- **Theme picker**: added SDK theme switcher (light / dark) as the first item on the home page.
+- **Setup page**: SDK initialisation is now done on a dedicated `SetupPage` before entering the main menu.
+
+---
+
 ## 3.0.0
 
 ### New Features

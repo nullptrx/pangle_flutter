@@ -47,6 +47,6 @@ android {
 }
 
 dependencies {
-  api("com.pangle.cn:ads-sdk-pro:[7.0,8.0)")
+  api("com.pangle_beta.cn:mediation-sdk:[7.0,8.0)")
   implementation("androidx.appcompat:appcompat:[1.7,1.8)")
 }
