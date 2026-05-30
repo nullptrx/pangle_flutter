@@ -69,15 +69,14 @@ Native platform demos:
 
 The SDK is bundled as a dependency — no manual import needed. To use a different SDK version, fork this project and update the dependency.
 
-- [[Android] 5.0+](https://www.pangle.cn/union/media/union/download/log?id=4)
-- [[iOS] 5.0+](https://www.pangle.cn/union/media/union/download/log?id=16)
+- [Gromore 7.0+](https://www.csjplatform.com/union/media/union/download/pangle)
 
 ---
 
 ## Official Documentation
 
-- [Pangle Android SDK](https://www.pangle.cn/union/media/union/download/detail?id=4&osType=android)
-- [Pangle iOS SDK](https://www.pangle.cn/union/media/union/download/detail?id=16&osType=ios)
+- [Pangle Android SDK](https://www.csjplatform.com/union/media/union/download/detail?id=195&docId=27562&osType=android)
+- [Pangle iOS SDK](https://www.csjplatform.com/union/media/union/download/detail?id=197&docId=27487&osType=ios)
 
 ---
 

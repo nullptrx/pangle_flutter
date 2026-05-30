@@ -69,15 +69,14 @@
 
 SDK 已作为内部依赖集成，无需手动引入。如需替换版本，请 fork 本项目并修改依赖声明。
 
-- [[Android] 5.0+](https://www.pangle.cn/union/media/union/download/log?id=4)
-- [[iOS] 5.0+](https://www.pangle.cn/union/media/union/download/log?id=16)
+- [Gromore 7.0+](https://www.csjplatform.com/union/media/union/download/pangle)
 
 ---
 
 ## 官方文档
 
-- [穿山甲 Android SDK 文档](https://www.pangle.cn/union/media/union/download/detail?id=4&osType=android)
-- [穿山甲 iOS SDK 文档](https://www.pangle.cn/union/media/union/download/detail?id=16&osType=ios)
+- [穿山甲 Android SDK 文档](https://www.csjplatform.com/union/media/union/download/detail?id=195&docId=27562&osType=android)
+- [穿山甲 iOS SDK 文档](https://www.csjplatform.com/union/media/union/download/detail?id=197&docId=27487&osType=ios)
 
 ---
 
