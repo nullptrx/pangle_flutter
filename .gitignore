@@ -1,66 +1,35 @@
-# macOS and editor temp files
-.DS_Store
-*.swp
-*.swo
-*.tmp
-*.temp
+# Miscellaneous
+*.class
 *.log
-
-# Hidden local/tool directories.
-# Keep repository metadata that is intentionally versioned.
-.*/
-!.github/
-!.github/**
-
-# Dart and Flutter
-.dart_tool/
-.packages
-.pub/
-.pub-cache/
-.flutter-plugins
-.flutter-plugins-dependencies
-pubspec.lock
-build/
-coverage/
-generated_plugin_registrant.dart
-GeneratedPluginRegistrant.*
-flutter_export_environment.sh
-
-# Flutter iOS artifacts
-ios/Podfile
-ios/Podfile.lock
-Pods/
-.symlinks/
-**/Flutter/App.framework/
-**/Flutter/Flutter.framework/
-**/Flutter/Flutter.podspec
-**/Flutter/Generated.xcconfig
-**/Flutter/ephemeral/
-**/Flutter/flutter_assets/
-**/Flutter/flutter_export_environment.sh
-ServiceDefinitions.json
-xcuserdata/
-**/DerivedData/
-
-# Flutter Android artifacts
-local.properties
-keystore.properties
-.gradle/
-gradlew
-gradlew.bat
-gradle-wrapper.jar
-captures/
-*.iml
-
-# IDE and project metadata
+*.pyc
+*.swp
+.DS_Store
 .atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
 .idea/
-.vscode/
-.project
-.classpath
-.settings/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+# Libraries should not include pubspec.lock, per https://dart.dev/guides/libraries/private-files#pubspeclock.
+/pubspec.lock
+**/doc/api/
+.dart_tool/
+.flutter-plugins-dependencies
+/build/
+/coverage/
 .claude
 .codex
-# Generated and local-only project files
-examples/all_plugins/pubspec.yaml
-template/
