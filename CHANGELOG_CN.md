@@ -2,6 +2,38 @@
 
 ---
 
+## 3.0.2
+
+### 构建基础设施
+
+#### Android
+
+- 升级 Android Gradle Plugin：8.11.1 → **9.0.1**
+- 升级 Gradle wrapper：8.14 → **9.1.0**
+- 升级 Kotlin 插件：2.2.20 → **2.3.20**
+- 重构 `android/build.gradle.kts`：通过 `pluginManager.withPlugin` 解耦 Kotlin 编译器选项，无论是否应用 Kotlin 插件均可正常构建；`jvmToolchain` 改用 `compilerOptions.jvmTarget`（类型安全枚举）
+- 新增 `testOptions` 块：支持 JUnit Platform 及每条测试的 stdout/stderr 日志输出
+- 示例工程：`compileSdk` / `targetSdk` / `versionCode` / `versionName` 改为 Flutter 提供的变量；修复 `build.gradle.kts` 中 Gradle 9 `Directory` API 用法
+- `gradle.properties` 新增 AGP 9 + Flutter Gradle 插件兼容标志：`android.newDsl=false`、`android.builtInKotlin=false`
+
+#### iOS
+
+- 将插件源代码从 `ios/Classes/` 迁移为标准 **Swift Package**，目录为 `ios/pangle_flutter/`（`Sources/pangle_flutter/`）
+- 删除已不再需要的 Obj-C 桥接文件（`PangleFlutterPlugin.h` / `.m`）
+- 更新 `pangle_flutter.podspec`：`source_files` 和 `resource_bundles` 路径指向新的 SPM 目录
+- 示例工程：移除 CocoaPods 集成（xcconfig 引用、`Pods.xcodeproj` workspace 引用、所有 `[CP]` 构建阶段）；改用 `FlutterGeneratedPluginSwiftPackage`（`XCLocalSwiftPackageReference`）
+- 示例工程：Xcode Scheme 新增 "Prepare Flutter Framework" 预操作，确保 SPM 构建时正确触发 Flutter 的 `xcode_backend prepare` 步骤
+- 示例工程：将 CocoaPods xcconfig 引用替换为显式 `OTHER_LDFLAGS` weak-framework 链接标志（`AppTrackingTransparency`、`CoreHaptics`、`CoreML`、`DeviceCheck`）
+- 示例工程：将 `Info-Debug.plist` / `Info-Release.plist` 合并为单一的 `Info.plist`
+
+#### Dart / pubspec
+
+- 修复 `pubspec.yaml` 中 iOS `pluginClass`：`PangleFlutterPlugin` → `SwiftPangleFlutterPlugin`
+- 放宽 Dart SDK 约束：`^3.11.5` → `'>=3.0.0 <4.0.0'`
+- 提升 Flutter 最低版本要求：`3.3.0` → `3.10.0`
+
+---
+
 ## 3.0.1
 
 ### 新功能

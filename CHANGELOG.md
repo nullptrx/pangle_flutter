@@ -2,6 +2,38 @@ English | [中文](CHANGELOG_CN.md)
 
 ---
 
+## 3.0.2
+
+### Build Infrastructure
+
+#### Android
+
+- Upgraded Android Gradle Plugin: 8.11.1 → **9.0.1**
+- Upgraded Gradle wrapper: 8.14 → **9.1.0**
+- Upgraded Kotlin plugin: 2.2.20 → **2.3.20**
+- Refactored `android/build.gradle.kts`: decoupled Kotlin compiler options via `pluginManager.withPlugin` so the library builds correctly regardless of Kotlin plugin presence; switched `jvmToolchain` to `compilerOptions.jvmTarget` (typed enum)
+- Added `testOptions` block with JUnit Platform support and per-test stdout/stderr logging
+- Example: switched `compileSdk` / `targetSdk` / `versionCode` / `versionName` to Flutter-provided values where applicable; fixed Gradle 9 `Directory` API usage in `build.gradle.kts`
+- Added AGP 9 + Flutter Gradle plugin compatibility flags to `gradle.properties`: `android.newDsl=false`, `android.builtInKotlin=false`
+
+#### iOS
+
+- Migrated plugin source layout from `ios/Classes/` to a proper **Swift Package** at `ios/pangle_flutter/` (`Sources/pangle_flutter/`)
+- Removed legacy Obj-C bridge files (`PangleFlutterPlugin.h` / `.m`) — no longer needed under SPM
+- Updated `pangle_flutter.podspec`: `source_files` and `resource_bundles` paths now point to the new SPM layout
+- Example: removed CocoaPods integration (Pods xcconfig includes, `Pods.xcodeproj` workspace reference, all `[CP]` build phases); replaced with `FlutterGeneratedPluginSwiftPackage` as an `XCLocalSwiftPackageReference`
+- Example: added a "Prepare Flutter Framework" pre-action to the Xcode scheme so SPM builds correctly trigger Flutter's `xcode_backend prepare` step
+- Example: replaced CocoaPods xcconfig includes with explicit `OTHER_LDFLAGS` weak-framework flags for `AppTrackingTransparency`, `CoreHaptics`, `CoreML`, `DeviceCheck`
+- Example: merged `Info-Debug.plist` / `Info-Release.plist` into a single `Info.plist`
+
+#### Dart / pubspec
+
+- Fixed iOS `pluginClass` in `pubspec.yaml`: `PangleFlutterPlugin` → `SwiftPangleFlutterPlugin`
+- Relaxed Dart SDK constraint: `^3.11.5` → `'>=3.0.0 <4.0.0'`
+- Raised minimum Flutter version: `3.3.0` → `3.10.0`
+
+---
+
 ## 3.0.1
 
 ### New Features
