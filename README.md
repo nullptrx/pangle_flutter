@@ -88,7 +88,7 @@ See [PROPERTY.md](PROPERTY.md) for a full description of every configuration par
 
 ## Screenshots
 
-<img src="screenshots/pangle1.png" width="30%"/> <img src="screenshots/pangle2.png" width="30%"/> <img src="screenshots/pangle3.png" width="30%"/>
+<img src="https://cdn.jsdelivr.net/gh/nullptrX/pangle_flutter@master/screenshots/pangle1.png" width="30%"/> <img src="https://cdn.jsdelivr.net/gh/nullptrX/pangle_flutter@master/screenshots/pangle2.png" width="30%"/> <img src="https://cdn.jsdelivr.net/gh/nullptrX/pangle_flutter@master/screenshots/pangle3.png" width="30%"/>
 
 ---
 
@@ -109,7 +109,7 @@ See [SETUP.md](SETUP.md) for Android manifest changes and iOS Info.plist / Cocoa
 
 **Pure Objective-C projects (iOS):** Create an empty Swift file in your project and select *Create Bridging Header* when prompted. This is required for Swift-based plugins to work.
 
-<img src="https://github.com/nullptrX/assets/raw/static/pangle_flutter/images/oc2swift.png" alt="OC to Swift bridging" width="500" />
+<img src="https://cdn.jsdelivr.net/gh/nullptrX/pangle_flutter@master/screenshots/oc2swift.png" alt="OC to Swift bridging" width="500" />
 
 ---
 

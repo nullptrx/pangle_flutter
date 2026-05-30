@@ -1,27 +1,23 @@
 PODS:
-  - Ads-CN-Beta/BUAdSDK (6.8.0.6)
-  - BUAdTestMeasurement-Beta (6.8.0.6):
-    - Ads-CN-Beta/BUAdSDK (= 6.8.0.6)
+  - Ads-CN-Beta/BUAdTestMeasurement (7.6.0.4)
   - Flutter (1.0.0)
 
 DEPENDENCIES:
-  - BUAdTestMeasurement-Beta
+  - Ads-CN-Beta/BUAdTestMeasurement (~> 7.0)
   - Flutter (from `Flutter`)
 
 SPEC REPOS:
   trunk:
     - Ads-CN-Beta
-    - BUAdTestMeasurement-Beta
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
 
 SPEC CHECKSUMS:
-  Ads-CN-Beta: d60eb96212ab21533ce80247a28533c61aa9da45
-  BUAdTestMeasurement-Beta: 3a03cdde1e91c4395e4150ddde237dedc5f6ab35
+  Ads-CN-Beta: 9fa1a101ef0ae54cdf7324c7086d6108601c8f1b
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
 
-PODFILE CHECKSUM: 9a32778cb726fddbd597b6c587af07e79b965dc6
+PODFILE CHECKSUM: 56565608cc95894b1985e2d232b35834488f97c7
 
 COCOAPODS: 1.16.2

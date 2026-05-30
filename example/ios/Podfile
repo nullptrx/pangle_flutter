@@ -28,7 +28,7 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
-  pod 'BUAdTestMeasurement-Beta'
+  pod 'Ads-CN-Beta','~> 7.0', :subspecs => ['BUAdTestMeasurement']
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
