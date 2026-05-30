@@ -20,5 +20,9 @@ skills/
 # Legacy
 android/keep
 
+# Example iOS CocoaPods (checked in for CI but not needed in pub package)
+example/ios/Podfile
+example/ios/Podfile.lock
+
 screenshots
 TODO.md
