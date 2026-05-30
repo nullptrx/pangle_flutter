@@ -27,8 +27,8 @@ GeneratedPluginRegistrant.*
 flutter_export_environment.sh
 
 # Flutter iOS artifacts
-Podfile
-Podfile.lock
+ios/Podfile
+ios/Podfile.lock
 Pods/
 .symlinks/
 **/Flutter/App.framework/
