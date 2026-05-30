@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 class AppUtil {
     /// 返回当前可见的根视图控制器，使用 Scene-based API（iOS 13+）

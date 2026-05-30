@@ -6,6 +6,8 @@
 //
 
 import Foundation
+import UIKit
+import Flutter
 
 class FLTView: UIView {
     

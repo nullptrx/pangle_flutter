@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Flutter
 
 protocol FLTTaskProtocol: AnyObject {
     func execute() -> (@escaping (FLTTaskProtocol, Any) -> Void) -> Void

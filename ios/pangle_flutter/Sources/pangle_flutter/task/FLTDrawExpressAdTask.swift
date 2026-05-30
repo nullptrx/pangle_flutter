@@ -5,6 +5,7 @@
 
 import BUAdSDK
 import Foundation
+import Flutter
 
 internal final class FLTDrawExpressAdTask: FLTTaskProtocol {
     public let manager: BUNativeExpressAdManager

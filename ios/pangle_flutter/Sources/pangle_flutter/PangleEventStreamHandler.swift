@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Flutter
 
 public final class PangleEventStreamHandler: NSObject, FlutterStreamHandler {
     private static var eventSinks: [PangleEventType: FlutterEventSink] = [:]

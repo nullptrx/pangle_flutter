@@ -7,6 +7,7 @@
 
 import BUAdSDK
 import Foundation
+import Flutter
 
 internal final class FLTFullscreenVideoExpressAd: NSObject, BUNativeExpressFullscreenVideoAdDelegate {
     typealias Success = () -> Void

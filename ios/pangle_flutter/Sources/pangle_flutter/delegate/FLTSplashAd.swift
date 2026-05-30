@@ -7,6 +7,8 @@
 
 import BUAdSDK
 import Foundation
+import UIKit
+import Flutter
 
 internal final class FLTSplashAd: NSObject, BUSplashAdDelegate {
 

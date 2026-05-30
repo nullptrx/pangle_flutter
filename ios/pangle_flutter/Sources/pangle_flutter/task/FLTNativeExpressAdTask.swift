@@ -7,6 +7,7 @@
 
 import BUAdSDK
 import Foundation
+import Flutter
 
 internal final class FLTNativeExpressAdTask: FLTTaskProtocol {
     public let manager: BUNativeExpressAdManager

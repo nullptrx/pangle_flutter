@@ -7,6 +7,7 @@
 
 import BUAdSDK
 import Foundation
+import Flutter
 
 internal final class FLTRewardedVideoExpressAd: NSObject, BUNativeExpressRewardedVideoAdDelegate {
     typealias Success = (Bool) -> Void

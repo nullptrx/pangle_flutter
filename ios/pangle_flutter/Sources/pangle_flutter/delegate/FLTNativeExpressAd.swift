@@ -5,6 +5,8 @@
 //  Created by nullptrX on 2020/8/16.
 //
 
+import Flutter
+import UIKit
 import BUAdSDK
 
 internal final class FLTNativeExpressAdViewDelegate: NSObject, BUNativeExpressAdViewDelegate, BUCustomEventProtocol {

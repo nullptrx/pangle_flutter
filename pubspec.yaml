@@ -6,8 +6,8 @@ issue_tracker: https://github.com/nullptrx/pangle_flutter/issues
 version: 3.0.1
 
 environment:
-  sdk: ^3.11.5
-  flutter: '>=3.3.0'
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.10.0'
 
 dependencies:
   flutter:
@@ -26,5 +26,5 @@ flutter:
         package: io.github.nullptrx.pangleflutter
         pluginClass: PangleFlutterPlugin
       ios:
-        pluginClass: PangleFlutterPlugin
+        pluginClass: SwiftPangleFlutterPlugin
 

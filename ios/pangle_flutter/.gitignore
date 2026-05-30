@@ -1,0 +1,4 @@
+# BUAdSDK and BUAdLive are static XCFrameworks (~400 MB) downloaded via CocoaPods.
+# Run example/ios/setup_spm_frameworks.sh to populate these before building.
+Frameworks/
+Sources/pangle_flutter/Resources/
