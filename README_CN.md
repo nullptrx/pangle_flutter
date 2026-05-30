@@ -83,13 +83,13 @@ SDK 已作为内部依赖集成，无需手动引入。如需替换版本，请 
 
 ## 参数文档
 
-各配置类的完整参数说明见 [DOC_PROPERTY.md](DOC_PROPERTY.md)。
+各配置类的完整参数说明见 [PROPERTY.md](PROPERTY.md)。
 
 ---
 
 ## 范例截图
 
-<img src="https://raw.githubusercontent.com/nullptrX/assets/master/images/20210322143743.gif" width="30%"/>
+<img src="screenshots/pangle1.png" width="30%"/> <img src="screenshots/pangle2.png" width="30%"/> <img src="screenshots/pangle3.png" width="30%"/>
 
 ---
 

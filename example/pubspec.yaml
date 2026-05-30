@@ -1,6 +1,6 @@
 name: pangle_flutter_example
 description: Demonstrates how to use the pangle_flutter plugin.
-version: 3.0.0
+version: 3.0.2
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.

@@ -83,13 +83,13 @@ The SDK is bundled as a dependency — no manual import needed. To use a differe
 
 ## Parameter Reference
 
-See [DOC_PROPERTY.md](DOC_PROPERTY.md) for a full description of every configuration parameter.
+See [PROPERTY.md](PROPERTY.md) for a full description of every configuration parameter.
 
 ---
 
 ## Screenshots
 
-<img src="https://raw.githubusercontent.com/nullptrX/assets/master/images/20210322143743.gif" width="30%"/>
+<img src="screenshots/pangle1.png" width="30%"/> <img src="screenshots/pangle2.png" width="30%"/> <img src="screenshots/pangle3.png" width="30%"/>
 
 ---
 

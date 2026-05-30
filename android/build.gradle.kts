@@ -1,5 +1,5 @@
 group = "io.github.nullptrx.pangleflutter"
-version = "3.0.0"
+version = "3.0.2"
 
 plugins {
     id("com.android.library")
