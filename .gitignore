@@ -33,3 +33,4 @@ migrate_working_dir/
 /coverage/
 .claude
 .codex
+.codegraph
